@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Mail, Compass } from "lucide-react";
 
 export function DeveloperCard() {
@@ -20,11 +21,12 @@ export function DeveloperCard() {
           title="Buy me a coffee"
           className="group/coffee inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#E0DEDB] bg-white text-amber-500 transition-all hover:border-[#FFDD00] hover:bg-[#FFDD00] shadow-sm active:scale-95"
         >
-          <img
+          <Image
             src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenhvbDVrajNocXBpb2Z2b2k4aWZ6dXRxeTZyYmh6eWc3MGM5bTJ3ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TDQOtnWgsBx99cNoyH/giphy.gif"
             alt="Coffee cup"
             width={24}
             height={24}
+            unoptimized
             className="h-6 w-6 rounded-full object-cover grayscale transition-all duration-300 group-hover/coffee:grayscale-0 group-hover/coffee:scale-110"
           />
         </a>

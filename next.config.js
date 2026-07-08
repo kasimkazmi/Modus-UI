@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // your config
-}
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media1.giphy.com",
+      },
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
