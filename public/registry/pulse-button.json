@@ -7,7 +7,7 @@
   "files": [
     {
       "path": "registry/pulse-button.tsx",
-      "content": "\"use client\"\r\n\r\nimport { motion } from \"framer-motion\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\ninterface PulseButtonProps {\r\n  children: React.ReactNode\r\n  className?: string\r\n}\r\n\r\nexport function PulseButton({ children, className }: PulseButtonProps) {\r\n  return (\r\n    <motion.button\r\n      className={cn(\r\n        \"px-4 py-2 bg-green-500 text-white rounded-lg\",\r\n        className\r\n      )}\r\n      animate={{ scale: [1, 1.1, 1] }}\r\n      transition={{ duration: 1, repeat: Infinity }}\r\n    >\r\n      {children}\r\n    </motion.button>\r\n  )\r\n}"
+      "content": "\"use client\"\n\nimport { motion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface PulseButtonProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function PulseButton({ children, className }: PulseButtonProps) {\n  return (\n    <motion.button\n      className={cn(\n        \"px-4 py-2 bg-green-500 text-white rounded-lg\",\n        className\n      )}\n      animate={{ scale: [1, 1.1, 1] }}\n      transition={{ duration: 1, repeat: Infinity }}\n    >\n      {children}\n    </motion.button>\n  )\n}"
     }
   ]
 }

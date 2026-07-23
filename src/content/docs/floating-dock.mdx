@@ -1,0 +1,48 @@
+---
+title: Floating Dock
+description: A premium navigation dock with smooth Apple-style magnifying zoom animation on hover.
+---
+
+A premium floating dock navigation bar. Hovering over the icons enlarges them and their immediate neighbors dynamically using spring-based motion. Perfect for modern, app-like landing pages.
+
+<ComponentPreview name="floating-dock" />
+
+## Installation
+
+### CLI
+
+```bash
+npx react-ui-component add floating-dock
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/floating-dock.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FloatingDock } from "@/components/ui/floating-dock";
+import { Home, Compass, Sparkles, Mail } from "lucide-react";
+
+export default function Example() {
+  const items = [
+    { title: "Home", icon: <Home />, href: "/" },
+    { title: "Explore", icon: <Compass />, href: "/explore" },
+    { title: "Features", icon: <Sparkles />, onClick: () => console.log("clicked") },
+    { title: "Contact", icon: <Mail />, href: "/contact" },
+  ];
+
+  return <FloatingDock items={items} />;
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `FloatingDockItem[]` | - | An array of navigation item objects containing title, icon, and optional href or onClick. |
+| `direction` | `"top" \| "bottom"` | `"bottom"` | The alignment and expansion direction of the tooltips. |
+| `className` | `string` | - | Custom container styles. |

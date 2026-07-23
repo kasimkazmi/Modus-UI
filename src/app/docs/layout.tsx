@@ -18,6 +18,7 @@ const DOC_CATEGORIES = [
     icon: PanelTop,
     items: [
       { title: "Morphing Navbar", href: "/docs/morphing-navbar" },
+      { title: "Floating Dock", href: "/docs/floating-dock" },
     ]
   },
   {
@@ -34,6 +35,7 @@ const DOC_CATEGORIES = [
     icon: CreditCard,
     items: [
       { title: "Rotating Card", href: "/docs/rotating-card" },
+      { title: "Tilt Card", href: "/docs/tilt-card" },
     ]
   },
   {
@@ -47,7 +49,7 @@ const DOC_CATEGORIES = [
     title: "Layout",
     icon: Layout,
     items: [
-      { title: "Coming Soon", href: "/docs/coming-soon" },
+      { title: "Circuit Background", href: "/docs/circuit-background" },
     ]
   },
   {

@@ -7,7 +7,7 @@
   "files": [
     {
       "path": "registry/floating-text.tsx",
-      "content": "\"use client\"\r\n\r\nimport { motion } from \"framer-motion\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\ninterface FloatingTextProps {\r\n  children: React.ReactNode\r\n  className?: string\r\n}\r\n\r\nexport function FloatingText({ children, className }: FloatingTextProps) {\r\n  return (\r\n    <motion.div\r\n      className={cn(\"inline-block\", className)}\r\n      animate={{ y: [0, -10, 0] }}\r\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\r\n    >\r\n      {children}\r\n    </motion.div>\r\n  )\r\n}"
+      "content": "\"use client\"\n\nimport { motion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface FloatingTextProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function FloatingText({ children, className }: FloatingTextProps) {\n  return (\n    <motion.div\n      className={cn(\"inline-block\", className)}\n      animate={{ y: [0, -10, 0] }}\n      transition={{ duration: 2, repeat: Infinity, ease: \"easeInOut\" }}\n    >\n      {children}\n    </motion.div>\n  )\n}"
     }
   ]
 }

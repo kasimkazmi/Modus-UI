@@ -42,4 +42,23 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/notch-footer.tsx"],
   },
+  {
+    name: "tilt-card",
+    type: "components:ui",
+    dependencies: ["framer-motion"],
+    files: ["registry/tilt-card.tsx"],
+  },
+  {
+    name: "floating-dock",
+    type: "components:ui",
+    dependencies: ["framer-motion", "lucide-react"],
+    files: ["registry/floating-dock.tsx"],
+  },
+  {
+    name: "circuit-background",
+    type: "components:ui",
+    dependencies: [],
+    files: ["registry/circuit-background.tsx"],
+  },
 ];
+

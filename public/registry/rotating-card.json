@@ -7,7 +7,7 @@
   "files": [
     {
       "path": "registry/rotating-card.tsx",
-      "content": "\"use client\"\r\n\r\nimport { motion } from \"framer-motion\"\r\n\r\nimport { cn } from \"@/lib/utils\"\r\n\r\ninterface RotatingCardProps {\r\n  children: React.ReactNode\r\n  className?: string\r\n}\r\n\r\nexport function RotatingCard({ children, className }: RotatingCardProps) {\r\n  return (\r\n    <motion.div\r\n      className={cn(\r\n        \"p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg\",\r\n        className\r\n      )}\r\n      whileHover={{ rotateY: 10 }}\r\n      transition={{ type: \"spring\", stiffness: 300 }}\r\n    >\r\n      {children}\r\n    </motion.div>\r\n  )\r\n}"
+      "content": "\"use client\"\n\nimport { motion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface RotatingCardProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function RotatingCard({ children, className }: RotatingCardProps) {\n  return (\n    <motion.div\n      className={cn(\n        \"p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg\",\n        className\n      )}\n      whileHover={{ rotateY: 10 }}\n      transition={{ type: \"spring\", stiffness: 300 }}\n    >\n      {children}\n    </motion.div>\n  )\n}"
     }
   ]
 }

@@ -1,0 +1,60 @@
+---
+title: Tilt Card
+description: A 3D parallax tilt card featuring smooth physics-based rotations on hover, collapsible tags and descriptions, and custom CTA buttons.
+---
+
+A highly premium, interactive 3D parallax tilt card designed for presenting project portfolios, case studies, or feature cards. It responds dynamically to mouse/pointer hover with spring-loaded physics and wraps tags and long descriptions with collapsible states.
+
+<ComponentPreview name="tilt-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx react-ui-component add tilt-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tilt-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TiltCard } from "@/components/ui/tilt-card";
+
+export default function Example() {
+  return (
+    <TiltCard
+      title="AlphaAuctions"
+      description="A premium, real-time online auction and bidding platform. Features live bidding rooms."
+      image="https://images.unsplash.com/photo-1563013544-824ae1d704d3?auto=format&fit=crop&w=800&q=80"
+      tag="Web"
+      techStack="Next.js, TypeScript, Tailwind CSS, Prisma, PostgreSQL, Socket.io"
+      liveUrl="https://example.com"
+      githubUrl="https://github.com"
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | - | The title of the card. |
+| `description` | `string` | - | Descriptive text for the project or feature. |
+| `image` | `string` | - | Source URL of the cover image. |
+| `tag` | `string` | - | A category badge overlaid on the top-right of the image (e.g. "Web", "Design"). |
+| `techStack` | `string \| string[]` | - | A comma-separated string or array of tags for technical skills/tools. |
+| `liveUrl` | `string` | - | URL for the interactive preview button. |
+| `githubUrl` | `string` | - | URL for the github source repository button. |
+| `caseStudyUrl` | `string` | - | URL to show a separate Case Study button. |
+| `onCaseStudyClick` | `() => void` | - | Optional custom handler when clicking Case Study. |
+| `maxTilt` | `number` | `15` | Maximum rotation angle in degrees. |
+| `perspective` | `number` | `1000` | Depth perspective value for 3D distortion. |
+| `children` | `ReactNode` | - | Direct children override if you wish to build custom inner layout. |
+| `className` | `string` | - | Custom container styles. |
