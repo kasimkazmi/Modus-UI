@@ -96,7 +96,7 @@ export function TiltCard({
       onMouseLeave={handleMouseLeave}
       style={{
         transformStyle: "preserve-3d",
-        perspective: perspective,
+        transformPerspective: perspective,
         rotateX: tiltEnabled ? rotateX : 0,
         rotateY: tiltEnabled ? rotateY : 0,
       }}

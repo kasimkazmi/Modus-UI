@@ -13,6 +13,9 @@ import { PulseButtonDemo } from "@/registry/pulse-button-demo";
 import { RotatingCardDemo } from "@/registry/rotating-card-demo";
 import { FloatingTextDemo } from "@/registry/floating-text-demo";
 import { NotchFooterDemo } from "@/registry/notch-footer-demo";
+import { TiltCardDemo } from "@/registry/tilt-card-demo";
+import { FloatingDockDemo } from "@/registry/floating-dock-demo";
+import { CircuitBackgroundDemo } from "@/registry/circuit-background-demo";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -24,6 +27,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "rotating-card": RotatingCardDemo,
   "floating-text": FloatingTextDemo,
   "notch-footer": NotchFooterDemo,
+  "tilt-card": TiltCardDemo,
+  "floating-dock": FloatingDockDemo,
+  "circuit-background": CircuitBackgroundDemo,
 };
 
 interface PreviewPageProps {
