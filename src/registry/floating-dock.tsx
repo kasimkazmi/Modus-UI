@@ -25,8 +25,7 @@ export function FloatingDock({ items, className, direction = "bottom" }: Floatin
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto flex h-16 items-end gap-4 rounded-3xl border border-[#E0DEDB] bg-[#F7F5F3]/90 px-4 pb-3 shadow-xl backdrop-blur-md relative overflow-hidden",
-        "before:absolute before:inset-0 before:opacity-[0.03] before:pointer-events-none before:bg-[radial-gradient(circle,_#37322F_1px,_transparent_1px)] before:bg-[length:8px_8px]",
+        "mx-auto flex h-20 items-end gap-5 rounded-none border-2 border-[#3F3F46] bg-[#09090B]/95 px-5 pb-4 shadow-none relative overflow-hidden",
         className
       )}
     >
@@ -63,20 +62,20 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction }: DockIconPro
     return val - bounds.x - bounds.width / 2;
   });
 
-  // Calculate icon scaling relative to distance from pointer
-  const sizeTransform = useTransform(distance, [-120, 0, 120], [40, 60, 40]);
-  const iconSizeTransform = useTransform(distance, [-120, 0, 120], [18, 30, 18]);
+  // Scale calculations for brutalist magnification
+  const sizeTransform = useTransform(distance, [-100, 0, 100], [44, 64, 44]);
+  const iconSizeTransform = useTransform(distance, [-100, 0, 100], [20, 32, 20]);
 
   const size = useSpring(sizeTransform, {
     mass: 0.1,
-    stiffness: 200,
-    damping: 15,
+    stiffness: 220,
+    damping: 14,
   });
 
   const iconSize = useSpring(iconSizeTransform, {
     mass: 0.1,
-    stiffness: 200,
-    damping: 15,
+    stiffness: 220,
+    damping: 14,
   });
 
   const Content = (
@@ -87,7 +86,7 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction }: DockIconPro
       onMouseLeave={() => setHovered(false)}
       whileTap={{ scale: 0.9 }}
       className={cn(
-        "relative flex items-center justify-center rounded-full border border-[#E0DEDB] bg-white text-[#37322F] shadow-sm transition-colors hover:bg-[#FAF9F7]",
+        "relative flex items-center justify-center rounded-none border border-[#3F3F46] bg-black text-[#FAFAFA] shadow-none transition-colors duration-200 hover:bg-[#DFE104] hover:text-black hover:border-[#DFE104]",
         "group cursor-pointer"
       )}
       onClick={onClick}
@@ -96,11 +95,11 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction }: DockIconPro
         {hovered && (
           <motion.div
             initial={{ opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: direction === "bottom" ? -36 : 36, scale: 1 }}
+            animate={{ opacity: 1, y: direction === "bottom" ? -38 : 38, scale: 1 }}
             exit={{ opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            transition={{ duration: 0.15 }}
             className={cn(
-              "absolute z-50 rounded-md border border-[#E0DEDB] bg-[#F7F5F3] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#37322F] shadow-sm whitespace-nowrap",
+              "absolute z-50 rounded-none border border-black bg-[#DFE104] px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-black shadow-none whitespace-nowrap",
               direction === "bottom" ? "-top-2" : "-bottom-2"
             )}
           >

@@ -17,6 +17,7 @@ export interface TiltCardProps {
   className?: string;
   maxTilt?: number;
   perspective?: number;
+  index?: number;
   children?: React.ReactNode;
 }
 
@@ -31,8 +32,9 @@ export function TiltCard({
   caseStudyUrl,
   onCaseStudyClick,
   className,
-  maxTilt = 15,
+  maxTilt = 12,
   perspective = 1000,
+  index,
   children,
 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -53,8 +55,8 @@ export function TiltCard({
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const rotateXSpring = useSpring(y, { stiffness: 150, damping: 20 });
-  const rotateYSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const rotateXSpring = useSpring(y, { stiffness: 180, damping: 22 });
+  const rotateYSpring = useSpring(x, { stiffness: 180, damping: 22 });
 
   const rotateX = useTransform(rotateXSpring, [-0.5, 0.5], [maxTilt, -maxTilt]);
   const rotateY = useTransform(rotateYSpring, [-0.5, 0.5], [-maxTilt, maxTilt]);
@@ -101,48 +103,57 @@ export function TiltCard({
         rotateY: tiltEnabled ? rotateY : 0,
       }}
       className={cn(
-        "w-full max-w-[360px] rounded-2xl border border-[#E0DEDB] bg-[#F7F5F3] p-5 shadow-sm transition-all duration-300 hover:shadow-md select-none flex flex-col justify-between overflow-hidden",
+        "w-full max-w-[360px] rounded-none border-2 border-[#3F3F46] bg-[#09090B] p-6 shadow-none transition-colors duration-300 hover:bg-[#DFE104] hover:border-[#DFE104] select-none flex flex-col justify-between overflow-hidden relative group",
         className
       )}
     >
+      {/* Decorative Giant Number for Kinetic Design */}
+      {index !== undefined && (
+        <div 
+          className="absolute -right-4 -bottom-6 text-[11rem] font-bold tracking-tighter select-none pointer-events-none leading-none text-[#27272A] opacity-20 group-hover:text-[#000000]/10 transition-colors duration-300 z-0 font-sans"
+          aria-hidden="true"
+        >
+          {String(index).padStart(2, "0")}
+        </div>
+      )}
+
       {children ? (
-        children
+        <div className="relative z-10">{children}</div>
       ) : (
-        <div className="flex flex-col h-full gap-4" style={{ transform: "translateZ(20px)" }}>
-          {/* Project Image Section */}
+        <div className="flex flex-col h-full gap-5 relative z-10" style={{ transform: "translateZ(30px)" }}>
+          {/* Cover Image Section */}
           {image && (
-            <div className="relative w-full h-[200px] overflow-hidden rounded-xl border border-[#E0DEDB]/60 bg-white">
+            <div className="relative w-full h-[180px] overflow-hidden rounded-none border border-[#3F3F46] bg-black">
               <img
                 src={image}
-                alt={title || "Project image"}
+                alt={title || "Cover"}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 loading="lazy"
               />
               {tag && (
-                <span className="absolute right-3 top-3 rounded-full border border-[#E0DEDB] bg-[#FAF9F7]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#605A57] backdrop-blur-sm">
+                <span className="absolute right-3 top-3 rounded-none border-2 border-[#3F3F46] bg-[#09090B] px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[#FAFAFA] group-hover:bg-[#FAFAFA] group-hover:text-black group-hover:border-black transition-colors duration-300">
                   {tag}
                 </span>
               )}
             </div>
           )}
 
-          {/* Heading */}
-          <div className="space-y-1">
+          {/* Heading and Tags */}
+          <div className="space-y-2">
             {title && (
-              <h3 className="font-serif text-2xl font-normal leading-tight text-[#37322F]">
+              <h3 className="font-sans text-3xl font-bold uppercase tracking-tighter leading-none text-[#FAFAFA] group-hover:text-[#000000] transition-colors duration-300">
                 {title}
               </h3>
             )}
 
-            {/* Tech Stack Badges */}
+            {/* Tech Badges */}
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {visibleTags.map((tech, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1 rounded border border-[#E0DEDB]/60 bg-white px-2 py-0.5 text-[9px] font-semibold tracking-wider text-[#605A57] shadow-sm uppercase"
+                    className="inline-flex items-center gap-1 rounded-none border border-[#3F3F46] bg-black/40 px-2 py-0.5 text-[8px] font-bold tracking-widest text-[#A1A1AA] uppercase group-hover:border-black group-hover:bg-black/10 group-hover:text-black transition-colors duration-300"
                   >
-                    <span className="h-1 w-1 rounded-full bg-[#605A57]/40" />
                     {tech}
                   </span>
                 ))}
@@ -153,9 +164,9 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(true);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] hover:bg-[#FAF9F7] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors"
+                    className="inline-flex items-center rounded-none border border-[#3F3F46] bg-[#27272A] hover:bg-[#3F3F46] px-2 py-0.5 text-[8px] font-bold tracking-widest text-[#FAFAFA] transition-colors group-hover:border-black group-hover:bg-black/20 group-hover:text-black"
                   >
-                    +{remainingTags} more
+                    +{remainingTags}
                   </button>
                 )}
                 {isTechExpanded && (
@@ -165,9 +176,9 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(false);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] hover:bg-[#FAF9F7] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors"
+                    className="inline-flex items-center rounded-none border border-[#3F3F46] bg-[#27272A] hover:bg-[#3F3F46] px-2 py-0.5 text-[8px] font-bold tracking-widest text-[#FAFAFA] transition-colors group-hover:border-black group-hover:bg-black/20 group-hover:text-black"
                   >
-                    Show less
+                    LESS
                   </button>
                 )}
               </div>
@@ -179,8 +190,8 @@ export function TiltCard({
             <div className="flex-grow flex flex-col justify-between">
               <p
                 className={cn(
-                  "text-xs leading-relaxed text-[#605A57] transition-all duration-300",
-                  isExpanded ? "line-clamp-none" : "line-clamp-2"
+                  "text-xs leading-relaxed text-[#A1A1AA] group-hover:text-black/80 transition-colors duration-300",
+                  isExpanded ? "line-clamp-none" : "line-clamp-3"
                 )}
               >
                 {description}
@@ -191,7 +202,7 @@ export function TiltCard({
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
                 }}
-                className="mt-1 self-start text-[10px] font-bold uppercase tracking-wider text-[#37322F] hover:underline"
+                className="mt-2 self-start text-[9px] font-bold uppercase tracking-widest text-[#DFE104] group-hover:text-[#000000] hover:underline transition-colors duration-300"
               >
                 {isExpanded ? "Read less" : "Read more"}
               </button>
@@ -199,32 +210,34 @@ export function TiltCard({
           )}
 
           {/* CTAs */}
-          <div className="flex gap-2 pt-2 mt-auto" style={{ transform: "translateZ(10px)" }}>
-            {liveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center"
-              >
-                <button className="w-full rounded-lg border border-[#E0DEDB] bg-white px-3 py-2 text-xs font-bold text-[#605A57] transition-all duration-200 hover:border-[#37322F]/40 hover:text-[#37322F] hover:bg-[#FAF9F7] active:scale-[0.98]">
-                  Preview
-                </button>
-              </a>
-            )}
+          <div className="flex flex-col gap-2 pt-2 mt-auto" style={{ transform: "translateZ(15px)" }}>
+            <div className="flex gap-2">
+              {liveUrl && (
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center"
+                >
+                  <button className="w-full h-11 rounded-none border-2 border-[#3F3F46] bg-transparent text-xs font-bold uppercase tracking-tighter text-[#FAFAFA] transition-all duration-200 hover:bg-[#FAFAFA] hover:text-[#000000] hover:border-[#FAFAFA] group-hover:border-black group-hover:text-black group-hover:hover:bg-black group-hover:hover:text-white group-hover:hover:border-black active:scale-95">
+                    PREVIEW
+                  </button>
+                </a>
+              )}
 
-            {githubUrl && (
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 text-center"
-              >
-                <button className="w-full rounded-lg border border-[#37322F] bg-[#37322F] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:bg-[#4A4542] hover:border-[#4A4542] active:scale-[0.98]">
-                  GitHub
-                </button>
-              </a>
-            )}
+              {githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center"
+                >
+                  <button className="w-full h-11 rounded-none bg-[#FAFAFA] text-xs font-bold uppercase tracking-tighter text-black transition-all duration-200 hover:scale-105 active:scale-95 group-hover:bg-black group-hover:text-[#DFE104]">
+                    GITHUB
+                  </button>
+                </a>
+              )}
+            </div>
 
             {(caseStudyUrl || onCaseStudyClick) && (
               <button
@@ -234,9 +247,9 @@ export function TiltCard({
                   if (onCaseStudyClick) onCaseStudyClick();
                   else if (caseStudyUrl) window.open(caseStudyUrl, "_blank");
                 }}
-                className="w-full rounded-lg border border-transparent bg-[#8B3A30] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:bg-[#A84A3E] active:scale-[0.98]"
+                className="w-full h-11 rounded-none border-2 border-[#DFE104] bg-[#DFE104] text-xs font-bold uppercase tracking-tighter text-black transition-all duration-200 hover:scale-105 active:scale-95 group-hover:bg-black group-hover:text-white group-hover:border-black"
               >
-                Case Study
+                CASE STUDY
               </button>
             )}
           </div>

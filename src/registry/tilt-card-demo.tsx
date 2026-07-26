@@ -35,11 +35,21 @@ export function TiltCardDemo() {
   ];
 
   return (
-    <div className="min-h-[500px] py-12 flex flex-col items-center justify-center gap-8 bg-[#FAF9F7]/30">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl px-4">
+    <div className="min-h-[500px] w-full py-16 flex flex-col items-center justify-center gap-12 bg-[#09090B] border-2 border-[#3F3F46]">
+      <div className="text-center space-y-3 px-4">
+        <h4 className="font-sans text-4xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+          KINETIC SELECTIONS
+        </h4>
+        <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
+          Hover over the cards to observe brutalist style inversions and spring-loaded 3D tilt effects.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl px-4 w-full justify-items-center">
         {mockProjects.map((project, idx) => (
           <TiltCard
             key={idx}
+            index={idx + 1}
             title={project.title}
             description={project.description}
             image={project.image}
@@ -48,12 +58,12 @@ export function TiltCardDemo() {
             liveUrl={project.liveUrl}
             githubUrl={project.githubUrl}
             caseStudyUrl={project.caseStudyUrl}
-            className="bg-white"
           />
         ))}
       </div>
-      <p className="text-xs text-[#605A57]/60 italic font-sans mt-4">
-        * Hover to experience physics-based 3D tilt interaction. Mobile users see stable static view.
+      
+      <p className="text-[10px] text-[#A1A1AA]/50 font-bold uppercase tracking-widest mt-4">
+        * Hover cards to invert colors instantly
       </p>
     </div>
   );

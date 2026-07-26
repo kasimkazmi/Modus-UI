@@ -39,11 +39,13 @@ export function FloatingDockDemo() {
   ];
 
   return (
-    <div className="min-h-[300px] w-full flex flex-col items-center justify-center gap-12 p-8 bg-[#FAF9F7]/30 border border-[#E0DEDB]/50 rounded-2xl relative overflow-hidden">
-      <div className="text-center space-y-2">
-        <h4 className="font-serif text-2xl text-[#37322F]">Interactive Navigation</h4>
-        <p className="text-xs text-[#605A57] max-w-sm mx-auto">
-          Hover over the dock below to experience the magnifying effect on the icons.
+    <div className="min-h-[300px] w-full flex flex-col items-center justify-center gap-12 p-8 bg-[#09090B] border-2 border-[#3F3F46] rounded-none relative overflow-hidden">
+      <div className="text-center space-y-3">
+        <h4 className="font-sans text-3xl font-bold uppercase tracking-tighter text-[#FAFAFA]">
+          KINETIC NAVIGATION
+        </h4>
+        <p className="text-xs text-[#A1A1AA] max-w-sm mx-auto">
+          Hover over the brutalist dock to observe high-contrast icon expansion and instant label reveals.
         </p>
       </div>
 

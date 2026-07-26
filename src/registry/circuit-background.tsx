@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 
-// Self-contained ripple class for interactive mouse effects
+// Self-contained ripple class for interactive mouse effects in Kinetic design
 class CircuitRipple {
   x: number;
   y: number;
@@ -24,8 +24,8 @@ class CircuitRipple {
     this.radius = 0;
     this.maxRadius = 80 + Math.random() * 40;
     this.speed = 1.2 + Math.random() * 0.3;
-    this.alpha = 0.45;
-    this.fadeSpeed = 0.008;
+    this.alpha = 0.5;
+    this.fadeSpeed = 0.009;
     this.thickness = 1.5;
     this.waveOffset = Math.random() * Math.PI * 2;
     this.waveSpeed = 0.05 + Math.random() * 0.02;
@@ -34,7 +34,7 @@ class CircuitRipple {
     this.isActive = true;
   }
 
-  update(ctx: CanvasRenderingContext2D, isDarkMode: boolean) {
+  update(ctx: CanvasRenderingContext2D) {
     if (!this.isActive) return;
 
     this.radius += this.speed;
@@ -45,13 +45,13 @@ class CircuitRipple {
       return;
     }
 
-    // Ripple color adapts to theme
-    const rippleColor = isDarkMode ? "250, 249, 247" : "55, 50, 47";
+    // Ripple color is strictly Kinetic Acid Yellow: #DFE104 (223, 225, 4)
+    const rippleColor = "223, 225, 4";
 
     for (let i = 0; i < 4; i++) {
       const circleRadius = this.radius - i * 6;
       if (circleRadius > 0) {
-        const circleAlpha = this.alpha * (1 - i * 0.2) * 0.7;
+        const circleAlpha = this.alpha * (1 - i * 0.2) * 0.8;
         ctx.strokeStyle = `rgba(${rippleColor}, ${circleAlpha})`;
         ctx.lineWidth = this.thickness - i * 0.15;
 
@@ -98,8 +98,8 @@ export function CircuitBackground({
   maxTrails = 60,
   lineColor,
   circleColor,
-  glowStrength = 6,
-  circleSize = 5,
+  glowStrength = 4,
+  circleSize = 4,
   spawnChance = 0.03,
   className,
 }: CircuitBackgroundProps) {
@@ -125,12 +125,9 @@ export function CircuitBackground({
     let W: number, H: number;
     let running = true;
 
-    // Check document class list for dark theme
-    const isDarkMode = document.documentElement.classList.contains("dark");
-
-    // Colors mapping to Modus UI warm design palette
-    const resolvedLineColor = lineColor || (isDarkMode ? "rgba(250, 249, 247, 0.15)" : "rgba(55, 50, 47, 0.1)");
-    const resolvedCircleColor = circleColor || (isDarkMode ? "rgba(250, 249, 247, 0.3)" : "rgba(55, 50, 47, 0.2)");
+    // Direct configuration matching Kinetic Design Tokens (Acid Yellow and Zinc 700)
+    const resolvedLineColor = lineColor || "rgba(223, 225, 4, 0.12)";
+    const resolvedCircleColor = circleColor || "rgba(223, 225, 4, 0.3)";
 
     const allowedAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     const turnChoices = [45, 90];
@@ -184,7 +181,7 @@ export function CircuitBackground({
 
       return {
         points: [start, point1, point2, point3],
-        hue: choose([20, 30, 40, 50]), // Warm hues
+        hue: 55, // Fixed hue representing yellow spectrum
         startTime: performance.now(),
         growTime: random(2000, 1200),
         holdTime: random(1800, 800),
@@ -236,7 +233,7 @@ export function CircuitBackground({
         return;
       }
 
-      alpha *= 0.25; // Keep it subtle and ambient
+      alpha *= 0.25;
       const drawLength = totalLength * progress;
 
       bufferCtx.strokeStyle = resolvedLineColor;
@@ -343,7 +340,7 @@ export function CircuitBackground({
       // Ripple drawing
       rippleCtx.clearRect(0, 0, rippleCanvas!.width, rippleCanvas!.height);
       ripplesRef.current = ripplesRef.current.filter((ripple) => {
-        ripple.update(rippleCtx, isDarkMode);
+        ripple.update(rippleCtx);
         return ripple.isActive;
       });
 
@@ -405,6 +402,7 @@ export function CircuitBackground({
           height: "100vh",
           zIndex: 0,
           pointerEvents: "none",
+          backgroundColor: "#09090B",
         }}
       />
       <canvas
