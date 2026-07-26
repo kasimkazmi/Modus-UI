@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { DM_Sans, Instrument_Serif } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "700"],
 });
 
-const instrumentSerif = Instrument_Serif({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-instrument-serif",
-  weight: "400",
+  variable: "--font-inter",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Modus UI",
-  description: "A premium, editorial-grade React component library built with restraint and typographic precision.",
+  title: "Modus UI - Kinetic Design Library",
+  description: "A premium, high-energy brutalist React component library built with kinetic typography and precision layout grids.",
 };
 
 export default function RootLayout({
@@ -24,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${instrumentSerif.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );
-}
+}

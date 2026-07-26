@@ -44,7 +44,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-dm-sans)", "ui-sans-serif", "system-ui"],
+        sans: ["var(--font-space-grotesk)", "var(--font-inter)", "ui-sans-serif", "system-ui"],
         serif: ["var(--font-instrument-serif)", "ui-serif", "Georgia"],
       },
       borderRadius: {
