@@ -30,6 +30,8 @@ const COMPONENT_LIST = [
   { title: "Spotlight Card", href: "/docs/spotlight-card" },
   { title: "Click Spark", href: "/docs/click-spark" },
   { title: "Border Glow", href: "/docs/border-glow" },
+  { title: "Waves", href: "/docs/waves" },
+  { title: "Letter Glitch", href: "/docs/letter-glitch" },
   { title: "Notch Footer", href: "/docs/notch-footer" },
   { title: "Flowing Menu", href: "/docs/flowing-menu" },
   { title: "Circuit Background", href: "/docs/circuit-background" },

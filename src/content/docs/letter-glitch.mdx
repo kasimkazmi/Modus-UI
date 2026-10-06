@@ -1,0 +1,42 @@
+---
+title: Letter Glitch
+description: A canvas-rendered procedural matrix of glitching letters and symbols.
+---
+
+A highly-optimized canvas component that renders a dense grid of randomly fluctuating letters, smoothly transitioning between specified colors. Includes built-in center and edge vignette effects.
+
+<ComponentPreview name="letter-glitch" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add letter-glitch
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/letter-glitch.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { LetterGlitch } from "@/components/ui/letter-glitch";
+
+export default function Example() {
+  return (
+    <div className="relative w-full h-[500px]">
+      <LetterGlitch
+        glitchSpeed={50}
+        centerVignette={true}
+        outerVignette={true}
+        smooth={true}
+        glitchColors={["#f43f5e", "#8b5cf6", "#3b82f6"]}
+      />
+    </div>
+  );
+}
+```

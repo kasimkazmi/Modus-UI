@@ -1,0 +1,45 @@
+---
+title: Waves
+description: A reactive background of flowing lines driven by Perlin noise and cursor physics.
+---
+
+A physics-based line wave background that utilizes Perlin noise and cursor proximity to disturb the wave field dynamically.
+
+<ComponentPreview name="waves" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add waves
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/waves.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Waves } from "@/components/ui/waves";
+
+export default function Example() {
+  return (
+    <div className="relative w-full h-[500px] overflow-hidden">
+      <Waves
+        lineColor="rgba(55, 50, 47, 0.2)"
+        waveSpeedX={0.02}
+        waveSpeedY={0.01}
+        waveAmpX={40}
+        waveAmpY={20}
+      />
+      <div className="relative z-10 flex h-full items-center justify-center">
+        <h1>Content over waves</h1>
+      </div>
+    </div>
+  );
+}
+```

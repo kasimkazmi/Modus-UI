@@ -36,6 +36,8 @@ import GradientTextDemo from "@/registry/gradient-text-demo";
 import ClickSparkDemo from "@/registry/click-spark-demo";
 import SpotlightCardDemo from "@/registry/spotlight-card-demo";
 import TextPressureDemo from "@/registry/text-pressure-demo";
+import WavesDemo from "@/registry/waves-demo";
+import LetterGlitchDemo from "@/registry/letter-glitch-demo";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -70,6 +72,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "click-spark": ClickSparkDemo,
   "spotlight-card": SpotlightCardDemo,
   "text-pressure": TextPressureDemo,
+  "waves": WavesDemo,
+  "letter-glitch": LetterGlitchDemo,
 };
 
 interface PreviewPageProps {

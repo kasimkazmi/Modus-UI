@@ -180,5 +180,17 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge"],
     files: ["registry/text-pressure.tsx"],
   },
+  {
+    name: "waves",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/waves.tsx"],
+  },
+  {
+    name: "letter-glitch",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/letter-glitch.tsx"],
+  },
 ];
 

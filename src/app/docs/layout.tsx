@@ -51,6 +51,8 @@ const DOC_CATEGORIES = [
     title: "Backgrounds",
     icon: Sparkles,
     items: [
+      { title: "Waves", href: "/docs/waves" },
+      { title: "Letter Glitch", href: "/docs/letter-glitch" },
       { title: "Aurora Background", href: "/docs/aurora-background" },
       { title: "Circuit Background", href: "/docs/circuit-background" },
       { title: "Grid Motion", href: "/docs/grid-motion" },

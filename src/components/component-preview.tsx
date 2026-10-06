@@ -30,6 +30,8 @@ import GradientTextDemo from "@/registry/gradient-text-demo";
 import ClickSparkDemo from "@/registry/click-spark-demo";
 import SpotlightCardDemo from "@/registry/spotlight-card-demo";
 import TextPressureDemo from "@/registry/text-pressure-demo";
+import WavesDemo from "@/registry/waves-demo";
+import LetterGlitchDemo from "@/registry/letter-glitch-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -65,6 +67,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "click-spark": ClickSparkDemo,
   "spotlight-card": SpotlightCardDemo,
   "text-pressure": TextPressureDemo,
+  "waves": WavesDemo,
+  "letter-glitch": LetterGlitchDemo,
 };
 
 interface ComponentPreviewProps {
