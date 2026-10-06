@@ -1,0 +1,51 @@
+---
+title: Tilted Card
+description: A 3D interactive card that physically tilts and pans relative to the cursor position.
+---
+
+A highly responsive 3D card utilizing Framer Motion spring physics. It dynamically calculates cursor offsets to apply localized 3D rotations, complete with an attached tooltip that flows with cursor velocity.
+
+<ComponentPreview name="tilted-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add tilted-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tilted-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TiltedCard } from "@/components/ui/tilted-card";
+
+export default function Example() {
+  return (
+    <TiltedCard
+      imageSrc="/path/to/image.jpg"
+      altText="Description"
+      captionText="Tooltip Content"
+      containerHeight={400}
+      containerWidth={300}
+      imageHeight={400}
+      imageWidth={300}
+      rotateAmplitude={12}
+      scaleOnHover={1.1}
+      showTooltip={true}
+      displayOverlayContent={true}
+      overlayContent={
+        <div className="w-[300px] h-[400px] p-6 flex flex-col justify-end rounded-xl">
+          <p className="text-white text-2xl font-bold">Overlay Text</p>
+        </div>
+      }
+    />
+  );
+}
+```

@@ -192,5 +192,17 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge"],
     files: ["registry/letter-glitch.tsx"],
   },
+  {
+    name: "pixel-card",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/pixel-card.tsx"],
+  },
+  {
+    name: "tilted-card",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/tilted-card.tsx"],
+  },
 ];
 

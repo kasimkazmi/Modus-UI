@@ -27,6 +27,8 @@ const COMPONENT_LIST = [
   { title: "Gradient Text", href: "/docs/gradient-text" },
   { title: "True Focus", href: "/docs/true-focus" },
   { title: "Text Pressure", href: "/docs/text-pressure" },
+  { title: "Tilted Card", href: "/docs/tilted-card" },
+  { title: "Pixel Card", href: "/docs/pixel-card" },
   { title: "Spotlight Card", href: "/docs/spotlight-card" },
   { title: "Click Spark", href: "/docs/click-spark" },
   { title: "Border Glow", href: "/docs/border-glow" },

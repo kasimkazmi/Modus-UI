@@ -76,6 +76,8 @@ const DOC_CATEGORIES = [
     title: "Components",
     icon: LayoutTemplate,
     items: [
+      { title: "Tilted Card", href: "/docs/tilted-card" },
+      { title: "Pixel Card", href: "/docs/pixel-card" },
       { title: "Click Spark", href: "/docs/click-spark" },
       { title: "Spotlight Card", href: "/docs/spotlight-card" },
       { title: "Border Glow", href: "/docs/border-glow" },

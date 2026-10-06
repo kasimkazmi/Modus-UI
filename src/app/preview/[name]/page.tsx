@@ -38,6 +38,8 @@ import SpotlightCardDemo from "@/registry/spotlight-card-demo";
 import TextPressureDemo from "@/registry/text-pressure-demo";
 import WavesDemo from "@/registry/waves-demo";
 import LetterGlitchDemo from "@/registry/letter-glitch-demo";
+import PixelCardDemo from "@/registry/pixel-card-demo";
+import TiltedCardDemo from "@/registry/tilted-card-demo";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -74,6 +76,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "text-pressure": TextPressureDemo,
   "waves": WavesDemo,
   "letter-glitch": LetterGlitchDemo,
+  "pixel-card": PixelCardDemo,
+  "tilted-card": TiltedCardDemo,
 };
 
 interface PreviewPageProps {

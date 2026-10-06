@@ -1,0 +1,38 @@
+---
+title: Pixel Card
+description: A card that reveals a pixelated, shimmering canvas pattern on hover.
+---
+
+A stunning interaction component that draws a grid of shrinking and growing canvas pixels following your cursor focus. 
+
+<ComponentPreview name="pixel-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add pixel-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pixel-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PixelCard } from "@/components/ui/pixel-card";
+
+export default function Example() {
+  return (
+    <PixelCard variant="blue">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span className="text-xl font-bold text-blue-500">Hover Me</span>
+      </div>
+    </PixelCard>
+  );
+}
+```

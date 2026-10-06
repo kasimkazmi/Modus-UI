@@ -32,6 +32,8 @@ import SpotlightCardDemo from "@/registry/spotlight-card-demo";
 import TextPressureDemo from "@/registry/text-pressure-demo";
 import WavesDemo from "@/registry/waves-demo";
 import LetterGlitchDemo from "@/registry/letter-glitch-demo";
+import PixelCardDemo from "@/registry/pixel-card-demo";
+import TiltedCardDemo from "@/registry/tilted-card-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -69,6 +71,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "text-pressure": TextPressureDemo,
   "waves": WavesDemo,
   "letter-glitch": LetterGlitchDemo,
+  "pixel-card": PixelCardDemo,
+  "tilted-card": TiltedCardDemo,
 };
 
 interface ComponentPreviewProps {
