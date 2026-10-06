@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-("use client");
 
 import {
   AnimatePresence,
