@@ -1,0 +1,158 @@
+---
+title: Installation
+description: Set up Tailwind CSS and the Modus theme tokens, then add components with the CLI.
+---
+
+Modus UI is not a package you import from. The CLI copies each component's source into your project, so you own the code and can change anything. Components are React client components styled with Tailwind CSS and animated with Framer Motion.
+
+## Requirements
+
+- **React 18 or newer**, with Next.js (App Router or Pages) or Vite.
+- **TypeScript**, with an `@/` import alias pointing at your source root.
+- **Tailwind CSS v3.4.** Components read theme colours as `hsl(var(--token))`, so they need Tailwind 3-style tokens stored as bare HSL channels. Tailwind CSS v4 and shadcn's `oklch` themes are not supported yet.
+
+Already using shadcn/ui on Tailwind CSS v3? Your project already has compatible tokens. Skip to [Add components](#add-components).
+
+## Set up Tailwind CSS
+
+If your project doesn't use Tailwind yet, follow the official guide for [Next.js](https://v3.tailwindcss.com/docs/guides/nextjs) or [Vite](https://v3.tailwindcss.com/docs/guides/vite) first.
+
+## Add the theme tokens
+
+Components take their colours and radius from CSS variables. Paste these Modus tokens into your global stylesheet (for example `app/globals.css`), replacing the `@tailwind` lines it already has. Change the values to restyle every component at once.
+
+<ThemeTokensCss />
+
+The values are HSL channels without `hsl()`, so Tailwind can add opacity (`bg-primary/50`). Dark mode switches when an ancestor, usually `<html>`, has the `dark` class.
+
+## Map the tokens in Tailwind
+
+Expose the tokens as Tailwind colours so classes like `bg-background` and `text-muted-foreground` work. Make sure `content` includes the folder the CLI writes components to.
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: "class",
+  content: ["./src/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border) / <alpha-value>)",
+        input: "hsl(var(--input) / <alpha-value>)",
+        ring: "hsl(var(--ring) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        primary: {
+          DEFAULT: "hsl(var(--primary) / <alpha-value>)",
+          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
+          foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+          foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground) / <alpha-value>)",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+          foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card) / <alpha-value>)",
+          foreground: "hsl(var(--card-foreground) / <alpha-value>)",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+    },
+  },
+};
+```
+
+## Configure the import alias
+
+Components import `cn` from `@/lib/utils`. Next.js projects created with `create-next-app` already have the alias. For Vite, add it to both `tsconfig.json` and `vite.config.ts`:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] }
+  }
+}
+```
+
+```ts
+import path from "node:path";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+});
+```
+
+## Add components
+
+Run the CLI from your project root with one or more component names:
+
+```bash
+npx @modus-ui/cli add blur-text magnet
+```
+
+It writes each component to `components/ui/<name>.tsx` (or `src/components/ui` when you have a `src/` folder). If you don't have a `cn()` helper yet, it creates `lib/utils.ts`. Then it installs `framer-motion`, `clsx` and `tailwind-merge` with your package manager. Run `npx @modus-ui/cli list` to see every component.
+
+## Use a component
+
+```tsx
+import { BlurText } from "@/components/ui/blur-text";
+
+export default function Hero() {
+  return <BlurText text="Isn't this just beautiful?" className="text-5xl" />;
+}
+```
+
+Every component page lists its props and a usage example.
+
+## Install manually
+
+Prefer not to use the CLI? Open a component's page, copy the source from the **Code** tab into `components/ui/<name>.tsx`, and install the packages it imports. Add the `cn()` helper if you don't have one:
+
+```ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+## Use with coding agents
+
+Add the MCP server so Claude Code, Cursor and other agents can search components, read their real props and install them:
+
+```bash
+claude mcp add modus-ui -- npx -y @modus-ui/mcp
+```
+
+Agents that only read URLs can use [`/llms.txt`](/llms.txt), or any component page with `.md` appended, for example [`/docs/blur-text.md`](/docs/blur-text.md).
+
+## Troubleshooting
+
+- **Colours are missing, transparent or black.** The theme tokens aren't defined, or they hold full colours like `#fff` or `oklch(...)` instead of HSL channels such as `0 0% 100%`.
+- **Tailwind classes have no effect.** Add the components folder to `content` in `tailwind.config`.
+- **`Cannot find module '@/lib/utils'`.** Configure the `@/` alias, or change the import to your project's path.
+- **Animations don't play.** Your system has "reduce motion" turned on. Every component respects `prefers-reduced-motion` and shows its settled state instead.
