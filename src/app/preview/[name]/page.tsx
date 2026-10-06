@@ -23,7 +23,7 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
   if (name === "morphing-navbar") {
     return (
       <div
-        data-theme="modus"
+        data-palette="modus"
         className="relative min-h-screen bg-background font-sans text-foreground"
       >
         {/* Real page-level sticky Navbar */}
@@ -117,7 +117,7 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
 
   return (
     <div
-      data-theme="modus"
+      data-palette="modus"
       className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background font-sans text-foreground"
     >
       {/* Floating Back Link Badge */}

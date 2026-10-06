@@ -10,7 +10,7 @@ import {
   Space_Grotesk,
 } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import { DEFAULT_THEME, THEMES } from "@/lib/themes";
+import { paletteScript } from "@/lib/themes";
 import "./globals.css";
 
 // The default theme's fonts are preloaded; the rest download only when a theme uses them.
@@ -60,14 +60,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // next-themes sets data-theme before hydration, so the attribute differs from the server's.
+    // The palette script and next-themes set attributes before hydration, so they differ from the server's.
     <html lang="en" className={fontVariables} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: paletteScript }} />
+      </head>
       <body className="antialiased">
         <ThemeProvider
-          attribute="data-theme"
-          themes={THEMES.map((theme) => theme.id)}
-          defaultTheme={DEFAULT_THEME}
-          enableSystem={false}
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
           disableTransitionOnChange
         >
           {children}

@@ -60,7 +60,7 @@ export const ComponentPreviewClient = ({
               value="preview"
               forceMount
               // Previews always render in the original Modus design, whatever the site theme.
-              data-theme="modus"
+              data-palette="modus"
               className="relative flex min-h-[400px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card shadow-sm focus-visible:outline-none"
             >
               <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
