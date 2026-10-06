@@ -26,9 +26,9 @@ export function AnimatedBeam({
   reverse = false,
   duration = 3,
   delay = 0,
-  pathColor = "var(--border)",
-  gradientStart = "var(--primary)",
-  gradientStop = "var(--primary)",
+  pathColor = "hsl(var(--border))",
+  gradientStart = "hsl(var(--primary))",
+  gradientStop = "hsl(var(--primary))",
   className = "",
 }: AnimatedBeamProps) {
   const gradientId = useId();

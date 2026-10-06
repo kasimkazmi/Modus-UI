@@ -11,7 +11,7 @@ export default function BlobCursorDemo() {
       </div>
 
       {/* The blob cursor only lives inside this box */}
-      <BlobCursor fillColor="var(--primary)" />
+      <BlobCursor fillColor="hsl(var(--primary))" />
     </div>
   );
 }

@@ -21,9 +21,9 @@ export function StarBorder({
   color = "rgba(255, 255, 255, 0.8)",
   speed = 6,
   thickness = 1,
-  backgroundColor = "var(--background)",
-  textColor = "var(--foreground)",
-  borderColor = "var(--border)",
+  backgroundColor = "hsl(var(--background))",
+  textColor = "hsl(var(--foreground))",
+  borderColor = "hsl(var(--border))",
   children,
   ...rest
 }: StarBorderProps) {
@@ -38,7 +38,7 @@ export function StarBorder({
     >
       {/* Bottom glowing beam */}
       <motion.div
-        className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full z-0 pointer-events-none"
+        className="pointer-events-none absolute bottom-[-11px] right-[-250%] z-0 h-[50%] w-[300%] rounded-full opacity-70"
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
         }}
@@ -52,7 +52,7 @@ export function StarBorder({
       />
       {/* Top glowing beam */}
       <motion.div
-        className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full z-0 pointer-events-none"
+        className="pointer-events-none absolute left-[-250%] top-[-10px] z-0 h-[50%] w-[300%] rounded-full opacity-70"
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
         }}
@@ -64,10 +64,10 @@ export function StarBorder({
           ease: "linear",
         }}
       />
-      
+
       {/* Inner Button Content */}
       <div
-        className="relative z-10 border text-center text-sm font-medium py-2.5 px-6 rounded-full w-full h-full"
+        className="relative z-10 h-full w-full rounded-full border px-6 py-2.5 text-center text-sm font-medium"
         style={{ background: backgroundColor, color: textColor, borderColor }}
       >
         {children}

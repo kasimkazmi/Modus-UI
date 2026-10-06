@@ -23,6 +23,14 @@ describe("coding standards (AGENTS.md)", () => {
     expect(sources.filter((f) => /from\s+["']gsap/.test(read(f)))).toEqual([]);
   });
 
+  // Theme tokens are bare HSL channels (`--primary: 24 8% 20%`), so a raw
+  // `var(--primary)` is not a color: it renders transparent or black.
+  it("wraps theme tokens in hsl() when used as a color", () => {
+    const raw =
+      /(?<!hsl\()var\(--(primary|secondary|accent|muted|background|foreground|border|ring|card|destructive|input|popover)(-foreground)?\)/;
+    expect(sources.filter((f) => f.startsWith("src/registry") && raw.test(read(f)))).toEqual([]);
+  });
+
   it("documents installs with the modus-ui CLI only", () => {
     const offenders = docs.filter((f) => /npx (shadcn|react-ui-component)/.test(read(f)));
     expect(offenders).toEqual([]);
