@@ -1,0 +1,46 @@
+{
+  "name": "@modus-ui/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Modus UI. Lets your coding agent search, read and install animated React components.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "modus-ui",
+    "react",
+    "components"
+  ],
+  "license": "MIT",
+  "homepage": "https://modusui.kasimkazmi.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasimkazmi/Modus-UI.git",
+    "directory": "packages/mcp"
+  },
+  "type": "module",
+  "bin": {
+    "modus-ui-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

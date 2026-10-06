@@ -1,0 +1,44 @@
+name: Release packages
+
+# Push a tag to publish: `cli-v0.1.0` releases @modus-ui/cli, `mcp-v0.1.0` releases @modus-ui/mcp.
+# The tag version must match the package's package.json version.
+# Requires the NPM_TOKEN repository secret (an npm automation token with publish rights on @modus-ui).
+on:
+  push:
+    tags: ["cli-v*", "mcp-v*"]
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - name: Resolve package from tag
+        id: pkg
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          dir="packages/${tag%%-v*}"
+          version="${tag#*-v}"
+          actual=$(node -p "require('./$dir/package.json').version")
+          if [ "$version" != "$actual" ]; then
+            echo "::error::Tag $tag does not match $dir/package.json version $actual"; exit 1
+          fi
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+
+      - run: pnpm --dir ${{ steps.pkg.outputs.dir }} build
+      - run: pnpm --dir ${{ steps.pkg.outputs.dir }} test
+      - run: npm publish --provenance --access public
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -27,6 +27,20 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
 
+  packages:
+    name: CLI & MCP packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter "./packages/*" build
+      - run: pnpm --filter "./packages/*" test
+
   build:
     name: Build & registry
     runs-on: ubuntu-latest

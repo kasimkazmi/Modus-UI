@@ -1,0 +1,43 @@
+{
+  "name": "@modus-ui/cli",
+  "version": "0.1.0",
+  "description": "Add Modus UI animated React components to your project.",
+  "type": "module",
+  "bin": {
+    "modus-ui": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "homepage": "https://modusui.kasimkazmi.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kasimkazmi/Modus-UI.git",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "tailwind",
+    "framer-motion",
+    "cli",
+    "modus-ui"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "typescript": "^5",
+    "vitest": "^5.0.3"
+  }
+}

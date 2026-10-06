@@ -48,7 +48,13 @@ export function cn(...inputs: ClassValue[]) {
 
 ## For coding agents
 
-The docs are published as plain markdown so agents like Claude Code, Cursor or Codex can read them directly:
+The MCP server lets your agent search the catalogue, read a component's real props and source, and get its install command:
+
+```bash
+claude mcp add modus-ui -- npx -y @modus-ui/mcp
+```
+
+For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The docs are also published as plain markdown so agents like Claude Code, Cursor or Codex can read them directly:
 
 - [`/llms.txt`](https://modusui.kasimkazmi.com/llms.txt): index of every component with a one-line description
 - [`/llms-full.txt`](https://modusui.kasimkazmi.com/llms-full.txt): every component's docs and full source in one file
@@ -76,7 +82,7 @@ Run the site locally and open [`/docs`](http://localhost:3000/docs). Each compon
 
 ## Local development
 
-Requires **Node 20+** and **pnpm**.
+Requires **Node 20+** and **pnpm**. The CLI and MCP server live in [`packages/cli`](packages/cli) and [`packages/mcp`](packages/mcp) as a pnpm workspace.
 
 ```bash
 git clone https://github.com/kasimkazmi/Modus-UI.git
