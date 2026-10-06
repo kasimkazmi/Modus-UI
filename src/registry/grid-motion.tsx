@@ -10,14 +10,14 @@ export interface GridMotionProps {
   gradientColor?: string;
 }
 
-function GridRow({ 
-  rowIndex, 
-  smoothX, 
-  combinedItems 
-}: { 
-  rowIndex: number; 
-  smoothX: any; 
-  combinedItems: React.ReactNode[] 
+function GridRow({
+  rowIndex,
+  smoothX,
+  combinedItems,
+}: {
+  rowIndex: number;
+  smoothX: any;
+  combinedItems: React.ReactNode[];
 }) {
   const direction = rowIndex % 2 === 0 ? 1 : -1;
   const inertiaFactor = [0.6, 0.4, 0.3, 0.2][rowIndex % 4];
@@ -26,24 +26,25 @@ function GridRow({
   // Now useTransform is called at the top level of a component!
   const x = useTransform(smoothX, (currentX: number) => {
     if (typeof window === "undefined") return 0;
-    const moveAmount = ((currentX / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
+    const moveAmount =
+      ((currentX / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
     return moveAmount * inertiaFactor;
   });
 
   return (
-    <motion.div className="grid gap-4 grid-cols-7" style={{ x }}>
+    <motion.div className="grid grid-cols-7 gap-4" style={{ x }}>
       {[...Array(7)].map((_, itemIndex) => {
         const content = combinedItems[rowIndex * 7 + itemIndex];
         return (
           <div key={itemIndex} className="relative">
-            <div className="relative w-full h-full overflow-hidden rounded-[16px] bg-card border border-border flex items-center justify-center text-foreground text-[1.5rem] shadow-sm hover:scale-[1.02] transition-transform duration-300 cursor-default">
-              {typeof content === 'string' && content.startsWith('http') ? (
+            <div className="relative flex h-full w-full cursor-default items-center justify-center overflow-hidden rounded-[16px] border border-border bg-card text-[1.5rem] text-foreground shadow-sm transition-transform duration-300 hover:scale-[1.02]">
+              {typeof content === "string" && content.startsWith("http") ? (
                 <div
-                  className="w-full h-full bg-cover bg-center absolute top-0 left-0"
+                  className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
                   style={{ backgroundImage: `url(${content})` }}
                 />
               ) : (
-                <div className="p-4 text-center z-[1]">{content}</div>
+                <div className="z-[1] p-4 text-center">{content}</div>
               )}
             </div>
           </div>
@@ -53,9 +54,13 @@ function GridRow({
   );
 }
 
-export function GridMotion({ items = [], className, gradientColor = "var(--background)" }: GridMotionProps) {
+export function GridMotion({
+  items = [],
+  className,
+  gradientColor = "hsl(var(--background))",
+}: GridMotionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Create an array of 28 items minimum
   const totalItems = 28;
   const defaultItems = Array.from({ length: totalItems }, (_, index) => `Item ${index + 1}`);
@@ -74,21 +79,24 @@ export function GridMotion({ items = [], className, gradientColor = "var(--backg
   }, [mouseX]);
 
   return (
-    <div ref={containerRef} className={cn("h-full w-full overflow-hidden bg-background", className)}>
+    <div
+      ref={containerRef}
+      className={cn("h-full w-full overflow-hidden bg-background", className)}
+    >
       <section
-        className="w-full h-screen overflow-hidden relative flex items-center justify-center"
+        className="relative flex h-screen w-full items-center justify-center overflow-hidden"
         style={{
-          background: `radial-gradient(circle, ${gradientColor} 0%, transparent 100%)`
+          background: `radial-gradient(circle, ${gradientColor} 0%, transparent 100%)`,
         }}
       >
-        <div className="absolute inset-0 pointer-events-none z-[4] bg-[length:250px]"></div>
-        <div className="gap-4 flex-none relative w-[150vw] h-[150vh] grid grid-rows-4 grid-cols-1 rotate-[-15deg] origin-center z-[2]">
+        <div className="pointer-events-none absolute inset-0 z-[4] bg-[length:250px]"></div>
+        <div className="relative z-[2] grid h-[150vh] w-[150vw] flex-none origin-center rotate-[-15deg] grid-cols-1 grid-rows-4 gap-4">
           {[...Array(4)].map((_, rowIndex) => (
-            <GridRow 
-              key={rowIndex} 
-              rowIndex={rowIndex} 
-              smoothX={smoothX} 
-              combinedItems={combinedItems} 
+            <GridRow
+              key={rowIndex}
+              rowIndex={rowIndex}
+              smoothX={smoothX}
+              combinedItems={combinedItems}
             />
           ))}
         </div>

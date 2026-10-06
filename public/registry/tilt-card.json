@@ -1,5 +1,7 @@
 {
   "name": "tilt-card",
+  "title": "Tilt Card",
+  "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
     "framer-motion"

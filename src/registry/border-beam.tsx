@@ -22,21 +22,13 @@ export function BorderBeam({
   duration = 8,
   borderWidth = 1.5,
   size = 200,
-  colorFrom = "var(--primary)",
+  colorFrom = "hsl(var(--primary))",
   colorTo = "transparent",
   delay = 0,
   className,
 }: BorderBeamProps) {
+  // Null during SSR, so the tree must not branch on it: only the animation does.
   const prefersReducedMotion = useReducedMotion();
-
-  if (prefersReducedMotion) {
-    return (
-      <div
-        className={cn("absolute inset-0 rounded-[inherit] border", className)}
-        style={{ borderWidth, borderColor: colorFrom }}
-      />
-    );
-  }
 
   return (
     <div
@@ -62,7 +54,7 @@ export function BorderBeam({
         style={{
           background: `conic-gradient(from 90deg at 50% 50%, ${colorTo} 0%, ${colorFrom} 50%, ${colorTo} 100%)`,
         }}
-        animate={{ rotate: 360 }}
+        animate={prefersReducedMotion ? undefined : { rotate: 360 }}
         transition={{
           repeat: Infinity,
           duration,

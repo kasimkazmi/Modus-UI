@@ -1,5 +1,7 @@
 {
   "name": "border-glow",
+  "title": "Border Glow",
+  "category": "Components",
   "type": "components:ui",
   "dependencies": [
     "clsx",

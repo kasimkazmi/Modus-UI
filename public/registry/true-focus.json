@@ -1,5 +1,7 @@
 {
   "name": "true-focus",
+  "title": "True Focus",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

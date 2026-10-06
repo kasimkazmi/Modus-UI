@@ -1,5 +1,7 @@
 {
   "name": "spotlight-card",
+  "title": "Spotlight Card",
+  "category": "Components",
   "type": "components:ui",
   "dependencies": [
     "clsx",

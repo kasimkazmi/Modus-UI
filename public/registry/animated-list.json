@@ -1,5 +1,7 @@
 {
   "name": "animated-list",
+  "title": "Animated List",
+  "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

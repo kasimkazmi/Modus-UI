@@ -1,5 +1,7 @@
 {
   "name": "magnet",
+  "title": "Magnet",
+  "category": "Actions",
   "type": "components:ui",
   "dependencies": [
     "clsx",

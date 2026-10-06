@@ -1,5 +1,7 @@
 {
   "name": "focus-card",
+  "title": "Focus Card",
+  "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
     "clsx",

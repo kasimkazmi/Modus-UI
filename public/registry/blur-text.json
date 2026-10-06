@@ -1,5 +1,7 @@
 {
   "name": "blur-text",
+  "title": "Blur Text",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

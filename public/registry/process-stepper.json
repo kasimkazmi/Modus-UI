@@ -1,5 +1,7 @@
 {
   "name": "process-stepper",
+  "title": "Process Stepper",
+  "category": "Navigation",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

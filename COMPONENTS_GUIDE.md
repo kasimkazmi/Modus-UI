@@ -86,9 +86,10 @@ Don't use the raw component directly in the preview if it requires context.
 
 To make the component live, you must:
 
-1. **Register** in `src/registry/index.ts`: Add an entry to the `registry` array with dependencies and file paths.
-2. **Map** in `src/components/component-preview.tsx`: Import the **Demo** component and add it to the `COMPONENT_MAP`.
-3. **Navigate** in `src/app/docs/layout.tsx`: Add the item to the appropriate `DOC_CATEGORIES` list.
+1. **Register** in `src/registry/index.ts`: Add an entry with `name`, `title`, `category`, dependencies and file paths. Its position within the category is its position in the sidebar.
+2. **Demo** in `src/registry/demos.ts`: Import the **Demo** component and add it to `demos`. Typecheck fails if a registered component has no demo.
+
+The sidebar, components index, docs previews and `/preview/[name]` all read from these two files.
 
 ---
 

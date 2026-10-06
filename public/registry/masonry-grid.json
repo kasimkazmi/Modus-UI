@@ -1,5 +1,7 @@
 {
   "name": "masonry-grid",
+  "title": "Masonry Grid",
+  "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

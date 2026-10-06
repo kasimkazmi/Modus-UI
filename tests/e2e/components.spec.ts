@@ -45,7 +45,12 @@ async function showsContent(page: Page): Promise<boolean> {
     };
     return [...root.querySelectorAll<HTMLElement>("*")].some((el) => {
       const box = el.getBoundingClientRect();
+      // Backgrounds only count on leaves (e.g. decorative lines); a wrapper's
+      // backdrop would otherwise mask content that never appeared.
+      const style = getComputedStyle(el);
       const painted =
+        (el.childElementCount === 0 &&
+          (style.backgroundColor !== "rgba(0, 0, 0, 0)" || style.backgroundImage !== "none")) ||
         el instanceof HTMLCanvasElement ||
         el instanceof SVGElement ||
         el instanceof HTMLImageElement ||

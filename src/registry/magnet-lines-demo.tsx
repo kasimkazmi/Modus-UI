@@ -13,7 +13,7 @@ export default function MagnetLinesDemo() {
         rows={7}
         columns={7}
         containerSize="60vmin"
-        lineColor="var(--primary)"
+        lineColor="hsl(var(--primary))"
         lineWidth="0.8vmin"
         lineHeight="4vmin"
         baseAngle={0}

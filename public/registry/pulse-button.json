@@ -1,5 +1,7 @@
 {
   "name": "pulse-button",
+  "title": "Pulse Button",
+  "category": "Actions",
   "type": "components:ui",
   "dependencies": [
     "framer-motion"

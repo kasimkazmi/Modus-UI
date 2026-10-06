@@ -1,5 +1,7 @@
 {
   "name": "liquid-tabs",
+  "title": "Liquid Tabs",
+  "category": "Navigation",
   "type": "components:ui",
   "dependencies": [
     "clsx",

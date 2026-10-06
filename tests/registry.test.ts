@@ -7,12 +7,6 @@ const SRC = path.join(process.cwd(), "src");
 const read = (file: string) => fs.readFileSync(path.join(SRC, file), "utf8");
 
 const names = registry.map((item) => item.name);
-const preview = read("components/component-preview.tsx");
-const standalone = read("app/preview/[name]/page.tsx");
-/** Matches a map key whether or not Prettier kept its quotes. */
-const mapKey = (name: string) => new RegExp(`(^|[\\s{,])["']?${name}["']?\\s*:`, "m");
-const docsIndex = read("app/docs/components/page.tsx");
-const sidebar = read("app/docs/layout.tsx");
 
 describe("registry integrity", () => {
   it("has a unique name per component", () => {
@@ -47,30 +41,32 @@ describe("registry integrity", () => {
   });
 });
 
-describe("every component is wired up (AGENTS.md rule 4)", () => {
-  it.each(names)("%s is in the preview map", (name) => {
-    expect(preview).toMatch(mapKey(name));
+// Sidebar, components index and previews are derived from the registry, and
+// `demos.ts` is typed against it, so wiring is enforced by the compiler. These
+// cover what the compiler cannot see: the files on disk.
+describe("docs and registry agree", () => {
+  it("has a unique title per component", () => {
+    const titles = registry.map((item) => item.title);
+    expect(new Set(titles).size).toBe(titles.length);
   });
 
-  // morphing-navbar gets a dedicated full-page preview instead of a map entry.
-  it.each(names.filter((n) => n !== "morphing-navbar"))(
-    "%s is in the standalone preview map",
-    (name) => {
-      expect(standalone).toMatch(mapKey(name));
-    },
-  );
-
-  it.each(names)("%s is on the components index page", (name) => {
-    expect(docsIndex).toContain(`"/docs/${name}"`);
+  it.each(registry)("$name doc title matches the registry title", (item) => {
+    const mdx = read(`content/docs/${item.name}.mdx`);
+    expect(mdx.match(/^title:\s*(.+)$/m)?.[1].trim()).toBe(item.title);
   });
 
-  it.each(names)("%s is in the docs sidebar", (name) => {
-    expect(sidebar).toContain(`"/docs/${name}"`);
+  it("has no doc without a registry entry", () => {
+    const docs = fs
+      .readdirSync(path.join(SRC, "content/docs"))
+      .map((file) => file.replace(/\.mdx$/, ""));
+    expect(docs.filter((name) => !names.includes(name as (typeof names)[number]))).toEqual([]);
   });
 
-  it("the sidebar links nothing that is not in the registry", () => {
-    const linked = [...sidebar.matchAll(/href: "\/docs\/([^"]+)"/g)].map(([, n]) => n);
-    const pages = new Set(["components", "coming-soon", ...names]);
-    expect(linked.filter((n) => !pages.has(n))).toEqual([]);
+  it("has no demo file without a registry entry", () => {
+    const demos = fs
+      .readdirSync(path.join(SRC, "registry"))
+      .filter((file) => file.endsWith("-demo.tsx"))
+      .map((file) => file.replace(/-demo\.tsx$/, ""));
+    expect(demos.filter((name) => !names.includes(name as (typeof names)[number]))).toEqual([]);
   });
 });

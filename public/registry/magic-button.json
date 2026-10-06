@@ -1,5 +1,7 @@
 {
   "name": "magic-button",
+  "title": "Magic Button",
+  "category": "Actions",
   "type": "components:ui",
   "dependencies": [
     "framer-motion"

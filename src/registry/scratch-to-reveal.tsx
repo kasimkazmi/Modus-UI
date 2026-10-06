@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-} from "framer-motion";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type PointerEvent,
-} from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface ScratchToRevealProps {
@@ -55,7 +46,7 @@ export function ScratchToReveal({
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
-    
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.scale(dpr, dpr);
@@ -67,10 +58,12 @@ export function ScratchToReveal({
       };
       img.src = overlayImage;
     } else {
-      ctx.fillStyle = overlayColor;
+      // Canvas cannot resolve CSS variables; let the browser compute the color.
+      canvas.style.color = overlayColor;
+      ctx.fillStyle = getComputedStyle(canvas).color;
       ctx.fillRect(0, 0, width, height);
     }
-    
+
     // Add noise texture for realism if using flat color
     if (!overlayImage) {
       for (let i = 0; i < width * height * 0.05; i++) {
@@ -80,7 +73,6 @@ export function ScratchToReveal({
         ctx.fillRect(x, y, 1, 1);
       }
     }
-
   }, [width, height, overlayImage, overlayColor]);
 
   const clearedFraction = () => {
@@ -90,12 +82,12 @@ export function ScratchToReveal({
 
     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
     let emptyCount = 0;
-    
+
     // Check alpha channel (every 4th value)
     for (let i = 3; i < pixels.length; i += 4) {
       if (pixels[i] === 0) emptyCount++;
     }
-    
+
     return emptyCount / (canvas.width * canvas.height);
   };
 
@@ -165,7 +157,7 @@ export function ScratchToReveal({
         className,
       )}
     >
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         {children}
       </div>
 
@@ -182,14 +174,10 @@ export function ScratchToReveal({
         onKeyDown={handleKeyDown}
         style={{ width, height, touchAction: "none" }}
         animate={{ opacity: revealed ? 0 : 1, scale: revealed ? 1.06 : 1 }}
-        transition={
-          prefersReducedMotion
-            ? { duration: 0 }
-            : { duration: 0.5, ease: "easeOut" }
-        }
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5, ease: "easeOut" }}
         className={cn(
           "absolute inset-0 rounded-[inherit]",
-          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           revealed ? "pointer-events-none" : "cursor-crosshair",
         )}
       />

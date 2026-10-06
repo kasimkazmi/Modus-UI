@@ -52,9 +52,9 @@ export default function AnimatedBeamDemo() {
         fromRef={fromRef}
         toRef={toRef1}
         curvature={-50}
-        pathColor="var(--border)"
-        gradientStart="var(--primary)"
-        gradientStop="var(--primary)"
+        pathColor="hsl(var(--border))"
+        gradientStart="hsl(var(--primary))"
+        gradientStop="hsl(var(--primary))"
       />
       <AnimatedBeam containerRef={containerRef} fromRef={fromRef} toRef={toRef2} curvature={0} />
       <AnimatedBeam

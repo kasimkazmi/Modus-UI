@@ -20,7 +20,7 @@ export function FuzzyText({
   fontSize = "clamp(3rem, 8vw, 6rem)",
   fontWeight = 900,
   fontFamily = "inherit",
-  color = "var(--foreground)",
+  color = "hsl(var(--foreground))",
   hoverHover = true,
   baseIntensity = 0.18,
   hoverIntensity = 0.6,
@@ -38,6 +38,10 @@ export function FuzzyText({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Canvas cannot resolve CSS variables; let the browser compute the color.
+    canvas.style.color = color;
+    const fill = getComputedStyle(canvas).color;
+
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -45,7 +49,7 @@ export function FuzzyText({
       ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
-      ctx.fillStyle = color;
+      ctx.fillStyle = fill;
 
       // We manually handle centering based on canvas dimensions
       const text = String(children);

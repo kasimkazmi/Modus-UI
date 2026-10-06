@@ -1,5 +1,7 @@
 {
   "name": "circuit-background",
+  "title": "Circuit Background",
+  "category": "Backgrounds",
   "type": "components:ui",
   "dependencies": [],
   "files": [
