@@ -150,35 +150,21 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#FAF9F7] text-[#37322F] font-sans relative p-6">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background text-foreground font-sans relative">
       {/* Floating Back Link Badge */}
       <div className="fixed top-6 left-6 z-50">
         <Link
           href={`/docs/${name}`}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[#E0DEDB] bg-white/90 text-[#605A57] font-medium text-xs hover:text-[#37322F] shadow-sm transition-all hover:bg-white hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border bg-background/90 text-muted-foreground font-medium text-xs hover:text-foreground shadow-sm transition-all hover:bg-background hover:scale-105 active:scale-95"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Docs
         </Link>
       </div>
 
-      {/* Standalone Interactive Demo wrapper */}
-      <div className="w-full max-w-3xl flex flex-col items-center justify-center p-12 border border-[#E0DEDB] rounded-3xl bg-white shadow-xl relative overflow-hidden">
-        {/* Elegant top accent label */}
-        <div className="absolute top-6 left-6 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#37322F]/40 select-none">
-          <Sparkles className="w-3.5 h-3.5 text-[#37322F]/60 animate-pulse" />
-          Standalone View
-        </div>
-
-        {/* Standalone interactive preview */}
-        <div className="w-full flex items-center justify-center py-16">
-          <DemoComponent />
-        </div>
-
-        {/* Bottom instructions */}
-        <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#605A57]/50 select-none">
-          Click or hover elements above to test interactive states
-        </div>
+      {/* Completely full screen rendering of the demo component */}
+      <div className="w-full flex-1 flex items-center justify-center min-h-screen">
+        <DemoComponent />
       </div>
     </div>
   );
