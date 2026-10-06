@@ -13,31 +13,23 @@
 ### Task 1: Update Docs Layout Sidebar
 
 **Files:**
+
 - Modify: `src/app/docs/layout.tsx`
 
 - [ ] **Step 1: Implement Categorized Sidebar**
-Update the navigation logic to use categories.
+      Update the navigation logic to use categories.
 
 ```tsx
 // src/app/docs/layout.tsx modifications
 // ... existing imports
-import { 
-  Layout, 
-  MousePointer2, 
-  Type, 
-  CreditCard, 
-  PanelTop,
-  Component
-} from "lucide-react";
+import { Layout, MousePointer2, Type, CreditCard, PanelTop, Component } from "lucide-react";
 
 // Define categories
 const DOC_CATEGORIES = [
   {
     title: "Headers",
     icon: PanelTop,
-    items: [
-      { title: "Morphing Navbar", href: "/docs/components/morphing-navbar" },
-    ]
+    items: [{ title: "Morphing Navbar", href: "/docs/components/morphing-navbar" }],
   },
   {
     title: "Buttons",
@@ -46,47 +38,42 @@ const DOC_CATEGORIES = [
       { title: "Magic Button", href: "/docs/magic-button" },
       { title: "Animated Button", href: "/docs/components/animated-button" },
       { title: "Pulse Button", href: "/docs/components/pulse-button" },
-    ]
+    ],
   },
   {
     title: "Cards",
     icon: CreditCard,
-    items: [
-      { title: "Rotating Card", href: "/docs/components/rotating-card" },
-    ]
+    items: [{ title: "Rotating Card", href: "/docs/components/rotating-card" }],
   },
   {
     title: "Layout",
     icon: Layout,
-    items: [
-      { title: "Dock", href: "/docs/dock" },
-    ]
+    items: [{ title: "Dock", href: "/docs/dock" }],
   },
   {
     title: "Text",
     icon: Type,
-    items: [
-      { title: "Floating Text", href: "/docs/components/floating-text" },
-    ]
-  }
+    items: [{ title: "Floating Text", href: "/docs/components/floating-text" }],
+  },
 ];
 ```
 
 ### Task 2: Update Docs Home Page
 
 **Files:**
+
 - Modify: `src/app/docs/page.tsx`
 
 - [ ] **Step 2: Add Morphing Navbar card**
-Include the new component in the documentation overview.
+      Include the new component in the documentation overview.
 
 ```tsx
 // Add this card to the grid in src/app/docs/page.tsx
 <Link
   href="/docs/components/morphing-navbar"
-  className="block p-6 border rounded-lg hover:shadow-lg transition-shadow bg-white/50"
+  className="block rounded-lg border bg-white/50 p-6 transition-shadow hover:shadow-lg"
 >
-  <h2 className="text-xl font-semibold mb-2">Morphing Navbar</h2>
+  <h2 className="mb-2 text-xl font-semibold">Morphing Navbar</h2>
   <p className="text-gray-600 dark:text-gray-400">
     A premium, scroll-aware header with fluid morphing animations.
   </p>

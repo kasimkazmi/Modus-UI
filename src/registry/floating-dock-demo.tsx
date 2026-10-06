@@ -8,46 +8,46 @@ export function FloatingDockDemo() {
   const dockItems: FloatingDockItem[] = [
     {
       title: "Home",
-      icon: <Home className="w-full h-full" />,
+      icon: <Home className="h-full w-full" />,
       href: "#",
     },
     {
       title: "Explore",
-      icon: <Compass className="w-full h-full" />,
+      icon: <Compass className="h-full w-full" />,
       href: "#",
     },
     {
       title: "Features",
-      icon: <Sparkles className="w-full h-full" />,
+      icon: <Sparkles className="h-full w-full" />,
       onClick: () => alert("Features Clicked!"),
     },
     {
       title: "Projects",
-      icon: <Globe className="w-full h-full" />,
+      icon: <Globe className="h-full w-full" />,
       href: "#",
     },
     {
       title: "Settings",
-      icon: <Settings className="w-full h-full" />,
+      icon: <Settings className="h-full w-full" />,
       onClick: () => alert("Settings Clicked!"),
     },
     {
       title: "Contact",
-      icon: <Mail className="w-full h-full" />,
+      icon: <Mail className="h-full w-full" />,
       href: "mailto:hello@example.com",
     },
   ];
 
   return (
-    <div className="min-h-[300px] w-full flex flex-col items-center justify-center gap-12 p-8 bg-[#FAF9F7]/30 border border-[#E0DEDB]/50 rounded-2xl relative overflow-hidden">
-      <div className="text-center space-y-2">
+    <div className="relative flex min-h-[300px] w-full flex-col items-center justify-center gap-12 overflow-hidden rounded-2xl border border-[#E0DEDB]/50 bg-[#FAF9F7]/30 p-8">
+      <div className="space-y-2 text-center">
         <h4 className="font-serif text-2xl text-[#37322F]">Interactive Navigation</h4>
-        <p className="text-xs text-[#605A57] max-w-sm mx-auto">
+        <p className="mx-auto max-w-sm text-xs text-[#605A57]">
           Hover over the dock below to experience the magnifying effect on the icons.
         </p>
       </div>
 
-      <div className="w-full flex justify-center py-6">
+      <div className="flex w-full justify-center py-6">
         <FloatingDock items={dockItems} />
       </div>
     </div>

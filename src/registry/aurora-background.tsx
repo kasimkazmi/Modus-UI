@@ -51,7 +51,7 @@ export function AuroraBackground({
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute -left-[10%] -top-[10%] h-[60%] w-[60%] rounded-full bg-[#38bdf8] opacity-70 mix-blend-multiply blur-[80px] md:blur-[120px] dark:mix-blend-screen"
+              className="absolute -left-[10%] -top-[10%] h-[60%] w-[60%] rounded-full bg-[#38bdf8] opacity-70 mix-blend-multiply blur-[80px] dark:mix-blend-screen md:blur-[120px]"
             />
 
             {/* Animated Blob 2 */}
@@ -70,7 +70,7 @@ export function AuroraBackground({
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute -right-[10%] top-[10%] h-[50%] w-[50%] rounded-full bg-[#818cf8] opacity-70 mix-blend-multiply blur-[80px] md:blur-[120px] dark:mix-blend-screen"
+              className="absolute -right-[10%] top-[10%] h-[50%] w-[50%] rounded-full bg-[#818cf8] opacity-70 mix-blend-multiply blur-[80px] dark:mix-blend-screen md:blur-[120px]"
             />
 
             {/* Animated Blob 3 */}
@@ -89,7 +89,7 @@ export function AuroraBackground({
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute -bottom-[20%] left-[20%] h-[70%] w-[70%] rounded-full bg-[#34d399] opacity-70 mix-blend-multiply blur-[80px] md:blur-[120px] dark:mix-blend-screen"
+              className="absolute -bottom-[20%] left-[20%] h-[70%] w-[70%] rounded-full bg-[#34d399] opacity-70 mix-blend-multiply blur-[80px] dark:mix-blend-screen md:blur-[120px]"
             />
 
             {/* Animated Blob 4 (Extra for richness) */}
@@ -108,7 +108,7 @@ export function AuroraBackground({
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute bottom-[10%] right-[20%] h-[50%] w-[50%] rounded-full bg-[#e879f9] opacity-60 mix-blend-multiply blur-[80px] md:blur-[120px] dark:mix-blend-screen"
+              className="absolute bottom-[10%] right-[20%] h-[50%] w-[50%] rounded-full bg-[#e879f9] opacity-60 mix-blend-multiply blur-[80px] dark:mix-blend-screen md:blur-[120px]"
             />
           </div>
         </div>

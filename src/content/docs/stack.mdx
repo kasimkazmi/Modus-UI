@@ -28,17 +28,17 @@ import { Stack } from "@/components/ui/stack";
 
 export default function Example() {
   const cards = [
-    <div key="1" className="w-full h-full bg-blue-500 rounded-2xl">Card 1</div>,
-    <div key="2" className="w-full h-full bg-red-500 rounded-2xl">Card 2</div>,
+    <div key="1" className="h-full w-full rounded-2xl bg-blue-500">
+      Card 1
+    </div>,
+    <div key="2" className="h-full w-full rounded-2xl bg-red-500">
+      Card 2
+    </div>,
   ];
 
   return (
-    <div className="w-[300px] h-[400px]">
-      <Stack
-        cards={cards}
-        randomRotation={true}
-        sendToBackOnClick={true}
-      />
+    <div className="h-[400px] w-[300px]">
+      <Stack cards={cards} randomRotation={true} sendToBackOnClick={true} />
     </div>
   );
 }

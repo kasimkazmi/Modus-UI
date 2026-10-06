@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-  useVelocity,
-} from "framer-motion";
+import { motion, useReducedMotion, useSpring, useTransform, useVelocity } from "framer-motion";
 import {
   useCallback,
   useEffect,
@@ -44,9 +38,7 @@ export function LiquidTabs({
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const measured = useRef(false);
 
-  const [uncontrolled, setUncontrolled] = useState(
-    defaultValue ?? items[0]?.value ?? "",
-  );
+  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? items[0]?.value ?? "");
   const selected = value ?? uncontrolled;
   const activeIndex = Math.max(
     0,
@@ -58,12 +50,9 @@ export function LiquidTabs({
   const width = useSpring(0, spring);
 
   const velocity = useVelocity(x);
-  const stretch = useTransform(
-    velocity,
-    [-2600, 0, 2600],
-    [1 + squish, 1, 1 + squish],
-    { clamp: true },
-  );
+  const stretch = useTransform(velocity, [-2600, 0, 2600], [1 + squish, 1, 1 + squish], {
+    clamp: true,
+  });
   const scaleX = useSpring(stretch, { stiffness: 500, damping: 30 });
   const scaleY = useTransform(scaleX, (current) => 1 / current);
 
@@ -153,11 +142,9 @@ export function LiquidTabs({
             tabIndex={isActive ? 0 : -1}
             onClick={() => select(item.value)}
             className={cn(
-              "relative rounded-full px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors",
-              "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-              isActive
-                ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground",
+              "relative whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
             {item.label}

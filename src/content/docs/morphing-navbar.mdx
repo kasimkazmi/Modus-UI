@@ -29,13 +29,10 @@ import { GraduationCap } from "lucide-react";
 
 export default function Example() {
   return (
-    <MorphingNavbar 
+    <MorphingNavbar
       title="Morphing Navbar"
       logo={GraduationCap}
-      breadcrumbSteps={[
-        { label: "Components" },
-        { label: "Navigation" }
-      ]}
+      breadcrumbSteps={[{ label: "Components" }, { label: "Navigation" }]}
     />
   );
 }
@@ -43,10 +40,10 @@ export default function Example() {
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `title` | `string` | `"Morphing Navbar"` | The title text displayed next to the logo. |
-| `logo` | `ElementType` | `GraduationCap` | The icon component to display as the logo. |
-| `breadcrumbSteps` | `Step[]` | `[]` | Array of breadcrumb steps to display in expanded mode. |
-| `scrollThreshold` | `number` | `36` | Scroll distance in pixels before morphing to collapsed state. |
-| `targetId` | `string` | - | Optional ID of a scrollable container to track instead of the window. |
+| Prop              | Type          | Default             | Description                                                           |
+| :---------------- | :------------ | :------------------ | :-------------------------------------------------------------------- |
+| `title`           | `string`      | `"Morphing Navbar"` | The title text displayed next to the logo.                            |
+| `logo`            | `ElementType` | `GraduationCap`     | The icon component to display as the logo.                            |
+| `breadcrumbSteps` | `Step[]`      | `[]`                | Array of breadcrumb steps to display in expanded mode.                |
+| `scrollThreshold` | `number`      | `36`                | Scroll distance in pixels before morphing to collapsed state.         |
+| `targetId`        | `string`      | -                   | Optional ID of a scrollable container to track instead of the window. |

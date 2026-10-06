@@ -13,6 +13,7 @@
 ### Task 1: Typography Integration
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 
 - [ ] **Step 1: Update font imports and configuration**
@@ -40,11 +41,7 @@ export const metadata: Metadata = {
   description: "Custom UI components library",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${instrumentSerif.variable}`}>
       <body className="antialiased">{children}</body>
@@ -65,6 +62,7 @@ git commit -m "style: add DM Sans and Instrument Serif fonts"
 ### Task 2: Global Styles & CSS Variables
 
 **Files:**
+
 - Modify: `src/app/globals.css`
 
 - [ ] **Step 1: Overwrite CSS variables with Premium UI Palette**
@@ -78,25 +76,25 @@ Replace the `:root` block and add utility classes in `src/app/globals.css`:
 
 @layer base {
   :root {
-    --background: #F7F5F3;
-    --foreground: #37322F;
-    --card: #FFFFFF;
-    --card-foreground: #37322F;
-    --popover: #FFFFFF;
-    --popover-foreground: #37322F;
-    --primary: #37322F;
-    --primary-foreground: #FAF9F7;
-    --secondary: #F0EDEA;
-    --secondary-foreground: #37322F;
-    --muted: #F0EDEA;
-    --muted-foreground: #605A57;
-    --accent: #F0EDEA;
-    --accent-foreground: #37322F;
-    --destructive: #8B3A30;
-    --destructive-foreground: #FFF;
-    --border: #E0DEDB;
-    --input: #E0DEDB;
-    --ring: #605A57;
+    --background: #f7f5f3;
+    --foreground: #37322f;
+    --card: #ffffff;
+    --card-foreground: #37322f;
+    --popover: #ffffff;
+    --popover-foreground: #37322f;
+    --primary: #37322f;
+    --primary-foreground: #faf9f7;
+    --secondary: #f0edea;
+    --secondary-foreground: #37322f;
+    --muted: #f0edea;
+    --muted-foreground: #605a57;
+    --accent: #f0edea;
+    --accent-foreground: #37322f;
+    --destructive: #8b3a30;
+    --destructive-foreground: #fff;
+    --border: #e0dedb;
+    --input: #e0dedb;
+    --ring: #605a57;
     --radius: 0.625rem;
   }
 }
@@ -113,7 +111,7 @@ body {
   /* Primary Landing Button */
   .btn-landing {
     position: relative;
-    background: linear-gradient(to bottom right, #4A4542, #3D3835, #37322F);
+    background: linear-gradient(to bottom right, #4a4542, #3d3835, #37322f);
     box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.08);
     overflow: hidden;
     border-radius: 9999px;
@@ -122,24 +120,24 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    color: #FAF9F7;
+    color: #faf9f7;
     padding: 0.5rem 1.25rem;
   }
   .btn-landing::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), transparent);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
     border-radius: 9999px;
     pointer-events: none;
   }
   .btn-landing:hover {
-    background: linear-gradient(to bottom right, #565250, #4A4542, #3D3835);
+    background: linear-gradient(to bottom right, #565250, #4a4542, #3d3835);
   }
 
   /* Landing Heading */
   .heading-landing {
-    color: #37322F;
+    color: #37322f;
     font-family: var(--font-instrument-serif);
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -156,7 +154,7 @@ body {
     border-radius: 20px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #605A57;
+    background: #605a57;
   }
 }
 ```
@@ -173,6 +171,7 @@ git commit -m "style: update global variables and add landing page utilities"
 ### Task 3: Tailwind Config Update
 
 **Files:**
+
 - Modify: `tailwind.config.js`
 
 - [ ] **Step 1: Extend Tailwind theme with new fonts and hex-aware colors**
@@ -237,7 +236,7 @@ module.exports = {
     },
   },
   plugins: [require("@tailwindcss/typography")],
-}
+};
 ```
 
 - [ ] **Step 2: Commit changes**

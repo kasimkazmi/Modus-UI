@@ -9,7 +9,7 @@ export function NotchFooterDemo() {
   };
 
   return (
-    <div className="w-full max-w-4xl p-6 bg-[#FAF9F7] rounded-3xl border border-[#E0DEDB]/40 flex items-center justify-center">
+    <div className="flex w-full max-w-4xl items-center justify-center rounded-3xl border border-[#E0DEDB]/40 bg-[#FAF9F7] p-6">
       <NotchFooter
         title="Stop guessing about your digital experience with Modus"
         buttonText="Get started for free"

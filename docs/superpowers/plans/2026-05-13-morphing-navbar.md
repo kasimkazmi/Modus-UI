@@ -13,36 +13,29 @@
 ### Task 1: Create the MorphingNavbar Registry Component
 
 **Files:**
+
 - Create: `src/registry/morphing-navbar.tsx`
 
 - [ ] **Step 1: Implement the MorphingNavbar component**
-Create the file with the scroll logic, Framer Motion animations, and internal sub-components.
+      Create the file with the scroll logic, Framer Motion animations, and internal sub-components.
 
 ```tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Menu, 
-  X, 
-  ChevronRight, 
-  GraduationCap,
-  Moon,
-  Sun,
-  Home
-} from "lucide-react";
+import { Menu, X, ChevronRight, GraduationCap, Moon, Sun, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // --- Simplified UI Helpers (Standalone) ---
 
-const NavButton = ({ 
-  children, 
-  onClick, 
+const NavButton = ({
+  children,
+  onClick,
   className,
-  variant = "primary" 
-}: { 
-  children: React.ReactNode; 
+  variant = "primary",
+}: {
+  children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   variant?: "primary" | "ghost" | "outline";
@@ -50,7 +43,7 @@ const NavButton = ({
   const variants = {
     primary: "bg-[#37322F] text-[#F7F5F3] hover:opacity-90 shadow-sm",
     ghost: "bg-transparent text-[#37322F] hover:bg-[#F0EDEA]",
-    outline: "border border-[#E0DEDB] bg-white/60 text-[#37322F] hover:bg-[#F0EDEA]"
+    outline: "border border-[#E0DEDB] bg-white/60 text-[#37322F] hover:bg-[#F0EDEA]",
   };
 
   return (
@@ -59,7 +52,7 @@ const NavButton = ({
       className={cn(
         "inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-95 active:scale-90",
         variants[variant],
-        className
+        className,
       )}
     >
       {children}
@@ -68,7 +61,7 @@ const NavButton = ({
 };
 
 const UserAvatar = ({ src, alt }: { src?: string; alt: string }) => (
-  <div className="h-10 w-10 overflow-hidden rounded-full border border-[#E0DEDB] bg-[#F0EDEA] flex items-center justify-center">
+  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[#E0DEDB] bg-[#F0EDEA]">
     {src ? (
       <img src={src} alt={alt} className="h-full w-full object-cover" />
     ) : (
@@ -79,14 +72,14 @@ const UserAvatar = ({ src, alt }: { src?: string; alt: string }) => (
 
 // --- Main Component ---
 
-export function MorphingNavbar({ 
+export function MorphingNavbar({
   title = "Morphing Navbar",
   logo: Logo = GraduationCap,
   breadcrumbSteps = [],
   onHomeClick = () => {},
   onProfileClick = () => {},
   onToggleSidebar = () => {},
-  sidebarOpen = false
+  sidebarOpen = false,
 }: {
   title?: string;
   logo?: React.ElementType;
@@ -113,35 +106,36 @@ export function MorphingNavbar({
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-500 border-b",
-        collapsed 
-          ? "bg-[#F7F5F3]/95 shadow-md backdrop-blur-md border-[#E0DEDB]/80 h-[80px]" 
-          : "bg-[#F7F5F3]/80 backdrop-blur-sm border-[#E0DEDB]/40 h-[104px]"
+        "sticky top-0 z-50 w-full border-b transition-all duration-500",
+        collapsed
+          ? "h-[80px] border-[#E0DEDB]/80 bg-[#F7F5F3]/95 shadow-md backdrop-blur-md"
+          : "h-[104px] border-[#E0DEDB]/40 bg-[#F7F5F3]/80 backdrop-blur-sm",
       )}
     >
-      <div className={cn(
-        "mx-auto h-full w-full px-4 md:px-8 lg:px-10 flex flex-col justify-center transition-all duration-500",
-        collapsed ? "max-w-full" : "max-w-[1200px]"
-      )}>
-        <div className="flex items-center justify-between w-full">
+      <div
+        className={cn(
+          "mx-auto flex h-full w-full flex-col justify-center px-4 transition-all duration-500 md:px-8 lg:px-10",
+          collapsed ? "max-w-full" : "max-w-[1200px]",
+        )}
+      >
+        <div className="flex w-full items-center justify-between">
           {/* Left Section: Logo & Mobile Toggle */}
           <div className="flex items-center gap-3">
             <button
               onClick={onToggleSidebar}
-              className="lg:hidden p-2 hover:bg-[#F0EDEA] rounded-md transition-colors"
+              className="rounded-md p-2 transition-colors hover:bg-[#F0EDEA] lg:hidden"
             >
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
 
             <button
               onClick={onHomeClick}
-              className="group flex items-center gap-2 bg-transparent border-none p-0 transition-opacity hover:opacity-80"
+              className="group flex items-center gap-2 border-none bg-transparent p-0 transition-opacity hover:opacity-80"
             >
-              <motion.div
-                animate={{ scale: collapsed ? 0.9 : 1 }}
-                className="text-[#37322F]"
-              >
-                <Logo className={cn("transition-all duration-500", collapsed ? "h-8 w-8" : "h-9 w-9")} />
+              <motion.div animate={{ scale: collapsed ? 0.9 : 1 }} className="text-[#37322F]">
+                <Logo
+                  className={cn("transition-all duration-500", collapsed ? "h-8 w-8" : "h-9 w-9")}
+                />
               </motion.div>
               <motion.h1
                 animate={{ fontSize: collapsed ? "1.25rem" : "1.75rem" }}
@@ -154,24 +148,22 @@ export function MorphingNavbar({
 
           {/* Right Section: Actions */}
           <div className="flex items-center gap-2">
-            <NavButton 
-              variant="ghost" 
+            <NavButton
+              variant="ghost"
               onClick={onProfileClick}
-              className="hidden sm:flex p-0 h-10 w-10"
+              className="hidden h-10 w-10 p-0 sm:flex"
             >
               <UserAvatar alt="User" />
             </NavButton>
 
-            <NavButton onClick={onHomeClick}>
-              Home
-            </NavButton>
+            <NavButton onClick={onHomeClick}>Home</NavButton>
 
-            <div className="hidden sm:flex items-center gap-2 border border-[#E0DEDB] bg-white/40 rounded-full p-1 ml-2">
-              <button 
+            <div className="ml-2 hidden items-center gap-2 rounded-full border border-[#E0DEDB] bg-white/40 p-1 sm:flex">
+              <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className="p-1.5 rounded-full hover:bg-[#F0EDEA] transition-colors"
+                className="rounded-full p-1.5 transition-colors hover:bg-[#F0EDEA]"
               >
-                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </button>
             </div>
           </div>
@@ -190,11 +182,13 @@ export function MorphingNavbar({
                 <span>All Pages</span>
                 {breadcrumbSteps.map((step, i) => (
                   <React.Fragment key={i}>
-                    <ChevronRight className="w-3 h-3" />
-                    <span className={cn(
-                      "truncate max-w-[150px]",
-                      i === breadcrumbSteps.length - 1 ? "font-medium text-[#37322F]" : ""
-                    )}>
+                    <ChevronRight className="h-3 w-3" />
+                    <span
+                      className={cn(
+                        "max-w-[150px] truncate",
+                        i === breadcrumbSteps.length - 1 ? "font-medium text-[#37322F]" : "",
+                      )}
+                    >
                       {step.label}
                     </span>
                   </React.Fragment>
@@ -206,10 +200,7 @@ export function MorphingNavbar({
       </div>
 
       {/* Subtle bottom accent line */}
-      <motion.div 
-        animate={{ opacity: collapsed ? 1 : 0.6 }}
-        className="h-px w-full bg-[#E0DEDB]"
-      />
+      <motion.div animate={{ opacity: collapsed ? 1 : 0.6 }} className="h-px w-full bg-[#E0DEDB]" />
     </header>
   );
 }
@@ -218,10 +209,11 @@ export function MorphingNavbar({
 ### Task 2: Register in Registry
 
 **Files:**
+
 - Modify: `src/registry/index.ts`
 
 - [ ] **Step 2: Add MorphingNavbar to registry**
-Add the entry to the exported `registry` array.
+      Add the entry to the exported `registry` array.
 
 ```typescript
 // ... existing imports
@@ -235,15 +227,16 @@ Add the entry to the exported `registry` array.
 ### Task 3: Create Documentation Page
 
 **Files:**
+
 - Create: `src/app/docs/components/morphing-navbar/page.tsx`
 
 - [ ] **Step 3: Implement the documentation page**
-Create the page with Tabs for Preview and Code.
+      Create the page with Tabs for Preview and Code.
 
 ```tsx
-import { MorphingNavbar } from "@/registry/morphing-navbar"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { CopyButton } from "@/components/copy-button"
+import { MorphingNavbar } from "@/registry/morphing-navbar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { CopyButton } from "@/components/copy-button";
 
 export default function MorphingNavbarPage() {
   const componentCode = `"use client";
@@ -251,10 +244,11 @@ export default function MorphingNavbarPage() {
 `;
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
-      <h1 className="heading-landing text-4xl mb-4">Morphing Navbar</h1>
-      <p className="text-[#605A57] mb-8">
-        A premium, scroll-aware navigation header that dynamically adjusts its height, logo scale, and background density.
+    <div className="mx-auto max-w-4xl py-10">
+      <h1 className="heading-landing mb-4 text-4xl">Morphing Navbar</h1>
+      <p className="mb-8 text-[#605A57]">
+        A premium, scroll-aware navigation header that dynamically adjusts its height, logo scale,
+        and background density.
       </p>
 
       <Tabs defaultValue="preview" className="mb-8">
@@ -263,28 +257,30 @@ export default function MorphingNavbarPage() {
           <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
         <TabsContent value="preview">
-          <div className="relative border rounded-xl overflow-hidden bg-[#FAF9F7] h-[500px]">
-             {/* Simulated scroll container */}
-             <div className="absolute inset-0 overflow-y-auto custom-scrollbar">
-                <MorphingNavbar 
-                  title="Premium UI Path" 
-                  breadcrumbSteps={[{ label: "Components" }, { label: "Morphing Navbar" }]}
-                />
-                <div className="p-10 space-y-8">
-                  <h2 className="text-2xl font-serif">Scroll down to see the effect</h2>
-                  {Array.from({ length: 10 }).map((_, i) => (
-                    <p key={i} className="text-[#605A57] leading-relaxed">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                  ))}
-                </div>
-             </div>
+          <div className="relative h-[500px] overflow-hidden rounded-xl border bg-[#FAF9F7]">
+            {/* Simulated scroll container */}
+            <div className="custom-scrollbar absolute inset-0 overflow-y-auto">
+              <MorphingNavbar
+                title="Premium UI Path"
+                breadcrumbSteps={[{ label: "Components" }, { label: "Morphing Navbar" }]}
+              />
+              <div className="space-y-8 p-10">
+                <h2 className="font-serif text-2xl">Scroll down to see the effect</h2>
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <p key={i} className="leading-relaxed text-[#605A57]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                ))}
+              </div>
+            </div>
           </div>
         </TabsContent>
         <TabsContent value="code">
           <div className="relative">
             <CopyButton value={componentCode} />
-            <pre className="bg-[#37322F] text-[#F7F5F3] p-4 rounded-lg text-sm overflow-x-auto mt-2">
+            <pre className="mt-2 overflow-x-auto rounded-lg bg-[#37322F] p-4 text-sm text-[#F7F5F3]">
               <code>{componentCode}</code>
             </pre>
           </div>
@@ -293,6 +289,6 @@ export default function MorphingNavbarPage() {
 
       {/* Installation and Props section... */}
     </div>
-  )
+  );
 }
 ```

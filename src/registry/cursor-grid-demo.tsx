@@ -4,7 +4,7 @@ import { CursorGrid } from "./cursor-grid";
 
 export default function CursorGridDemo() {
   return (
-    <div className="relative flex w-full items-center justify-center h-[500px] overflow-hidden rounded-xl border border-border bg-black">
+    <div className="relative flex h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-black">
       <CursorGrid
         color="#3b82f6"
         cellSize={25}
@@ -12,9 +12,9 @@ export default function CursorGridDemo() {
         falloff="gaussian"
         fadeDuration={800}
         clickPulse={true}
-        className="w-full h-full"
+        className="h-full w-full"
       />
-      <div className="absolute pointer-events-none text-white/50 text-xl font-medium tracking-widest uppercase">
+      <div className="pointer-events-none absolute text-xl font-medium uppercase tracking-widest text-white/50">
         Hover over the grid
       </div>
     </div>

@@ -28,24 +28,28 @@ import { KineticCarousel } from "@/components/ui/kinetic-carousel";
 
 export default function Example() {
   const items = [
-    <div key="1" className="p-8 h-48 bg-muted rounded-xl flex items-center justify-center">Slide 1</div>,
-    <div key="2" className="p-8 h-48 bg-muted rounded-xl flex items-center justify-center">Slide 2</div>,
-    <div key="3" className="p-8 h-48 bg-muted rounded-xl flex items-center justify-center">Slide 3</div>,
+    <div key="1" className="flex h-48 items-center justify-center rounded-xl bg-muted p-8">
+      Slide 1
+    </div>,
+    <div key="2" className="flex h-48 items-center justify-center rounded-xl bg-muted p-8">
+      Slide 2
+    </div>,
+    <div key="3" className="flex h-48 items-center justify-center rounded-xl bg-muted p-8">
+      Slide 3
+    </div>,
   ];
 
-  return (
-    <KineticCarousel items={items} loop={true} autoplay={true} />
-  );
+  return <KineticCarousel items={items} loop={true} autoplay={true} />;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `ReactNode[]` | `[]` | Array of React elements to display as slides. |
-| `baseWidth` | `number` | `320` | The total width of the carousel container in pixels. |
-| `autoplay` | `boolean` | `false` | Whether the carousel should automatically cycle. |
-| `autoplayDelay` | `number` | `3000` | The delay in milliseconds between automatic slide transitions. |
-| `pauseOnHover` | `boolean` | `false` | Whether to pause autoplay when the user hovers over the carousel. |
-| `loop` | `boolean` | `false` | Whether the carousel should infinitely loop from the last slide back to the first. |
+| Prop            | Type          | Default | Description                                                                        |
+| :-------------- | :------------ | :------ | :--------------------------------------------------------------------------------- |
+| `items`         | `ReactNode[]` | `[]`    | Array of React elements to display as slides.                                      |
+| `baseWidth`     | `number`      | `320`   | The total width of the carousel container in pixels.                               |
+| `autoplay`      | `boolean`     | `false` | Whether the carousel should automatically cycle.                                   |
+| `autoplayDelay` | `number`      | `3000`  | The delay in milliseconds between automatic slide transitions.                     |
+| `pauseOnHover`  | `boolean`     | `false` | Whether to pause autoplay when the user hovers over the carousel.                  |
+| `loop`          | `boolean`     | `false` | Whether the carousel should infinitely loop from the last slide back to the first. |
