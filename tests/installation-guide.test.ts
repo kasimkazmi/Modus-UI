@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { modusThemeCss } from "@/lib/theme-css";
-import { getGuideHeadings } from "@/lib/mdx";
+import { getGuideHeadings } from "@/lib/guides";
 
 const root = process.cwd();
 const guide = fs.readFileSync(path.join(root, "src/content/guides/installation.mdx"), "utf8");

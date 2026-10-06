@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TableOfContents } from "@/components/table-of-contents";
-import { getGuideBySlug, getGuideHeadings } from "@/lib/mdx";
+import { getGuideHeadings } from "@/lib/guides";
+import { getGuideBySlug } from "@/lib/mdx";
 import { SITE } from "@/lib/site";
 
 const SLUG = "installation";
