@@ -30,7 +30,7 @@ Modus UI is **not** a package you import from. You own the code: add a component
 ## Install a component
 
 ```bash
-npx modus-ui add blur-text
+npx @modus-ui/cli add blur-text
 ```
 
 The CLI writes the component into your project and lists the npm packages it needs. Every component page shows its own command.

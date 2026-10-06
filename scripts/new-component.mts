@@ -124,7 +124,7 @@ TODO 2-3 sentences on why this component is useful.
 ### CLI
 
 \`\`\`bash
-npx modus-ui add ${name}
+npx @modus-ui/cli add ${name}
 \`\`\`
 
 ### Manual

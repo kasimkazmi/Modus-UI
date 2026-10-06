@@ -30,7 +30,7 @@ This skill ensures you adhere to the established architectural patterns and conv
 
 ## 5. CLI & Documentation Standards
 
-- **Component CLI**: When writing installation instructions in `.mdx` files, ALWAYS use `npx modus-ui add <component-name>`. Do not use `react-ui-component` or `shadcn`.
+- **Component CLI**: When writing installation instructions in `.mdx` files, ALWAYS use `npx @modus-ui/cli add <component-name>`. Do not use `react-ui-component` or `shadcn`.
 - **Dependencies**: Provide standard package manager instructions (e.g., `npm install framer-motion`) below the CLI command if the component relies on external libraries not handled by the Modus UI CLI.
 - **Preview Wiring**: New components must be registered in the following files to appear on the documentation site:
   1. `src/registry/index.ts` (Export the component)
