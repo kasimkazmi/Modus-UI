@@ -8,7 +8,7 @@ export const MDXComponents = {
     <h1
       className={cn(
         "mt-2 scroll-m-20 text-4xl font-extrabold tracking-tight text-foreground",
-        className
+        className,
       )}
       {...props}
     />
@@ -19,13 +19,13 @@ export const MDXComponents = {
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "");
-      
+
     return (
       <h2
         id={id}
         className={cn(
           "mt-12 scroll-m-20 border-b border-border pb-2 text-2xl font-semibold tracking-tight text-foreground first:mt-0",
-          className
+          className,
         )}
         {...props}
       >
@@ -37,17 +37,14 @@ export const MDXComponents = {
     <h3
       className={cn(
         "mt-8 scroll-m-20 text-xl font-semibold tracking-tight text-foreground",
-        className
+        className,
       )}
       {...props}
     />
   ),
   p: ({ className, ...props }: any) => (
     <p
-      className={cn(
-        "leading-7 text-muted-foreground [&:not(:first-child)]:mt-6",
-        className
-      )}
+      className={cn("leading-7 text-muted-foreground [&:not(:first-child)]:mt-6", className)}
       {...props}
     />
   ),
@@ -61,7 +58,7 @@ export const MDXComponents = {
     <code
       className={cn(
         "relative rounded bg-secondary px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-primary",
-        className
+        className,
       )}
       {...props}
     />
@@ -77,31 +74,25 @@ export const MDXComponents = {
     );
   },
   Steps: ({ ...props }) => (
-    <div
-      className="steps mb-12 ml-4 border-l border-border pl-8 [counter-reset:step]"
-      {...props}
-    />
+    <div className="steps mb-12 ml-4 border-l border-border pl-8 [counter-reset:step]" {...props} />
   ),
   Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
     <h3
       className={cn(
         "mt-8 scroll-m-32 text-lg font-semibold tracking-tight text-foreground",
-        className
+        className,
       )}
       {...props}
     />
   ),
   table: ({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 w-full overflow-y-auto rounded-xl border border-border bg-white/50 backdrop-blur-sm">
+    <div className="my-6 w-full overflow-y-auto rounded-xl border border-border bg-card/50 backdrop-blur-sm">
       <table className={cn("w-full text-sm", className)} {...props} />
     </div>
   ),
   tr: ({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr
-      className={cn(
-        "m-0 border-t border-border p-0 even:bg-secondary/10",
-        className
-      )}
+      className={cn("m-0 border-t border-border p-0 even:bg-secondary/10", className)}
       {...props}
     />
   ),
@@ -109,7 +100,7 @@ export const MDXComponents = {
     <th
       className={cn(
         "border-border px-4 py-3 text-left font-bold text-foreground [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />
@@ -118,7 +109,7 @@ export const MDXComponents = {
     <td
       className={cn(
         "border-border px-4 py-3 text-left text-muted-foreground [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />

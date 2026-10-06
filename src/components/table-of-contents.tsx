@@ -20,14 +20,16 @@ export function TableOfContents({ items }: TableOfContentsProps) {
 
     const callback = (entries: IntersectionObserverEntry[]) => {
       // Find all intersecting entries
-      const intersectingEntries = entries.filter(entry => entry.isIntersecting);
-      
+      const intersectingEntries = entries.filter((entry) => entry.isIntersecting);
+
       if (intersectingEntries.length > 0) {
         // Sort by their distance from the top of the viewport
         const closestToTop = intersectingEntries.reduce((prev, curr) => {
-          return (Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top)) ? curr : prev;
+          return Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top)
+            ? curr
+            : prev;
         });
-        
+
         setActiveId(closestToTop.target.id);
       }
     };
@@ -50,7 +52,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         setActiveId(items[0].id);
         return;
       }
-      
+
       // Force last item if at the very bottom
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
         setActiveId(items[items.length - 1].id);
@@ -67,10 +69,12 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   }, [items]);
 
   return (
-    <div className="sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto pr-4 scrollbar-none flex flex-col justify-between gap-12">
+    <div className="scrollbar-none sticky top-24 flex h-[calc(100vh-8rem)] flex-col justify-between gap-12 overflow-y-auto pr-4">
       <div>
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#605A57]/60 mb-6">On This Page</p>
-        <ul className="space-y-4 text-[13px] font-medium text-[#605A57]">
+        <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+          On This Page
+        </p>
+        <ul className="space-y-4 text-[13px] font-medium text-muted-foreground">
           {items.map((item) => (
             <li key={item.id}>
               <a
@@ -80,17 +84,17 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className={cn(
-                  "block transition-all duration-300 hover:text-[#37322F]",
-                  activeId === item.id 
-                    ? "text-[#37322F] translate-x-1" 
-                    : "text-[#605A57]"
+                  "block transition-all duration-300 hover:text-foreground",
+                  activeId === item.id ? "translate-x-1 text-foreground" : "text-muted-foreground",
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <div className={cn(
-                    "h-1 w-1 rounded-full transition-all duration-300",
-                    activeId === item.id ? "bg-[#37322F] scale-100" : "bg-transparent scale-0"
-                  )} />
+                  <div
+                    className={cn(
+                      "h-1 w-1 rounded-full transition-all duration-300",
+                      activeId === item.id ? "scale-100 bg-primary" : "scale-0 bg-transparent",
+                    )}
+                  />
                   {item.title}
                 </div>
               </a>
@@ -99,7 +103,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         </ul>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-[#E0DEDB]/60 flex flex-col gap-4">
+      <div className="mt-4 flex flex-col gap-4 border-t border-border/60 pt-4">
         <GitHubStarCard />
         <DeveloperCard />
       </div>

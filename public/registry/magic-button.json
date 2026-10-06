@@ -9,7 +9,7 @@
   "files": [
     {
       "path": "registry/magic-button.tsx",
-      "content": "\"use client\";\n\nimport React from \"react\";\nimport { motion, useReducedMotion } from \"framer-motion\";\n\nexport const MagicButton = () => {\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <motion.button\n      whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}\n      whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}\n      className=\"px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium shadow-lg hover:bg-indigo-700 transition-colors motion-reduce:transition-none\"\n    >\n      Magic Button\n    </motion.button>\n  );\n};\n"
+      "content": "\"use client\";\n\nimport React from \"react\";\nimport { motion, useReducedMotion } from \"framer-motion\";\n\nexport const MagicButton = () => {\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <motion.button\n      whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}\n      whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}\n      className=\"rounded-lg bg-indigo-600 px-6 py-2 font-medium text-white shadow-lg transition-colors hover:bg-indigo-700 motion-reduce:transition-none\"\n    >\n      Magic Button\n    </motion.button>\n  );\n};\n"
     }
   ]
 }

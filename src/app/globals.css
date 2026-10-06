@@ -3,27 +3,166 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  /*
+   * Site themes: colours, typography and radius. Keep ids in sync with
+   * src/lib/themes.ts. Component previews set data-theme="modus" so they
+   * always render in the original design.
+   */
+  :root,
+  [data-theme="modus"] {
     --background: 30 18% 96%; /* #F7F5F3 */
-    --foreground: 24 8% 20%;  /* #37322F */
-    --card: 0 0% 100%;        /* #FFFFFF */
+    --foreground: 24 8% 20%; /* #37322F */
+    --card: 0 0% 100%;
     --card-foreground: 24 8% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 24 8% 20%;
     --primary: 24 8% 20%;
     --primary-foreground: 30 15% 97%; /* #FAF9F7 */
-    --secondary: 30 15% 93%;  /* #F0EDEA */
+    --secondary: 30 15% 93%; /* #F0EDEA */
     --secondary-foreground: 24 8% 20%;
     --muted: 30 15% 93%;
-    --muted-foreground: 19 5% 36%;    /* #605A57 */
+    --muted-foreground: 19 5% 36%; /* #605A57 */
     --accent: 30 15% 93%;
     --accent-foreground: 24 8% 20%;
-    --destructive: 6 48% 37%; /* #8B3A30 */
+    --destructive: 6 48% 37%;
     --destructive-foreground: 0 0% 100%;
-    --border: 30 6% 87%;      /* #E0DEDB */
+    --border: 30 6% 87%; /* #E0DEDB */
     --input: 30 6% 87%;
     --ring: 19 5% 36%;
     --radius: 0.625rem;
+    --font-heading: var(--font-instrument-serif);
+    --font-body: var(--font-dm-sans);
+  }
+
+  [data-theme="slate"] {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 214 32% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 214 32% 94%;
+    --muted-foreground: 215 16% 42%;
+    --accent: 214 32% 94%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 28% 88%;
+    --input: 214 28% 88%;
+    --ring: 215 16% 42%;
+    --radius: 0.5rem;
+    --font-heading: var(--font-inter);
+    --font-body: var(--font-inter);
+  }
+
+  [data-theme="midnight"] {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 96%;
+    --card: 222 40% 11%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 40% 11%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 7%;
+    --secondary: 222 30% 16%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 222 30% 16%;
+    --muted-foreground: 215 20% 68%;
+    --accent: 222 30% 18%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 25% 20%;
+    --input: 222 25% 20%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;
+    --font-heading: var(--font-space-grotesk);
+    --font-body: var(--font-space-grotesk);
+  }
+
+  [data-theme="forest"] {
+    --background: 60 20% 96%;
+    --foreground: 150 30% 14%;
+    --card: 60 25% 99%;
+    --card-foreground: 150 30% 14%;
+    --popover: 60 25% 99%;
+    --popover-foreground: 150 30% 14%;
+    --primary: 152 51% 29%;
+    --primary-foreground: 60 25% 98%;
+    --secondary: 90 18% 90%;
+    --secondary-foreground: 150 30% 14%;
+    --muted: 90 18% 90%;
+    --muted-foreground: 150 12% 36%;
+    --accent: 90 18% 90%;
+    --accent-foreground: 150 30% 14%;
+    --destructive: 6 60% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 90 12% 84%;
+    --input: 90 12% 84%;
+    --ring: 152 51% 29%;
+    --radius: 1rem;
+    --font-heading: var(--font-fraunces);
+    --font-body: var(--font-manrope);
+  }
+
+  [data-theme="rose"] {
+    --background: 340 50% 98%;
+    --foreground: 340 25% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 340 25% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 25% 16%;
+    --primary: 340 66% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 340 40% 94%;
+    --secondary-foreground: 340 25% 16%;
+    --muted: 340 40% 94%;
+    --muted-foreground: 340 10% 40%;
+    --accent: 340 40% 94%;
+    --accent-foreground: 340 25% 16%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 340 25% 88%;
+    --input: 340 25% 88%;
+    --ring: 340 66% 52%;
+    --radius: 1.25rem;
+    --font-heading: var(--font-playfair);
+    --font-body: var(--font-inter);
+  }
+
+  [data-theme="mono"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 38%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 4%;
+    --radius: 0rem;
+    --font-heading: var(--font-jetbrains-mono);
+    --font-body: var(--font-jetbrains-mono);
+  }
+
+  /* Re-resolve inherited text styles wherever a theme scope starts (e.g. previews). */
+  [data-theme] {
+    font-family: var(--font-body), ui-sans-serif, system-ui;
+    color: hsl(var(--foreground));
   }
 }
 
@@ -33,26 +172,36 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-dm-sans), ui-sans-serif, system-ui;
+    font-family: var(--font-body), ui-sans-serif, system-ui;
   }
 }
 
 @layer components {
   /* Primary Landing Button */
   .btn-landing {
-    @apply relative overflow-hidden rounded-full inline-flex items-center justify-center cursor-pointer transition-all duration-200 px-5 py-2 text-[#FAF9F7];
-    background: linear-gradient(to bottom right, #4A4542, #3D3835, #37322F);
+    @apply relative inline-flex cursor-pointer items-center justify-center overflow-hidden rounded-full px-5 py-2 text-primary-foreground transition-all duration-200;
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--primary) / 0.85),
+      hsl(var(--primary) / 0.93),
+      hsl(var(--primary))
+    );
     box-shadow: inset 0 0 0 2.5px rgba(255, 255, 255, 0.08);
   }
-  
+
   .btn-landing::before {
     content: "";
-    @apply absolute inset-0 pointer-events-none rounded-full;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.10), transparent);
+    @apply pointer-events-none absolute inset-0 rounded-full;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
   }
-  
+
   .btn-landing:hover {
-    background: linear-gradient(to bottom right, #565250, #4A4542, #3D3835);
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--primary) / 0.75),
+      hsl(var(--primary) / 0.85),
+      hsl(var(--primary) / 0.93)
+    );
   }
 
   /* Landing Heading */
@@ -66,10 +215,10 @@
     height: 6px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: hsla(24, 8%, 20%, 0.2);
+    background: hsl(var(--foreground) / 0.2);
     border-radius: 20px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #605A57;
+    background: hsl(var(--muted-foreground));
   }
 }
