@@ -61,7 +61,7 @@ export const ComponentPreviewClient = ({
             <Tabs.Content
               value="preview"
               forceMount
-              className="relative rounded-xl border border-border bg-white min-h-[400px] overflow-hidden shadow-sm focus-visible:outline-none"
+              className="relative flex items-center justify-center rounded-xl border border-border bg-white min-h-[400px] w-full overflow-hidden shadow-sm focus-visible:outline-none"
             >
               <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
                 <a
@@ -87,7 +87,7 @@ export const ComponentPreviewClient = ({
               </div>
               <div
                 key={key}
-                className="relative z-10 transition-all duration-500 hover:scale-[1.02]"
+                className="relative z-10 w-full flex items-center justify-center transition-all duration-500 hover:scale-[1.02]"
               >
                 {preview}
               </div>
