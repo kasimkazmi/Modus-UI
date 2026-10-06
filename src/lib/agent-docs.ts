@@ -74,7 +74,7 @@ export function llmsTxt(): string {
     [
       `# ${SITE.name}`,
       `> ${SITE.description}`,
-      `Install any component with \`${SITE.cli} <name>\`. It writes the source to \`components/ui/<name>.tsx\` and lists the npm packages it needs. Components import \`cn()\` from \`@/lib/utils\` (clsx + tailwind-merge). Every link below is a markdown doc with usage and full source; ${SITE.url}/llms-full.txt has all of them in one file.`,
+      `Install any component with \`${SITE.cli} <name>\`. It writes the source to \`components/ui/<name>.tsx\` and lists the npm packages it needs. Components import \`cn()\` from \`@/lib/utils\` (clsx + tailwind-merge). Every link below is a markdown doc with usage and full source; ${SITE.url}/llms-full.txt has all of them in one file. Project setup (Tailwind CSS v3, theme tokens as HSL channels, the \`@/\` alias) is described at ${SITE.url}/docs/installation.`,
       ...sections,
     ].join("\n\n") + "\n"
   );

@@ -5,7 +5,7 @@ import { SITE } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
-    "/docs",
+    "/docs/installation",
     "/docs/components",
     ...registry.map((item) => `/docs/${item.name}`),
     "/blog",

@@ -9,6 +9,7 @@ import {
   Sparkles,
   LayoutTemplate,
   BookOpen,
+  Rocket,
   type LucideIcon,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
@@ -23,6 +24,14 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
 };
 
 const DOC_CATEGORIES = [
+  {
+    title: "Getting Started",
+    icon: Rocket,
+    items: [
+      { title: "Installation", href: "/docs/installation" },
+      { title: "All Components", href: "/docs/components" },
+    ],
+  },
   ...CATEGORIES.map((category) => ({
     title: category,
     icon: CATEGORY_ICONS[category],
