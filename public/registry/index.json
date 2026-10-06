@@ -1,0 +1,562 @@
+{
+  "name": "Modus UI",
+  "homepage": "https://modusui.kasimkazmi.com",
+  "count": 51,
+  "categories": [
+    "Navigation",
+    "Actions",
+    "Data Display",
+    "Backgrounds",
+    "Typography",
+    "Components"
+  ],
+  "components": [
+    {
+      "name": "liquid-tabs",
+      "title": "Liquid Tabs",
+      "category": "Navigation",
+      "description": "A tab switcher with a physics-driven, stretching selection pill.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "flowing-menu",
+      "title": "Flowing Menu",
+      "category": "Navigation",
+      "description": "A full-screen menu where hovering an item triggers an infinite scrolling marquee.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "morphing-navbar",
+      "title": "Morphing Navbar",
+      "category": "Navigation",
+      "description": "A premium, scroll-aware header that dynamically adjusts its layout density and logo scale based on scroll position.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "floating-dock",
+      "title": "Floating Dock",
+      "category": "Navigation",
+      "description": "A premium navigation dock with smooth Apple-style magnifying zoom animation on hover.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ]
+    },
+    {
+      "name": "notch-footer",
+      "title": "Notch Footer",
+      "category": "Navigation",
+      "description": "A premium, animated footer component with a smooth curved pocket.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "process-stepper",
+      "title": "Process Stepper",
+      "category": "Navigation",
+      "description": "A wizard-style stepper component for breaking down complex forms and processes into manageable chunks.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "magnet",
+      "title": "Magnet",
+      "category": "Actions",
+      "description": "A micro-interaction component that pulls an element towards the mouse cursor.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "magic-button",
+      "title": "Magic Button",
+      "category": "Actions",
+      "description": "A smooth animated button using Framer Motion.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "animated-button",
+      "title": "Animated Button",
+      "category": "Actions",
+      "description": "A smooth button with hover and tap scale animations using Framer Motion.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "pulse-button",
+      "title": "Pulse Button",
+      "category": "Actions",
+      "description": "A button with an organic, rhythmic pulsing animation to draw user attention.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "bounce-cards",
+      "title": "Bounce Cards",
+      "category": "Data Display",
+      "description": "A stack of playing cards that fan out and straighten out interactively when hovered.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "masonry-grid",
+      "title": "Masonry Grid",
+      "category": "Data Display",
+      "description": "A fully responsive, animated masonry layout powered by Framer Motion.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "animated-list",
+      "title": "Animated List",
+      "category": "Data Display",
+      "description": "A scrollable, animated list component with keyboard navigation, hover states, and smooth entrance physics.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "kinetic-carousel",
+      "title": "Kinetic Carousel",
+      "category": "Data Display",
+      "description": "A modern, physics-based carousel that supports dragging, infinite looping, and 3D perspective transitions.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "expandable-showcase",
+      "title": "Expandable Showcase",
+      "category": "Data Display",
+      "description": "A horizontal or vertical list of items where hovering or clicking expands one item while shrinking others.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "focus-card",
+      "title": "Focus Card",
+      "category": "Data Display",
+      "description": "A card with a subtle radial gradient spotlight that follows the user's cursor.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "rotating-card",
+      "title": "Rotating Card",
+      "category": "Data Display",
+      "description": "A 3D-style rotating card that responds to user hover with smooth perspective shifts.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "tilt-card",
+      "title": "Tilt Card",
+      "category": "Data Display",
+      "description": "A 3D parallax tilt card featuring smooth physics-based rotations on hover, collapsible tags and descriptions, and custom CTA buttons.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "cursor-grid",
+      "title": "Cursor Grid",
+      "category": "Backgrounds",
+      "description": "An interactive canvas grid that reacts to cursor proximity and clicks.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "waves",
+      "title": "Waves",
+      "category": "Backgrounds",
+      "description": "A reactive background of flowing lines driven by Perlin noise and cursor physics.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "letter-glitch",
+      "title": "Letter Glitch",
+      "category": "Backgrounds",
+      "description": "A canvas-rendered procedural matrix of glitching letters and symbols.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "aurora-background",
+      "title": "Aurora Background",
+      "category": "Backgrounds",
+      "description": "A stunning, smooth animated aurora borealis background effect using Framer Motion.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "circuit-background",
+      "title": "Circuit Background",
+      "category": "Backgrounds",
+      "description": "A highly ambient, canvas-based circuit board animation with interactive mouse ripple effects.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "orbiting-elements",
+      "title": "Orbiting Elements",
+      "category": "Backgrounds",
+      "description": "Elements that mathematically orbit around a central node in circular paths.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "blob-cursor",
+      "title": "Blob Cursor",
+      "category": "Backgrounds",
+      "description": "A morphing gelatinous blob that trails your mouse cursor.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "magnet-lines",
+      "title": "Magnet Lines",
+      "category": "Backgrounds",
+      "description": "A grid of lines that mathematically rotate to point towards your cursor.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "grid-motion",
+      "title": "Grid Motion",
+      "category": "Backgrounds",
+      "description": "An interactive, infinite grid that tracks mouse movement with beautiful inertia physics.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gravity-text-swap",
+      "title": "Gravity Text Swap",
+      "category": "Typography",
+      "description": "Text that detaches and falls away with simulated gravity when swapped.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "flip-words",
+      "title": "Flip Words",
+      "category": "Typography",
+      "description": "A sleek text rotator that flips individual words sequentially using 3D perspective.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "fuzzy-text",
+      "title": "Fuzzy Text",
+      "category": "Typography",
+      "description": "Typography rendered with dynamic, animated noise and grain displacement.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "scroll-velocity",
+      "title": "Scroll Velocity",
+      "category": "Typography",
+      "description": "A marque text effect whose speed scales dynamically based on scroll velocity.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "text-pressure",
+      "title": "Text Pressure",
+      "category": "Typography",
+      "description": "A responsive variable-font typography effect that reacts fluidly to the cursor's proximity.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "true-focus",
+      "title": "True Focus",
+      "category": "Typography",
+      "description": "A typographic animation that moves a camera-like focus frame between words while blurring the rest.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gradient-text",
+      "title": "Gradient Text",
+      "category": "Typography",
+      "description": "Seamlessly looping animated gradient text that can optionally wrap its borders.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "blur-text",
+      "title": "Blur Text",
+      "category": "Typography",
+      "description": "Smoothly unblurs text characters or words as they enter the viewport.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "split-text",
+      "title": "Split Text",
+      "category": "Typography",
+      "description": "Staggered text animations splitting by characters, words, or lines.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "decrypted-text",
+      "title": "Decrypted Text",
+      "category": "Typography",
+      "description": "A hacker-style text decryption matrix effect that scrambles text before revealing it.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "shimmer-text",
+      "title": "Shimmer Text",
+      "category": "Typography",
+      "description": "Animated text that shimmers with a flowing gradient effect.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "floating-text",
+      "title": "Floating Text",
+      "category": "Typography",
+      "description": "A text component that floats and drifts subtly, creating an editorial, high-end feel.",
+      "dependencies": [
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "animated-beam",
+      "title": "Animated Beam",
+      "category": "Components",
+      "description": "A dynamic SVG beam animation that traces paths between elements.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "border-beam",
+      "title": "Border Beam",
+      "category": "Components",
+      "description": "A glowing, animated gradient beam that endlessly traces the perimeter.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "bento-grid",
+      "title": "Bento Grid",
+      "category": "Components",
+      "description": "A highly structured, responsive layout primitive for creating asymmetric grid layouts.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "decay-card",
+      "title": "Decay Card",
+      "category": "Components",
+      "description": "A 3D interactive card that decays and shatters its visual elements when hovered.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "scratch-to-reveal",
+      "title": "Scratch to Reveal",
+      "category": "Components",
+      "description": "An interactive canvas component that lets users scratch off an overlay to reveal the content underneath.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "stack",
+      "title": "Stack",
+      "category": "Components",
+      "description": "A 3D interactive stack of cards that can be dragged and rearranged.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "star-border",
+      "title": "Star Border",
+      "category": "Components",
+      "description": "A glowing button border animation that circles the perimeter.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "tilted-card",
+      "title": "Tilted Card",
+      "category": "Components",
+      "description": "A 3D interactive card that physically tilts and pans relative to the cursor position.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge",
+        "framer-motion"
+      ]
+    },
+    {
+      "name": "pixel-card",
+      "title": "Pixel Card",
+      "category": "Components",
+      "description": "A card that reveals a pixelated, shimmering canvas pattern on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "click-spark",
+      "title": "Click Spark",
+      "category": "Components",
+      "description": "A physics-based canvas effect that bursts colorful sparks wherever the user clicks.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "spotlight-card",
+      "title": "Spotlight Card",
+      "category": "Components",
+      "description": "A card with a subtle spotlight gradient that follows the user's mouse cursor on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "border-glow",
+      "title": "Border Glow",
+      "category": "Components",
+      "description": "An interactive card wrapper with an ambient glowing mesh gradient that mathematically tracks the mouse.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    }
+  ]
+}

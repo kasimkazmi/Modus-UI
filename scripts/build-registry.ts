@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { registry } from "../src/registry";
+import { CATEGORIES, registry } from "../src/registry";
+import { readComponentDoc } from "../src/lib/agent-docs";
+import { SITE } from "../src/lib/site";
 
 const REGISTRY_PATH = path.join(process.cwd(), "public/registry");
 
@@ -25,6 +27,22 @@ for (const item of registry) {
     failures.push(item.name);
   }
 }
+
+// The catalogue the CLI and MCP server read: one small file instead of 50 fetches.
+const catalogue = {
+  name: SITE.name,
+  homepage: SITE.url,
+  count: registry.length,
+  categories: CATEGORIES,
+  components: registry.map((item) => ({
+    name: item.name,
+    title: item.title,
+    category: item.category,
+    description: readComponentDoc(item.name).description,
+    dependencies: item.dependencies,
+  })),
+};
+fs.writeFileSync(path.join(REGISTRY_PATH, "index.json"), JSON.stringify(catalogue, null, 2));
 
 if (failures.length > 0) {
   console.error(`\n💥 Registry build failed for: ${failures.join(", ")}`);
