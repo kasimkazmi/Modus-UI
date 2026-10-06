@@ -4,36 +4,31 @@ import { registry } from "../src/registry";
 
 const REGISTRY_PATH = path.join(process.cwd(), "public/registry");
 
-// Ensure the directory exists
-if (!fs.existsSync(REGISTRY_PATH)) {
-  fs.mkdirSync(REGISTRY_PATH, { recursive: true });
-}
+fs.mkdirSync(REGISTRY_PATH, { recursive: true });
 
 console.log("🚀 Building registry...");
 
-registry.forEach((item) => {
+const failures: string[] = [];
+
+for (const item of registry) {
   try {
-    const filePath = path.join(process.cwd(), "src", item.files[0]);
-    const content = fs.readFileSync(filePath, "utf8");
-    
-    const payload = {
-      ...item,
-      files: [
-        {
-          path: item.files[0],
-          content,
-        },
-      ],
-    };
+    const content = fs.readFileSync(path.join(process.cwd(), "src", item.files[0]), "utf8");
+    const payload = { ...item, files: [{ path: item.files[0], content }] };
 
     fs.writeFileSync(
       path.join(REGISTRY_PATH, `${item.name}.json`),
-      JSON.stringify(payload, null, 2)
+      JSON.stringify(payload, null, 2),
     );
     console.log(`✅ ${item.name}.json generated`);
   } catch (error) {
     console.error(`❌ Error processing ${item.name}:`, error);
+    failures.push(item.name);
   }
-});
+}
 
-console.log("✨ Registry build complete!");
+if (failures.length > 0) {
+  console.error(`\n💥 Registry build failed for: ${failures.join(", ")}`);
+  process.exit(1);
+}
+
+console.log(`✨ Registry build complete! (${registry.length} components)`);
