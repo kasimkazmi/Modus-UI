@@ -2,14 +2,15 @@ name: Release packages
 
 # Push a tag to publish: `cli-v0.1.0` releases @modus-ui/cli, `mcp-v0.1.0` releases @modus-ui/mcp.
 # The tag version must match the package's package.json version.
-# Requires the NPM_TOKEN repository secret (an npm automation token with publish rights on @modus-ui).
+# Publishes with npm trusted publishing (OIDC): no token. Each package has a trusted publisher on
+# npmjs.com (Settings -> Trusted Publisher) for kasimkazmi/Modus-UI, workflow release.yml.
 on:
   push:
     tags: ["cli-v*", "mcp-v*"]
 
 permissions:
   contents: read
-  id-token: write # npm provenance
+  id-token: write # OIDC token for npm trusted publishing (and provenance)
 
 jobs:
   publish:
@@ -22,6 +23,8 @@ jobs:
           node-version: 22
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1+; Node 22 ships npm 10.
+      - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
 
       - name: Resolve package from tag
@@ -49,5 +52,3 @@ jobs:
       - run: npm publish --provenance --access public
         if: steps.pkg.outputs.published != 'true'
         working-directory: ${{ steps.pkg.outputs.dir }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
