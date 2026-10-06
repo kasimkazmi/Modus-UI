@@ -1,0 +1,36 @@
+---
+title: Flip Words
+description: A sleek text rotator that flips individual words sequentially using 3D perspective.
+---
+
+A typography component from UI Beats. It utilizes Framer Motion's `AnimatePresence` with `mode="popLayout"` to smoothly slide adjacent text over as the rotating word changes length, preventing the jarring layout jumps seen in most word rotators.
+
+<ComponentPreview name="flip-words" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add flip-words
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/flip-words.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FlipWords } from "@/components/ui/flip-words";
+
+export default function Example() {
+  return (
+    <h2>
+      Build <FlipWords words={["fast", "beautiful", "modern"]} /> websites.
+    </h2>
+  );
+}
+```

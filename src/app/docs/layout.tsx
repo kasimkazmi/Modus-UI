@@ -58,6 +58,7 @@ const DOC_CATEGORIES = [
       { title: "Letter Glitch", href: "/docs/letter-glitch" },
       { title: "Aurora Background", href: "/docs/aurora-background" },
       { title: "Circuit Background", href: "/docs/circuit-background" },
+      { title: "Orbiting Elements", href: "/docs/orbiting-elements" },
       { title: "Grid Motion", href: "/docs/grid-motion" },
     ],
   },
@@ -66,6 +67,7 @@ const DOC_CATEGORIES = [
     icon: Type,
     items: [
       { title: "Gravity Text Swap", href: "/docs/gravity-text-swap" },
+      { title: "Flip Words", href: "/docs/flip-words" },
       { title: "Scroll Velocity", href: "/docs/scroll-velocity" },
       { title: "Text Pressure", href: "/docs/text-pressure" },
       { title: "True Focus", href: "/docs/true-focus" },
@@ -83,8 +85,10 @@ const DOC_CATEGORIES = [
     items: [
       { title: "Animated Beam", href: "/docs/animated-beam" },
       { title: "Border Beam", href: "/docs/border-beam" },
+      { title: "Bento Grid", href: "/docs/bento-grid" },
       { title: "Animated Beam", href: "/docs/animated-beam" },
       { title: "Border Beam", href: "/docs/border-beam" },
+      { title: "Bento Grid", href: "/docs/bento-grid" },
       { title: "Scratch to Reveal", href: "/docs/scratch-to-reveal" },
       { title: "Stack", href: "/docs/stack" },
       { title: "Star Border", href: "/docs/star-border" },

@@ -44,6 +44,9 @@ import ScratchToRevealDemo from "@/registry/scratch-to-reveal-demo";
 import AnimatedBeamDemo from "@/registry/animated-beam-demo";
 import GravityTextSwapDemo from "@/registry/gravity-text-swap-demo";
 import BorderBeamDemo from "@/registry/border-beam-demo";
+import OrbitingElementsDemo from "@/registry/orbiting-elements-demo";
+import BentoGridDemo from "@/registry/bento-grid-demo";
+import FlipWordsDemo from "@/registry/flip-words-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -93,6 +96,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "animated-beam": AnimatedBeamDemo,
   "gravity-text-swap": GravityTextSwapDemo,
   "border-beam": BorderBeamDemo,
+  "orbiting-elements": OrbitingElementsDemo,
+  "bento-grid": BentoGridDemo,
+  "flip-words": FlipWordsDemo,
 };
 
 interface ComponentPreviewProps {

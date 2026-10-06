@@ -1,0 +1,15 @@
+{
+  "name": "orbiting-elements",
+  "type": "components:ui",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "framer-motion"
+  ],
+  "files": [
+    {
+      "path": "registry/orbiting-elements.tsx",
+      "content": "\"use client\";\n\nimport { Children, type ReactNode } from \"react\";\nimport { motion, useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface OrbitingElementsProps {\n  children: ReactNode;\n  radius?: number;\n  duration?: number;\n  reverse?: boolean;\n  showPath?: boolean;\n  startAngle?: number;\n  className?: string;\n}\n\nexport function OrbitingElements({\n  children,\n  radius = 100,\n  duration = 20,\n  reverse = false,\n  showPath = true,\n  startAngle = 0,\n  className = \"\",\n}: OrbitingElementsProps) {\n  const items = Children.toArray(children);\n  const prefersReducedMotion = useReducedMotion();\n  const spin = reverse ? -360 : 360;\n\n  const transition = {\n    duration,\n    repeat: Infinity,\n    ease: \"linear\" as const,\n  };\n\n  return (\n    <div\n      className={cn(\"relative\", className)}\n      style={{ width: radius * 2, height: radius * 2 }}\n    >\n      {showPath ? (\n        <div\n          aria-hidden=\"true\"\n          className=\"absolute inset-0 rounded-full border border-dashed border-border\"\n        />\n      ) : null}\n\n      {items.map((item, index) => {\n        const angle = startAngle + (360 / items.length) * index;\n\n        return (\n          <motion.div\n            key={index}\n            className=\"absolute top-1/2 left-1/2 size-0\"\n            initial={{ rotate: angle }}\n            animate={\n              prefersReducedMotion ? undefined : { rotate: angle + spin }\n            }\n            transition={transition}\n          >\n            <div\n              className=\"w-max\"\n              style={{ transform: `translateX(${radius}px)` }}\n            >\n              <motion.div\n                initial={{ rotate: -angle }}\n                animate={\n                  prefersReducedMotion ? undefined : { rotate: -angle - spin }\n                }\n                transition={transition}\n                className=\"flex w-max -translate-x-1/2 -translate-y-1/2 items-center justify-center\"\n              >\n                {item}\n              </motion.div>\n            </div>\n          </motion.div>\n        );\n      })}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

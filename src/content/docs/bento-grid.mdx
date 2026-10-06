@@ -1,0 +1,41 @@
+---
+title: Bento Grid
+description: A highly structured, responsive layout primitive for creating asymmetric grid layouts.
+---
+
+A layout primitive from UI Beats that perfectly solves the "Bento Box" design trend. It uses custom CSS properties to manage grid spans, ensuring that asymmetric layouts smoothly degrade to a single column on mobile devices without hard-coded media queries breaking the flow.
+
+<ComponentPreview name="bento-grid" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add bento-grid
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bento-grid.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BentoGrid, BentoCard } from "@/components/ui/bento-grid";
+
+export default function Example() {
+  return (
+    <BentoGrid columns={3} gap={16}>
+      <BentoCard colSpan={2}>Wide Card</BentoCard>
+      <BentoCard colSpan={1}>Standard Card</BentoCard>
+      <BentoCard colSpan={1} rowSpan={2}>
+        Tall Card
+      </BentoCard>
+      <BentoCard colSpan={2}>Bottom Wide</BentoCard>
+    </BentoGrid>
+  );
+}
+```

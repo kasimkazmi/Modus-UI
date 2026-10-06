@@ -264,4 +264,22 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/border-beam.tsx"],
   },
+  {
+    name: "orbiting-elements",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/orbiting-elements.tsx"],
+  },
+  {
+    name: "bento-grid",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/bento-grid.tsx"],
+  },
+  {
+    name: "flip-words",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/flip-words.tsx"],
+  },
 ];

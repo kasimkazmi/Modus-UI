@@ -1,0 +1,43 @@
+---
+title: Orbiting Elements
+description: Elements that mathematically orbit around a central node in circular paths.
+---
+
+A beautiful physics-driven layout component ported from UI Beats. It places child elements evenly around a circle and rotates them around a center point. Crucially, each item counter-rotates at the exact same speed, ensuring icons and text never end up upside down as they travel the orbit.
+
+<ComponentPreview name="orbiting-elements" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add orbiting-elements
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/orbiting-elements.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { OrbitingElements } from "@/components/ui/orbiting-elements";
+
+export default function Example() {
+  return (
+    <div className="relative flex h-[400px] items-center justify-center">
+      <div className="h-16 w-16 rounded-full border bg-card" />
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <OrbitingElements radius={100} duration={10}>
+          <div className="h-8 w-8 rounded-full bg-primary" />
+          <div className="h-8 w-8 rounded-full bg-secondary" />
+        </OrbitingElements>
+      </div>
+    </div>
+  );
+}
+```
