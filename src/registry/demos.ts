@@ -50,6 +50,10 @@ import DecayCardDemo from "./decay-card-demo";
 import BlobCursorDemo from "./blob-cursor-demo";
 import FuzzyTextDemo from "./fuzzy-text-demo";
 import MagnetLinesDemo from "./magnet-lines-demo";
+import ComparisonSliderDemo from "./comparison-slider-demo";
+import DockDemo from "./dock-demo";
+import ProgressRingDemo from "./progress-ring-demo";
+import MarqueeDemo from "./marquee-demo";
 import type { ComponentName } from "./index";
 
 /** The demo rendered for each component in docs and standalone previews. */
@@ -105,6 +109,10 @@ export const demos: Record<ComponentName, ComponentType> = {
   "blob-cursor": BlobCursorDemo,
   "fuzzy-text": FuzzyTextDemo,
   "magnet-lines": MagnetLinesDemo,
+  "comparison-slider": ComparisonSliderDemo,
+  dock: DockDemo,
+  "progress-ring": ProgressRingDemo,
+  marquee: MarqueeDemo,
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

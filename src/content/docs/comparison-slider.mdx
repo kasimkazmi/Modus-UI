@@ -1,0 +1,50 @@
+---
+title: Comparison Slider
+description: Two layers stacked, with a divider the user drags to compare them.
+---
+
+A buttery smooth, accessible image/layer comparison slider ported from UI Beats. It supports both horizontal and vertical orientations and is fully keyboard navigable.
+
+<ComponentPreview name="comparison-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add comparison-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/comparison-slider.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ComparisonSlider } from "@/components/ui/comparison-slider";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-[500px]">
+      <ComparisonSlider
+        before={<img src="/before.jpg" alt="Before" className="h-full w-full object-cover" />}
+        after={<img src="/after.jpg" alt="After" className="h-full w-full object-cover" />}
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop            | Type                       | Default                    | Description                                                    |
+| :-------------- | :------------------------- | :------------------------- | :------------------------------------------------------------- |
+| before          | ReactNode                  | -                          | The layer revealed on the leading side of the divider.         |
+| after           | ReactNode                  | -                          | The layer underneath, revealed as the divider moves across it. |
+| defaultPosition | number                     | 50                         | Where the divider starts, 0 to 100.                            |
+| orientation     | "horizontal" \| "vertical" | "horizontal"               | The orientation of the slider.                                 |
+| label           | string                     | "Compare before and after" | Accessible name for the divider.                               |
+| className       | string                     | ""                         | -                                                              |

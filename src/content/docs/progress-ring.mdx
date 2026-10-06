@@ -1,0 +1,43 @@
+---
+title: Progress Ring
+description: A circular ring that smoothly sweeps to a value, with a live numeric readout.
+---
+
+A highly precise, animated progress ring ported from UI Beats. It animates both the SVG `pathLength` and the numeric label smoothly using Framer Motion, avoiding the standard dash-array visual glitches on large stroke widths.
+
+<ComponentPreview name="progress-ring" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add progress-ring
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/progress-ring.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ProgressRing } from "@/components/ui/progress-ring";
+
+export default function Example() {
+  return <ProgressRing value={75} size={120} strokeWidth={8} showLabel={true} />;
+}
+```
+
+## Props
+
+| Prop        | Type    | Default | Description                         |
+| :---------- | :------ | :------ | :---------------------------------- |
+| value       | number  | 72      | How far round to sweep, 0 to 100.   |
+| size        | number  | 120     | Outer diameter, in pixels.          |
+| strokeWidth | number  | 10      | Thickness of the ring, in pixels.   |
+| duration    | number  | 1.2     | Seconds the sweep takes.            |
+| showLabel   | boolean | true    | Print the percentage in the middle. |
+| className   | string  | ""      | -                                   |

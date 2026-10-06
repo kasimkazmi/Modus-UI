@@ -1,0 +1,49 @@
+---
+title: Marquee
+description: A seamless, infinitely scrolling row of elements.
+---
+
+A highly resilient marquee ported from UI Beats. Instead of using fragile CSS keyframes, it drives the scroll with Framer Motion's `useAnimationFrame` against a measured bounding box. This guarantees perfectly seamless wrapping without visual jumps, and allows you to pause the scroll instantly on hover.
+
+<ComponentPreview name="marquee" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add marquee
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/marquee.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Marquee } from "@/components/ui/marquee";
+
+export default function Example() {
+  return (
+    <Marquee speed={50} direction="left" pauseOnHover>
+      <div className="mx-4">Logo 1</div>
+      <div className="mx-4">Logo 2</div>
+      <div className="mx-4">Logo 3</div>
+    </Marquee>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type              | Default | Description                                              |
+| :----------- | :---------------- | :------ | :------------------------------------------------------- |
+| children     | ReactNode         | -       | The elements to scroll.                                  |
+| speed        | number            | 60      | Pixels travelled per second.                             |
+| direction    | "left" \| "right" | "left"  | The direction to scroll.                                 |
+| pauseOnHover | boolean           | true    | Pause the scrolling when hovered.                        |
+| fadeEdges    | boolean           | true    | Fade the leading and trailing edges into the background. |
+| className    | string            | ""      | -                                                        |

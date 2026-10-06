@@ -1,0 +1,52 @@
+---
+title: Dock
+description: A highly interactive macOS-style dock that magnifies items on hover.
+---
+
+A beautiful icon dock ported from UI Beats. Built with Framer Motion, it applies complex physics interpolation to surrounding icons, smoothly magnifying them as the cursor approaches to create a realistic macOS dock effect.
+
+<ComponentPreview name="dock" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dock
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/dock.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Dock, DockItem } from "@/components/ui/dock";
+import { Home, Settings } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Dock>
+      <DockItem label="Home" href="/">
+        <Home />
+      </DockItem>
+      <DockItem label="Settings" href="/settings">
+        <Settings />
+      </DockItem>
+    </Dock>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type      | Default | Description                                      |
+| :------------ | :-------- | :------ | :----------------------------------------------- |
+| children      | ReactNode | -       | The DockItem components.                         |
+| size          | number    | 44      | Resting size of each item, in pixels.            |
+| magnification | number    | 76      | Size an item reaches directly under the pointer. |
+| reach         | number    | 130     | How far, in pixels, the magnification reaches.   |
+| className     | string    | ""      | -                                                |

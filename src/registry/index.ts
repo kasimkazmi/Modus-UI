@@ -433,6 +433,38 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/border-glow.tsx"],
   },
+  {
+    name: "comparison-slider",
+    title: "Comparison Slider",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
+    files: ["registry/comparison-slider.tsx"],
+  },
+  {
+    name: "dock",
+    title: "Dock",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/dock.tsx"],
+  },
+  {
+    name: "progress-ring",
+    title: "Progress Ring",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/progress-ring.tsx"],
+  },
+  {
+    name: "marquee",
+    title: "Marquee",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/marquee.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];
