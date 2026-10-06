@@ -22,7 +22,9 @@ describe("installation guide", () => {
   });
 
   it("documents a Tailwind config that uses only shipped tokens", () => {
-    for (const token of varsIn(guide)) {
+    const snippet = guide.match(/```js\n([\s\S]*?)```/)?.[1] ?? "";
+    expect(snippet).toContain("hsl(var(--primary) / <alpha-value>)");
+    for (const token of varsIn(snippet)) {
       expect(css, token).toContain(`${token}:`);
     }
   });

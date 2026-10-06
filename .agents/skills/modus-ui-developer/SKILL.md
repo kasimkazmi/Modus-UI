@@ -17,25 +17,24 @@ This skill ensures you adhere to the established architectural patterns and conv
 ## 2. Tech Stack & Styling
 
 - **TypeScript First**: Use `.tsx` exclusively. Define explicit interfaces (e.g., `interface FocusCardProps`). No generic `.jsx` or untyped props.
-- **Tailwind Variables**: NEVER use hardcoded hex colors or specific colors like `bg-neutral-900`. Tokens are bare HSL channels, so use `hsl(var(--primary))` for CSS properties or `bg-primary` for Tailwind classes. On a `<canvas>`, resolve colors through `getComputedStyle` first.
+- **Tailwind Variables**: NEVER use hardcoded hex colors or specific colors like `bg-neutral-900`. Use Modus UI's semantic CSS variables (e.g., `bg-background`, `text-muted-foreground`, `border-border`, `bg-primary`).
 - **Utility Merging**: Always use the `cn()` utility (`clsx` + `tailwind-merge`) from `@/lib/utils` for merging class names.
 
 ## 3. Animation Guidelines
 
-- **Framer Motion Only**: Do NOT use `gsap`. We prefer native `framer-motion` for animations, or clean native browser APIs (`requestAnimationFrame` for high-performance canvas/webgl work).
-- **Reduced Motion**: Honour `prefers-reduced-motion` natively using Framer Motion's `useReducedMotion()`.
+- **Framer Motion Only**: Do NOT use `gsap`, `requestAnimationFrame` custom loops, or other heavy animation libraries. Rebuild all animations natively in `framer-motion` to keep the bundle size small and consistent.
 
 ## 4. Accessibility
 
 - All interactive components MUST include keyboard navigation support (`onKeyDown`), appropriate ARIA roles, and `aria-expanded` / `aria-hidden` / `aria-label` attributes where relevant.
 
-## 5. CLI, Scaffolding & Registration Standards
+## 5. CLI & Documentation Standards
 
-- **Scaffolding**: Start new components with the CLI command:
-  `pnpm new:component --name <slug> --category <Category>`
-- **CLI docs**: Documentation must instruct users to use `npx @modus-ui/cli add <component>`. Do NOT use `npx shadcn`, `npx react-ui-component` or the unscoped `npx modus-ui` (that npm package belongs to someone else).
-- **Registration**: Register a component in exactly TWO places:
-  1. Its entry (name, title, category, dependencies, files) in `src/registry/index.ts`
-  2. Its demo in `src/registry/demos.ts`
-  The sidebar, components index, and previews are derived automatically from these. NEVER hand-edit lists in `src/app/docs/layout.tsx`, `src/app/docs/components/page.tsx`, `src/components/component-preview.tsx`, or `src/app/preview/[name]/page.tsx`.
-- **MDX Tables**: Check MDX props tables against component props and defaults.
+- **Component CLI**: When writing installation instructions in `.mdx` files, ALWAYS use `npx @modus-ui/cli add <component-name>`. Do not use `react-ui-component` or `shadcn`.
+- **Dependencies**: Provide standard package manager instructions (e.g., `npm install framer-motion`) below the CLI command if the component relies on external libraries not handled by the Modus UI CLI.
+- **Preview Wiring**: New components must be registered in the following files to appear on the documentation site:
+  1. `src/registry/index.ts` (Export the component)
+  2. `src/components/component-preview.tsx` (Import the Demo file and add it to `COMPONENT_MAP`)
+  3. `src/app/docs/components/page.tsx` (Add to `COMPONENT_LIST` for the grid view)
+  4. `src/app/docs/layout.tsx` (Add to the sidebar navigation under `DOC_CATEGORIES`)
+  5. `src/app/preview/[name]/page.tsx` (Add to the standalone preview `COMPONENT_MAP`)

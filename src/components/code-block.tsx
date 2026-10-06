@@ -8,7 +8,7 @@ async function getHighlighterInstance() {
   if (!highlighter) {
     highlighter = await createHighlighter({
       themes: ["github-dark"],
-      langs: ["tsx", "bash", "typescript", "javascript", "jsx", "css"],
+      langs: ["tsx", "bash", "typescript", "javascript", "jsx", "css", "json"],
     });
   }
   return highlighter;
