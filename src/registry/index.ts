@@ -204,5 +204,23 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/tilted-card.tsx"],
   },
+  {
+    name: "magnet",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/magnet.tsx"],
+  },
+  {
+    name: "stack",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/stack.tsx"],
+  },
+  {
+    name: "star-border",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/star-border.tsx"],
+  },
 ];
 

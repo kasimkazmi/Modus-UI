@@ -1,0 +1,36 @@
+---
+title: Magnet
+description: A micro-interaction component that pulls an element towards the mouse cursor.
+---
+
+A simple but highly effective physics micro-interaction. It wraps any element and pulls it towards the mouse cursor as it approaches, creating a magnetic gravity effect.
+
+<ComponentPreview name="magnet" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add magnet
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/magnet.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Magnet } from "@/components/ui/magnet";
+
+export default function Example() {
+  return (
+    <Magnet padding={150} magnetStrength={3}>
+      <button>Magnetic Button</button>
+    </Magnet>
+  );
+}
+```

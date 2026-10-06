@@ -1,0 +1,45 @@
+---
+title: Stack
+description: A 3D interactive stack of cards that can be dragged and rearranged.
+---
+
+An interactive deck of cards utilizing Framer Motion's `useTransform` and `drag`. Cards can be thrown to the back of the stack by dragging them off-center, or by clicking them (configurable).
+
+<ComponentPreview name="stack" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add stack
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/stack.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Stack } from "@/components/ui/stack";
+
+export default function Example() {
+  const cards = [
+    <div key="1" className="w-full h-full bg-blue-500 rounded-2xl">Card 1</div>,
+    <div key="2" className="w-full h-full bg-red-500 rounded-2xl">Card 2</div>,
+  ];
+
+  return (
+    <div className="w-[300px] h-[400px]">
+      <Stack
+        cards={cards}
+        randomRotation={true}
+        sendToBackOnClick={true}
+      />
+    </div>
+  );
+}
+```

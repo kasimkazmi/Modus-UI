@@ -1,0 +1,36 @@
+---
+title: Star Border
+description: A glowing button border animation that circles the perimeter.
+---
+
+A clean button with a dual-gradient beam that animates smoothly across the perimeter, utilizing Framer Motion instead of custom tailwind config.
+
+<ComponentPreview name="star-border" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add star-border
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/star-border.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StarBorder } from "@/components/ui/star-border";
+
+export default function Example() {
+  return (
+    <StarBorder color="rgba(168, 85, 247, 0.8)">
+      Premium Button
+    </StarBorder>
+  );
+}
+```

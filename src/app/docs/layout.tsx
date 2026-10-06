@@ -28,6 +28,7 @@ const DOC_CATEGORIES = [
     title: "Actions",
     icon: MousePointer2,
     items: [
+      { title: "Magnet", href: "/docs/magnet" },
       { title: "Magic Button", href: "/docs/magic-button" },
       { title: "Animated Button", href: "/docs/animated-button" },
       { title: "Pulse Button", href: "/docs/pulse-button" },
@@ -76,6 +77,8 @@ const DOC_CATEGORIES = [
     title: "Components",
     icon: LayoutTemplate,
     items: [
+      { title: "Stack", href: "/docs/stack" },
+      { title: "Star Border", href: "/docs/star-border" },
       { title: "Tilted Card", href: "/docs/tilted-card" },
       { title: "Pixel Card", href: "/docs/pixel-card" },
       { title: "Click Spark", href: "/docs/click-spark" },

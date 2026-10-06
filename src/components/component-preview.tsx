@@ -34,6 +34,9 @@ import WavesDemo from "@/registry/waves-demo";
 import LetterGlitchDemo from "@/registry/letter-glitch-demo";
 import PixelCardDemo from "@/registry/pixel-card-demo";
 import TiltedCardDemo from "@/registry/tilted-card-demo";
+import MagnetDemo from "@/registry/magnet-demo";
+import StackDemo from "@/registry/stack-demo";
+import StarBorderDemo from "@/registry/star-border-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -73,6 +76,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "letter-glitch": LetterGlitchDemo,
   "pixel-card": PixelCardDemo,
   "tilted-card": TiltedCardDemo,
+  "magnet": MagnetDemo,
+  "stack": StackDemo,
+  "star-border": StarBorderDemo,
 };
 
 interface ComponentPreviewProps {
