@@ -1,0 +1,32 @@
+---
+title: Fuzzy Text
+description: Typography rendered with dynamic, animated noise and grain displacement.
+---
+
+A completely custom `<canvas>` based typography component ported from React Bits. It reads the raw pixels of drawn text and randomly offsets them every frame using an intensity scale, creating a highly unique "fuzzy" or distorted aesthetic.
+
+<ComponentPreview name="fuzzy-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add fuzzy-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/fuzzy-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FuzzyText } from "@/components/ui/fuzzy-text";
+
+export default function Example() {
+  return <FuzzyText hoverIntensity={0.8}>Hello</FuzzyText>;
+}
+```

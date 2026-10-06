@@ -1,0 +1,36 @@
+---
+title: Blob Cursor
+description: A morphing gelatinous blob that trails your mouse cursor.
+---
+
+A buttery smooth, interactive cursor effect ported from React Bits. It uses a custom SVG `feGaussianBlur` and `feColorMatrix` filter to blend multiple trailing DOM elements into a single fluid "blob" that follows your cursor physics.
+
+<ComponentPreview name="blob-cursor" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add blob-cursor
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/blob-cursor.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BlobCursor } from "@/components/ui/blob-cursor";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full cursor-none overflow-hidden">
+      <BlobCursor fillColor="#ff0000" />
+    </div>
+  );
+}
+```

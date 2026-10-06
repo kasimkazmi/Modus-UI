@@ -1,0 +1,36 @@
+---
+title: Decay Card
+description: A 3D interactive card that decays and shatters its visual elements when hovered.
+---
+
+A highly complex and interactive SVG filter component ported from React Bits. It uses `feTurbulence` and `feDisplacementMap` bound to the cursor's movement distance to mathematically "shatter" the underlying image, while physics calculations handle the 3D rotation and translation. Completely refactored from GSAP to pure React + requestAnimationFrame for zero dependencies!
+
+<ComponentPreview name="decay-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add decay-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/decay-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DecayCard } from "@/components/ui/decay-card";
+
+export default function Example() {
+  return (
+    <DecayCard image="/your-image.jpg">
+      <h2>Hover Me</h2>
+    </DecayCard>
+  );
+}
+```

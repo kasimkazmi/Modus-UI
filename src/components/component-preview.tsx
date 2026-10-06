@@ -47,6 +47,9 @@ import BorderBeamDemo from "@/registry/border-beam-demo";
 import OrbitingElementsDemo from "@/registry/orbiting-elements-demo";
 import BentoGridDemo from "@/registry/bento-grid-demo";
 import FlipWordsDemo from "@/registry/flip-words-demo";
+import DecayCardDemo from "@/registry/decay-card-demo";
+import BlobCursorDemo from "@/registry/blob-cursor-demo";
+import FuzzyTextDemo from "@/registry/fuzzy-text-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -99,6 +102,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "orbiting-elements": OrbitingElementsDemo,
   "bento-grid": BentoGridDemo,
   "flip-words": FlipWordsDemo,
+  "decay-card": DecayCardDemo,
+  "blob-cursor": BlobCursorDemo,
+  "fuzzy-text": FuzzyTextDemo,
 };
 
 interface ComponentPreviewProps {

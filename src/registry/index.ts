@@ -282,4 +282,22 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/flip-words.tsx"],
   },
+  {
+    name: "decay-card",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/decay-card.tsx"],
+  },
+  {
+    name: "blob-cursor",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/blob-cursor.tsx"],
+  },
+  {
+    name: "fuzzy-text",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/fuzzy-text.tsx"],
+  },
 ];
