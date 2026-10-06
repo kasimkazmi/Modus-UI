@@ -70,7 +70,7 @@ export default function AnimatedListDemo() {
   ];
 
   return (
-    <div className="flex w-full items-center justify-center p-12 bg-background border border-border rounded-xl">
+    <div className="flex w-full items-center justify-center p-12 bg-background border border-border rounded-xl min-h-[400px]">
       <AnimatedList 
         items={items} 
         onItemSelect={(item, index) => console.log(`Selected item ${index}`)} 

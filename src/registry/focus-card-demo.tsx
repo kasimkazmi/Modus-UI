@@ -3,7 +3,7 @@ import { FocusCard } from "./focus-card";
 
 export default function FocusCardDemo() {
   return (
-    <div className="flex w-full items-center justify-center p-8">
+    <div className="flex w-full items-center justify-center p-8 min-h-[400px]">
       <FocusCard className="w-full max-w-sm transition-transform hover:scale-[1.02]">
         <div className="flex flex-col gap-4 relative z-10">
           <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center text-xl">

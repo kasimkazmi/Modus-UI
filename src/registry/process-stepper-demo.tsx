@@ -4,7 +4,7 @@ import { ProcessStepper, Step } from "./process-stepper";
 
 export default function ProcessStepperDemo() {
   return (
-    <div className="flex w-full items-center justify-center p-12 bg-background">
+    <div className="flex w-full items-center justify-center p-12 bg-background min-h-[400px]">
       <ProcessStepper
         initialStep={1}
         onStepChange={(step) => {
