@@ -95,19 +95,20 @@ The site runs at [http://localhost:3000](http://localhost:3000).
 
 ### Scripts
 
-| Script                | What it does                                                          |
-| --------------------- | --------------------------------------------------------------------- |
-| `pnpm dev`            | Start the dev server                                                  |
-| `pnpm build`          | Build the production site, then regenerate `public/registry/`         |
-| `pnpm start`          | Serve the production build                                            |
-| `pnpm lint`           | ESLint                                                                |
-| `pnpm typecheck`      | TypeScript, no emit                                                   |
-| `pnpm format`         | Prettier, with Tailwind class sorting (`format:check` to verify)      |
-| `pnpm test`           | Vitest: registry integrity and coding-standard checks                 |
-| `pnpm test:e2e`       | Playwright: builds, serves, then runs desktop Chrome and Pixel 7      |
-| `pnpm check`          | Lint, typecheck and unit tests in one go                              |
-| `pnpm build:registry` | Write each component's JSON to `public/registry/` for the CLI         |
-| `pnpm new:component`  | Scaffold and register a component (`--name`, `--category`, `--title`) |
+| Script                | What it does                                                                              |
+| --------------------- | ----------------------------------------------------------------------------------------- |
+| `pnpm dev`            | Start the dev server                                                                      |
+| `pnpm build`          | Build the production site, then regenerate `public/registry/`                             |
+| `pnpm start`          | Serve the production build                                                                |
+| `pnpm lint`           | ESLint                                                                                    |
+| `pnpm typecheck`      | TypeScript, no emit                                                                       |
+| `pnpm format`         | Prettier, with Tailwind class sorting (`format:check` to verify)                          |
+| `pnpm test`           | Vitest: registry integrity and coding-standard checks                                     |
+| `pnpm test:e2e`       | Playwright: builds, serves, then runs desktop Chrome and Pixel 7                          |
+| `pnpm check`          | Lint, typecheck and unit tests in one go                                                  |
+| `pnpm build:registry` | Write each component's JSON to `public/registry/` for the CLI                             |
+| `pnpm new:component`  | Scaffold and register a component (`--name`, `--category`, `--title`)                     |
+| `pnpm release`        | Interactive release of `@modus-ui/cli` / `@modus-ui/mcp`: bump, build, test, tag, publish |
 
 A pre-commit hook runs ESLint and Prettier on staged files.
 
