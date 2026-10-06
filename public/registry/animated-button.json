@@ -1,5 +1,7 @@
 {
   "name": "animated-button",
+  "title": "Animated Button",
+  "category": "Actions",
   "type": "components:ui",
   "dependencies": [
     "framer-motion"

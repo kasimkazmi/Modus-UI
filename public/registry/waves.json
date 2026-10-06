@@ -1,5 +1,7 @@
 {
   "name": "waves",
+  "title": "Waves",
+  "category": "Backgrounds",
   "type": "components:ui",
   "dependencies": [
     "clsx",

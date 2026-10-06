@@ -1,5 +1,7 @@
 {
   "name": "kinetic-carousel",
+  "title": "Kinetic Carousel",
+  "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

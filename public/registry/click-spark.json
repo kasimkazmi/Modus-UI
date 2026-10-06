@@ -1,5 +1,7 @@
 {
   "name": "click-spark",
+  "title": "Click Spark",
+  "category": "Components",
   "type": "components:ui",
   "dependencies": [
     "clsx",

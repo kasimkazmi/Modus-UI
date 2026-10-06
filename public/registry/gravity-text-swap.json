@@ -1,5 +1,7 @@
 {
   "name": "gravity-text-swap",
+  "title": "Gravity Text Swap",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "clsx",

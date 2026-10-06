@@ -1,5 +1,7 @@
 {
   "name": "text-pressure",
+  "title": "Text Pressure",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "clsx",

@@ -1,5 +1,7 @@
 {
   "name": "blob-cursor",
+  "title": "Blob Cursor",
+  "category": "Backgrounds",
   "type": "components:ui",
   "dependencies": [
     "clsx",

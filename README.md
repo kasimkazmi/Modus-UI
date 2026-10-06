@@ -109,7 +109,8 @@ CI (`.github/workflows/ci.yml`) runs three jobs on every pull request:
 ```text
 src/
 ├── registry/
-│   ├── index.ts              # Registry: name, dependencies and file for each component
+│   ├── index.ts              # Registry: the single source of truth for every component
+│   ├── demos.ts              # Demo for each component, type-checked against the registry
 │   ├── <name>.tsx            # The component users install
 │   └── <name>-demo.tsx       # The demo shown in docs and previews
 ├── content/docs/<name>.mdx   # Documentation page for each component
@@ -128,7 +129,7 @@ Contributions are welcome. Check the [open issues](https://github.com/kasimkazmi
 
 1. Fork the repo and create a branch named `feat/<component-name>` or `fix/<what>`.
 2. Follow [`COMPONENTS_GUIDE.md`](COMPONENTS_GUIDE.md) for file layout, design standards and the MDX template, and [`AGENTS.md`](AGENTS.md) for coding rules (TypeScript, Tailwind variables, `framer-motion`, `cn()`).
-3. Register the component in `src/registry/index.ts`, `src/components/component-preview.tsx`, `src/app/preview/[name]/page.tsx`, `src/app/docs/components/page.tsx` and `src/app/docs/layout.tsx`. `pnpm test` tells you if you missed one.
+3. Register the component in `src/registry/index.ts` (name, title, category) and its demo in `src/registry/demos.ts`. The sidebar, components index and previews are generated from these, and `pnpm typecheck` / `pnpm test` tell you if anything is missing.
 4. Run `pnpm check` and `pnpm test:e2e` before opening a pull request. Include a screenshot or recording of the component.
 
 ## Credit

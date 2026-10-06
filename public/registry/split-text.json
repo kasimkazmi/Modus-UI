@@ -1,5 +1,7 @@
 {
   "name": "split-text",
+  "title": "Split Text",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",

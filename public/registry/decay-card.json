@@ -1,5 +1,7 @@
 {
   "name": "decay-card",
+  "title": "Decay Card",
+  "category": "Components",
   "type": "components:ui",
   "dependencies": [
     "clsx",

@@ -1,5 +1,7 @@
 {
   "name": "scroll-velocity",
+  "title": "Scroll Velocity",
+  "category": "Typography",
   "type": "components:ui",
   "dependencies": [
     "clsx",

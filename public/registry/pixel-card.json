@@ -1,5 +1,7 @@
 {
   "name": "pixel-card",
+  "title": "Pixel Card",
+  "category": "Components",
   "type": "components:ui",
   "dependencies": [
     "clsx",

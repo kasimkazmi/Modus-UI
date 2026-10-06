@@ -1,5 +1,7 @@
 {
   "name": "aurora-background",
+  "title": "Aurora Background",
+  "category": "Backgrounds",
   "type": "components:ui",
   "dependencies": [
     "framer-motion",
