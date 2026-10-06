@@ -178,7 +178,10 @@ export function TextPressure({
 
   const styleElement = useMemo(() => {
     return (
-      <style>{`
+      <style
+        // Raw CSS: React 18 escapes quotes in text children during SSR, causing a hydration mismatch.
+        dangerouslySetInnerHTML={{
+          __html: `
         @import url('${fontUrl}');
         .stroke span {
           position: relative;
@@ -194,20 +197,22 @@ export function TextPressure({
           -webkit-text-stroke-width: ${strokeWidth}px;
           -webkit-text-stroke-color: ${strokeColor};
         }
-      `}</style>
+      `,
+        }}
+      />
     );
   }, [fontUrl, textColor, strokeColor, strokeWidth]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full overflow-hidden bg-transparent">
+    <div ref={containerRef} className="relative h-full w-full overflow-hidden bg-transparent">
       {styleElement}
       <h1
         ref={titleRef}
         className={cn(
-          "text-pressure-title uppercase text-center",
+          "text-pressure-title text-center uppercase",
           flex ? "flex justify-between" : "",
           stroke ? "stroke" : "",
-          className
+          className,
         )}
         style={{
           fontFamily,
@@ -223,7 +228,9 @@ export function TextPressure({
         {chars.map((char, i) => (
           <span
             key={i}
-            ref={(el) => { spansRef.current[i] = el; }}
+            ref={(el) => {
+              spansRef.current[i] = el;
+            }}
             data-char={char}
             className="inline-block"
           >

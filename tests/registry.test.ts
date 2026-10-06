@@ -8,6 +8,7 @@ const read = (file: string) => fs.readFileSync(path.join(SRC, file), "utf8");
 
 const names = registry.map((item) => item.name);
 const preview = read("components/component-preview.tsx");
+const standalone = read("app/preview/[name]/page.tsx");
 const docsIndex = read("app/docs/components/page.tsx");
 const sidebar = read("app/docs/layout.tsx");
 
@@ -48,6 +49,14 @@ describe("every component is wired up (AGENTS.md rule 4)", () => {
   it.each(names)("%s is in the preview map", (name) => {
     expect(preview).toContain(`"${name}":`);
   });
+
+  // morphing-navbar gets a dedicated full-page preview instead of a map entry.
+  it.each(names.filter((n) => n !== "morphing-navbar"))(
+    "%s is in the standalone preview map",
+    (name) => {
+      expect(standalone).toContain(`"${name}":`);
+    },
+  );
 
   it.each(names)("%s is on the components index page", (name) => {
     expect(docsIndex).toContain(`"/docs/${name}"`);
