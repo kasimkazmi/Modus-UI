@@ -28,3 +28,12 @@ test("palette and dark mode restyle the site, persist, and leave previews on Mod
   await expect(html).toHaveAttribute("data-palette", "ocean");
   await expect(html).toHaveClass(/\bdark\b/);
 });
+
+test("first visit follows the system colour scheme", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/docs");
+  await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+});
