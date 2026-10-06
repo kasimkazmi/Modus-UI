@@ -8,7 +8,15 @@
     "start": "next start",
     "lint": "next lint",
     "build:registry": "tsx scripts/build-registry.ts",
-    "postbuild": "npm run build:registry"
+    "postbuild": "npm run build:registry",
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-tabs": "^1.1.13",
@@ -28,16 +36,29 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/node": "^20.19.41",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "postcss": "^8",
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.0.3"
   },
-  "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264"
+  "packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md,mdx,yml,yaml}": "prettier --write"
+  }
 }

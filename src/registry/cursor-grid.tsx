@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface CursorGridProps {
   color?: string;
@@ -27,7 +28,11 @@ const FALLOFF_CURVES = {
 
 function hexToRgb(hex: string) {
   let h = hex.replace(/^#/, "");
-  if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+  if (h.length === 3)
+    h = h
+      .split("")
+      .map((c) => c + c)
+      .join("");
   const num = parseInt(h, 16);
   return [num >> 16, (num >> 8) & 255, num & 255];
 }
@@ -46,7 +51,7 @@ export function CursorGrid({
   cellRadius = 4,
   clickPulse = true,
   pulseSpeed = 800,
-  className = "",
+  className,
 }: CursorGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -320,10 +325,7 @@ export function CursorGrid({
   }, [gridOpacity, color, lineWidth, maxOpacity, fillOpacity, cellRadius]);
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative h-full w-full overflow-hidden ${className}`}
-    >
+    <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden", className)}>
       <canvas ref={canvasRef} className="block h-full w-full" />
     </div>
   );

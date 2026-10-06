@@ -246,5 +246,22 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/scratch-to-reveal.tsx"],
   },
+  {
+    name: "animated-beam",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/animated-beam.tsx"],
+  },
+  {
+    name: "gravity-text-swap",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/gravity-text-swap.tsx"],
+  },
+  {
+    name: "border-beam",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/border-beam.tsx"],
+  },
 ];
-

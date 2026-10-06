@@ -41,6 +41,9 @@ import CursorGridDemo from "@/registry/cursor-grid-demo";
 import ScrollVelocityDemo from "@/registry/scroll-velocity-demo";
 import LiquidTabsDemo from "@/registry/liquid-tabs-demo";
 import ScratchToRevealDemo from "@/registry/scratch-to-reveal-demo";
+import AnimatedBeamDemo from "@/registry/animated-beam-demo";
+import GravityTextSwapDemo from "@/registry/gravity-text-swap-demo";
+import BorderBeamDemo from "@/registry/border-beam-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -76,17 +79,20 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "click-spark": ClickSparkDemo,
   "spotlight-card": SpotlightCardDemo,
   "text-pressure": TextPressureDemo,
-  "waves": WavesDemo,
+  waves: WavesDemo,
   "letter-glitch": LetterGlitchDemo,
   "pixel-card": PixelCardDemo,
   "tilted-card": TiltedCardDemo,
-  "magnet": MagnetDemo,
-  "stack": StackDemo,
+  magnet: MagnetDemo,
+  stack: StackDemo,
   "star-border": StarBorderDemo,
   "cursor-grid": CursorGridDemo,
   "scroll-velocity": ScrollVelocityDemo,
   "liquid-tabs": LiquidTabsDemo,
   "scratch-to-reveal": ScratchToRevealDemo,
+  "animated-beam": AnimatedBeamDemo,
+  "gravity-text-swap": GravityTextSwapDemo,
+  "border-beam": BorderBeamDemo,
 };
 
 interface ComponentPreviewProps {
@@ -99,7 +105,7 @@ export const ComponentPreview = async ({ name }: ComponentPreviewProps) => {
 
   if (!component || !Preview) {
     return (
-      <div className="text-red-500 p-8 border border-red-200 rounded-2xl bg-red-50/50 font-medium text-sm">
+      <div className="rounded-2xl border border-red-200 bg-red-50/50 p-8 text-sm font-medium text-red-500">
         Component &quot;{name}&quot; not found in the registry map.
       </div>
     );

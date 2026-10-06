@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 // Self-contained ripple class for interactive mouse effects
 class CircuitRipple {
@@ -58,7 +59,8 @@ class CircuitRipple {
         ctx.beginPath();
         ctx.moveTo(this.x + circleRadius, this.y);
         for (let angle = 0; angle <= Math.PI * 2; angle += 0.1) {
-          const waveDistortion = Math.sin(angle * this.waveFrequency + this.waveOffset) * this.waveAmplitude;
+          const waveDistortion =
+            Math.sin(angle * this.waveFrequency + this.waveOffset) * this.waveAmplitude;
           const distortedRadius = circleRadius + waveDistortion;
           const pointX = this.x + Math.cos(angle) * distortedRadius;
           const pointY = this.y + Math.sin(angle) * distortedRadius;
@@ -129,8 +131,10 @@ export function CircuitBackground({
     const isDarkMode = document.documentElement.classList.contains("dark");
 
     // Colors mapping to Modus UI warm design palette
-    const resolvedLineColor = lineColor || (isDarkMode ? "rgba(250, 249, 247, 0.15)" : "rgba(55, 50, 47, 0.1)");
-    const resolvedCircleColor = circleColor || (isDarkMode ? "rgba(250, 249, 247, 0.3)" : "rgba(55, 50, 47, 0.2)");
+    const resolvedLineColor =
+      lineColor || (isDarkMode ? "rgba(250, 249, 247, 0.15)" : "rgba(55, 50, 47, 0.1)");
+    const resolvedCircleColor =
+      circleColor || (isDarkMode ? "rgba(250, 249, 247, 0.3)" : "rgba(55, 50, 47, 0.2)");
 
     const allowedAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     const turnChoices = [45, 90];
@@ -151,17 +155,15 @@ export function CircuitBackground({
       return arr.length ? choose(arr) : baseDeg;
     }
 
-    function createTrail(
-      startPoint?: { x: number; y: number },
-      angleDeg?: number
-    ): CircuitTrail {
+    function createTrail(startPoint?: { x: number; y: number }, angleDeg?: number): CircuitTrail {
       const start = startPoint || {
         x: Math.random() * bufferCanvas.width,
         y: Math.random() * bufferCanvas.height,
       };
-      const baseAngle = typeof angleDeg === "number" ? normalizeDegrees(angleDeg) : choose(allowedAngles);
+      const baseAngle =
+        typeof angleDeg === "number" ? normalizeDegrees(angleDeg) : choose(allowedAngles);
       const baseRad = (baseAngle * Math.PI) / 180;
-      
+
       const length1 = random(60, 100);
       const point1 = {
         x: start.x + Math.cos(baseRad) * length1,
@@ -254,7 +256,7 @@ export function CircuitBackground({
         const pointA = trail.points[i];
         const pointB = trail.points[i + 1];
         const segmentLength = Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
-        
+
         if (remaining >= segmentLength) {
           bufferCtx.lineTo(pointB.x, pointB.y);
           remaining -= segmentLength;
@@ -262,7 +264,7 @@ export function CircuitBackground({
           const t = remaining / segmentLength;
           bufferCtx.lineTo(
             pointA.x + (pointB.x - pointA.x) * t,
-            pointA.y + (pointB.y - pointA.y) * t
+            pointA.y + (pointB.y - pointA.y) * t,
           );
           break;
         }
@@ -273,7 +275,7 @@ export function CircuitBackground({
         trail.points[0].x,
         trail.points[0].y,
         circleSize * (window.devicePixelRatio || 1),
-        alpha
+        alpha,
       );
 
       if (progress >= 1) {
@@ -281,7 +283,7 @@ export function CircuitBackground({
           trail.points[3].x,
           trail.points[3].y,
           circleSize * (window.devicePixelRatio || 1),
-          alpha
+          alpha,
         );
 
         // Branching logic at ends
@@ -328,17 +330,11 @@ export function CircuitBackground({
       // Render camera drift/perspective zoom
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, W, H);
-      
+
       const driftX = Math.sin(currentTime * 0.0001) * 80;
       const driftY = Math.cos(currentTime * 0.00008) * 50;
-      
-      ctx.drawImage(
-        bufferCanvas,
-        -W * 0.25 + driftX,
-        -H * 0.25 + driftY,
-        W * 1.5,
-        H * 1.5
-      );
+
+      ctx.drawImage(bufferCanvas, -W * 0.25 + driftX, -H * 0.25 + driftY, W * 1.5, H * 1.5);
 
       // Ripple drawing
       rippleCtx.clearRect(0, 0, rippleCanvas!.width, rippleCanvas!.height);
@@ -362,7 +358,7 @@ export function CircuitBackground({
       for (let i = 0; i < 4; i++) {
         const ripple = new CircuitRipple(
           x + (Math.random() - 0.5) * 20,
-          y + (Math.random() - 0.5) * 20
+          y + (Math.random() - 0.5) * 20,
         );
         ripple.maxRadius = 110 + Math.random() * 40;
         ripple.speed = 1.8 + Math.random() * 0.8;
@@ -374,7 +370,7 @@ export function CircuitBackground({
     window.addEventListener("resize", resize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("click", handleClick);
-    
+
     for (let i = 0; i < 3; i++) {
       trailsRef.current.push(createTrail());
     }
@@ -396,7 +392,7 @@ export function CircuitBackground({
     <>
       <canvas
         ref={canvasRef}
-        className={className}
+        className={cn(className)}
         style={{
           position: "fixed",
           top: 0,
