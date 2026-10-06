@@ -1,6 +1,6 @@
 {
   "name": "@modus-ui/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Add Modus UI animated React components to your project.",
   "type": "module",
   "bin": {

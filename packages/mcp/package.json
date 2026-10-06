@@ -1,6 +1,6 @@
 {
   "name": "@modus-ui/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for Modus UI. Lets your coding agent search, read and install animated React components.",
   "keywords": [
     "mcp",
