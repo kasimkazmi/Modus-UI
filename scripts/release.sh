@@ -5,8 +5,8 @@
 #     pnpm release
 #
 # Bumps the version, builds and tests, commits "chore(release): ..." on main,
-# tags it <pkg>-v<version> and publishes: through the Release workflow when the
-# repo has the NPM_TOKEN secret, otherwise from this machine with your npm login.
+# tags it <pkg>-v<version> and publishes, either through the Release workflow
+# (npm trusted publishing, no token) or from this machine with your npm login.
 
 set -euo pipefail
 
@@ -46,16 +46,23 @@ git fetch --quiet origin main
 [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] ||
   die "main is not in sync with origin/main. Run: git pull"
 
-npm_user=$(npm whoami 2>/dev/null) || die "Not logged in to npm. Run: npm login"
-ok "On main, clean and up to date; npm user: $npm_user"
+ok "On main, clean and up to date with origin"
 
-if gh secret list 2>/dev/null | grep -q '^NPM_TOKEN'; then
-  publish_via="ci"
-  ok "NPM_TOKEN secret found: the Release workflow will publish after the tag is pushed."
-else
-  publish_via="local"
-  warn "No NPM_TOKEN secret (or gh not authenticated): packages will be published from this machine."
-fi
+echo
+info "${bold}How should it publish?${reset}"
+PS3="> "
+select how in "GitHub Actions (trusted publishing, recommended)" "This machine (npm login)"; do
+  case "$REPLY" in
+    1) publish_via="ci"; break ;;
+    2)
+      publish_via="local"
+      npm_user=$(npm whoami 2>/dev/null) || die "Not logged in to npm. Run: npm login"
+      ok "npm user: $npm_user"
+      break
+      ;;
+    *) warn "Pick 1 or 2." ;;
+  esac
+done
 echo
 
 # ---------------------------------------------------------------------------
