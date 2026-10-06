@@ -1,0 +1,40 @@
+---
+title: Cursor Grid
+description: An interactive canvas grid that reacts to cursor proximity and clicks.
+---
+
+A highly optimized `<canvas>` implementation of a grid that lights up based on cursor proximity and triggers ripples on click. Since it uses `requestAnimationFrame` and canvas 2D, it has a negligible impact on DOM performance, easily running at 60fps on huge containers.
+
+<ComponentPreview name="cursor-grid" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add cursor-grid
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/cursor-grid.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CursorGrid } from "@/components/ui/cursor-grid";
+
+export default function Example() {
+  return (
+    <div className="w-full h-screen bg-black relative">
+      <CursorGrid
+        color="#3b82f6"
+        cellSize={25}
+        radius={150}
+      />
+    </div>
+  );
+}
+```

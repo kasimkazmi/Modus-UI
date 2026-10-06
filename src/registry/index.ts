@@ -222,5 +222,17 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/star-border.tsx"],
   },
+  {
+    name: "cursor-grid",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/cursor-grid.tsx"],
+  },
+  {
+    name: "scroll-velocity",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/scroll-velocity.tsx"],
+  },
 ];
 

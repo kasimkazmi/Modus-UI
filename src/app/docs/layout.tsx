@@ -52,6 +52,7 @@ const DOC_CATEGORIES = [
     title: "Backgrounds",
     icon: Sparkles,
     items: [
+      { title: "Cursor Grid", href: "/docs/cursor-grid" },
       { title: "Waves", href: "/docs/waves" },
       { title: "Letter Glitch", href: "/docs/letter-glitch" },
       { title: "Aurora Background", href: "/docs/aurora-background" },
@@ -63,6 +64,7 @@ const DOC_CATEGORIES = [
     title: "Typography",
     icon: Type,
     items: [
+      { title: "Scroll Velocity", href: "/docs/scroll-velocity" },
       { title: "Text Pressure", href: "/docs/text-pressure" },
       { title: "True Focus", href: "/docs/true-focus" },
       { title: "Gradient Text", href: "/docs/gradient-text" },

@@ -1,0 +1,37 @@
+---
+title: Scroll Velocity
+description: A marque text effect whose speed scales dynamically based on scroll velocity.
+---
+
+A high-performance text marquee powered by `framer-motion`'s `useVelocity`, `useScroll`, and `useTransform`. As the user scrolls faster, the text marquee speed multiplies dynamically.
+
+<ComponentPreview name="scroll-velocity" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add scroll-velocity
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/scroll-velocity.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ScrollVelocity } from "@/components/ui/scroll-velocity";
+
+export default function Example() {
+  return (
+    <ScrollVelocity
+      texts={["FIRST LINE", "SECOND LINE", "THIRD LINE"]}
+      velocity={50}
+    />
+  );
+}
+```

@@ -37,6 +37,8 @@ import TiltedCardDemo from "@/registry/tilted-card-demo";
 import MagnetDemo from "@/registry/magnet-demo";
 import StackDemo from "@/registry/stack-demo";
 import StarBorderDemo from "@/registry/star-border-demo";
+import CursorGridDemo from "@/registry/cursor-grid-demo";
+import ScrollVelocityDemo from "@/registry/scroll-velocity-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -79,6 +81,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "magnet": MagnetDemo,
   "stack": StackDemo,
   "star-border": StarBorderDemo,
+  "cursor-grid": CursorGridDemo,
+  "scroll-velocity": ScrollVelocityDemo,
 };
 
 interface ComponentPreviewProps {
