@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "test:e2e": "playwright test",
-    "new:component": "tsx scripts/new-component.mts"
+    "new:component": "tsx scripts/new-component.mts",
+    "release": "bash scripts/release.sh"
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.2.0",
