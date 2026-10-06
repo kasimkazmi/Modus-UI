@@ -36,3 +36,13 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop      | Type                                        | Default     | Description                                                   |
+| :-------- | :------------------------------------------ | :---------- | :------------------------------------------------------------ |
+| `variant` | `"default" \| "blue" \| "yellow" \| "pink"` | `"default"` | Preset for gap, speed, colours and focus behaviour.           |
+| `gap`     | `number`                                    | -           | Gap between pixels; overrides the variant.                    |
+| `speed`   | `number`                                    | -           | Shimmer speed; overrides the variant.                         |
+| `colors`  | `string`                                    | -           | Comma-separated pixel colours; overrides the variant.         |
+| `noFocus` | `boolean`                                   | -           | Skips the animation on keyboard focus; overrides the variant. |

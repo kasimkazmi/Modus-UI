@@ -30,3 +30,11 @@ export default function Example() {
   return <GravityTextSwap texts={["Hello", "World", "Build"]} duration={0.6} />;
 }
 ```
+
+## Props
+
+| Prop            | Type       | Default | Description                        |
+| :-------------- | :--------- | :------ | :--------------------------------- |
+| `texts`         | `string[]` | -       | The strings to cycle through.      |
+| `duration`      | `number`   | `0.5`   | Seconds each swap animation takes. |
+| `pauseDuration` | `number`   | `2`     | Seconds each string stays visible. |

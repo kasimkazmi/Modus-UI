@@ -30,3 +30,15 @@ export default function Example() {
   return <FuzzyText hoverIntensity={0.8}>Hello</FuzzyText>;
 }
 ```
+
+## Props
+
+| Prop             | Type               | Default                    | Description                                     |
+| :--------------- | :----------------- | :------------------------- | :---------------------------------------------- |
+| `fontSize`       | `number \| string` | `"clamp(3rem, 8vw, 6rem)"` | Font size (number in pixels or any CSS length). |
+| `fontWeight`     | `number \| string` | `900`                      | Font weight.                                    |
+| `fontFamily`     | `string`           | `"inherit"`                | Font family.                                    |
+| `color`          | `string`           | `"hsl(var(--foreground))"` | Text colour.                                    |
+| `enableHover`    | `boolean`          | `true`                     | Increases the fuzz while the text is hovered.   |
+| `baseIntensity`  | `number`           | `0.18`                     | Fuzz intensity at rest.                         |
+| `hoverIntensity` | `number`           | `0.6`                      | Fuzz intensity while hovered.                   |

@@ -36,3 +36,13 @@ export default function Example() {
   return <LiquidTabs items={tabs} defaultValue="home" />;
 }
 ```
+
+## Props
+
+| Prop            | Type                      | Default | Description                                                              |
+| :-------------- | :------------------------ | :------ | :----------------------------------------------------------------------- |
+| `items`         | `LiquidTabItem[]`         | -       | The tabs to render.                                                      |
+| `defaultValue`  | `string`                  | -       | The initially active tab when uncontrolled.                              |
+| `value`         | `string`                  | -       | The active tab when controlled.                                          |
+| `onValueChange` | `(value: string) => void` | -       | Called with the new value when a tab is selected.                        |
+| `squish`        | `number`                  | `0.22`  | How much the indicator stretches while it moves (0 disables the effect). |

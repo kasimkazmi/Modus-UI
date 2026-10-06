@@ -38,3 +38,14 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop             | Type                                       | Default                                                   | Description                                           |
+| :--------------- | :----------------------------------------- | :-------------------------------------------------------- | :---------------------------------------------------- |
+| `colors`         | `string[]`                                 | `["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#34d399"]` | Colours of the gradient.                              |
+| `animationSpeed` | `number`                                   | `8`                                                       | Seconds for one gradient cycle.                       |
+| `showBorder`     | `boolean`                                  | `false`                                                   | Adds an animated gradient border.                     |
+| `direction`      | `"horizontal" \| "vertical" \| "diagonal"` | `"horizontal"`                                            | Direction the gradient moves.                         |
+| `pauseOnHover`   | `boolean`                                  | `false`                                                   | Pauses the animation while hovered.                   |
+| `yoyo`           | `boolean`                                  | `true`                                                    | Reverses the animation each cycle instead of looping. |

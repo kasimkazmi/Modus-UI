@@ -40,3 +40,16 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop              | Type       | Default                                                         | Description                                           |
+| :---------------- | :--------- | :-------------------------------------------------------------- | :---------------------------------------------------- |
+| `glitchColors`    | `string[]` | `["#38bdf8", "#818cf8", "#34d399"]`                             | Colours the letters cycle through.                    |
+| `glitchSpeed`     | `number`   | `50`                                                            | Milliseconds between glitch updates.                  |
+| `centerVignette`  | `boolean`  | `true`                                                          | Darkens the centre with a radial vignette.            |
+| `outerVignette`   | `boolean`  | `true`                                                          | Darkens the edges with a radial vignette.             |
+| `smooth`          | `boolean`  | `true`                                                          | Fades between colours instead of switching instantly. |
+| `lightMode`       | `boolean`  | `false`                                                         | Uses light-theme vignettes.                           |
+| `backgroundColor` | `string`   | -                                                               | Canvas background colour.                             |
+| `characters`      | `string`   | `"ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>.,0123456789"` | Characters the grid is drawn from.                    |

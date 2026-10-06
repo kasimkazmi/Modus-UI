@@ -45,5 +45,9 @@ export default function Example() {
 | `title`           | `string`      | `"Morphing Navbar"` | The title text displayed next to the logo.                            |
 | `logo`            | `ElementType` | `GraduationCap`     | The icon component to display as the logo.                            |
 | `breadcrumbSteps` | `Step[]`      | `[]`                | Array of breadcrumb steps to display in expanded mode.                |
+| `onHomeClick`     | `() => void`  | -                   | Called when the home button is clicked.                               |
+| `onProfileClick`  | `() => void`  | -                   | Called when the profile avatar is clicked.                            |
+| `onToggleSidebar` | `() => void`  | -                   | Called when the sidebar toggle is clicked.                            |
+| `sidebarOpen`     | `boolean`     | `false`             | Whether the sidebar is open (sets the mobile toggle icon).            |
 | `scrollThreshold` | `number`      | `36`                | Scroll distance in pixels before morphing to collapsed state.         |
 | `targetId`        | `string`      | -                   | Optional ID of a scrollable container to track instead of the window. |

@@ -36,3 +36,14 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop           | Type     | Default                 | Description                                           |
+| :------------- | :------- | :---------------------- | :---------------------------------------------------- |
+| `width`        | `number` | -                       | Width of the scratch area in pixels.                  |
+| `height`       | `number` | -                       | Height of the scratch area in pixels.                 |
+| `brushSize`    | `number` | `40`                    | Radius of the scratch brush in pixels.                |
+| `threshold`    | `number` | `0.5`                   | Fraction cleared before the rest is revealed.         |
+| `overlayImage` | `string` | -                       | Image drawn on the scratch surface.                   |
+| `overlayColor` | `string` | `"hsl(var(--primary))"` | Colour of the scratch surface when there is no image. |

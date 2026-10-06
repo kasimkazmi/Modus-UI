@@ -49,3 +49,21 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop                    | Type               | Default               | Description                                   |
+| :---------------------- | :----------------- | :-------------------- | :-------------------------------------------- |
+| `imageSrc`              | `string`           | -                     | Image URL.                                    |
+| `altText`               | `string`           | `"Tilted card image"` | Alt text for the image.                       |
+| `captionText`           | `string`           | `""`                  | Tooltip text that follows the cursor.         |
+| `containerHeight`       | `string \| number` | `"300px"`             | Height of the container.                      |
+| `containerWidth`        | `string \| number` | `"100%"`              | Width of the container.                       |
+| `imageHeight`           | `string \| number` | `"300px"`             | Height of the image.                          |
+| `imageWidth`            | `string \| number` | `"300px"`             | Width of the image.                           |
+| `scaleOnHover`          | `number`           | `1.1`                 | Scale applied while hovered.                  |
+| `rotateAmplitude`       | `number`           | `14`                  | Maximum tilt in degrees.                      |
+| `showMobileWarning`     | `boolean`          | `false`               | Shows a note that the effect needs a pointer. |
+| `showTooltip`           | `boolean`          | `true`                | Shows the caption tooltip.                    |
+| `overlayContent`        | `React.ReactNode`  | `null`                | Content layered over the image.               |
+| `displayOverlayContent` | `boolean`          | `false`               | Shows `overlayContent`.                       |

@@ -39,3 +39,16 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop                     | Type      | Default                       | Description                                                |
+| :----------------------- | :-------- | :---------------------------- | :--------------------------------------------------------- |
+| `sentence`               | `string`  | `"True Focus"`                | The sentence to render.                                    |
+| `separator`              | `string`  | `" "`                         | String the sentence is split on.                           |
+| `manualMode`             | `boolean` | `false`                       | Focuses the hovered word instead of cycling automatically. |
+| `blurAmount`             | `number`  | `5`                           | Blur in pixels on unfocused words.                         |
+| `borderColor`            | `string`  | `"hsl(var(--primary))"`       | Colour of the focus frame corners.                         |
+| `glowColor`              | `string`  | `"hsl(var(--primary) / 0.6)"` | Glow colour around the focus frame.                        |
+| `animationDuration`      | `number`  | `0.5`                         | Seconds the focus frame takes to move.                     |
+| `pauseBetweenAnimations` | `number`  | `1`                           | Seconds between automatic moves.                           |

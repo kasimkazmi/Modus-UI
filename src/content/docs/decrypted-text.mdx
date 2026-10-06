@@ -37,3 +37,19 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop                   | Type                           | Default                                                              | Description                                           |
+| :--------------------- | :----------------------------- | :------------------------------------------------------------------- | :---------------------------------------------------- |
+| `text`                 | `string`                       | -                                                                    | The text to reveal.                                   |
+| `speed`                | `number`                       | `50`                                                                 | Milliseconds between scramble frames.                 |
+| `maxIterations`        | `number`                       | `10`                                                                 | Scramble frames before revealing when not sequential. |
+| `sequential`           | `boolean`                      | `false`                                                              | Reveals one character at a time.                      |
+| `revealDirection`      | `"start" \| "end" \| "center"` | `"start"`                                                            | Where sequential reveal starts.                       |
+| `useOriginalCharsOnly` | `boolean`                      | `false`                                                              | Scrambles using only the text's own characters.       |
+| `characters`           | `string`                       | `"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+"` | Characters used for scrambling.                       |
+| `parentClassName`      | `string`                       | -                                                                    | Classes for the wrapper.                              |
+| `encryptedClassName`   | `string`                       | -                                                                    | Classes for still-scrambled characters.               |
+| `animateOn`            | `"view" \| "hover"`            | `"hover"`                                                            | Whether to run on hover or when scrolled into view.   |
+| `delay`                | `number`                       | `0`                                                                  | Milliseconds to wait before starting.                 |

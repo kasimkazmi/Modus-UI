@@ -34,3 +34,21 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop           | Type                                      | Default                 | Description                                            |
+| :------------- | :---------------------------------------- | :---------------------- | :----------------------------------------------------- |
+| `color`        | `string`                                  | `"hsl(var(--primary))"` | Colour of highlighted cells.                           |
+| `cellSize`     | `number`                                  | `32`                    | Size of each grid cell in pixels.                      |
+| `radius`       | `number`                                  | `120`                   | Radius in pixels of the cursor's influence.            |
+| `falloff`      | `"linear" \| "exponential" \| "gaussian"` | `"gaussian"`            | How the highlight fades with distance from the cursor. |
+| `holdTime`     | `number`                                  | `0`                     | Milliseconds a cell stays lit before fading.           |
+| `fadeDuration` | `number`                                  | `600`                   | Milliseconds a cell takes to fade out.                 |
+| `lineWidth`    | `number`                                  | `1`                     | Width of the grid lines in pixels.                     |
+| `maxOpacity`   | `number`                                  | `1`                     | Maximum opacity of a highlighted cell.                 |
+| `fillOpacity`  | `number`                                  | `0.1`                   | Opacity of the fill of highlighted cells.              |
+| `gridOpacity`  | `number`                                  | `0.05`                  | Opacity of the resting grid lines.                     |
+| `cellRadius`   | `number`                                  | `4`                     | Corner radius of each cell in pixels.                  |
+| `clickPulse`   | `boolean`                                 | `true`                  | Sends a ripple across the grid on click.               |
+| `pulseSpeed`   | `number`                                  | `800`                   | Duration in milliseconds of the click ripple.          |

@@ -43,3 +43,18 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop                | Type                                     | Default                           | Description                                              |
+| :------------------ | :--------------------------------------- | :-------------------------------- | :------------------------------------------------------- |
+| `cards`             | `React.ReactNode[]`                      | -                                 | The cards in the stack.                                  |
+| `randomRotation`    | `boolean`                                | `false`                           | Gives each card a slight random rotation.                |
+| `sensitivity`       | `number`                                 | `200`                             | Drag distance in pixels that sends a card to the back.   |
+| `animationConfig`   | `{ stiffness: number; damping: number }` | `{ stiffness: 260, damping: 20 }` | Spring settings for card movement.                       |
+| `sendToBackOnClick` | `boolean`                                | `false`                           | Sends the top card to the back on click.                 |
+| `autoplay`          | `boolean`                                | `false`                           | Cycles the cards automatically.                          |
+| `autoplayDelay`     | `number`                                 | `3000`                            | Milliseconds between automatic cycles.                   |
+| `pauseOnHover`      | `boolean`                                | `false`                           | Pauses autoplay while hovered.                           |
+| `mobileClickOnly`   | `boolean`                                | `false`                           | Uses click instead of drag on mobile.                    |
+| `mobileBreakpoint`  | `number`                                 | `768`                             | Width in pixels below which the device counts as mobile. |

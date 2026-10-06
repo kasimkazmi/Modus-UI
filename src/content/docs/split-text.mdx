@@ -37,3 +37,15 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop        | Type                                         | Default    | Description                                   |
+| :---------- | :------------------------------------------- | :--------- | :-------------------------------------------- |
+| `text`      | `string`                                     | -          | The text to animate.                          |
+| `delay`     | `number`                                     | `0.05`     | Seconds between each segment.                 |
+| `duration`  | `number`                                     | `0.5`      | Seconds each segment animates for.            |
+| `splitType` | `"chars" \| "words" \| "lines"`              | `"chars"`  | How the text is split into segments.          |
+| `threshold` | `number`                                     | `0.1`      | Fraction visible before the animation starts. |
+| `textAlign` | `"left" \| "center" \| "right" \| "justify"` | `"center"` | Text alignment.                               |
+| `as`        | `React.ElementType`                          | `"p"`      | Element to render as.                         |

@@ -41,3 +41,15 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop               | Type               | Default | Description                                     |
+| :----------------- | :----------------- | :------ | :---------------------------------------------- |
+| `images`           | `string[]`         | `[]`    | Image URLs for the cards.                       |
+| `containerWidth`   | `number \| string` | `400`   | Width of the container.                         |
+| `containerHeight`  | `number \| string` | `400`   | Height of the container.                        |
+| `animationDelay`   | `number`           | `0.5`   | Delay in seconds before the cards bounce in.    |
+| `animationStagger` | `number`           | `0.06`  | Delay in seconds between each card.             |
+| `enableHover`      | `boolean`          | `false` | Spreads the cards apart when one is hovered.    |
+| `transformStyles`  | `string[]`         | `[...]` | CSS transform for each card's resting position. |

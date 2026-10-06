@@ -36,3 +36,15 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop          | Type                                                   | Default                 | Description                             |
+| :------------ | :----------------------------------------------------- | :---------------------- | :-------------------------------------- |
+| `sparkColor`  | `string`                                               | `"hsl(var(--primary))"` | Colour of the sparks.                   |
+| `sparkSize`   | `number`                                               | `10`                    | Length of each spark in pixels.         |
+| `sparkRadius` | `number`                                               | `25`                    | Distance the sparks travel in pixels.   |
+| `sparkCount`  | `number`                                               | `8`                     | Number of sparks per click.             |
+| `duration`    | `number`                                               | `500`                   | Milliseconds the sparks last.           |
+| `easing`      | `"linear" \| "ease-in" \| "ease-out" \| "ease-in-out"` | `"ease-out"`            | Easing of the spark motion.             |
+| `extraScale`  | `number`                                               | `1`                     | Multiplier for spark distance and size. |
