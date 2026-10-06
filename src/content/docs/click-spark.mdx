@@ -1,0 +1,38 @@
+---
+title: Click Spark
+description: A physics-based canvas effect that bursts colorful sparks wherever the user clicks.
+---
+
+A physics-based canvas effect that creates a burst of colorful sparks originating from the exact coordinates of a user's click.
+
+<ComponentPreview name="click-spark" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add click-spark
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/click-spark.tsx`.
+3. Paste the code.
+
+## Usage
+
+Wrap any container with `ClickSpark`.
+
+```tsx
+import { ClickSpark } from "@/components/ui/click-spark";
+
+export default function Example() {
+  return (
+    <ClickSpark sparkColor="#0ea5e9" sparkCount={8}>
+      <button>Click me for sparks</button>
+    </ClickSpark>
+  );
+}
+```

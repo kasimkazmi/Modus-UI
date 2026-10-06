@@ -1,0 +1,36 @@
+---
+title: Spotlight Card
+description: A card with a subtle spotlight gradient that follows the user's mouse cursor on hover.
+---
+
+A card component that creates an ambient spotlight effect tracking the user's mouse cursor across its surface. Perfect for subtle emphasis and giving depth to interfaces.
+
+<ComponentPreview name="spotlight-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add spotlight-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/spotlight-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SpotlightCard } from "@/components/ui/spotlight-card";
+
+export default function Example() {
+  return (
+    <SpotlightCard className="max-w-sm" spotlightColor="rgba(255, 255, 255, 0.2)">
+      <h3 className="text-xl font-semibold">Hover me</h3>
+    </SpotlightCard>
+  );
+}
+```

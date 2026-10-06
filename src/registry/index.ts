@@ -162,5 +162,23 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/gradient-text.tsx"],
   },
+  {
+    name: "click-spark",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/click-spark.tsx"],
+  },
+  {
+    name: "spotlight-card",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/spotlight-card.tsx"],
+  },
+  {
+    name: "text-pressure",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/text-pressure.tsx"],
+  },
 ];
 

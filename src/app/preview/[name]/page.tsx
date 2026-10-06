@@ -33,6 +33,9 @@ import FlowingMenuDemo from "@/registry/flowing-menu-demo";
 import TrueFocusDemo from "@/registry/true-focus-demo";
 import BorderGlowDemo from "@/registry/border-glow-demo";
 import GradientTextDemo from "@/registry/gradient-text-demo";
+import ClickSparkDemo from "@/registry/click-spark-demo";
+import SpotlightCardDemo from "@/registry/spotlight-card-demo";
+import TextPressureDemo from "@/registry/text-pressure-demo";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -64,6 +67,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "true-focus": TrueFocusDemo,
   "border-glow": BorderGlowDemo,
   "gradient-text": GradientTextDemo,
+  "click-spark": ClickSparkDemo,
+  "spotlight-card": SpotlightCardDemo,
+  "text-pressure": TextPressureDemo,
 };
 
 interface PreviewPageProps {

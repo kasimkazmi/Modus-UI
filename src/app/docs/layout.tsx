@@ -60,6 +60,7 @@ const DOC_CATEGORIES = [
     title: "Typography",
     icon: Type,
     items: [
+      { title: "Text Pressure", href: "/docs/text-pressure" },
       { title: "True Focus", href: "/docs/true-focus" },
       { title: "Gradient Text", href: "/docs/gradient-text" },
       { title: "Blur Text", href: "/docs/blur-text" },
@@ -73,6 +74,8 @@ const DOC_CATEGORIES = [
     title: "Components",
     icon: LayoutTemplate,
     items: [
+      { title: "Click Spark", href: "/docs/click-spark" },
+      { title: "Spotlight Card", href: "/docs/spotlight-card" },
       { title: "Border Glow", href: "/docs/border-glow" },
     ]
   },

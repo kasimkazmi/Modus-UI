@@ -1,0 +1,41 @@
+---
+title: Text Pressure
+description: A responsive variable-font typography effect that reacts fluidly to the cursor's proximity.
+---
+
+A highly interactive variable-font typography component. It dynamically adjusts the weight, width, and italic properties of individual characters based on their distance to the user's mouse cursor.
+
+<ComponentPreview name="text-pressure" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add text-pressure
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/text-pressure.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TextPressure } from "@/components/ui/text-pressure";
+
+export default function Example() {
+  return (
+    <div className="w-full h-64">
+      <TextPressure
+        text="Modus"
+        width={true}
+        weight={true}
+        italic={true}
+      />
+    </div>
+  );
+}
+```

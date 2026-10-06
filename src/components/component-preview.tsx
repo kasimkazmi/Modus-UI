@@ -27,6 +27,9 @@ import FlowingMenuDemo from "@/registry/flowing-menu-demo";
 import TrueFocusDemo from "@/registry/true-focus-demo";
 import BorderGlowDemo from "@/registry/border-glow-demo";
 import GradientTextDemo from "@/registry/gradient-text-demo";
+import ClickSparkDemo from "@/registry/click-spark-demo";
+import SpotlightCardDemo from "@/registry/spotlight-card-demo";
+import TextPressureDemo from "@/registry/text-pressure-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -59,6 +62,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "true-focus": TrueFocusDemo,
   "border-glow": BorderGlowDemo,
   "gradient-text": GradientTextDemo,
+  "click-spark": ClickSparkDemo,
+  "spotlight-card": SpotlightCardDemo,
+  "text-pressure": TextPressureDemo,
 };
 
 interface ComponentPreviewProps {
