@@ -1,0 +1,38 @@
+---
+title: Scratch to Reveal
+description: An interactive canvas component that lets users scratch off an overlay to reveal the content underneath.
+---
+
+A highly optimized HTML5 `<canvas>` interaction ported directly from UI Beats. As the user scrubs their mouse across the container, it visually erases the overlay and calculates the cleared percentage of the bounding box. Once the threshold is crossed, it snaps the rest of the overlay away.
+
+<ComponentPreview name="scratch-to-reveal" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add scratch-to-reveal
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/scratch-to-reveal.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ScratchToReveal } from "@/components/ui/scratch-to-reveal";
+
+export default function Example() {
+  return (
+    <ScratchToReveal width={300} height={300} threshold={0.5}>
+      <div className="flex items-center justify-center p-8 bg-muted rounded-xl w-full h-full">
+        <h2 className="text-xl font-bold">Hidden Treasure</h2>
+      </div>
+    </ScratchToReveal>
+  );
+}
+```

@@ -234,5 +234,17 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/scroll-velocity.tsx"],
   },
+  {
+    name: "liquid-tabs",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/liquid-tabs.tsx"],
+  },
+  {
+    name: "scratch-to-reveal",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge", "framer-motion"],
+    files: ["registry/scratch-to-reveal.tsx"],
+  },
 ];
 

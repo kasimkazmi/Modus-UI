@@ -17,6 +17,7 @@ const DOC_CATEGORIES = [
     title: "Navigation",
     icon: PanelTop,
     items: [
+      { title: "Liquid Tabs", href: "/docs/liquid-tabs" },
       { title: "Flowing Menu", href: "/docs/flowing-menu" },
       { title: "Morphing Navbar", href: "/docs/morphing-navbar" },
       { title: "Floating Dock", href: "/docs/floating-dock" },
@@ -79,6 +80,7 @@ const DOC_CATEGORIES = [
     title: "Components",
     icon: LayoutTemplate,
     items: [
+      { title: "Scratch to Reveal", href: "/docs/scratch-to-reveal" },
       { title: "Stack", href: "/docs/stack" },
       { title: "Star Border", href: "/docs/star-border" },
       { title: "Tilted Card", href: "/docs/tilted-card" },

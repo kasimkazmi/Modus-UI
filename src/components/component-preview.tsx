@@ -39,6 +39,8 @@ import StackDemo from "@/registry/stack-demo";
 import StarBorderDemo from "@/registry/star-border-demo";
 import CursorGridDemo from "@/registry/cursor-grid-demo";
 import ScrollVelocityDemo from "@/registry/scroll-velocity-demo";
+import LiquidTabsDemo from "@/registry/liquid-tabs-demo";
+import ScratchToRevealDemo from "@/registry/scratch-to-reveal-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -83,6 +85,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "star-border": StarBorderDemo,
   "cursor-grid": CursorGridDemo,
   "scroll-velocity": ScrollVelocityDemo,
+  "liquid-tabs": LiquidTabsDemo,
+  "scratch-to-reveal": ScratchToRevealDemo,
 };
 
 interface ComponentPreviewProps {

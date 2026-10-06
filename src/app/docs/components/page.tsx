@@ -29,6 +29,8 @@ const COMPONENT_LIST = [
   { title: "True Focus", href: "/docs/true-focus" },
   { title: "Text Pressure", href: "/docs/text-pressure" },
   { title: "Cursor Grid", href: "/docs/cursor-grid" },
+  { title: "Scratch to Reveal", href: "/docs/scratch-to-reveal" },
+  { title: "Liquid Tabs", href: "/docs/liquid-tabs" },
   { title: "Stack", href: "/docs/stack" },
   { title: "Magnet", href: "/docs/magnet" },
   { title: "Star Border", href: "/docs/star-border" },
