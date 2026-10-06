@@ -14,15 +14,17 @@ import {
 
 const DOC_CATEGORIES = [
   {
-    title: "Headers",
+    title: "Navigation",
     icon: PanelTop,
     items: [
       { title: "Morphing Navbar", href: "/docs/morphing-navbar" },
       { title: "Floating Dock", href: "/docs/floating-dock" },
+      { title: "Notch Footer", href: "/docs/notch-footer" },
+      { title: "Process Stepper", href: "/docs/process-stepper" },
     ]
   },
   {
-    title: "Buttons",
+    title: "Actions",
     icon: MousePointer2,
     items: [
       { title: "Magic Button", href: "/docs/magic-button" },
@@ -31,38 +33,35 @@ const DOC_CATEGORIES = [
     ]
   },
   {
-    title: "Cards",
-    icon: CreditCard,
+    title: "Data Display",
+    icon: Layout,
     items: [
+      { title: "Masonry Grid", href: "/docs/masonry-grid" },
+      { title: "Animated List", href: "/docs/animated-list" },
+      { title: "Kinetic Carousel", href: "/docs/kinetic-carousel" },
+      { title: "Expandable Showcase", href: "/docs/expandable-showcase" },
+      { title: "Focus Card", href: "/docs/focus-card" },
       { title: "Rotating Card", href: "/docs/rotating-card" },
       { title: "Tilt Card", href: "/docs/tilt-card" },
     ]
   },
   {
-    title: "Footers",
-    icon: PanelBottom,
+    title: "Backgrounds",
+    icon: Sparkles,
     items: [
-      { title: "Notch Footer", href: "/docs/notch-footer" },
-    ]
-  },
-  {
-    title: "Layout",
-    icon: Layout,
-    items: [
+      { title: "Aurora Background", href: "/docs/aurora-background" },
       { title: "Circuit Background", href: "/docs/circuit-background" },
+      { title: "Grid Motion", href: "/docs/grid-motion" },
     ]
   },
   {
-    title: "Template",
-    icon: LayoutTemplate,
-    items: [
-      { title: "Coming Soon", href: "/docs/coming-soon" },
-    ]
-  },
-  {
-    title: "Text",
+    title: "Typography",
     icon: Type,
     items: [
+      { title: "Blur Text", href: "/docs/blur-text" },
+      { title: "Split Text", href: "/docs/split-text" },
+      { title: "Decrypted Text", href: "/docs/decrypted-text" },
+      { title: "Shimmer Text", href: "/docs/shimmer-text" },
       { title: "Floating Text", href: "/docs/floating-text" },
     ]
   },
@@ -70,6 +69,7 @@ const DOC_CATEGORIES = [
     title: "Resources",
     icon: BookOpen,
     items: [
+      { title: "Coming Soon", href: "/docs/coming-soon" },
       { title: "Blog (Coming Soon)", href: "/blog" },
     ]
   }

@@ -60,5 +60,77 @@ export const registry = [
     dependencies: [],
     files: ["registry/circuit-background.tsx"],
   },
+  {
+    name: "focus-card",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/focus-card.tsx"],
+  },
+  {
+    name: "expandable-showcase",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/expandable-showcase.tsx"],
+  },
+  {
+    name: "shimmer-text",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/shimmer-text.tsx"],
+  },
+  {
+    name: "kinetic-carousel",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/kinetic-carousel.tsx"],
+  },
+  {
+    name: "process-stepper",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/process-stepper.tsx"],
+  },
+  {
+    name: "animated-list",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/animated-list.tsx"],
+  },
+  {
+    name: "masonry-grid",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/masonry-grid.tsx"],
+  },
+  {
+    name: "aurora-background",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/aurora-background.tsx"],
+  },
+  {
+    name: "grid-motion",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/grid-motion.tsx"],
+  },
+  {
+    name: "blur-text",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/blur-text.tsx"],
+  },
+  {
+    name: "split-text",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/split-text.tsx"],
+  },
+  {
+    name: "decrypted-text",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/decrypted-text.tsx"],
+  },
 ];
 

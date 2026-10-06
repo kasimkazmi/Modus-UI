@@ -1,0 +1,14 @@
+{
+  "name": "focus-card",
+  "type": "components:ui",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/focus-card.tsx",
+      "content": "\"use client\";\n\nimport React, { useRef, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface FocusCardProps extends React.HTMLAttributes<HTMLDivElement> {\n  children: React.ReactNode;\n  className?: string;\n  spotlightColor?: string;\n}\n\nexport function FocusCard({ \n  children, \n  className, \n  spotlightColor = \"rgba(255, 255, 255, 0.15)\",\n  ...props \n}: FocusCardProps) {\n  const divRef = useRef<HTMLDivElement>(null);\n  const [isFocused, setIsFocused] = useState(false);\n  const [position, setPosition] = useState({ x: 0, y: 0 });\n  const [opacity, setOpacity] = useState(0);\n\n  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {\n    if (!divRef.current || isFocused) return;\n\n    const rect = divRef.current.getBoundingClientRect();\n    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });\n  };\n\n  const handleFocus = () => {\n    setIsFocused(true);\n    setOpacity(0.6);\n  };\n\n  const handleBlur = () => {\n    setIsFocused(false);\n    setOpacity(0);\n  };\n\n  const handleMouseEnter = () => {\n    setOpacity(0.6);\n  };\n\n  const handleMouseLeave = () => {\n    setOpacity(0);\n  };\n\n  return (\n    <div\n      ref={divRef}\n      onMouseMove={handleMouseMove}\n      onFocus={handleFocus}\n      onBlur={handleBlur}\n      onMouseEnter={handleMouseEnter}\n      onMouseLeave={handleMouseLeave}\n      className={cn(\n        \"relative overflow-hidden rounded-3xl border border-border bg-card p-8\",\n        className\n      )}\n      {...props}\n    >\n      <div\n        className=\"pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out\"\n        style={{\n          opacity,\n          background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)`,\n        }}\n        aria-hidden=\"true\"\n      />\n      {children}\n    </div>\n  );\n}\n"
+    }
+  ]
+}

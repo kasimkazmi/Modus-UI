@@ -1,0 +1,47 @@
+---
+title: Focus Card
+description: A card with a subtle radial gradient spotlight that follows the user's cursor.
+---
+
+A card with a subtle radial gradient spotlight that follows the user's cursor, bringing attention to the elements you're hovering over. Great for feature grids and pricing cards.
+
+<ComponentPreview name="focus-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add focus-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/focus-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FocusCard } from "@/components/ui/focus-card";
+
+export default function Example() {
+  return (
+    <FocusCard>
+      <div className="relative z-10 p-8">
+        <h3 className="text-xl font-semibold">Hover me</h3>
+        <p>The spotlight follows your mouse.</p>
+      </div>
+    </FocusCard>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | The content inside the card. |
+| `className` | `string` | - | Additional CSS classes for the card. |
+| `spotlightColor` | `string` | `"rgba(255, 255, 255, 0.15)"` | The color of the spotlight radial gradient. |

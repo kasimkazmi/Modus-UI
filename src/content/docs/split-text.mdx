@@ -1,0 +1,39 @@
+---
+title: Split Text
+description: Staggered text animations splitting by characters, words, or lines.
+---
+
+Staggered text animations splitting by characters, words, or lines. A native Framer Motion implementation that achieves the same beautiful effect as GSAP's premium SplitText plugin without the cost or bundle size.
+
+<ComponentPreview name="split-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add split-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/split-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SplitText } from "@/components/ui/split-text";
+
+export default function Example() {
+  return (
+    <SplitText
+      text="The details are not the details."
+      delay={0.03}
+      splitType="chars"
+      className="text-3xl font-serif"
+    />
+  );
+}
+```

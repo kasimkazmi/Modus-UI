@@ -1,0 +1,43 @@
+---
+title: Aurora Background
+description: A stunning, smooth animated aurora borealis background effect using Framer Motion.
+---
+
+A stunning, smooth animated aurora borealis background effect using Framer Motion. Built natively without heavy WebGL libraries.
+
+<ComponentPreview name="aurora-background" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add aurora-background
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/aurora-background.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { AuroraBackground } from "@/components/ui/aurora-background";
+
+export default function Example() {
+  return (
+    <AuroraBackground>
+      <h1 className="text-white text-5xl font-bold z-10 relative">Hello World</h1>
+    </AuroraBackground>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | The content to render on top of the aurora. |
+| `showRadialGradient` | `boolean` | `true` | Whether to mask the bottom edge of the aurora. |

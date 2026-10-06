@@ -1,0 +1,39 @@
+---
+title: Decrypted Text
+description: A hacker-style text decryption matrix effect that scrambles text before revealing it.
+---
+
+A hacker-style text decryption matrix effect that scrambles text before revealing it. Can trigger on hover or when scrolled into view.
+
+<ComponentPreview name="decrypted-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add decrypted-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/decrypted-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DecryptedText } from "@/components/ui/decrypted-text";
+
+export default function Example() {
+  return (
+    <DecryptedText
+      text="Hover over me to decrypt"
+      animateOn="hover"
+      speed={40}
+      className="text-4xl font-mono"
+    />
+  );
+}
+```

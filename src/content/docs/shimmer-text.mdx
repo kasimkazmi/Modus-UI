@@ -1,0 +1,46 @@
+---
+title: Shimmer Text
+description: Animated text that shimmers with a flowing gradient effect.
+---
+
+Animated text that shimmers with a flowing gradient effect. Great for highlighting new features, primary calls-to-action, or hero section headlines.
+
+<ComponentPreview name="shimmer-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add shimmer-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/shimmer-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ShimmerText } from "@/components/ui/shimmer-text";
+
+export default function Example() {
+  return (
+    <h1>
+      <ShimmerText text="Build Interfaces Faster" />
+    </h1>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `text` | `string` | - | The text to display and animate. |
+| `baseColor` | `string` | `"hsl(var(--muted-foreground))"` | The main text color. |
+| `shimmerColor` | `string` | `"hsl(var(--foreground))"` | The color of the shimmer gradient. |
+| `speed` | `number` | `3` | Animation duration in seconds. |
+| `spread` | `number` | `120` | The angle of the linear gradient. |

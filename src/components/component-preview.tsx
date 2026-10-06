@@ -10,6 +10,18 @@ import { NotchFooterDemo } from "@/registry/notch-footer-demo";
 import { TiltCardDemo } from "@/registry/tilt-card-demo";
 import { FloatingDockDemo } from "@/registry/floating-dock-demo";
 import { CircuitBackgroundDemo } from "@/registry/circuit-background-demo";
+import FocusCardDemo from "@/registry/focus-card-demo";
+import ExpandableShowcaseDemo from "@/registry/expandable-showcase-demo";
+import ShimmerTextDemo from "@/registry/shimmer-text-demo";
+import KineticCarouselDemo from "@/registry/kinetic-carousel-demo";
+import ProcessStepperDemo from "@/registry/process-stepper-demo";
+import AnimatedListDemo from "@/registry/animated-list-demo";
+import MasonryGridDemo from "@/registry/masonry-grid-demo";
+import AuroraBackgroundDemo from "@/registry/aurora-background-demo";
+import GridMotionDemo from "@/registry/grid-motion-demo";
+import BlurTextDemo from "@/registry/blur-text-demo";
+import SplitTextDemo from "@/registry/split-text-demo";
+import DecryptedTextDemo from "@/registry/decrypted-text-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -25,6 +37,18 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "tilt-card": TiltCardDemo,
   "floating-dock": FloatingDockDemo,
   "circuit-background": CircuitBackgroundDemo,
+  "focus-card": FocusCardDemo,
+  "expandable-showcase": ExpandableShowcaseDemo,
+  "shimmer-text": ShimmerTextDemo,
+  "kinetic-carousel": KineticCarouselDemo,
+  "process-stepper": ProcessStepperDemo,
+  "animated-list": AnimatedListDemo,
+  "masonry-grid": MasonryGridDemo,
+  "aurora-background": AuroraBackgroundDemo,
+  "grid-motion": GridMotionDemo,
+  "blur-text": BlurTextDemo,
+  "split-text": SplitTextDemo,
+  "decrypted-text": DecryptedTextDemo,
 };
 
 interface ComponentPreviewProps {

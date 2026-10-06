@@ -4,12 +4,27 @@ import { MoveRight } from "lucide-react";
 
 const COMPONENT_LIST = [
   { title: "Morphing Navbar", href: "/docs/morphing-navbar" },
+  { title: "Floating Dock", href: "/docs/floating-dock" },
   { title: "Magic Button", href: "/docs/magic-button" },
   { title: "Animated Button", href: "/docs/animated-button" },
+  { title: "Grid Motion", href: "/docs/grid-motion" },
   { title: "Pulse Button", href: "/docs/pulse-button" },
+  { title: "Masonry Grid", href: "/docs/masonry-grid" },
+  { title: "Aurora Background", href: "/docs/aurora-background" },
+  { title: "Kinetic Carousel", href: "/docs/kinetic-carousel" },
+  { title: "Process Stepper", href: "/docs/process-stepper" },
+  { title: "Animated List", href: "/docs/animated-list" },
+  { title: "Focus Card", href: "/docs/focus-card" },
+  { title: "Expandable Showcase", href: "/docs/expandable-showcase" },
   { title: "Rotating Card", href: "/docs/rotating-card" },
+  { title: "Tilt Card", href: "/docs/tilt-card" },
   { title: "Floating Text", href: "/docs/floating-text" },
+  { title: "Shimmer Text", href: "/docs/shimmer-text" },
+  { title: "Blur Text", href: "/docs/blur-text" },
+  { title: "Split Text", href: "/docs/split-text" },
+  { title: "Decrypted Text", href: "/docs/decrypted-text" },
   { title: "Notch Footer", href: "/docs/notch-footer" },
+  { title: "Circuit Background", href: "/docs/circuit-background" },
   { title: "Coming Soon", href: "/docs/coming-soon", disabled: true },
 ];
 

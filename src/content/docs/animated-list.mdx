@@ -1,0 +1,51 @@
+---
+title: Animated List
+description: A scrollable, animated list component with keyboard navigation, hover states, and smooth entrance physics.
+---
+
+A scrollable, animated list component with keyboard navigation, hover states, and smooth entrance physics. Perfect for settings menus, notifications, or selecting items from a large list.
+
+<ComponentPreview name="animated-list" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add animated-list
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/animated-list.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { AnimatedList } from "@/components/ui/animated-list";
+
+export default function Example() {
+  const items = [
+    "Item 1",
+    "Item 2",
+    "Item 3"
+  ];
+
+  return (
+    <AnimatedList items={items} />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `ReactNode[] \| string[]` | `[...]` | The items to display in the list. |
+| `onItemSelect` | `(item: any, index: number) => void` | - | Callback when an item is clicked or selected via Enter key. |
+| `showGradients` | `boolean` | `true` | Whether to show fading gradients at the top and bottom of the scroll container. |
+| `enableArrowNavigation` | `boolean` | `true` | Whether to enable up/down arrow and tab key navigation. |
+| `displayScrollbar` | `boolean` | `true` | Whether to show the scrollbar. |
+| `initialSelectedIndex` | `number` | `-1` | The index of the item that is selected initially. |

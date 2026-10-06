@@ -1,0 +1,15 @@
+{
+  "name": "shimmer-text",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/shimmer-text.tsx",
+      "content": "\"use client\";\n\nimport React from \"react\";\nimport { motion, HTMLMotionProps } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface ShimmerTextProps extends HTMLMotionProps<\"span\"> {\n  text: string;\n  className?: string;\n  baseColor?: string;\n  shimmerColor?: string;\n  speed?: number;\n  spread?: number;\n}\n\nexport function ShimmerText({\n  text,\n  className,\n  baseColor = \"hsl(var(--muted-foreground))\",\n  shimmerColor = \"hsl(var(--foreground))\",\n  speed = 3,\n  spread = 120,\n  ...props\n}: ShimmerTextProps) {\n  const gradientStyle = {\n    backgroundImage: `linear-gradient(${spread}deg, ${baseColor} 0%, ${baseColor} 35%, ${shimmerColor} 50%, ${baseColor} 65%, ${baseColor} 100%)`,\n    backgroundSize: \"200% auto\",\n    WebkitBackgroundClip: \"text\",\n    backgroundClip: \"text\",\n    color: \"transparent\",\n  };\n\n  return (\n    <motion.span\n      className={cn(\"inline-block font-medium\", className)}\n      style={gradientStyle}\n      initial={{ backgroundPosition: \"200% center\" }}\n      animate={{ backgroundPosition: \"-50% center\" }}\n      transition={{\n        repeat: Infinity,\n        duration: speed,\n        ease: \"linear\",\n      }}\n      {...props}\n    >\n      {text}\n    </motion.span>\n  );\n}\n"
+    }
+  ]
+}

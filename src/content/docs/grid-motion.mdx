@@ -1,0 +1,48 @@
+---
+title: Grid Motion
+description: An interactive, infinite grid that tracks mouse movement with beautiful inertia physics.
+---
+
+An interactive, infinite grid that tracks mouse movement with beautiful inertia physics. Perfect for hero sections or showcasing features and partner logos.
+
+<ComponentPreview name="grid-motion" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add grid-motion
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/grid-motion.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GridMotion } from "@/components/ui/grid-motion";
+
+export default function Example() {
+  const items = [
+    "Design", "Development", "Engineering", "Architecture",
+    "Performance", "Accessibility", "Framer Motion", "Tailwind",
+  ];
+
+  return (
+    <div className="h-[600px] w-full">
+      <GridMotion items={items} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `ReactNode[]` | `[]` | Array of items to populate the grid. Should ideally have at least 28 items to fill the viewport. |
+| `gradientColor` | `string` | `"var(--background)"` | Center color of the radial gradient mask overlay. |

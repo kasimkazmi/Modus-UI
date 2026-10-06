@@ -1,0 +1,40 @@
+---
+title: Blur Text
+description: Smoothly unblurs text characters or words as they enter the viewport.
+---
+
+Smoothly unblurs text characters or words as they enter the viewport. A highly elegant and sophisticated text entrance animation powered entirely by Framer Motion.
+
+<ComponentPreview name="blur-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add blur-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/blur-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BlurText } from "@/components/ui/blur-text";
+
+export default function Example() {
+  return (
+    <BlurText
+      text="Isn't this just beautiful?"
+      delay={150}
+      animateBy="words"
+      direction="top"
+      className="text-4xl font-serif"
+    />
+  );
+}
+```

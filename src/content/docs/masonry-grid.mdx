@@ -1,0 +1,48 @@
+---
+title: Masonry Grid
+description: A fully responsive, animated masonry layout powered by Framer Motion.
+---
+
+A fully responsive, animated masonry layout powered by Framer Motion. It automatically calculates column sizes based on screen width and provides stunning entrance animations with blur effects.
+
+<ComponentPreview name="masonry-grid" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add masonry-grid
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/masonry-grid.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MasonryGrid } from "@/components/ui/masonry-grid";
+
+export default function Example() {
+  const items = [
+    { id: 1, height: 300, content: <div className="bg-primary/20 h-full w-full rounded-xl" /> },
+    { id: 2, height: 200, content: <div className="bg-primary/40 h-full w-full rounded-xl" /> },
+    { id: 3, height: 400, content: <div className="bg-primary/60 h-full w-full rounded-xl" /> },
+  ];
+
+  return (
+    <MasonryGrid items={items} animateFrom="bottom" stagger={0.05} />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `MasonryItem[]` | `[]` | Array of objects containing `id`, `height`, and `content`. |
+| `animateFrom` | `"top" \| "bottom" \| "left" \| "right" \| "center" \| "random"` | `"bottom"` | Direction from which items animate in. |
+| `stagger` | `number` | `0.05` | Delay interval between item animations. |

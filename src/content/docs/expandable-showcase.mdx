@@ -1,0 +1,50 @@
+---
+title: Expandable Showcase
+description: A horizontal or vertical list of items where hovering or clicking expands one item while shrinking others.
+---
+
+A horizontal or vertical list of items where hovering or clicking expands one item while shrinking others. Perfect for image galleries, product showcases, or interactive feature lists.
+
+<ComponentPreview name="expandable-showcase" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add expandable-showcase
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/expandable-showcase.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ExpandableShowcase } from "@/components/ui/expandable-showcase";
+
+export default function Example() {
+  const items = [
+    { id: 1, image: "/img1.jpg", label: "Mountain" },
+    { id: 2, image: "/img2.jpg", label: "River" },
+    { id: 3, image: "/img3.jpg", label: "Forest" }
+  ];
+
+  return (
+    <ExpandableShowcase items={items} />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `items` | `ShowcaseItem[]` | - | Array of objects containing id, image, and label. |
+| `defaultIndex` | `number` | `0` | The index of the initially expanded item. |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Direction of the gallery. |
+| `height` | `number \| string` | `460` | Height of the container. |
+| `gap` | `number` | `12` | Spacing between items. |
