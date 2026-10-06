@@ -12,7 +12,7 @@ A fully responsive, animated masonry layout powered by Framer Motion. It automat
 ### CLI
 
 ```bash
-npx modus-ui add masonry-grid
+npx @modus-ui/cli add masonry-grid
 ```
 
 ### Manual
@@ -28,21 +28,19 @@ import { MasonryGrid } from "@/components/ui/masonry-grid";
 
 export default function Example() {
   const items = [
-    { id: 1, height: 300, content: <div className="bg-primary/20 h-full w-full rounded-xl" /> },
-    { id: 2, height: 200, content: <div className="bg-primary/40 h-full w-full rounded-xl" /> },
-    { id: 3, height: 400, content: <div className="bg-primary/60 h-full w-full rounded-xl" /> },
+    { id: 1, height: 300, content: <div className="h-full w-full rounded-xl bg-primary/20" /> },
+    { id: 2, height: 200, content: <div className="h-full w-full rounded-xl bg-primary/40" /> },
+    { id: 3, height: 400, content: <div className="h-full w-full rounded-xl bg-primary/60" /> },
   ];
 
-  return (
-    <MasonryGrid items={items} animateFrom="bottom" stagger={0.05} />
-  );
+  return <MasonryGrid items={items} animateFrom="bottom" stagger={0.05} />;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `MasonryItem[]` | `[]` | Array of objects containing `id`, `height`, and `content`. |
-| `animateFrom` | `"top" \| "bottom" \| "left" \| "right" \| "center" \| "random"` | `"bottom"` | Direction from which items animate in. |
-| `stagger` | `number` | `0.05` | Delay interval between item animations. |
+| Prop          | Type                                                             | Default    | Description                                                |
+| :------------ | :--------------------------------------------------------------- | :--------- | :--------------------------------------------------------- |
+| `items`       | `MasonryItem[]`                                                  | `[]`       | Array of objects containing `id`, `height`, and `content`. |
+| `animateFrom` | `"top" \| "bottom" \| "left" \| "right" \| "center" \| "random"` | `"bottom"` | Direction from which items animate in.                     |
+| `stagger`     | `number`                                                         | `0.05`     | Delay interval between item animations.                    |

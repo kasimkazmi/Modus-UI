@@ -14,14 +14,10 @@ export default function LiquidTabsDemo() {
   ];
 
   return (
-    <div className="relative flex w-full flex-col items-center justify-center min-h-[400px] gap-8 overflow-hidden rounded-xl border border-border bg-background">
-      <LiquidTabs 
-        items={tabs} 
-        value={activeTab} 
-        onValueChange={setActiveTab} 
-      />
-      <div className="p-8 text-center border border-border rounded-xl bg-card shadow-sm w-full max-w-sm">
-        <p className="text-muted-foreground text-sm uppercase tracking-wider mb-2">Current Tab</p>
+    <div className="relative flex min-h-[400px] w-full flex-col items-center justify-center gap-8 overflow-hidden rounded-xl border border-border bg-background">
+      <LiquidTabs items={tabs} value={activeTab} onValueChange={setActiveTab} />
+      <div className="w-full max-w-sm rounded-xl border border-border bg-card p-8 text-center shadow-sm">
+        <p className="mb-2 text-sm uppercase tracking-wider text-muted-foreground">Current Tab</p>
         <h3 className="text-2xl font-semibold capitalize text-foreground">{activeTab}</h3>
       </div>
     </div>

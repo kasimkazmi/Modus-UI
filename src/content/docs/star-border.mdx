@@ -12,7 +12,7 @@ A clean button with a dual-gradient beam that animates smoothly across the perim
 ### CLI
 
 ```bash
-npx modus-ui add star-border
+npx @modus-ui/cli add star-border
 ```
 
 ### Manual
@@ -27,10 +27,18 @@ npx modus-ui add star-border
 import { StarBorder } from "@/components/ui/star-border";
 
 export default function Example() {
-  return (
-    <StarBorder color="rgba(168, 85, 247, 0.8)">
-      Premium Button
-    </StarBorder>
-  );
+  return <StarBorder color="rgba(168, 85, 247, 0.8)">Premium Button</StarBorder>;
 }
 ```
+
+## Props
+
+| Prop              | Type                | Default                      | Description                             |
+| :---------------- | :------------------ | :--------------------------- | :-------------------------------------- |
+| `as`              | `React.ElementType` | `"button"`                   | Element to render as.                   |
+| `color`           | `string`            | `"rgba(255, 255, 255, 0.8)"` | Colour of the moving star.              |
+| `speed`           | `number`            | `6`                          | Seconds for one trip around the border. |
+| `thickness`       | `number`            | `1`                          | Border thickness in pixels.             |
+| `backgroundColor` | `string`            | `"hsl(var(--background))"`   | Inner background colour.                |
+| `textColor`       | `string`            | `"hsl(var(--foreground))"`   | Text colour.                            |
+| `borderColor`     | `string`            | `"hsl(var(--border))"`       | Colour of the static border.            |

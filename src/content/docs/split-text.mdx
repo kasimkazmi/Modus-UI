@@ -12,7 +12,7 @@ Staggered text animations splitting by characters, words, or lines. A native Fra
 ### CLI
 
 ```bash
-npx modus-ui add split-text
+npx @modus-ui/cli add split-text
 ```
 
 ### Manual
@@ -32,8 +32,20 @@ export default function Example() {
       text="The details are not the details."
       delay={0.03}
       splitType="chars"
-      className="text-3xl font-serif"
+      className="font-serif text-3xl"
     />
   );
 }
 ```
+
+## Props
+
+| Prop        | Type                                         | Default    | Description                                   |
+| :---------- | :------------------------------------------- | :--------- | :-------------------------------------------- |
+| `text`      | `string`                                     | -          | The text to animate.                          |
+| `delay`     | `number`                                     | `0.05`     | Seconds between each segment.                 |
+| `duration`  | `number`                                     | `0.5`      | Seconds each segment animates for.            |
+| `splitType` | `"chars" \| "words" \| "lines"`              | `"chars"`  | How the text is split into segments.          |
+| `threshold` | `number`                                     | `0.1`      | Fraction visible before the animation starts. |
+| `textAlign` | `"left" \| "center" \| "right" \| "justify"` | `"center"` | Text alignment.                               |
+| `as`        | `React.ElementType`                          | `"p"`      | Element to render as.                         |

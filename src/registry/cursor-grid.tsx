@@ -27,19 +27,15 @@ const FALLOFF_CURVES = {
   gaussian: (x: number) => Math.exp(-Math.pow(1 - x, 2) * 5),
 };
 
-function hexToRgb(hex: string) {
-  let h = hex.replace(/^#/, "");
-  if (h.length === 3)
-    h = h
-      .split("")
-      .map((c) => c + c)
-      .join("");
-  const num = parseInt(h, 16);
-  return [num >> 16, (num >> 8) & 255, num & 255];
+// Canvas cannot resolve CSS variables; let the browser compute the color.
+function resolveRgb(el: HTMLElement, color: string) {
+  el.style.color = color;
+  const [r = 0, g = 0, b = 0] = (getComputedStyle(el).color.match(/[\d.]+/g) ?? []).map(Number);
+  return [r, g, b];
 }
 
 export function CursorGrid({
-  color = "#a855f7",
+  color = "hsl(var(--primary))",
   cellSize = 32,
   radius = 120,
   falloff = "gaussian",
@@ -129,6 +125,8 @@ export function CursorGrid({
     let raf = 0;
     let running = false;
     let lastFrame = 0;
+    let rgbFor = "";
+    let rgb = [0, 0, 0];
 
     const rebuild = () => {
       const p = propsRef.current;
@@ -186,7 +184,11 @@ export function CursorGrid({
       const dt = Math.min(now - lastFrame, 50);
       lastFrame = now;
       ctx.clearRect(0, 0, w, h);
-      const [cr, cg, cb] = hexToRgb(p.color);
+      if (rgbFor !== p.color) {
+        rgb = resolveRgb(canvas, p.color);
+        rgbFor = p.color;
+      }
+      const [cr, cg, cb] = rgb;
 
       if (p.gridOpacity > 0) {
         ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${p.gridOpacity})`;

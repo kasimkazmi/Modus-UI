@@ -2,9 +2,9 @@ import { TrueFocus } from "./true-focus";
 
 export default function TrueFocusDemo() {
   return (
-    <div className="flex w-full items-center justify-center p-12 bg-background min-h-[400px]">
+    <div className="flex min-h-[400px] w-full items-center justify-center bg-background p-12">
       <div className="flex flex-col gap-16">
-        <TrueFocus 
+        <TrueFocus
           sentence="Focus On What Matters"
           manualMode={false}
           blurAmount={4}
@@ -12,7 +12,7 @@ export default function TrueFocusDemo() {
           animationDuration={0.6}
           pauseBetweenAnimations={1.5}
         />
-        <TrueFocus 
+        <TrueFocus
           sentence="Hover Me Manually"
           manualMode={true}
           blurAmount={6}

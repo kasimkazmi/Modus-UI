@@ -20,9 +20,9 @@ const NavButton = ({
   variant?: "primary" | "ghost" | "outline";
 }) => {
   const variants = {
-    primary: "bg-[#37322F] text-[#F7F5F3] hover:opacity-90 shadow-sm",
-    ghost: "bg-transparent text-[#37322F] hover:bg-[#F0EDEA]",
-    outline: "border border-[#E0DEDB] bg-white/60 text-[#37322F] hover:bg-[#F0EDEA]",
+    primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-sm",
+    ghost: "bg-transparent text-foreground hover:bg-accent",
+    outline: "border border-border bg-card/60 text-foreground hover:bg-accent",
   };
 
   return (
@@ -40,11 +40,11 @@ const NavButton = ({
 };
 
 const UserAvatar = ({ src, alt }: { src?: string; alt: string }) => (
-  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[#E0DEDB] bg-[#F0EDEA]">
+  <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary">
     {src ? (
       <Image src={src} alt={alt} width={40} height={40} className="h-full w-full object-cover" />
     ) : (
-      <span className="text-xs font-bold text-[#605A57]">{alt.charAt(0)}</span>
+      <span className="text-xs font-bold text-muted-foreground">{alt.charAt(0)}</span>
     )}
   </div>
 );
@@ -111,8 +111,8 @@ export function MorphingNavbar({
       className={cn(
         "sticky top-0 z-50 w-full border-b transition-all duration-500 motion-reduce:transition-none",
         collapsed
-          ? "h-[80px] border-[#E0DEDB]/80 bg-[#F7F5F3]/95 shadow-md backdrop-blur-md"
-          : "h-[104px] border-[#E0DEDB]/40 bg-[#F7F5F3]/80 backdrop-blur-sm",
+          ? "h-[80px] border-border/80 bg-background/95 shadow-md backdrop-blur-md"
+          : "h-[104px] border-border/40 bg-background/80 backdrop-blur-sm",
       )}
     >
       <div
@@ -126,7 +126,7 @@ export function MorphingNavbar({
           <div className="flex items-center gap-3">
             <button
               onClick={onToggleSidebar}
-              className="rounded-md p-2 transition-colors hover:bg-[#F0EDEA] lg:hidden"
+              className="rounded-md p-2 transition-colors hover:bg-accent lg:hidden"
               aria-label="Toggle menu"
             >
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -146,12 +146,12 @@ export function MorphingNavbar({
                 <div className="flex items-center justify-center">
                   <Logo
                     className={cn(
-                      "text-[#37322F] transition-all duration-500 motion-reduce:transition-none",
+                      "text-foreground transition-all duration-500 motion-reduce:transition-none",
                       collapsed ? "h-7 w-7" : "h-9 w-9",
                     )}
                   />
                 </div>
-                <h1 className="whitespace-nowrap font-serif text-3xl font-medium leading-none tracking-tight text-[#37322F]">
+                <h1 className="whitespace-nowrap font-serif text-3xl font-medium leading-none tracking-tight text-foreground">
                   {title}
                 </h1>
               </motion.div>
@@ -173,10 +173,10 @@ export function MorphingNavbar({
               Home
             </NavButton>
 
-            <div className="ml-2 hidden items-center gap-2 rounded-full border border-[#E0DEDB] bg-white/40 p-1 sm:flex">
+            <div className="ml-2 hidden items-center gap-2 rounded-full border border-border bg-card/40 p-1 sm:flex">
               <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className="rounded-full p-1.5 transition-colors hover:bg-[#F0EDEA]"
+                className="rounded-full p-1.5 transition-colors hover:bg-accent"
                 aria-label="Toggle dark mode"
               >
                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -195,8 +195,8 @@ export function MorphingNavbar({
               exit={{ opacity: 0, height: 0, marginTop: 0 }}
               className="hidden overflow-hidden sm:block"
             >
-              <div className="flex items-center gap-1 text-xs text-[#605A57]">
-                <span className="cursor-pointer hover:text-[#37322F]" onClick={onHomeClick}>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <span className="cursor-pointer hover:text-foreground" onClick={onHomeClick}>
                   All Pages
                 </span>
                 {breadcrumbSteps.map((step, i) => (
@@ -206,8 +206,8 @@ export function MorphingNavbar({
                       className={cn(
                         "max-w-[150px] truncate",
                         i === breadcrumbSteps.length - 1
-                          ? "font-medium text-[#37322F]"
-                          : "cursor-pointer hover:text-[#37322F]",
+                          ? "font-medium text-foreground"
+                          : "cursor-pointer hover:text-foreground",
                       )}
                     >
                       {step.label}
@@ -224,7 +224,7 @@ export function MorphingNavbar({
       <motion.div
         animate={{ opacity: collapsed ? 1 : 0.6 }}
         transition={instant}
-        className="h-px w-full bg-[#E0DEDB]"
+        className="h-px w-full bg-border"
       />
     </header>
   );

@@ -12,7 +12,7 @@ interface BlobCursorProps {
 
 export function BlobCursor({
   blobType = "circle",
-  fillColor = "#00f0ff",
+  fillColor = "hsl(var(--primary))",
   className,
 }: BlobCursorProps) {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -21,8 +21,8 @@ export function TrueFocus({
   separator = " ",
   manualMode = false,
   blurAmount = 5,
-  borderColor = "#10b981", // Emerald 500
-  glowColor = "rgba(16, 185, 129, 0.6)",
+  borderColor = "hsl(var(--primary))",
+  glowColor = "hsl(var(--primary) / 0.6)",
   animationDuration = 0.5,
   pauseBetweenAnimations = 1,
   className,

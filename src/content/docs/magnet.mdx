@@ -12,7 +12,7 @@ A simple but highly effective physics micro-interaction. It wraps any element an
 ### CLI
 
 ```bash
-npx modus-ui add magnet
+npx @modus-ui/cli add magnet
 ```
 
 ### Manual
@@ -34,3 +34,15 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop                 | Type      | Default                        | Description                                                         |
+| :------------------- | :-------- | :----------------------------- | :------------------------------------------------------------------ |
+| `padding`            | `number`  | `100`                          | Distance in pixels around the element within which the pull starts. |
+| `disabled`           | `boolean` | `false`                        | Turns the magnetic effect off.                                      |
+| `magnetStrength`     | `number`  | `2`                            | Divisor for the pull; higher values move the element less.          |
+| `activeTransition`   | `string`  | `"transform 0.3s ease-out"`    | CSS transition used while the cursor is in range.                   |
+| `inactiveTransition` | `string`  | `"transform 0.5s ease-in-out"` | CSS transition used when the element springs back.                  |
+| `wrapperClassName`   | `string`  | `""`                           | Classes for the outer wrapper.                                      |
+| `innerClassName`     | `string`  | `""`                           | Classes for the moving inner element.                               |

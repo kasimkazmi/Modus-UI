@@ -12,7 +12,7 @@ Smoothly unblurs text characters or words as they enter the viewport. A highly e
 ### CLI
 
 ```bash
-npx modus-ui add blur-text
+npx @modus-ui/cli add blur-text
 ```
 
 ### Manual
@@ -33,8 +33,24 @@ export default function Example() {
       delay={150}
       animateBy="words"
       direction="top"
-      className="text-4xl font-serif"
+      className="font-serif text-4xl"
     />
   );
 }
 ```
+
+## Props
+
+| Prop                  | Type                                            | Default     | Description                                          |
+| :-------------------- | :---------------------------------------------- | :---------- | :--------------------------------------------------- |
+| `text`                | `string`                                        | `""`        | The text to animate.                                 |
+| `delay`               | `number`                                        | `200`       | Milliseconds between each word or letter.            |
+| `animateBy`           | `"words" \| "letters"`                          | `"words"`   | Whether to animate word by word or letter by letter. |
+| `direction`           | `"top" \| "bottom"`                             | `"top"`     | Direction the text enters from.                      |
+| `threshold`           | `number`                                        | `0.1`       | Fraction visible before the animation starts.        |
+| `rootMargin`          | `string`                                        | `"0px"`     | Intersection observer root margin.                   |
+| `animationFrom`       | `Record<string, any>`                           | -           | Starting animation values.                           |
+| `animationTo`         | `Record<string, any>[]`                         | -           | Keyframes to animate through.                        |
+| `easing`              | `string \| number[] \| ((t: number) => number)` | `"easeOut"` | Framer Motion easing.                                |
+| `onAnimationComplete` | `() => void`                                    | -           | Called when the last segment finishes.               |
+| `stepDuration`        | `number`                                        | `0.35`      | Seconds per keyframe step.                           |

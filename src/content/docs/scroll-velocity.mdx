@@ -12,7 +12,7 @@ A high-performance text marquee powered by `framer-motion`'s `useVelocity`, `use
 ### CLI
 
 ```bash
-npx modus-ui add scroll-velocity
+npx @modus-ui/cli add scroll-velocity
 ```
 
 ### Manual
@@ -27,11 +27,22 @@ npx modus-ui add scroll-velocity
 import { ScrollVelocity } from "@/components/ui/scroll-velocity";
 
 export default function Example() {
-  return (
-    <ScrollVelocity
-      texts={["FIRST LINE", "SECOND LINE", "THIRD LINE"]}
-      velocity={50}
-    />
-  );
+  return <ScrollVelocity texts={["FIRST LINE", "SECOND LINE", "THIRD LINE"]} velocity={50} />;
 }
 ```
+
+## Props
+
+| Prop                 | Type                                    | Default                                | Description                                      |
+| :------------------- | :-------------------------------------- | :------------------------------------- | :----------------------------------------------- |
+| `scrollContainerRef` | `React.RefObject<HTMLElement>`          | -                                      | Scroll container to track instead of the window. |
+| `texts`              | `string[]`                              | `[]`                                   | One scrolling row per string.                    |
+| `velocity`           | `number`                                | `100`                                  | Base speed of the rows.                          |
+| `damping`            | `number`                                | `50`                                   | Damping of the scroll-velocity spring.           |
+| `stiffness`          | `number`                                | `400`                                  | Stiffness of the scroll-velocity spring.         |
+| `numCopies`          | `number`                                | `6`                                    | Copies of the text per row.                      |
+| `velocityMapping`    | `{ input: number[]; output: number[] }` | `{ input: [0, 1000], output: [0, 5] }` | Maps scroll velocity to the speed multiplier.    |
+| `parallaxClassName`  | `string`                                | -                                      | Classes for each row's container.                |
+| `scrollerClassName`  | `string`                                | -                                      | Classes for each moving row.                     |
+| `parallaxStyle`      | `React.CSSProperties`                   | -                                      | Inline styles for each row's container.          |
+| `scrollerStyle`      | `React.CSSProperties`                   | -                                      | Inline styles for each moving row.               |

@@ -12,7 +12,7 @@ A highly optimized background component ported from React Bits. It renders a CSS
 ### CLI
 
 ```bash
-npx modus-ui add magnet-lines
+npx @modus-ui/cli add magnet-lines
 ```
 
 ### Manual
@@ -34,3 +34,15 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop            | Type     | Default          | Description                               |
+| :-------------- | :------- | :--------------- | :---------------------------------------- |
+| `rows`          | `number` | `9`              | Number of rows of lines.                  |
+| `columns`       | `number` | `9`              | Number of columns of lines.               |
+| `containerSize` | `string` | `"80vmin"`       | CSS size of the square container.         |
+| `lineColor`     | `string` | `"currentColor"` | Colour of the lines.                      |
+| `lineWidth`     | `string` | `"1vmin"`        | CSS width of each line.                   |
+| `lineHeight`    | `string` | `"6vmin"`        | CSS length of each line.                  |
+| `baseAngle`     | `number` | `-10`            | Resting rotation of the lines in degrees. |

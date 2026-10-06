@@ -31,9 +31,18 @@ describe("coding standards (AGENTS.md)", () => {
     expect(sources.filter((f) => f.startsWith("src/registry") && raw.test(read(f)))).toEqual([]);
   });
 
-  it("documents installs with the modus-ui CLI only", () => {
-    const offenders = docs.filter((f) => /npx (shadcn|react-ui-component)/.test(read(f)));
+  // The unscoped `modus-ui` package on npm belongs to someone else; ours is `@modus-ui/cli`.
+  it("documents installs with the @modus-ui/cli CLI only", () => {
+    const offenders = docs.filter((f) =>
+      /npx (shadcn|react-ui-component|modus-ui(?![\w/-]))/.test(read(f)),
+    );
     expect(offenders).toEqual([]);
+  });
+
+  it.each(registry)("$name doc shows its @modus-ui/cli install command", (item) => {
+    expect(read(`src/content/docs/${item.name}.mdx`)).toContain(
+      `npx @modus-ui/cli add ${item.name}`,
+    );
   });
 
   it.each(registry)("$name merges its className prop with cn()", (item) => {

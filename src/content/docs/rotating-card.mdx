@@ -12,7 +12,7 @@ A 3D-style rotating card that responds to user hover with smooth perspective shi
 ### CLI
 
 ```bash
-npx modus-ui add rotating-card
+npx @modus-ui/cli add rotating-card
 ```
 
 ### Manual
@@ -29,8 +29,8 @@ import { RotatingCard } from "@/components/ui/rotating-card";
 export default function Example() {
   return (
     <RotatingCard>
-      <div className="p-8 h-48 flex items-center justify-center">
-        <h3 className="text-xl font-serif">Feature Card</h3>
+      <div className="flex h-48 items-center justify-center p-8">
+        <h3 className="font-serif text-xl">Feature Card</h3>
       </div>
     </RotatingCard>
   );
@@ -39,7 +39,7 @@ export default function Example() {
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content inside the card. |
-| `className` | `string` | - | Additional CSS classes for the card. |
+| Prop        | Type        | Default | Description                          |
+| :---------- | :---------- | :------ | :----------------------------------- |
+| `children`  | `ReactNode` | -       | The content inside the card.         |
+| `className` | `string`    | -       | Additional CSS classes for the card. |

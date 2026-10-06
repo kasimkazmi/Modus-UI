@@ -12,7 +12,7 @@ An interactive, infinite grid that tracks mouse movement with beautiful inertia 
 ### CLI
 
 ```bash
-npx modus-ui add grid-motion
+npx @modus-ui/cli add grid-motion
 ```
 
 ### Manual
@@ -28,8 +28,14 @@ import { GridMotion } from "@/components/ui/grid-motion";
 
 export default function Example() {
   const items = [
-    "Design", "Development", "Engineering", "Architecture",
-    "Performance", "Accessibility", "Framer Motion", "Tailwind",
+    "Design",
+    "Development",
+    "Engineering",
+    "Architecture",
+    "Performance",
+    "Accessibility",
+    "Framer Motion",
+    "Tailwind",
   ];
 
   return (
@@ -42,7 +48,7 @@ export default function Example() {
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `ReactNode[]` | `[]` | Array of items to populate the grid. Should ideally have at least 28 items to fill the viewport. |
-| `gradientColor` | `string` | `"var(--background)"` | Center color of the radial gradient mask overlay. |
+| Prop            | Type          | Default                    | Description                                                                                      |
+| :-------------- | :------------ | :------------------------- | :----------------------------------------------------------------------------------------------- |
+| `items`         | `ReactNode[]` | `[]`                       | Array of items to populate the grid. Should ideally have at least 28 items to fill the viewport. |
+| `gradientColor` | `string`      | `"hsl(var(--background))"` | Center color of the radial gradient mask overlay.                                                |

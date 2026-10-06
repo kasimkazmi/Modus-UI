@@ -335,7 +335,7 @@ export function Waves({
       className={cn("absolute left-0 top-0 h-full w-full overflow-hidden", className)}
     >
       <div
-        className="pointer-events-none absolute left-0 top-0 h-2 w-2 rounded-full bg-[#37322F]/10"
+        className="pointer-events-none absolute left-0 top-0 h-2 w-2 rounded-full bg-primary/10"
         style={{
           transform: "translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)",
           willChange: "transform",

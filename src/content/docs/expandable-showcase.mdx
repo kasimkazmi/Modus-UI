@@ -12,7 +12,7 @@ A horizontal or vertical list of items where hovering or clicking expands one it
 ### CLI
 
 ```bash
-npx modus-ui add expandable-showcase
+npx @modus-ui/cli add expandable-showcase
 ```
 
 ### Manual
@@ -30,21 +30,19 @@ export default function Example() {
   const items = [
     { id: 1, image: "/img1.jpg", label: "Mountain" },
     { id: 2, image: "/img2.jpg", label: "River" },
-    { id: 3, image: "/img3.jpg", label: "Forest" }
+    { id: 3, image: "/img3.jpg", label: "Forest" },
   ];
 
-  return (
-    <ExpandableShowcase items={items} />
-  );
+  return <ExpandableShowcase items={items} />;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `ShowcaseItem[]` | - | Array of objects containing id, image, and label. |
-| `defaultIndex` | `number` | `0` | The index of the initially expanded item. |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Direction of the gallery. |
-| `height` | `number \| string` | `460` | Height of the container. |
-| `gap` | `number` | `12` | Spacing between items. |
+| Prop           | Type                         | Default        | Description                                       |
+| :------------- | :--------------------------- | :------------- | :------------------------------------------------ |
+| `items`        | `ShowcaseItem[]`             | -              | Array of objects containing id, image, and label. |
+| `defaultIndex` | `number`                     | `0`            | The index of the initially expanded item.         |
+| `orientation`  | `"horizontal" \| "vertical"` | `"horizontal"` | Direction of the gallery.                         |
+| `height`       | `number \| string`           | `460`          | Height of the container.                          |
+| `gap`          | `number`                     | `12`           | Spacing between items.                            |

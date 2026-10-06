@@ -12,7 +12,7 @@ A beautiful component ported from UI Beats that shoots a glowing gradient pulse 
 ### CLI
 
 ```bash
-npx modus-ui add animated-beam
+npx @modus-ui/cli add animated-beam
 ```
 
 ### Manual
@@ -41,3 +41,18 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop            | Type                             | Default                 | Description                         |
+| :-------------- | :------------------------------- | :---------------------- | :---------------------------------- |
+| `containerRef`  | `RefObject<HTMLElement \| null>` | -                       | The container both elements sit in. |
+| `fromRef`       | `RefObject<HTMLElement \| null>` | -                       | The element the beam starts at.     |
+| `toRef`         | `RefObject<HTMLElement \| null>` | -                       | The element the beam ends at.       |
+| `curvature`     | `number`                         | `0`                     | Bend of the path in pixels.         |
+| `reverse`       | `boolean`                        | `false`                 | Runs the beam from end to start.    |
+| `duration`      | `number`                         | `3`                     | Seconds for one beam pass.          |
+| `delay`         | `number`                         | `0`                     | Seconds before the beam starts.     |
+| `pathColor`     | `string`                         | `"hsl(var(--border))"`  | Colour of the static path.          |
+| `gradientStart` | `string`                         | `"hsl(var(--primary))"` | Start colour of the beam.           |
+| `gradientStop`  | `string`                         | `"hsl(var(--primary))"` | End colour of the beam.             |

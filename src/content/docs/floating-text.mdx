@@ -12,7 +12,7 @@ A text component that floats and drifts subtly, creating an editorial, high-end 
 ### CLI
 
 ```bash
-npx modus-ui add floating-text
+npx @modus-ui/cli add floating-text
 ```
 
 ### Manual
@@ -27,17 +27,13 @@ npx modus-ui add floating-text
 import { FloatingText } from "@/components/ui/floating-text";
 
 export default function Example() {
-  return (
-    <FloatingText className="text-4xl font-serif">
-      Editorial Atmosphere
-    </FloatingText>
-  );
+  return <FloatingText className="font-serif text-4xl">Editorial Atmosphere</FloatingText>;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The text or elements to float. |
-| `className` | `string` | - | Additional CSS classes for the text. |
+| Prop        | Type        | Default | Description                          |
+| :---------- | :---------- | :------ | :----------------------------------- |
+| `children`  | `ReactNode` | -       | The text or elements to float.       |
+| `className` | `string`    | -       | Additional CSS classes for the text. |

@@ -12,7 +12,7 @@ A scrollable, animated list component with keyboard navigation, hover states, an
 ### CLI
 
 ```bash
-npx modus-ui add animated-list
+npx @modus-ui/cli add animated-list
 ```
 
 ### Manual
@@ -27,25 +27,20 @@ npx modus-ui add animated-list
 import { AnimatedList } from "@/components/ui/animated-list";
 
 export default function Example() {
-  const items = [
-    "Item 1",
-    "Item 2",
-    "Item 3"
-  ];
+  const items = ["Item 1", "Item 2", "Item 3"];
 
-  return (
-    <AnimatedList items={items} />
-  );
+  return <AnimatedList items={items} />;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `items` | `ReactNode[] \| string[]` | `[...]` | The items to display in the list. |
-| `onItemSelect` | `(item: any, index: number) => void` | - | Callback when an item is clicked or selected via Enter key. |
-| `showGradients` | `boolean` | `true` | Whether to show fading gradients at the top and bottom of the scroll container. |
-| `enableArrowNavigation` | `boolean` | `true` | Whether to enable up/down arrow and tab key navigation. |
-| `displayScrollbar` | `boolean` | `true` | Whether to show the scrollbar. |
-| `initialSelectedIndex` | `number` | `-1` | The index of the item that is selected initially. |
+| Prop                    | Type                                 | Default | Description                                                                     |
+| :---------------------- | :----------------------------------- | :------ | :------------------------------------------------------------------------------ |
+| `items`                 | `ReactNode[] \| string[]`            | `[...]` | The items to display in the list.                                               |
+| `onItemSelect`          | `(item: any, index: number) => void` | -       | Callback when an item is clicked or selected via Enter key.                     |
+| `itemClassName`         | `string`                             | -       | Classes for each item.                                                          |
+| `showGradients`         | `boolean`                            | `true`  | Whether to show fading gradients at the top and bottom of the scroll container. |
+| `enableArrowNavigation` | `boolean`                            | `true`  | Whether to enable up/down arrow and tab key navigation.                         |
+| `displayScrollbar`      | `boolean`                            | `true`  | Whether to show the scrollbar.                                                  |
+| `initialSelectedIndex`  | `number`                             | `-1`    | The index of the item that is selected initially.                               |

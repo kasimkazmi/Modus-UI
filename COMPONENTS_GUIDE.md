@@ -44,7 +44,7 @@ description: [One sentence description of the component's role]
 ### CLI
 
 \```bash
-npx modus-ui add [slug]
+npx @modus-ui/cli add [slug]
 \```
 
 ### Manual

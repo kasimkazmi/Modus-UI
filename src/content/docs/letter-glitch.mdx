@@ -12,7 +12,7 @@ A highly-optimized canvas component that renders a dense grid of randomly fluctu
 ### CLI
 
 ```bash
-npx modus-ui add letter-glitch
+npx @modus-ui/cli add letter-glitch
 ```
 
 ### Manual
@@ -28,7 +28,7 @@ import { LetterGlitch } from "@/components/ui/letter-glitch";
 
 export default function Example() {
   return (
-    <div className="relative w-full h-[500px]">
+    <div className="relative h-[500px] w-full">
       <LetterGlitch
         glitchSpeed={50}
         centerVignette={true}
@@ -40,3 +40,16 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop              | Type       | Default                                                         | Description                                           |
+| :---------------- | :--------- | :-------------------------------------------------------------- | :---------------------------------------------------- |
+| `glitchColors`    | `string[]` | `["#38bdf8", "#818cf8", "#34d399"]`                             | Colours the letters cycle through.                    |
+| `glitchSpeed`     | `number`   | `50`                                                            | Milliseconds between glitch updates.                  |
+| `centerVignette`  | `boolean`  | `true`                                                          | Darkens the centre with a radial vignette.            |
+| `outerVignette`   | `boolean`  | `true`                                                          | Darkens the edges with a radial vignette.             |
+| `smooth`          | `boolean`  | `true`                                                          | Fades between colours instead of switching instantly. |
+| `lightMode`       | `boolean`  | `false`                                                         | Uses light-theme vignettes.                           |
+| `backgroundColor` | `string`   | -                                                               | Canvas background colour.                             |
+| `characters`      | `string`   | `"ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>.,0123456789"` | Characters the grid is drawn from.                    |

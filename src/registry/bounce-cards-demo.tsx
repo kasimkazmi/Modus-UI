@@ -10,7 +10,7 @@ export default function BounceCardsDemo() {
   ];
 
   return (
-    <div className="flex w-full items-center justify-center p-12 bg-muted border border-border rounded-xl overflow-hidden min-h-[500px]">
+    <div className="flex min-h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted p-12">
       <BounceCards
         images={images}
         containerWidth={500}

@@ -27,7 +27,7 @@ export function ScratchToReveal({
   threshold = 0.5,
   children,
   overlayImage,
-  overlayColor = "#a855f7",
+  overlayColor = "hsl(var(--primary))",
   className,
 }: ScratchToRevealProps) {
   const prefersReducedMotion = useReducedMotion();

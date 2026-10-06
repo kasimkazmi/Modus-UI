@@ -69,7 +69,7 @@ for (const { name } of registry) {
       const response = await page.goto(`/docs/${name}`);
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("tab", { name: "preview" })).toBeVisible();
-      await expect(page.getByText(`npx modus-ui add ${name}`).first()).toBeAttached();
+      await expect(page.getByText(`npx @modus-ui/cli add ${name}`).first()).toBeAttached();
       await page.waitForTimeout(500);
       expect(errors).toEqual([]);
     });

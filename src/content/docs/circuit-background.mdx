@@ -12,7 +12,7 @@ A premium HTML5 Canvas-based background animation. Technical circuit lines grow,
 ### CLI
 
 ```bash
-npx modus-ui add circuit-background
+npx @modus-ui/cli add circuit-background
 ```
 
 ### Manual
@@ -38,12 +38,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `maxTrails` | `number` | `60` | The maximum amount of concurrently active growing circuits. |
-| `lineColor` | `string` | - | Custom stroke color for circuit lines. (Defaults to theme-adapted colors). |
-| `circleColor` | `string` | - | Custom border color for connection node circles. (Defaults to theme-adapted colors). |
-| `glowStrength` | `number` | `6` | Glow shadow size in pixels. |
-| `circleSize` | `number` | `5` | Radius of the circuit connection nodes. |
-| `spawnChance` | `number` | `0.03` | Probability of spawning a new circuit line per frame. |
-| `className` | `string` | - | Additional CSS class for the canvas containers. |
+| Prop           | Type     | Default | Description                                                                          |
+| :------------- | :------- | :------ | :----------------------------------------------------------------------------------- |
+| `maxTrails`    | `number` | `60`    | The maximum amount of concurrently active growing circuits.                          |
+| `lineColor`    | `string` | -       | Custom stroke color for circuit lines. (Defaults to theme-adapted colors).           |
+| `circleColor`  | `string` | -       | Custom border color for connection node circles. (Defaults to theme-adapted colors). |
+| `glowStrength` | `number` | `6`     | Glow shadow size in pixels.                                                          |
+| `circleSize`   | `number` | `5`     | Radius of the circuit connection nodes.                                              |
+| `spawnChance`  | `number` | `0.03`  | Probability of spawning a new circuit line per frame.                                |
+| `className`    | `string` | -       | Additional CSS class for the canvas containers.                                      |

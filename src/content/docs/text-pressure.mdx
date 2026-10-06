@@ -12,7 +12,7 @@ A highly interactive variable-font typography component. It dynamically adjusts 
 ### CLI
 
 ```bash
-npx modus-ui add text-pressure
+npx @modus-ui/cli add text-pressure
 ```
 
 ### Manual
@@ -28,14 +28,28 @@ import { TextPressure } from "@/components/ui/text-pressure";
 
 export default function Example() {
   return (
-    <div className="w-full h-64">
-      <TextPressure
-        text="Modus"
-        width={true}
-        weight={true}
-        italic={true}
-      />
+    <div className="h-64 w-full">
+      <TextPressure text="Modus" width={true} weight={true} italic={true} />
     </div>
   );
 }
 ```
+
+## Props
+
+| Prop          | Type      | Default                                                                                                       | Description                                          |
+| :------------ | :-------- | :------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------- |
+| `text`        | `string`  | `"Pressure"`                                                                                                  | The text to render.                                  |
+| `fontFamily`  | `string`  | `"Roboto Flex"`                                                                                               | Variable font family to use.                         |
+| `fontUrl`     | `string`  | `"https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&display=swap"` | Stylesheet URL that loads the variable font.         |
+| `width`       | `boolean` | `true`                                                                                                        | Varies the font width with cursor distance.          |
+| `weight`      | `boolean` | `true`                                                                                                        | Varies the font weight with cursor distance.         |
+| `italic`      | `boolean` | `true`                                                                                                        | Varies the italic axis with cursor distance.         |
+| `alpha`       | `boolean` | `false`                                                                                                       | Varies letter opacity with cursor distance.          |
+| `flex`        | `boolean` | `true`                                                                                                        | Spreads the letters across the container.            |
+| `stroke`      | `boolean` | `false`                                                                                                       | Draws an outline around the letters.                 |
+| `scale`       | `boolean` | `false`                                                                                                       | Stretches the text vertically to fill the container. |
+| `textColor`   | `string`  | `"hsl(var(--foreground))"`                                                                                    | Text colour.                                         |
+| `strokeColor` | `string`  | `"hsl(var(--foreground))"`                                                                                    | Outline colour when `stroke` is on.                  |
+| `strokeWidth` | `number`  | `2`                                                                                                           | Outline width in pixels.                             |
+| `minFontSize` | `number`  | `24`                                                                                                          | Minimum font size in pixels.                         |

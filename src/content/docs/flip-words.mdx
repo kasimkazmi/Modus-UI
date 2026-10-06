@@ -12,7 +12,7 @@ A typography component from UI Beats. It utilizes Framer Motion's `AnimatePresen
 ### CLI
 
 ```bash
-npx modus-ui add flip-words
+npx @modus-ui/cli add flip-words
 ```
 
 ### Manual
@@ -34,3 +34,11 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop       | Type       | Default | Description                        |
+| :--------- | :--------- | :------ | :--------------------------------- |
+| `words`    | `string[]` | -       | The words to cycle through.        |
+| `interval` | `number`   | `2`     | Seconds each word stays visible.   |
+| `duration` | `number`   | `0.5`   | Seconds each flip animation takes. |

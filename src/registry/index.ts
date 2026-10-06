@@ -15,7 +15,7 @@ export const CATEGORIES = [
 export type Category = (typeof CATEGORIES)[number];
 
 export interface RegistryItem {
-  /** Slug used in URLs, file names and `npx modus-ui add <name>`. */
+  /** Slug used in URLs, file names and `npx @modus-ui/cli add <name>`. */
   name: string;
   title: string;
   category: Category;

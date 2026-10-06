@@ -30,7 +30,7 @@ Modus UI is **not** a package you import from. You own the code: add a component
 ## Install a component
 
 ```bash
-npx modus-ui add blur-text
+npx @modus-ui/cli add blur-text
 ```
 
 The CLI writes the component into your project and lists the npm packages it needs. Every component page shows its own command.
@@ -45,6 +45,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 ```
+
+## For coding agents
+
+The docs are published as plain markdown so agents like Claude Code, Cursor or Codex can read them directly:
+
+- [`/llms.txt`](https://modusui.kasimkazmi.com/llms.txt): index of every component with a one-line description
+- [`/llms-full.txt`](https://modusui.kasimkazmi.com/llms-full.txt): every component's docs and full source in one file
+- `/docs/<name>.md`, e.g. [`/docs/blur-text.md`](https://modusui.kasimkazmi.com/docs/blur-text.md): one component's install command, usage and source
 
 ## Components
 

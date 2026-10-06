@@ -12,7 +12,7 @@ A button with an organic, rhythmic pulsing animation to draw user attention. Per
 ### CLI
 
 ```bash
-npx modus-ui add pulse-button
+npx @modus-ui/cli add pulse-button
 ```
 
 ### Manual
@@ -27,17 +27,13 @@ npx modus-ui add pulse-button
 import { PulseButton } from "@/components/ui/pulse-button";
 
 export default function Example() {
-  return (
-    <PulseButton>
-      Get Started
-    </PulseButton>
-  );
+  return <PulseButton>Get Started</PulseButton>;
 }
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | - | The content inside the button. |
-| `className` | `string` | - | Additional CSS classes for the button. |
+| Prop        | Type        | Default | Description                            |
+| :---------- | :---------- | :------ | :------------------------------------- |
+| `children`  | `ReactNode` | -       | The content inside the button.         |
+| `className` | `string`    | -       | Additional CSS classes for the button. |

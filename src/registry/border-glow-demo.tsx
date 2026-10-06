@@ -3,25 +3,25 @@ import { Copy } from "lucide-react";
 
 export default function BorderGlowDemo() {
   return (
-    <div className="flex w-full items-center justify-center p-12 min-h-[400px]">
+    <div className="flex min-h-[400px] w-full items-center justify-center p-12">
       <BorderGlow
-        className="w-[300px] h-[350px] p-8 flex flex-col justify-between"
+        className="flex h-[350px] w-[300px] flex-col justify-between p-8"
         glowColor="200 100 65" // Blueish glow
         colors={["#38bdf8", "#818cf8", "#c084fc"]} // Blue to purple mesh
         animated={true} // Runs a sweep animation on mount
-        backgroundColor="#09090b" // Dark zinc background
       >
         <div className="space-y-4">
-          <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
-            <Copy className="w-4 h-4 text-zinc-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-secondary">
+            <Copy className="h-4 w-4 text-muted-foreground" />
           </div>
-          <h3 className="text-xl font-medium text-zinc-100">Interactive Glow</h3>
-          <p className="text-sm text-zinc-400 leading-relaxed">
-            A highly sensitive ambient glow effect that tracks the cursor mathematically around the border radius.
+          <h3 className="text-xl font-medium text-foreground">Interactive Glow</h3>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            A highly sensitive ambient glow effect that tracks the cursor mathematically around the
+            border radius.
           </p>
         </div>
-        
-        <button className="w-full py-2.5 rounded-lg bg-zinc-800 border border-zinc-700 text-sm font-medium text-zinc-200 hover:bg-zinc-700 transition-colors">
+
+        <button className="w-full rounded-lg border border-border bg-secondary py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent">
           Try it out
         </button>
       </BorderGlow>

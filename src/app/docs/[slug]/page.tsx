@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getDocBySlug } from "@/lib/mdx";
+import { SITE } from "@/lib/site";
 import { notFound } from "next/navigation";
 import { TableOfContents } from "@/components/table-of-contents";
 
@@ -15,6 +17,20 @@ const TOC_ITEMS = [
   { title: "Usage", id: "usage" },
   { title: "Props", id: "props" },
 ];
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const doc = await getDocBySlug(params.slug);
+  if (!doc) return {};
+  const { title, description } = doc.frontmatter;
+  const url = `/docs/${params.slug}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { type: "article", siteName: SITE.name, title, description, url },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function DocPage({ params }: PageProps) {
   const doc = await getDocBySlug(params.slug);

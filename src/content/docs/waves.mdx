@@ -12,7 +12,7 @@ A physics-based line wave background that utilizes Perlin noise and cursor proxi
 ### CLI
 
 ```bash
-npx modus-ui add waves
+npx @modus-ui/cli add waves
 ```
 
 ### Manual
@@ -28,7 +28,7 @@ import { Waves } from "@/components/ui/waves";
 
 export default function Example() {
   return (
-    <div className="relative w-full h-[500px] overflow-hidden">
+    <div className="relative h-[500px] w-full overflow-hidden">
       <Waves
         lineColor="rgba(55, 50, 47, 0.2)"
         waveSpeedX={0.02}
@@ -43,3 +43,20 @@ export default function Example() {
   );
 }
 ```
+
+## Props
+
+| Prop              | Type                  | Default                | Description                                          |
+| :---------------- | :-------------------- | :--------------------- | :--------------------------------------------------- |
+| `lineColor`       | `string`              | `"rgba(0, 0, 0, 0.2)"` | Colour of the wave lines.                            |
+| `backgroundColor` | `string`              | `"transparent"`        | Background colour behind the lines.                  |
+| `waveSpeedX`      | `number`              | `0.0125`               | Horizontal speed of the noise field.                 |
+| `waveSpeedY`      | `number`              | `0.005`                | Vertical speed of the noise field.                   |
+| `waveAmpX`        | `number`              | `32`                   | Horizontal amplitude of the waves.                   |
+| `waveAmpY`        | `number`              | `16`                   | Vertical amplitude of the waves.                     |
+| `xGap`            | `number`              | `10`                   | Horizontal gap between lines in pixels.              |
+| `yGap`            | `number`              | `32`                   | Vertical gap between points in pixels.               |
+| `friction`        | `number`              | `0.925`                | How quickly cursor-induced motion settles.           |
+| `tension`         | `number`              | `0.005`                | How strongly points spring back to rest.             |
+| `maxCursorMove`   | `number`              | `100`                  | Maximum displacement caused by the cursor in pixels. |
+| `style`           | `React.CSSProperties` | `{}`                   | Inline styles for the container.                     |

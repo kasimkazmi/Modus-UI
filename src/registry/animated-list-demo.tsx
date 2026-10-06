@@ -5,8 +5,8 @@ import { Bell, CreditCard, FileText, Settings, User, Shield, Zap } from "lucide-
 export default function AnimatedListDemo() {
   const items = [
     <div key="1" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <User className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <User className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Profile Settings</p>
@@ -14,8 +14,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="2" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <Bell className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <Bell className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Notifications</p>
@@ -23,8 +23,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="3" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <Shield className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <Shield className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Security</p>
@@ -32,8 +32,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="4" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <CreditCard className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <CreditCard className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Billing</p>
@@ -41,8 +41,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="5" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <Zap className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <Zap className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Integrations</p>
@@ -50,8 +50,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="6" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <FileText className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <FileText className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Terms of Service</p>
@@ -59,8 +59,8 @@ export default function AnimatedListDemo() {
       </div>
     </div>,
     <div key="7" className="flex items-center gap-4">
-      <div className="p-2 rounded-full bg-primary/10 text-primary">
-        <Settings className="w-5 h-5" />
+      <div className="rounded-full bg-primary/10 p-2 text-primary">
+        <Settings className="h-5 w-5" />
       </div>
       <div>
         <p className="font-semibold text-foreground">Advanced</p>
@@ -70,10 +70,10 @@ export default function AnimatedListDemo() {
   ];
 
   return (
-    <div className="flex w-full items-center justify-center p-12 bg-background border border-border rounded-xl min-h-[400px]">
-      <AnimatedList 
-        items={items} 
-        onItemSelect={(item, index) => console.log(`Selected item ${index}`)} 
+    <div className="flex min-h-[400px] w-full items-center justify-center rounded-xl border border-border bg-background p-12">
+      <AnimatedList
+        items={items}
+        onItemSelect={(item, index) => console.log(`Selected item ${index}`)}
       />
     </div>
   );

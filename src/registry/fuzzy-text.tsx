@@ -10,7 +10,7 @@ interface FuzzyTextProps {
   fontWeight?: number | string;
   fontFamily?: string;
   color?: string;
-  hoverHover?: boolean;
+  enableHover?: boolean;
   baseIntensity?: number;
   hoverIntensity?: number;
   className?: string;
@@ -22,7 +22,7 @@ export function FuzzyText({
   fontWeight = 900,
   fontFamily = "inherit",
   color = "hsl(var(--foreground))",
-  hoverHover = true,
+  enableHover = true,
   baseIntensity = 0.18,
   hoverIntensity = 0.6,
   className,
@@ -113,10 +113,10 @@ export function FuzzyText({
     draw();
 
     const handleMouseEnter = () => {
-      if (hoverHover) isHovering = true;
+      if (enableHover) isHovering = true;
     };
     const handleMouseLeave = () => {
-      if (hoverHover) isHovering = false;
+      if (enableHover) isHovering = false;
     };
 
     canvas.addEventListener("mouseenter", handleMouseEnter);
@@ -133,7 +133,7 @@ export function FuzzyText({
     fontWeight,
     fontFamily,
     color,
-    hoverHover,
+    enableHover,
     baseIntensity,
     hoverIntensity,
     prefersReducedMotion,
