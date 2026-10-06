@@ -114,26 +114,12 @@ function buildMeshGradients(colors: string[]) {
   ];
 }
 
-function isLightColor(hex: string) {
-  if (!hex.startsWith("#")) return false;
-  hex = hex.replace("#", "");
-  if (hex.length === 3)
-    hex = hex
-      .split("")
-      .map((c) => c + c)
-      .join("");
-  const red = parseInt(hex.slice(0, 2), 16);
-  const green = parseInt(hex.slice(2, 4), 16);
-  const blue = parseInt(hex.slice(4, 6), 16);
-  return red * 0.2126 + green * 0.7152 + blue * 0.0722 > 180;
-}
-
 export function BorderGlow({
   children,
   className = "",
   edgeSensitivity = 30,
   glowColor = "266 100 65",
-  backgroundColor = "#120F17", // Needs to match theme context or container usually
+  backgroundColor = "hsl(var(--card))",
   borderRadius = 28,
   glowRadius = 40,
   glowIntensity = 1.0,
@@ -246,7 +232,6 @@ export function BorderGlow({
   const borderBg = meshGradients.map((g) => `${g} border-box`);
   const fillBg = meshGradients.map((g) => `${g} padding-box`);
   const angleDeg = `${cursorAngle.toFixed(3)}deg`;
-  const lightSurface = isLightColor(backgroundColor);
   const opacityTransition = prefersReducedMotion
     ? "none"
     : isVisible
@@ -262,12 +247,10 @@ export function BorderGlow({
       className={cn("relative isolate grid border", className)}
       style={{
         background: backgroundColor,
-        borderColor: lightSurface ? "rgb(24 24 27 / 12%)" : "rgb(255 255 255 / 15%)",
+        borderColor: "hsl(var(--border))",
         borderRadius: `${borderRadius}px`,
         transform: "translate3d(0, 0, 0.01px)",
-        boxShadow: lightSurface
-          ? "rgb(24 24 27 / 4%) 0 1px 2px, rgb(24 24 27 / 5%) 0 8px 24px"
-          : "rgba(0,0,0,0.1) 0 1px 2px, rgba(0,0,0,0.1) 0 2px 4px, rgba(0,0,0,0.1) 0 4px 8px, rgba(0,0,0,0.1) 0 8px 16px, rgba(0,0,0,0.1) 0 16px 32px, rgba(0,0,0,0.1) 0 32px 64px",
+        boxShadow: "rgb(24 24 27 / 4%) 0 1px 2px, rgb(24 24 27 / 5%) 0 8px 24px",
       }}
     >
       {/* mesh gradient border */}
@@ -289,7 +272,7 @@ export function BorderGlow({
 
       {/* mesh gradient fill near edges */}
       <div
-        className="absolute inset-0 -z-[1] rounded-[inherit]"
+        className="absolute inset-0 -z-[1] rounded-[inherit] dark:mix-blend-soft-light"
         style={{
           border: "1px solid transparent",
           background: fillBg.join(", "),
@@ -315,20 +298,18 @@ export function BorderGlow({
           WebkitMaskComposite:
             "source-out, source-over, source-over, source-over, source-over, source-over",
           opacity: borderOpacity * fillOpacity,
-          mixBlendMode: lightSurface ? "normal" : "soft-light",
           transition: opacityTransition,
         }}
       />
 
       {/* outer glow */}
       <span
-        className="pointer-events-none absolute z-[1] rounded-[inherit]"
+        className="pointer-events-none absolute z-[1] rounded-[inherit] dark:mix-blend-plus-lighter"
         style={{
           inset: `${-glowRadius}px`,
           maskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
           WebkitMaskImage: `conic-gradient(from ${angleDeg} at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%)`,
           opacity: glowOpacity,
-          mixBlendMode: lightSurface ? "normal" : "plus-lighter",
           transition: opacityTransition,
         }}
       >

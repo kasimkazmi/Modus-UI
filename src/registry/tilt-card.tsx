@@ -107,7 +107,7 @@ export function TiltCard({
         rotateY: shouldTilt ? rotateY : 0,
       }}
       className={cn(
-        "flex w-full max-w-[360px] select-none flex-col justify-between overflow-hidden rounded-2xl border border-[#E0DEDB] bg-[#F7F5F3] p-5 shadow-sm transition-all duration-300 hover:shadow-md",
+        "flex w-full max-w-[360px] select-none flex-col justify-between overflow-hidden rounded-2xl border border-border bg-background p-5 shadow-sm transition-all duration-300 hover:shadow-md",
         className,
       )}
     >
@@ -117,7 +117,7 @@ export function TiltCard({
         <div className="flex h-full flex-col gap-4" style={{ transform: "translateZ(20px)" }}>
           {/* Project Image Section */}
           {image && (
-            <div className="relative h-[200px] w-full overflow-hidden rounded-xl border border-[#E0DEDB]/60 bg-white">
+            <div className="relative h-[200px] w-full overflow-hidden rounded-xl border border-border/60 bg-card">
               <img
                 src={image}
                 alt={title || "Project image"}
@@ -125,7 +125,7 @@ export function TiltCard({
                 loading="lazy"
               />
               {tag && (
-                <span className="absolute right-3 top-3 rounded-full border border-[#E0DEDB] bg-[#FAF9F7]/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-[#605A57] backdrop-blur-sm">
+                <span className="absolute right-3 top-3 rounded-full border border-border bg-background/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur-sm">
                   {tag}
                 </span>
               )}
@@ -135,7 +135,7 @@ export function TiltCard({
           {/* Heading */}
           <div className="space-y-1">
             {title && (
-              <h3 className="font-serif text-2xl font-normal leading-tight text-[#37322F]">
+              <h3 className="font-serif text-2xl font-normal leading-tight text-foreground">
                 {title}
               </h3>
             )}
@@ -146,9 +146,9 @@ export function TiltCard({
                 {visibleTags.map((tech, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1 rounded border border-[#E0DEDB]/60 bg-white px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#605A57] shadow-sm"
+                    className="inline-flex items-center gap-1 rounded border border-border/60 bg-card px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground shadow-sm"
                   >
-                    <span className="h-1 w-1 rounded-full bg-[#605A57]/40" />
+                    <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
                     {tech}
                   </span>
                 ))}
@@ -159,7 +159,7 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(true);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors hover:bg-[#FAF9F7]"
+                    className="inline-flex items-center rounded border border-border/60 bg-secondary px-2 py-0.5 text-[9px] font-bold tracking-wider text-foreground transition-colors hover:bg-background"
                   >
                     +{remainingTags} more
                   </button>
@@ -171,7 +171,7 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(false);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors hover:bg-[#FAF9F7]"
+                    className="inline-flex items-center rounded border border-border/60 bg-secondary px-2 py-0.5 text-[9px] font-bold tracking-wider text-foreground transition-colors hover:bg-background"
                   >
                     Show less
                   </button>
@@ -185,7 +185,7 @@ export function TiltCard({
             <div className="flex flex-grow flex-col justify-between">
               <p
                 className={cn(
-                  "text-xs leading-relaxed text-[#605A57] transition-all duration-300",
+                  "text-xs leading-relaxed text-muted-foreground transition-all duration-300",
                   isExpanded ? "line-clamp-none" : "line-clamp-2",
                 )}
               >
@@ -197,7 +197,7 @@ export function TiltCard({
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
                 }}
-                className="mt-1 self-start text-[10px] font-bold uppercase tracking-wider text-[#37322F] hover:underline"
+                className="mt-1 self-start text-[10px] font-bold uppercase tracking-wider text-foreground hover:underline"
               >
                 {isExpanded ? "Read less" : "Read more"}
               </button>
@@ -213,7 +213,7 @@ export function TiltCard({
                 rel="noopener noreferrer"
                 className="flex-1 text-center"
               >
-                <button className="w-full rounded-lg border border-[#E0DEDB] bg-white px-3 py-2 text-xs font-bold text-[#605A57] transition-all duration-200 hover:border-[#37322F]/40 hover:bg-[#FAF9F7] hover:text-[#37322F] active:scale-[0.98]">
+                <button className="w-full rounded-lg border border-border bg-card px-3 py-2 text-xs font-bold text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:bg-background hover:text-foreground active:scale-[0.98]">
                   Preview
                 </button>
               </a>
@@ -226,7 +226,7 @@ export function TiltCard({
                 rel="noopener noreferrer"
                 className="flex-1 text-center"
               >
-                <button className="w-full rounded-lg border border-[#37322F] bg-[#37322F] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:border-[#4A4542] hover:bg-[#4A4542] active:scale-[0.98]">
+                <button className="w-full rounded-lg border border-primary bg-primary px-3 py-2 text-xs font-bold text-primary-foreground transition-all duration-200 hover:border-primary/90 hover:bg-primary/90 active:scale-[0.98]">
                   GitHub
                 </button>
               </a>
@@ -240,7 +240,7 @@ export function TiltCard({
                   if (onCaseStudyClick) onCaseStudyClick();
                   else if (caseStudyUrl) window.open(caseStudyUrl, "_blank");
                 }}
-                className="w-full rounded-lg border border-transparent bg-[#8B3A30] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:bg-[#A84A3E] active:scale-[0.98]"
+                className="w-full rounded-lg border border-transparent bg-destructive px-3 py-2 text-xs font-bold text-destructive-foreground transition-all duration-200 hover:bg-destructive/90 active:scale-[0.98]"
               >
                 Case Study
               </button>

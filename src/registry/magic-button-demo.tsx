@@ -7,7 +7,7 @@ export function MagicButtonDemo() {
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center gap-6 p-12">
       <MagicButton />
-      <p className="text-xs font-medium uppercase tracking-widest text-[#605A57] opacity-50">
+      <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground opacity-50">
         Hover and Click for Interaction
       </p>
     </div>

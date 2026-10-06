@@ -39,10 +39,10 @@ export function FloatingDockDemo() {
   ];
 
   return (
-    <div className="relative flex min-h-[300px] w-full flex-col items-center justify-center gap-12 overflow-hidden rounded-2xl border border-[#E0DEDB]/50 bg-[#FAF9F7]/30 p-8">
+    <div className="relative flex min-h-[300px] w-full flex-col items-center justify-center gap-12 overflow-hidden rounded-2xl border border-border/50 bg-background/30 p-8">
       <div className="space-y-2 text-center">
-        <h4 className="font-serif text-2xl text-[#37322F]">Interactive Navigation</h4>
-        <p className="mx-auto max-w-sm text-xs text-[#605A57]">
+        <h4 className="font-serif text-2xl text-foreground">Interactive Navigation</h4>
+        <p className="mx-auto max-w-sm text-xs text-muted-foreground">
           Hover over the dock below to experience the magnifying effect on the icons.
         </p>
       </div>

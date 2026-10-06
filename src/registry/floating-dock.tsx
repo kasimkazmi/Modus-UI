@@ -34,7 +34,7 @@ export function FloatingDock({ items, className, direction = "bottom" }: Floatin
       onMouseMove={(e) => !prefersReducedMotion && mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "relative mx-auto flex h-16 items-end gap-4 overflow-hidden rounded-3xl border border-[#E0DEDB] bg-[#F7F5F3]/90 px-4 pb-3 shadow-xl backdrop-blur-md",
+        "relative mx-auto flex h-16 items-end gap-4 overflow-hidden rounded-3xl border border-border bg-background/90 px-4 pb-3 shadow-xl backdrop-blur-md",
         "before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,_#37322F_1px,_transparent_1px)] before:bg-[length:8px_8px] before:opacity-[0.03]",
         className,
       )}
@@ -98,7 +98,7 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction, reducedMotion
       onMouseLeave={() => setHovered(false)}
       whileTap={reducedMotion ? undefined : { scale: 0.9 }}
       className={cn(
-        "relative flex items-center justify-center rounded-full border border-[#E0DEDB] bg-white text-[#37322F] shadow-sm transition-colors hover:bg-[#FAF9F7]",
+        "relative flex items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-colors hover:bg-background",
         "group cursor-pointer",
       )}
       onClick={onClick}
@@ -121,7 +121,7 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction, reducedMotion
               reducedMotion ? { duration: 0.15 } : { type: "spring", stiffness: 300, damping: 20 }
             }
             className={cn(
-              "absolute z-50 whitespace-nowrap rounded-md border border-[#E0DEDB] bg-[#F7F5F3] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#37322F] shadow-sm",
+              "absolute z-50 whitespace-nowrap rounded-md border border-border bg-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground shadow-sm",
               direction === "bottom" ? "-top-2" : "-bottom-2",
             )}
           >

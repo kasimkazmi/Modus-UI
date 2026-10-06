@@ -17,7 +17,7 @@ interface ClickSparkProps {
 }
 
 export function ClickSpark({
-  sparkColor = "#a855f7",
+  sparkColor = "hsl(var(--primary))",
   sparkSize = 10,
   sparkRadius = 25,
   sparkCount = 8,
@@ -86,6 +86,10 @@ export function ClickSpark({
     const ctx = canvas.getContext("2d");
     if (!ctx || prefersReducedMotion) return;
 
+    // Canvas cannot resolve CSS variables; let the browser compute the color.
+    canvas.style.color = sparkColor;
+    const stroke = getComputedStyle(canvas).color;
+
     let animationId: number;
 
     const draw = (timestamp: number) => {
@@ -106,7 +110,7 @@ export function ClickSpark({
         const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
         const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
 
-        ctx.strokeStyle = sparkColor;
+        ctx.strokeStyle = stroke;
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
         ctx.beginPath();

@@ -41,7 +41,7 @@ export function TiltCardDemo() {
   ];
 
   return (
-    <div className="flex min-h-[500px] flex-col items-center justify-center gap-8 bg-[#FAF9F7]/30 py-12">
+    <div className="flex min-h-[500px] flex-col items-center justify-center gap-8 bg-background/30 py-12">
       <div className="grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3">
         {mockProjects.map((project, idx) => (
           <TiltCard
@@ -58,7 +58,7 @@ export function TiltCardDemo() {
           />
         ))}
       </div>
-      <p className="mt-4 font-sans text-xs italic text-[#605A57]/60">
+      <p className="mt-4 font-sans text-xs italic text-muted-foreground/60">
         * Hover to experience physics-based 3D tilt interaction. Mobile users see stable static
         view.
       </p>

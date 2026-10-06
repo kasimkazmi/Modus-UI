@@ -6,7 +6,7 @@ import { GraduationCap } from "lucide-react";
 
 export function MorphingNavbarDemo() {
   return (
-    <div className="relative h-[500px] w-full overflow-hidden rounded-xl border border-[#E0DEDB] bg-[#FAF9F7]">
+    <div className="relative h-[500px] w-full overflow-hidden rounded-xl border border-border bg-background">
       <div id="demo-scroll-container" className="custom-scrollbar absolute inset-0 overflow-y-auto">
         <div className="sticky top-0 z-50">
           <MorphingNavbar
@@ -19,8 +19,8 @@ export function MorphingNavbarDemo() {
 
         <div className="mx-auto max-w-2xl space-y-8 p-8">
           <div className="space-y-4">
-            <h2 className="font-serif text-3xl text-[#37322F]">Scroll to Morph</h2>
-            <p className="leading-relaxed text-[#605A57]">
+            <h2 className="font-serif text-3xl text-foreground">Scroll to Morph</h2>
+            <p className="leading-relaxed text-muted-foreground">
               This preview container simulates a real page. Scroll down to see the Navbar transition
               into its collapsed state, scaling the logo and hiding breadcrumbs to maximize your
               reading area.
@@ -28,11 +28,11 @@ export function MorphingNavbarDemo() {
           </div>
 
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="space-y-4 rounded-xl border border-[#E0DEDB] bg-white/50 p-8">
-              <div className="h-4 w-1/3 animate-pulse rounded bg-[#E0DEDB]" />
+            <div key={i} className="space-y-4 rounded-xl border border-border bg-white/50 p-8">
+              <div className="h-4 w-1/3 animate-pulse rounded bg-border" />
               <div className="space-y-2">
-                <div className="h-3 w-full rounded bg-[#F0EDEA]" />
-                <div className="h-3 w-5/6 rounded bg-[#F0EDEA]" />
+                <div className="h-3 w-full rounded bg-secondary" />
+                <div className="h-3 w-5/6 rounded bg-secondary" />
               </div>
             </div>
           ))}

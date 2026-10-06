@@ -14,7 +14,6 @@ export default function TextPressureDemo() {
           width={true}
           weight={true}
           italic={true}
-          textColor="#37322F"
           minFontSize={48}
         />
       </div>

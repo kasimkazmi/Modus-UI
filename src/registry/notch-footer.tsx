@@ -35,11 +35,11 @@ export function NotchFooter({
   onButtonClick,
   buttonHref,
   logo,
-  bgColorClass = "bg-[#37322F]", // Modus UI's premium warm dark brand color
-  titleColorClass = "!text-[#FAF9F7]", // Protect from .prose overrides
-  buttonColorClass = "border-white/20 hover:border-white bg-white/10 hover:bg-white !text-white hover:!text-[#37322F]", // Protect from .prose overrides
-  dotColorClass = "bg-white/30",
-  notchFillColor = "#F7F5F3", // Modus UI's premium warm light background
+  bgColorClass = "bg-primary",
+  titleColorClass = "!text-primary-foreground", // Protect from .prose overrides
+  buttonColorClass = "border-primary-foreground/20 hover:border-primary-foreground bg-primary-foreground/10 hover:bg-primary-foreground !text-primary-foreground hover:!text-primary", // Protect from .prose overrides
+  dotColorClass = "bg-primary-foreground/30",
+  notchFillColor = "hsl(var(--background))",
   className,
 }: NotchFooterProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -59,17 +59,17 @@ export function NotchFooter({
     >
       {/* 0. Border Outline Layer (Spatially layered at z-5, constructs the bottom, left, and right border frames) */}
       <div
-        className="pointer-events-none absolute inset-0 rounded-3xl border-b border-l border-r border-[#E0DEDB]/10"
+        className="pointer-events-none absolute inset-0 rounded-3xl border-b border-l border-r border-border/10"
         style={{ zIndex: 5 }}
       />
       {/* Left Top Border Segment (Stops exactly at the start of the notch curves) */}
       <div
-        className="pointer-events-none absolute left-0 top-0 h-[1px] bg-[#E0DEDB]/10"
+        className="pointer-events-none absolute left-0 top-0 h-[1px] bg-border/10"
         style={{ zIndex: 5, width: "calc(50% - 120px)" }}
       />
       {/* Right Top Border Segment (Starts exactly at the end of the notch curves) */}
       <div
-        className="pointer-events-none absolute right-0 top-0 h-[1px] bg-[#E0DEDB]/10"
+        className="pointer-events-none absolute right-0 top-0 h-[1px] bg-border/10"
         style={{ zIndex: 5, width: "calc(50% - 120px)" }}
       />
 
@@ -106,7 +106,7 @@ export function NotchFooter({
           className="flex items-center justify-center"
         >
           {logo || (
-            <div className="flex select-none items-center gap-1.5 rounded-full border border-[#E0DEDB]/40 bg-white/95 px-3 py-1 shadow-sm">
+            <div className="flex select-none items-center gap-1.5 rounded-full border border-border/40 bg-card/95 px-3 py-1 shadow-sm">
               <svg
                 width="12"
                 height="12"
@@ -116,12 +116,12 @@ export function NotchFooter({
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="animate-pulse text-[#37322F] motion-reduce:animate-none"
+                className="animate-pulse text-foreground motion-reduce:animate-none"
               >
                 <path d="M4 20V8a4 4 0 0 1 8 0v12" />
                 <path d="M12 20V8a4 4 0 0 1 8 0v12" />
               </svg>
-              <span className="font-serif text-[10px] font-bold uppercase tracking-wider text-[#37322F]">
+              <span className="font-serif text-[10px] font-bold uppercase tracking-wider text-foreground">
                 Modus
               </span>
             </div>

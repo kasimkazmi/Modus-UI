@@ -54,8 +54,8 @@ export function TextPressure({
   flex = true,
   stroke = false,
   scale = false,
-  textColor = "#37322F", // Modus UI text-foreground
-  strokeColor = "#37322F",
+  textColor = "hsl(var(--foreground))",
+  strokeColor = "hsl(var(--foreground))",
   strokeWidth = 2,
   className = "",
   minFontSize = 24,
