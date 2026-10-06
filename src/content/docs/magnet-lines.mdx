@@ -1,0 +1,36 @@
+---
+title: Magnet Lines
+description: A grid of lines that mathematically rotate to point towards your cursor.
+---
+
+A highly optimized background component ported from React Bits. It renders a CSS grid of simple `<span>` elements and uses a single window event listener to calculate the geometric angle (using `Math.acos()`) from each line to your mouse, applying the rotation via CSS custom properties.
+
+<ComponentPreview name="magnet-lines" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add magnet-lines
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/magnet-lines.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MagnetLines } from "@/components/ui/magnet-lines";
+
+export default function Example() {
+  return (
+    <div className="flex h-screen w-full items-center justify-center bg-black">
+      <MagnetLines rows={9} columns={9} lineColor="#fff" lineWidth="2px" lineHeight="40px" />
+    </div>
+  );
+}
+```

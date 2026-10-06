@@ -50,6 +50,7 @@ import FlipWordsDemo from "@/registry/flip-words-demo";
 import DecayCardDemo from "@/registry/decay-card-demo";
 import BlobCursorDemo from "@/registry/blob-cursor-demo";
 import FuzzyTextDemo from "@/registry/fuzzy-text-demo";
+import MagnetLinesDemo from "@/registry/magnet-lines-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -105,6 +106,7 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "decay-card": DecayCardDemo,
   "blob-cursor": BlobCursorDemo,
   "fuzzy-text": FuzzyTextDemo,
+  "magnet-lines": MagnetLinesDemo,
 };
 
 interface ComponentPreviewProps {

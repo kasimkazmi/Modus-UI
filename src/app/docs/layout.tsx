@@ -60,6 +60,7 @@ const DOC_CATEGORIES = [
       { title: "Circuit Background", href: "/docs/circuit-background" },
       { title: "Orbiting Elements", href: "/docs/orbiting-elements" },
       { title: "Blob Cursor", href: "/docs/blob-cursor" },
+      { title: "Magnet Lines", href: "/docs/magnet-lines" },
       { title: "Grid Motion", href: "/docs/grid-motion" },
     ],
   },

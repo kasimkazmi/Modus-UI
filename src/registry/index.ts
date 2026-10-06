@@ -300,4 +300,10 @@ export const registry = [
     dependencies: ["clsx", "tailwind-merge", "framer-motion"],
     files: ["registry/fuzzy-text.tsx"],
   },
+  {
+    name: "magnet-lines",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/magnet-lines.tsx"],
+  },
 ];

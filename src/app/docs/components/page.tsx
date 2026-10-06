@@ -36,6 +36,7 @@ const COMPONENT_LIST = [
   { title: "Bento Grid", href: "/docs/bento-grid" },
   { title: "Decay Card", href: "/docs/decay-card" },
   { title: "Blob Cursor", href: "/docs/blob-cursor" },
+  { title: "Magnet Lines", href: "/docs/magnet-lines" },
   { title: "Fuzzy Text", href: "/docs/fuzzy-text" },
   { title: "Flip Words", href: "/docs/flip-words" },
   { title: "Scratch to Reveal", href: "/docs/scratch-to-reveal" },
