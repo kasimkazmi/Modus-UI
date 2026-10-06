@@ -46,6 +46,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
+## For coding agents
+
+The docs are published as plain markdown so agents like Claude Code, Cursor or Codex can read them directly:
+
+- [`/llms.txt`](https://modusui.kasimkazmi.com/llms.txt): index of every component with a one-line description
+- [`/llms-full.txt`](https://modusui.kasimkazmi.com/llms-full.txt): every component's docs and full source in one file
+- `/docs/<name>.md`, e.g. [`/docs/blur-text.md`](https://modusui.kasimkazmi.com/docs/blur-text.md): one component's install command, usage and source
+
 ## Components
 
 | Category         | Components                                                                                                                    |
