@@ -1,0 +1,37 @@
+---
+title: Border Beam
+description: A glowing, animated gradient beam that endlessly traces the perimeter.
+---
+
+A popular SaaS design element from UI Beats. It wraps any container and mathematically rotates a glowing `conic-gradient` beam perfectly along its edge borders without bleeding into the background.
+
+<ComponentPreview name="border-beam" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add border-beam
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/border-beam.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BorderBeam } from "@/components/ui/border-beam";
+
+export default function Example() {
+  return (
+    <div className="relative rounded-xl border bg-card p-6">
+      <h3>Card Content</h3>
+      <BorderBeam size={100} duration={6} />
+    </div>
+  );
+}
+```

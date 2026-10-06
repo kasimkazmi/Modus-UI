@@ -1,0 +1,32 @@
+---
+title: Gravity Text Swap
+description: Text that detaches and falls away with simulated gravity when swapped.
+---
+
+A physics-based typography component from UI Beats. The old characters physically drop out of the layout with staggered gravity logic, allowing the new characters to spring into place from above.
+
+<ComponentPreview name="gravity-text-swap" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add gravity-text-swap
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/gravity-text-swap.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GravityTextSwap } from "@/components/ui/gravity-text-swap";
+
+export default function Example() {
+  return <GravityTextSwap texts={["Hello", "World", "Build"]} duration={0.6} />;
+}
+```

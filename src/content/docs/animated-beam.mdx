@@ -1,0 +1,43 @@
+---
+title: Animated Beam
+description: A dynamic SVG beam animation that traces paths between elements.
+---
+
+A beautiful component ported from UI Beats that shoots a glowing gradient pulse along an SVG path connecting two HTML elements. It mathematically calculates the path curves automatically based on the live geometry and position of the DOM nodes using `ResizeObserver`.
+
+<ComponentPreview name="animated-beam" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add animated-beam
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/animated-beam.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { useRef } from "react";
+import { AnimatedBeam } from "@/components/ui/animated-beam";
+
+export default function Example() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const fromRef = useRef<HTMLDivElement>(null);
+  const toRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div ref={containerRef} className="relative flex justify-between p-10">
+      <div ref={fromRef}>Node A</div>
+      <div ref={toRef}>Node B</div>
+      <AnimatedBeam containerRef={containerRef} fromRef={fromRef} toRef={toRef} curvature={-50} />
+    </div>
+  );
+}
+```

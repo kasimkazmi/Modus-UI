@@ -1,0 +1,15 @@
+{
+  "name": "gravity-text-swap",
+  "type": "components:ui",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "framer-motion"
+  ],
+  "files": [
+    {
+      "path": "registry/gravity-text-swap.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion, AnimatePresence } from \"framer-motion\";\nimport { useEffect, useState } from \"react\";\nimport { cn } from \"@/lib/utils\";\n\ninterface GravityTextSwapProps {\n  texts: string[];\n  duration?: number;\n  pauseDuration?: number;\n  className?: string;\n}\n\nexport function GravityTextSwap({\n  texts,\n  duration = 0.5,\n  pauseDuration = 2,\n  className = \"\",\n}: GravityTextSwapProps) {\n  const [, setCurrentIndex] = useState(0);\n  const [currentText, setCurrentText] = useState(texts[0]);\n  const prefersReducedMotion = useReducedMotion();\n\n  useEffect(() => {\n    if (texts.length <= 1) return;\n\n    const intervalId = setInterval(\n      () => {\n        setCurrentIndex((prevIndex) => {\n          const nextIndex = (prevIndex + 1) % texts.length;\n          setCurrentText(texts[nextIndex] ?? \"\");\n          return nextIndex;\n        });\n      },\n      (duration + pauseDuration) * 1000,\n    );\n\n    return () => clearInterval(intervalId);\n  }, [texts, duration, pauseDuration]);\n\n  return (\n    <div className={cn(\"inline-block overflow-hidden\", className)}>\n      <AnimatePresence mode=\"wait\">\n        <motion.span\n          key={currentText}\n          className=\"inline-block\"\n          initial={{ opacity: 0 }}\n          animate={{ opacity: 1 }}\n          exit={{ opacity: 0 }}\n          transition={{ duration: duration / 2 }}\n        >\n          {prefersReducedMotion\n            ? currentText\n            : (currentText ?? \"\").split(\"\").map((char, index) => (\n                <motion.span\n                  key={index}\n                  className=\"inline-block\"\n                  initial={{ y: -20, opacity: 0 }}\n                  animate={{\n                    y: 0,\n                    opacity: 1,\n                    transition: {\n                      type: \"spring\",\n                      damping: 12,\n                      stiffness: 200,\n                      delay: index * 0.03,\n                    },\n                  }}\n                  exit={{\n                    y: 20,\n                    opacity: 0,\n                    transition: {\n                      duration: duration / 2,\n                      delay: index * 0.02,\n                    },\n                  }}\n                >\n                  {char === \" \" ? \"\\u00A0\" : char}\n                </motion.span>\n              ))}\n        </motion.span>\n      </AnimatePresence>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

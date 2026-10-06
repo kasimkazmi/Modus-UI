@@ -22,6 +22,7 @@ const COMPONENT_LIST = [
   { title: "Floating Text", href: "/docs/floating-text" },
   { title: "Shimmer Text", href: "/docs/shimmer-text" },
   { title: "Scroll Velocity", href: "/docs/scroll-velocity" },
+  { title: "Gravity Text Swap", href: "/docs/gravity-text-swap" },
   { title: "Blur Text", href: "/docs/blur-text" },
   { title: "Split Text", href: "/docs/split-text" },
   { title: "Decrypted Text", href: "/docs/decrypted-text" },
@@ -29,6 +30,8 @@ const COMPONENT_LIST = [
   { title: "True Focus", href: "/docs/true-focus" },
   { title: "Text Pressure", href: "/docs/text-pressure" },
   { title: "Cursor Grid", href: "/docs/cursor-grid" },
+  { title: "Animated Beam", href: "/docs/animated-beam" },
+  { title: "Border Beam", href: "/docs/border-beam" },
   { title: "Scratch to Reveal", href: "/docs/scratch-to-reveal" },
   { title: "Liquid Tabs", href: "/docs/liquid-tabs" },
   { title: "Stack", href: "/docs/stack" },
@@ -49,47 +52,51 @@ const COMPONENT_LIST = [
 
 export default function ComponentsPage() {
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4">
-      <nav className="flex items-center space-x-2 text-sm mb-8">
-        <Link href="/docs" className="text-[#605A57]/50 hover:text-[#37322F] transition-colors">Docs</Link>
-        <span className="text-[#605A57]/30 font-light">/</span>
-        <span className="text-[#37322F] font-medium">Components</span>
+    <div className="mx-auto max-w-5xl px-4 py-10">
+      <nav className="mb-8 flex items-center space-x-2 text-sm">
+        <Link href="/docs" className="text-[#605A57]/50 transition-colors hover:text-[#37322F]">
+          Docs
+        </Link>
+        <span className="font-light text-[#605A57]/30">/</span>
+        <span className="font-medium text-[#37322F]">Components</span>
       </nav>
 
       <header className="mb-20">
-        <h1 className="text-5xl md:text-6xl font-serif text-[#37322F] mb-6 tracking-tight">
+        <h1 className="mb-6 font-serif text-5xl tracking-tight text-[#37322F] md:text-6xl">
           Components
         </h1>
-        <p className="text-[#605A57] text-lg max-w-2xl leading-relaxed">
-          Explore our collection of premium React components designed for clarity, 
-          accuracy, and effortless trust. Built for modern editorial interfaces.
+        <p className="max-w-2xl text-lg leading-relaxed text-[#605A57]">
+          Explore our collection of premium React components designed for clarity, accuracy, and
+          effortless trust. Built for modern editorial interfaces.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-8">
+      <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
         {COMPONENT_LIST.map((component) => (
           <div key={component.title} className="group relative">
             {component.disabled ? (
-              <div className="flex items-center justify-between py-2 border-b border-transparent text-[#605A57]/40 cursor-not-allowed">
+              <div className="flex cursor-not-allowed items-center justify-between border-b border-transparent py-2 text-[#605A57]/40">
                 <span className="text-base font-medium">{component.title}</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Coming Soon</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest opacity-0 transition-opacity group-hover:opacity-100">
+                  Coming Soon
+                </span>
               </div>
             ) : (
               <Link
                 href={component.href}
-                className="flex items-center justify-between py-2 border-b border-[#E0DEDB]/40 hover:border-[#37322F] transition-all duration-300 group"
+                className="group flex items-center justify-between border-b border-[#E0DEDB]/40 py-2 transition-all duration-300 hover:border-[#37322F]"
               >
-                <span className="text-base font-medium text-[#605A57] group-hover:text-[#37322F] transition-colors">
+                <span className="text-base font-medium text-[#605A57] transition-colors group-hover:text-[#37322F]">
                   {component.title}
                 </span>
-                <MoveRight className="w-4 h-4 text-[#37322F] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                <MoveRight className="h-4 w-4 -translate-x-2 text-[#37322F] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
               </Link>
             )}
           </div>
         ))}
       </div>
 
-      <footer className="mt-32 pt-8 border-t border-[#E0DEDB]/40 flex justify-between items-center text-[10px] font-bold uppercase tracking-[0.3em] text-[#605A57]/40">
+      <footer className="mt-32 flex items-center justify-between border-t border-[#E0DEDB]/40 pt-8 text-[10px] font-bold uppercase tracking-[0.3em] text-[#605A57]/40">
         <span>Modus UI Library</span>
         <span>Version 1.0.0</span>
       </footer>

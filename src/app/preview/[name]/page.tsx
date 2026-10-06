@@ -47,6 +47,9 @@ import CursorGridDemo from "@/registry/cursor-grid-demo";
 import ScrollVelocityDemo from "@/registry/scroll-velocity-demo";
 import LiquidTabsDemo from "@/registry/liquid-tabs-demo";
 import ScratchToRevealDemo from "@/registry/scratch-to-reveal-demo";
+import AnimatedBeamDemo from "@/registry/animated-beam-demo";
+import GravityTextSwapDemo from "@/registry/gravity-text-swap-demo";
+import BorderBeamDemo from "@/registry/border-beam-demo";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -92,6 +95,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "scroll-velocity": ScrollVelocityDemo,
   "liquid-tabs": LiquidTabsDemo,
   "scratch-to-reveal": ScratchToRevealDemo,
+  "animated-beam": AnimatedBeamDemo,
+  "gravity-text-swap": GravityTextSwapDemo,
+  "border-beam": BorderBeamDemo,
 };
 
 interface PreviewPageProps {
