@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface ShowcaseItem {
@@ -31,16 +31,14 @@ export function ExpandableShowcase({
   ...props
 }: ExpandableShowcaseProps) {
   const [active, setActive] = useState(defaultIndex);
+  const prefersReducedMotion = useReducedMotion();
+  const instant = { duration: 0 };
 
   const isVertical = orientation === "vertical";
 
   return (
     <div
-      className={cn(
-        "flex w-full overflow-hidden",
-        isVertical ? "flex-col" : "flex-row",
-        className
-      )}
+      className={cn("flex w-full overflow-hidden", isVertical ? "flex-col" : "flex-row", className)}
       style={{
         height: isVertical ? "auto" : height,
         minHeight: isVertical ? height : "auto",
@@ -52,7 +50,7 @@ export function ExpandableShowcase({
     >
       {items.map((item, i) => {
         const isActive = i === active;
-        
+
         // Use motion.a if link is provided, otherwise motion.div
         const Tag = item.link ? motion.a : motion.div;
 
@@ -87,7 +85,9 @@ export function ExpandableShowcase({
               flexShrink: isActive ? 0 : 1,
               flexBasis: isActive ? (isVertical ? "40%" : "40%") : "15%",
             }}
-            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            transition={
+              prefersReducedMotion ? instant : { type: "spring", stiffness: 200, damping: 25 }
+            }
             style={{
               minHeight: isVertical ? 80 : "auto",
             }}
@@ -98,7 +98,7 @@ export function ExpandableShowcase({
               animate={{
                 filter: isActive ? "grayscale(0%)" : "grayscale(80%)",
               }}
-              transition={{ duration: 0.4 }}
+              transition={prefersReducedMotion ? instant : { duration: 0.4 }}
             >
               <img
                 src={item.image}
@@ -109,14 +109,14 @@ export function ExpandableShowcase({
             </motion.div>
 
             {/* Gradient Overlay for Text Readability */}
-            <motion.div 
+            <motion.div
               className="absolute inset-0"
               animate={{
-                background: isActive 
-                  ? "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%)" 
-                  : "linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)"
+                background: isActive
+                  ? "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%)"
+                  : "linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)",
               }}
-              transition={{ duration: 0.4 }}
+              transition={prefersReducedMotion ? instant : { duration: 0.4 }}
             />
 
             {/* Label and Indicator */}
@@ -126,18 +126,26 @@ export function ExpandableShowcase({
                 initial={false}
                 animate={{
                   opacity: isActive ? 1 : 0,
-                  x: isActive ? 0 : -10,
+                  x: isActive || prefersReducedMotion ? 0 : -10,
                 }}
-                transition={{ duration: 0.3, delay: isActive ? 0.1 : 0 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0.15 }
+                    : { duration: 0.3, delay: isActive ? 0.1 : 0 }
+                }
               />
               <motion.span
-                className="text-lg font-bold text-white drop-shadow-md truncate"
+                className="truncate text-lg font-bold text-white drop-shadow-md"
                 initial={false}
                 animate={{
                   opacity: isActive ? 1 : 0,
-                  x: isActive ? 0 : -10,
+                  x: isActive || prefersReducedMotion ? 0 : -10,
                 }}
-                transition={{ duration: 0.3, delay: isActive ? 0.15 : 0 }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0.15 }
+                    : { duration: 0.3, delay: isActive ? 0.15 : 0 }
+                }
               >
                 {item.label}
               </motion.span>

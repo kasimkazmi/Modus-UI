@@ -1,22 +1,28 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface FloatingTextProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function FloatingText({ children, className }: FloatingTextProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.div
       className={cn("inline-block", className)}
-      animate={{ y: [0, -10, 0] }}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      animate={prefersReducedMotion ? { y: 0 } : { y: [0, -10, 0] }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { duration: 2, repeat: Infinity, ease: "easeInOut" }
+      }
     >
       {children}
     </motion.div>
-  )
+  );
 }

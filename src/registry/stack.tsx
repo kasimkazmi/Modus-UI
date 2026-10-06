@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -9,9 +9,16 @@ interface CardRotateProps {
   onSendToBack: () => void;
   sensitivity: number;
   disableDrag?: boolean;
+  reduceMotion: boolean;
 }
 
-function CardRotate({ children, onSendToBack, sensitivity, disableDrag = false }: CardRotateProps) {
+function CardRotate({
+  children,
+  onSendToBack,
+  sensitivity,
+  disableDrag = false,
+  reduceMotion,
+}: CardRotateProps) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useTransform(y, [-100, 100], [60, -60]);
@@ -37,10 +44,12 @@ function CardRotate({ children, onSendToBack, sensitivity, disableDrag = false }
   return (
     <motion.div
       className="absolute inset-0 cursor-grab active:cursor-grabbing"
-      style={{ x, y, rotateX, rotateY }}
+      // Reduced motion: drag still works, without the 3D tilt or spring snap-back.
+      style={reduceMotion ? { x, y } : { x, y, rotateX, rotateY }}
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragElastic={0.6}
+      dragTransition={reduceMotion ? { bounceStiffness: 10000, bounceDamping: 100 } : undefined}
       onDragEnd={handleDragEnd}
     >
       {children}
@@ -77,6 +86,7 @@ export function Stack({
 }: StackProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -112,7 +122,8 @@ export function Stack({
   };
 
   useEffect(() => {
-    if (autoplay && stack.length > 1 && !isPaused) {
+    // Reduced motion: no autoplay; the user still reorders by drag or click.
+    if (autoplay && !prefersReducedMotion && stack.length > 1 && !isPaused) {
       const interval = setInterval(() => {
         const topCardId = stack[stack.length - 1].id;
         sendToBack(topCardId);
@@ -120,11 +131,11 @@ export function Stack({
 
       return () => clearInterval(interval);
     }
-  }, [autoplay, autoplayDelay, stack, isPaused]);
+  }, [autoplay, autoplayDelay, stack, isPaused, prefersReducedMotion]);
 
   return (
     <div
-      className={cn("relative w-full h-full [perspective:600px]", className)}
+      className={cn("relative h-full w-full [perspective:600px]", className)}
       onMouseEnter={() => pauseOnHover && setIsPaused(true)}
       onMouseLeave={() => pauseOnHover && setIsPaused(false)}
     >
@@ -136,9 +147,10 @@ export function Stack({
             onSendToBack={() => sendToBack(card.id)}
             sensitivity={sensitivity}
             disableDrag={shouldDisableDrag}
+            reduceMotion={!!prefersReducedMotion}
           >
             <motion.div
-              className="rounded-xl overflow-hidden w-full h-full shadow-lg"
+              className="h-full w-full overflow-hidden rounded-xl shadow-lg"
               onClick={() => shouldEnableClick && sendToBack(card.id)}
               animate={{
                 rotateZ: (stack.length - index - 1) * 4 + randomRotate,
@@ -146,11 +158,15 @@ export function Stack({
                 transformOrigin: "90% 90%",
               }}
               initial={false}
-              transition={{
-                type: "spring",
-                stiffness: animationConfig.stiffness,
-                damping: animationConfig.damping,
-              }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: animationConfig.stiffness,
+                      damping: animationConfig.damping,
+                    }
+              }
             >
               {card.content}
             </motion.div>

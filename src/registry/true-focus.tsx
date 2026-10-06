@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface TrueFocusProps {
@@ -33,19 +33,22 @@ export function TrueFocus({
   const containerRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const [focusRect, setFocusRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const prefersReducedMotion = useReducedMotion();
+  // Reduced motion: auto mode stops cycling and leaves every word sharp; manual mode moves focus instantly.
+  const staticFrame = !!prefersReducedMotion && !manualMode;
 
   useEffect(() => {
-    if (!manualMode) {
+    if (!manualMode && !prefersReducedMotion) {
       const interval = setInterval(
         () => {
           setCurrentIndex((prev) => (prev + 1) % words.length);
         },
-        (animationDuration + pauseBetweenAnimations) * 1000
+        (animationDuration + pauseBetweenAnimations) * 1000,
       );
 
       return () => clearInterval(interval);
     }
-  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
+  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length, prefersReducedMotion]);
 
   useEffect(() => {
     if (currentIndex === null || currentIndex === -1) return;
@@ -77,7 +80,7 @@ export function TrueFocus({
 
   return (
     <div
-      className={cn("relative flex gap-4 justify-center items-center flex-wrap", className)}
+      className={cn("relative flex flex-wrap items-center justify-center gap-4", className)}
       ref={containerRef}
       style={{ outline: "none", userSelect: "none" }}
     >
@@ -89,10 +92,10 @@ export function TrueFocus({
             ref={(el) => {
               wordRefs.current[index] = el;
             }}
-            className="relative text-5xl md:text-7xl font-black cursor-pointer text-foreground"
+            className="relative cursor-pointer text-5xl font-black text-foreground md:text-7xl"
             style={{
-              filter: isActive ? "blur(0px)" : `blur(${blurAmount}px)`,
-              transition: `filter ${animationDuration}s ease`,
+              filter: isActive || staticFrame ? "blur(0px)" : `blur(${blurAmount}px)`,
+              transition: prefersReducedMotion ? "none" : `filter ${animationDuration}s ease`,
               outline: "none",
               userSelect: "none",
             }}
@@ -105,7 +108,7 @@ export function TrueFocus({
       })}
 
       <motion.div
-        className="absolute top-0 left-0 pointer-events-none box-border border-0"
+        className="pointer-events-none absolute left-0 top-0 box-border border-0"
         animate={{
           x: focusRect.x,
           y: focusRect.y,
@@ -113,10 +116,11 @@ export function TrueFocus({
           height: focusRect.height,
           opacity: currentIndex >= 0 ? 1 : 0,
         }}
-        transition={{
-          duration: animationDuration,
-          ease: "easeInOut",
-        }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0 }
+            : { duration: animationDuration, ease: "easeInOut" }
+        }
         style={
           {
             "--border-color": borderColor,
@@ -125,28 +129,28 @@ export function TrueFocus({
         }
       >
         <span
-          className="absolute w-5 h-5 border-[4px] rounded-[4px] top-[-12px] left-[-12px] border-r-0 border-b-0"
+          className="absolute left-[-12px] top-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-b-0 border-r-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 6px var(--border-color))",
           }}
         />
         <span
-          className="absolute w-5 h-5 border-[4px] rounded-[4px] top-[-12px] right-[-12px] border-l-0 border-b-0"
+          className="absolute right-[-12px] top-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-b-0 border-l-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 6px var(--border-color))",
           }}
         />
         <span
-          className="absolute w-5 h-5 border-[4px] rounded-[4px] bottom-[-12px] left-[-12px] border-r-0 border-t-0"
+          className="absolute bottom-[-12px] left-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-r-0 border-t-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 6px var(--border-color))",
           }}
         />
         <span
-          className="absolute w-5 h-5 border-[4px] rounded-[4px] bottom-[-12px] right-[-12px] border-l-0 border-t-0"
+          className="absolute bottom-[-12px] right-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-l-0 border-t-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 6px var(--border-color))",

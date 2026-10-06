@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface TiltCardProps {
@@ -39,6 +39,9 @@ export function TiltCard({
   const [tiltEnabled, setTiltEnabled] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTechExpanded, setIsTechExpanded] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  // Reduced motion: the card stays flat and does not follow the pointer.
+  const shouldTilt = tiltEnabled && !prefersReducedMotion;
 
   // Disable tilt on mobile/tablets for better UX
   useEffect(() => {
@@ -60,7 +63,7 @@ export function TiltCard({
   const rotateY = useTransform(rotateYSpring, [-0.5, 0.5], [-maxTilt, maxTilt]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!tiltEnabled || !cardRef.current) return;
+    if (!shouldTilt || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -81,7 +84,10 @@ export function TiltCard({
   const tags: string[] = React.useMemo(() => {
     if (!techStack) return [];
     if (Array.isArray(techStack)) return techStack;
-    return techStack.split(",").map((t) => t.trim()).filter(Boolean);
+    return techStack
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
   }, [techStack]);
 
   const maxVisibleTags = 4;
@@ -97,25 +103,25 @@ export function TiltCard({
       style={{
         transformStyle: "preserve-3d",
         transformPerspective: perspective,
-        rotateX: tiltEnabled ? rotateX : 0,
-        rotateY: tiltEnabled ? rotateY : 0,
+        rotateX: shouldTilt ? rotateX : 0,
+        rotateY: shouldTilt ? rotateY : 0,
       }}
       className={cn(
-        "w-full max-w-[360px] rounded-2xl border border-[#E0DEDB] bg-[#F7F5F3] p-5 shadow-sm transition-all duration-300 hover:shadow-md select-none flex flex-col justify-between overflow-hidden",
-        className
+        "flex w-full max-w-[360px] select-none flex-col justify-between overflow-hidden rounded-2xl border border-[#E0DEDB] bg-[#F7F5F3] p-5 shadow-sm transition-all duration-300 hover:shadow-md",
+        className,
       )}
     >
       {children ? (
         children
       ) : (
-        <div className="flex flex-col h-full gap-4" style={{ transform: "translateZ(20px)" }}>
+        <div className="flex h-full flex-col gap-4" style={{ transform: "translateZ(20px)" }}>
           {/* Project Image Section */}
           {image && (
-            <div className="relative w-full h-[200px] overflow-hidden rounded-xl border border-[#E0DEDB]/60 bg-white">
+            <div className="relative h-[200px] w-full overflow-hidden rounded-xl border border-[#E0DEDB]/60 bg-white">
               <img
                 src={image}
                 alt={title || "Project image"}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
                 loading="lazy"
               />
               {tag && (
@@ -140,7 +146,7 @@ export function TiltCard({
                 {visibleTags.map((tech, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1 rounded border border-[#E0DEDB]/60 bg-white px-2 py-0.5 text-[9px] font-semibold tracking-wider text-[#605A57] shadow-sm uppercase"
+                    className="inline-flex items-center gap-1 rounded border border-[#E0DEDB]/60 bg-white px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#605A57] shadow-sm"
                   >
                     <span className="h-1 w-1 rounded-full bg-[#605A57]/40" />
                     {tech}
@@ -153,7 +159,7 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(true);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] hover:bg-[#FAF9F7] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors"
+                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors hover:bg-[#FAF9F7]"
                   >
                     +{remainingTags} more
                   </button>
@@ -165,7 +171,7 @@ export function TiltCard({
                       e.stopPropagation();
                       setIsTechExpanded(false);
                     }}
-                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] hover:bg-[#FAF9F7] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors"
+                    className="inline-flex items-center rounded border border-[#E0DEDB]/60 bg-[#F0EDEA] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#37322F] transition-colors hover:bg-[#FAF9F7]"
                   >
                     Show less
                   </button>
@@ -176,11 +182,11 @@ export function TiltCard({
 
           {/* Description */}
           {description && (
-            <div className="flex-grow flex flex-col justify-between">
+            <div className="flex flex-grow flex-col justify-between">
               <p
                 className={cn(
                   "text-xs leading-relaxed text-[#605A57] transition-all duration-300",
-                  isExpanded ? "line-clamp-none" : "line-clamp-2"
+                  isExpanded ? "line-clamp-none" : "line-clamp-2",
                 )}
               >
                 {description}
@@ -199,7 +205,7 @@ export function TiltCard({
           )}
 
           {/* CTAs */}
-          <div className="flex gap-2 pt-2 mt-auto" style={{ transform: "translateZ(10px)" }}>
+          <div className="mt-auto flex gap-2 pt-2" style={{ transform: "translateZ(10px)" }}>
             {liveUrl && (
               <a
                 href={liveUrl}
@@ -207,7 +213,7 @@ export function TiltCard({
                 rel="noopener noreferrer"
                 className="flex-1 text-center"
               >
-                <button className="w-full rounded-lg border border-[#E0DEDB] bg-white px-3 py-2 text-xs font-bold text-[#605A57] transition-all duration-200 hover:border-[#37322F]/40 hover:text-[#37322F] hover:bg-[#FAF9F7] active:scale-[0.98]">
+                <button className="w-full rounded-lg border border-[#E0DEDB] bg-white px-3 py-2 text-xs font-bold text-[#605A57] transition-all duration-200 hover:border-[#37322F]/40 hover:bg-[#FAF9F7] hover:text-[#37322F] active:scale-[0.98]">
                   Preview
                 </button>
               </a>
@@ -220,7 +226,7 @@ export function TiltCard({
                 rel="noopener noreferrer"
                 className="flex-1 text-center"
               >
-                <button className="w-full rounded-lg border border-[#37322F] bg-[#37322F] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:bg-[#4A4542] hover:border-[#4A4542] active:scale-[0.98]">
+                <button className="w-full rounded-lg border border-[#37322F] bg-[#37322F] px-3 py-2 text-xs font-bold text-[#FAF9F7] transition-all duration-200 hover:border-[#4A4542] hover:bg-[#4A4542] active:scale-[0.98]">
                   GitHub
                 </button>
               </a>

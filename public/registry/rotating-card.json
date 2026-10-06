@@ -9,7 +9,7 @@
   "files": [
     {
       "path": "registry/rotating-card.tsx",
-      "content": "\"use client\"\n\nimport { motion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface RotatingCardProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function RotatingCard({ children, className }: RotatingCardProps) {\n  return (\n    <motion.div\n      className={cn(\n        \"p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg\",\n        className\n      )}\n      whileHover={{ rotateY: 10 }}\n      transition={{ type: \"spring\", stiffness: 300 }}\n    >\n      {children}\n    </motion.div>\n  )\n}"
+      "content": "\"use client\"\n\nimport { motion, useReducedMotion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface RotatingCardProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function RotatingCard({ children, className }: RotatingCardProps) {\n  const prefersReducedMotion = useReducedMotion()\n\n  return (\n    <motion.div\n      className={cn(\n        \"p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg\",\n        className\n      )}\n      whileHover={prefersReducedMotion ? undefined : { rotateY: 10 }}\n      transition={{ type: \"spring\", stiffness: 300 }}\n    >\n      {children}\n    </motion.div>\n  )\n}"
     }
   ]
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { motion, HTMLMotionProps, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface ShimmerTextProps extends HTMLMotionProps<"span"> {
@@ -22,6 +22,8 @@ export function ShimmerText({
   spread = 120,
   ...props
 }: ShimmerTextProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   const gradientStyle = {
     backgroundImage: `linear-gradient(${spread}deg, ${baseColor} 0%, ${baseColor} 35%, ${shimmerColor} 50%, ${baseColor} 65%, ${baseColor} 100%)`,
     backgroundSize: "200% auto",
@@ -34,13 +36,18 @@ export function ShimmerText({
     <motion.span
       className={cn("inline-block font-medium", className)}
       style={gradientStyle}
-      initial={{ backgroundPosition: "200% center" }}
-      animate={{ backgroundPosition: "-50% center" }}
-      transition={{
-        repeat: Infinity,
-        duration: speed,
-        ease: "linear",
-      }}
+      // Reduced motion: hold a still frame with the highlight centred on the text.
+      initial={prefersReducedMotion ? false : { backgroundPosition: "200% center" }}
+      animate={
+        prefersReducedMotion
+          ? { backgroundPosition: "50% center" }
+          : { backgroundPosition: "-50% center" }
+      }
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { repeat: Infinity, duration: speed, ease: "linear" }
+      }
       {...props}
     >
       {text}

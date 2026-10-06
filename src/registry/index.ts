@@ -78,7 +78,7 @@ export const registry = [
     title: "Magnet",
     category: "Actions",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/magnet.tsx"],
   },
   {
@@ -150,7 +150,7 @@ export const registry = [
     title: "Focus Card",
     category: "Data Display",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/focus-card.tsx"],
   },
   {
@@ -174,7 +174,7 @@ export const registry = [
     title: "Cursor Grid",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/cursor-grid.tsx"],
   },
   {
@@ -182,7 +182,7 @@ export const registry = [
     title: "Waves",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/waves.tsx"],
   },
   {
@@ -190,7 +190,7 @@ export const registry = [
     title: "Letter Glitch",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/letter-glitch.tsx"],
   },
   {
@@ -206,7 +206,7 @@ export const registry = [
     title: "Circuit Background",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: [],
+    dependencies: ["framer-motion"],
     files: ["registry/circuit-background.tsx"],
   },
   {
@@ -230,7 +230,7 @@ export const registry = [
     title: "Magnet Lines",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/magnet-lines.tsx"],
   },
   {
@@ -278,7 +278,7 @@ export const registry = [
     title: "Text Pressure",
     category: "Typography",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/text-pressure.tsx"],
   },
   {
@@ -406,7 +406,7 @@ export const registry = [
     title: "Pixel Card",
     category: "Components",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/pixel-card.tsx"],
   },
   {
@@ -414,7 +414,7 @@ export const registry = [
     title: "Click Spark",
     category: "Components",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/click-spark.tsx"],
   },
   {
@@ -422,7 +422,7 @@ export const registry = [
     title: "Spotlight Card",
     category: "Components",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/spotlight-card.tsx"],
   },
   {
@@ -430,7 +430,7 @@ export const registry = [
     title: "Border Glow",
     category: "Components",
     type: "components:ui",
-    dependencies: ["clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/border-glow.tsx"],
   },
 ] as const satisfies readonly RegistryItem[];

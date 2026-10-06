@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface FuzzyTextProps {
@@ -27,6 +28,7 @@ export function FuzzyText({
   className,
 }: FuzzyTextProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     let animationFrameId: number;
@@ -104,7 +106,8 @@ export function FuzzyText({
         ctx.putImageData(newImageData, 0, 0);
       }
 
-      animationFrameId = requestAnimationFrame(draw);
+      // Reduced motion: draw a single static fuzzy frame instead of looping.
+      if (!prefersReducedMotion) animationFrameId = requestAnimationFrame(draw);
     };
 
     draw();
@@ -133,6 +136,7 @@ export function FuzzyText({
     hoverHover,
     baseIntensity,
     hoverIntensity,
+    prefersReducedMotion,
   ]);
 
   return <canvas ref={canvasRef} className={cn("block max-w-full cursor-default", className)} />;

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface StarBorderProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -27,6 +27,12 @@ export function StarBorder({
   children,
   ...rest
 }: StarBorderProps) {
+  const prefersReducedMotion = useReducedMotion();
+  // Reduced motion: beams rest at a fixed, visible spot instead of sweeping.
+  const beamTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: speed, repeat: Infinity, repeatType: "mirror" as const, ease: "linear" as const };
+
   return (
     <Component
       className={cn("relative inline-block overflow-hidden rounded-full", className)}
@@ -42,13 +48,12 @@ export function StarBorder({
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
         }}
-        animate={{ translateX: ["0%", "-100%"], opacity: [1, 0] }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "linear",
-        }}
+        animate={
+          prefersReducedMotion
+            ? { translateX: "-50%", opacity: 0.7 }
+            : { translateX: ["0%", "-100%"], opacity: [1, 0] }
+        }
+        transition={beamTransition}
       />
       {/* Top glowing beam */}
       <motion.div
@@ -56,13 +61,12 @@ export function StarBorder({
         style={{
           background: `radial-gradient(circle, ${color}, transparent 10%)`,
         }}
-        animate={{ translateX: ["0%", "100%"], opacity: [1, 0] }}
-        transition={{
-          duration: speed,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "linear",
-        }}
+        animate={
+          prefersReducedMotion
+            ? { translateX: "50%", opacity: 0.7 }
+            : { translateX: ["0%", "100%"], opacity: [1, 0] }
+        }
+        transition={beamTransition}
       />
 
       {/* Inner Button Content */}

@@ -9,6 +9,7 @@ import {
   useMotionValue,
   useVelocity,
   useAnimationFrame,
+  useReducedMotion,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -70,7 +71,7 @@ function VelocityText({
     smoothVelocity,
     velocityMapping.input,
     velocityMapping.output,
-    { clamp: false }
+    { clamp: false },
   );
 
   const copyRef = useRef<HTMLSpanElement>(null);
@@ -88,7 +89,10 @@ function VelocityText({
   });
 
   const directionFactor = useRef(1);
+  const prefersReducedMotion = useReducedMotion();
   useAnimationFrame((t, delta) => {
+    // Reduced motion: the marquee holds still at its first frame.
+    if (prefersReducedMotion) return;
     let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
 
     if (velocityFactor.get() < 0) {
@@ -106,15 +110,12 @@ function VelocityText({
     spans.push(
       <span className={cn("flex-shrink-0", className)} key={i} ref={i === 0 ? copyRef : null}>
         {children}&nbsp;
-      </span>
+      </span>,
     );
   }
 
   return (
-    <div
-      className={cn("relative overflow-hidden", parallaxClassName)}
-      style={parallaxStyle}
-    >
+    <div className={cn("relative overflow-hidden", parallaxClassName)} style={parallaxStyle}>
       <motion.div
         className={cn("flex whitespace-nowrap text-center", scrollerClassName)}
         style={{ x, ...scrollerStyle }}

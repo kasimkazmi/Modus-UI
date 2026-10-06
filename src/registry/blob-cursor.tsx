@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BlobCursorProps {
@@ -16,32 +17,45 @@ export function BlobCursor({
 }: BlobCursorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const blobsRef = useRef<(HTMLDivElement | null)[]>([]);
+  // Reduced motion: no trailing lerp loop; the blobs jump straight to the pointer.
+  const prefersReducedMotion = useReducedMotion();
 
   // Smooth trailing configuration
   const trailCount = 8;
   const positions = useRef<{ x: number; y: number }[]>(Array(trailCount).fill({ x: 0, y: 0 }));
   const mousePos = useRef({ x: 0, y: 0 });
 
-  const handleMove = useCallback((e: React.MouseEvent | React.TouchEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+  const handleMove = useCallback(
+    (e: React.MouseEvent | React.TouchEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
 
-    let clientX, clientY;
-    if ("touches" in e) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = (e as React.MouseEvent).clientX;
-      clientY = (e as React.MouseEvent).clientY;
-    }
+      let clientX, clientY;
+      if ("touches" in e) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = (e as React.MouseEvent).clientX;
+        clientY = (e as React.MouseEvent).clientY;
+      }
 
-    mousePos.current = {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    };
-  }, []);
+      mousePos.current = {
+        x: clientX - rect.left,
+        y: clientY - rect.top,
+      };
+
+      if (prefersReducedMotion) {
+        const { x, y } = mousePos.current;
+        blobsRef.current.forEach((blob) => {
+          if (blob) blob.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+        });
+      }
+    },
+    [prefersReducedMotion],
+  );
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     let animationFrameId: number;
 
     const render = () => {
@@ -71,7 +85,7 @@ export function BlobCursor({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div

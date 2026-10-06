@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
@@ -20,10 +20,7 @@ interface BlurTextProps {
 }
 
 const buildKeyframes = (from: Record<string, any>, steps: Record<string, any>[]) => {
-  const keys = new Set([
-    ...Object.keys(from),
-    ...steps.flatMap((s) => Object.keys(s)),
-  ]);
+  const keys = new Set([...Object.keys(from), ...steps.flatMap((s) => Object.keys(s))]);
 
   const keyframes: Record<string, any[]> = {};
   keys.forEach((k) => {
@@ -49,6 +46,8 @@ export function BlurText({
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
+  // Reduced motion: text renders in its settled final state from the first frame.
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (!ref.current) return;
@@ -59,7 +58,7 @@ export function BlurText({
           observer.unobserve(ref.current!);
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
     observer.observe(ref.current);
     return () => observer.disconnect();
@@ -70,7 +69,7 @@ export function BlurText({
       direction === "top"
         ? { filter: "blur(10px)", opacity: 0, y: -50 }
         : { filter: "blur(10px)", opacity: 0, y: 50 },
-    [direction]
+    [direction],
   );
 
   const defaultTo = useMemo(
@@ -82,7 +81,7 @@ export function BlurText({
       },
       { filter: "blur(0px)", opacity: 1, y: 0 },
     ],
-    [direction]
+    [direction],
   );
 
   const fromSnapshot = animationFrom ?? defaultFrom;
@@ -91,7 +90,7 @@ export function BlurText({
   const stepCount = toSnapshots.length + 1;
   const totalDuration = stepDuration * (stepCount - 1);
   const times = Array.from({ length: stepCount }, (_, i) =>
-    stepCount === 1 ? 0 : i / (stepCount - 1)
+    stepCount === 1 ? 0 : i / (stepCount - 1),
   );
 
   return (
@@ -99,23 +98,29 @@ export function BlurText({
       {elements.map((segment, index) => {
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
-        const spanTransition: any = {
-          duration: totalDuration,
-          times,
-          delay: (index * delay) / 1000,
-          ease: easing,
-        };
+        const spanTransition: any = prefersReducedMotion
+          ? { duration: 0 }
+          : {
+              duration: totalDuration,
+              times,
+              delay: (index * delay) / 1000,
+              ease: easing,
+            };
 
         return (
           <motion.span
             className="inline-block will-change-[transform,filter,opacity]"
             key={index}
-            initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
-            transition={spanTransition}
-            onAnimationComplete={
-              index === elements.length - 1 ? onAnimationComplete : undefined
+            initial={prefersReducedMotion ? false : fromSnapshot}
+            animate={
+              prefersReducedMotion
+                ? toSnapshots[toSnapshots.length - 1]
+                : inView
+                  ? animateKeyframes
+                  : fromSnapshot
             }
+            transition={spanTransition}
+            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
           >
             {segment === " " ? "\u00A0" : segment}
             {animateBy === "words" && index < elements.length - 1 && "\u00A0"}

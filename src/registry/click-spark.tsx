@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useCallback, ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface ClickSparkProps {
@@ -29,6 +30,8 @@ export function ClickSpark({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Array<{ x: number; y: number; angle: number; startTime: number }>>([]);
   const startTimeRef = useRef<number | null>(null);
+  // Reduced motion: no sparks and no draw loop; clicks still reach the children.
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,14 +77,14 @@ export function ClickSpark({
           return t * (2 - t);
       }
     },
-    [easing]
+    [easing],
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx || prefersReducedMotion) return;
 
     let animationId: number;
 
@@ -119,11 +122,20 @@ export function ClickSpark({
 
     animationId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animationId);
-  }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
+  }, [
+    sparkColor,
+    sparkSize,
+    sparkRadius,
+    sparkCount,
+    duration,
+    easeFunc,
+    extraScale,
+    prefersReducedMotion,
+  ]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || prefersReducedMotion) return;
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -140,10 +152,10 @@ export function ClickSpark({
   };
 
   return (
-    <div className={cn("relative w-full h-full", className)} onClick={handleClick}>
+    <div className={cn("relative h-full w-full", className)} onClick={handleClick}>
       <canvas
         ref={canvasRef}
-        className="w-full h-full block absolute top-0 left-0 select-none pointer-events-none z-50"
+        className="pointer-events-none absolute left-0 top-0 z-50 block h-full w-full select-none"
       />
       {children}
     </div>

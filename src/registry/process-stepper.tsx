@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useLayoutEffect, Children } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface ProcessStepperProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,7 +27,7 @@ export function ProcessStepper({
 }: ProcessStepperProps) {
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [direction, setDirection] = useState(0);
-  
+
   const stepsArray = Children.toArray(children);
   const totalSteps = stepsArray.length;
   const isCompleted = currentStep > totalSteps;
@@ -64,8 +64,8 @@ export function ProcessStepper({
   return (
     <div
       className={cn(
-        "flex flex-col w-full max-w-md mx-auto rounded-3xl border border-border bg-card shadow-sm overflow-hidden",
-        className
+        "mx-auto flex w-full max-w-md flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm",
+        className,
       )}
       {...rest}
     >
@@ -73,7 +73,7 @@ export function ProcessStepper({
         {stepsArray.map((_, index) => {
           const stepNumber = index + 1;
           const isNotLastStep = index < totalSteps - 1;
-          
+
           return (
             <React.Fragment key={stepNumber}>
               <StepIndicator
@@ -95,7 +95,7 @@ export function ProcessStepper({
         isCompleted={isCompleted}
         currentStep={currentStep}
         direction={direction}
-        className="px-8 space-y-4"
+        className="space-y-4 px-8"
       >
         {stepsArray[currentStep - 1]}
       </StepContentWrapper>
@@ -106,14 +106,14 @@ export function ProcessStepper({
             {currentStep !== 1 && (
               <button
                 onClick={handleBack}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2"
+                className="px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {backButtonText}
               </button>
             )}
             <button
               onClick={isLastStep ? handleComplete : handleNext}
-              className="flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-2 text-sm font-medium transition hover:opacity-90 active:scale-95"
+              className="flex items-center justify-center rounded-full bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90 active:scale-95 motion-reduce:transition-none motion-reduce:active:scale-100"
             >
               {isLastStep ? "Complete" : nextButtonText}
             </button>
@@ -124,25 +124,25 @@ export function ProcessStepper({
   );
 }
 
-function StepContentWrapper({ 
-  isCompleted, 
-  currentStep, 
-  direction, 
-  children, 
-  className 
-}: any) {
+function StepContentWrapper({ isCompleted, currentStep, direction, children, className }: any) {
   const [parentHeight, setParentHeight] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
       style={{ position: "relative", overflow: "hidden" }}
       animate={{ height: isCompleted ? 0 : parentHeight }}
-      transition={{ type: "spring", duration: 0.4 }}
+      transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", duration: 0.4 }}
       className={className}
     >
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         {!isCompleted && (
-          <SlideTransition key={currentStep} direction={direction} onHeightReady={(h: number) => setParentHeight(h)}>
+          <SlideTransition
+            key={currentStep}
+            direction={direction}
+            reduced={!!prefersReducedMotion}
+            onHeightReady={(h: number) => setParentHeight(h)}
+          >
             {children}
           </SlideTransition>
         )}
@@ -151,7 +151,7 @@ function StepContentWrapper({
   );
 }
 
-function SlideTransition({ children, direction, onHeightReady }: any) {
+function SlideTransition({ children, direction, reduced, onHeightReady }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -163,14 +163,15 @@ function SlideTransition({ children, direction, onHeightReady }: any) {
       ref={containerRef}
       custom={direction}
       variants={{
-        enter: (dir) => ({ x: dir >= 0 ? "-100%" : "100%", opacity: 0 }),
+        // Reduced motion: a short opacity-only crossfade instead of a slide.
+        enter: (dir) => ({ x: reduced ? "0%" : dir >= 0 ? "-100%" : "100%", opacity: 0 }),
         center: { x: "0%", opacity: 1 },
-        exit: (dir) => ({ x: dir >= 0 ? "50%" : "-50%", opacity: 0 }),
+        exit: (dir) => ({ x: reduced ? "0%" : dir >= 0 ? "50%" : "-50%", opacity: 0 }),
       }}
       initial="enter"
       animate="center"
       exit="exit"
-      transition={{ duration: 0.4 }}
+      transition={{ duration: reduced ? 0.15 : 0.4 }}
       style={{ position: "absolute", left: 0, right: 0, top: 0 }}
     >
       {children}
@@ -178,12 +179,13 @@ function SlideTransition({ children, direction, onHeightReady }: any) {
   );
 }
 
-export function Step({ children, className }: { children: React.ReactNode, className?: string }) {
+export function Step({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn("w-full", className)}>{children}</div>;
 }
 
 function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }: any) {
   const status = currentStep === step ? "active" : currentStep < step ? "inactive" : "complete";
+  const prefersReducedMotion = useReducedMotion();
 
   const handleClick = () => {
     if (step !== currentStep && !disableStepIndicators) onClickStep(step);
@@ -193,20 +195,32 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
     <motion.div
       onClick={handleClick}
       className={cn(
-        "relative outline-none focus:outline-none flex-shrink-0",
-        disableStepIndicators ? "pointer-events-none opacity-50" : "cursor-pointer"
+        "relative flex-shrink-0 outline-none focus:outline-none",
+        disableStepIndicators ? "pointer-events-none opacity-50" : "cursor-pointer",
       )}
       animate={status}
       initial={false}
     >
       <motion.div
         variants={{
-          inactive: { scale: 1, backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" },
-          active: { scale: 1, backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" },
-          complete: { scale: 1, backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" },
+          inactive: {
+            scale: 1,
+            backgroundColor: "hsl(var(--muted))",
+            color: "hsl(var(--muted-foreground))",
+          },
+          active: {
+            scale: 1,
+            backgroundColor: "hsl(var(--primary))",
+            color: "hsl(var(--primary-foreground))",
+          },
+          complete: {
+            scale: 1,
+            backgroundColor: "hsl(var(--primary))",
+            color: "hsl(var(--primary-foreground))",
+          },
         }}
-        transition={{ duration: 0.3 }}
-        className="flex h-10 w-10 items-center justify-center rounded-full font-semibold border-2 border-transparent"
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3 }}
+        className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent font-semibold"
       >
         {status === "complete" ? (
           <CheckIcon className="h-5 w-5 text-primary-foreground" />
@@ -221,23 +235,25 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators }
 }
 
 function StepConnector({ isComplete }: { isComplete: boolean }) {
+  const prefersReducedMotion = useReducedMotion();
   return (
     <div className="relative mx-3 h-1 flex-1 overflow-hidden rounded-full bg-muted">
       <motion.div
         className="absolute left-0 top-0 h-full bg-primary"
         initial={false}
         animate={{ width: isComplete ? "100%" : "0%" }}
-        transition={{ duration: 0.4 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.4 }}
       />
     </div>
   );
 }
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
+  const prefersReducedMotion = useReducedMotion();
   return (
     <svg {...props} fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
       <motion.path
-        initial={{ pathLength: 0 }}
+        initial={prefersReducedMotion ? false : { pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ delay: 0.1, type: "tween", ease: "easeOut", duration: 0.3 }}
         strokeLinecap="round"

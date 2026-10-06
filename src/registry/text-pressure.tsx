@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface TextPressureProps {
@@ -71,6 +72,7 @@ export function TextPressure({
   const [lineHeight, setLineHeight] = useState(1);
 
   const chars = text.split("");
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -133,6 +135,16 @@ export function TextPressure({
   }, [setSize]);
 
   useEffect(() => {
+    // Reduced motion: no pointer-driven loop; every glyph gets the same settled axes.
+    if (prefersReducedMotion) {
+      spansRef.current.forEach((span) => {
+        if (!span) return;
+        span.style.fontVariationSettings = `'wght' ${weight ? 600 : 400}, 'wdth' 100, 'ital' 0`;
+        span.style.opacity = "1";
+      });
+      return;
+    }
+
     let rafId: number;
     const animate = () => {
       mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
@@ -174,7 +186,7 @@ export function TextPressure({
 
     animate();
     return () => cancelAnimationFrame(rafId);
-  }, [width, weight, italic, alpha]);
+  }, [width, weight, italic, alpha, prefersReducedMotion]);
 
   const styleElement = useMemo(() => {
     return (
