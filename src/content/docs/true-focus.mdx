@@ -1,0 +1,41 @@
+---
+title: True Focus
+description: A typographic animation that moves a camera-like focus frame between words while blurring the rest.
+---
+
+A typographic animation that moves a camera-like focus frame between words while blurring the rest. It supports both automatic interval scrolling and manual hover modes.
+
+<ComponentPreview name="true-focus" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add true-focus
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/true-focus.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TrueFocus } from "@/components/ui/true-focus";
+
+export default function Example() {
+  return (
+    <TrueFocus 
+      sentence="Focus On What Matters"
+      manualMode={false}
+      blurAmount={4}
+      borderColor="#38bdf8"
+      animationDuration={0.6}
+      pauseBetweenAnimations={1.5}
+    />
+  );
+}
+```

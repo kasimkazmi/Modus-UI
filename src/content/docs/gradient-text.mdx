@@ -1,0 +1,40 @@
+---
+title: Gradient Text
+description: Seamlessly looping animated gradient text that can optionally wrap its borders.
+---
+
+Seamlessly looping animated gradient text driven by `framer-motion` animation frames. Includes support for horizontal, vertical, and diagonal sweeps, and an optional gradient border tracing mode.
+
+<ComponentPreview name="gradient-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add gradient-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/gradient-text.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GradientText } from "@/components/ui/gradient-text";
+
+export default function Example() {
+  return (
+    <GradientText 
+      className="text-4xl font-bold"
+      colors={["#f43f5e", "#d946ef", "#8b5cf6", "#3b82f6"]}
+      animationSpeed={5}
+    >
+      Fluid Gradient Text
+    </GradientText>
+  );
+}
+```

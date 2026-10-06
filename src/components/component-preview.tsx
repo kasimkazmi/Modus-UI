@@ -24,6 +24,9 @@ import SplitTextDemo from "@/registry/split-text-demo";
 import DecryptedTextDemo from "@/registry/decrypted-text-demo";
 import BounceCardsDemo from "@/registry/bounce-cards-demo";
 import FlowingMenuDemo from "@/registry/flowing-menu-demo";
+import TrueFocusDemo from "@/registry/true-focus-demo";
+import BorderGlowDemo from "@/registry/border-glow-demo";
+import GradientTextDemo from "@/registry/gradient-text-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -53,6 +56,9 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "decrypted-text": DecryptedTextDemo,
   "bounce-cards": BounceCardsDemo,
   "flowing-menu": FlowingMenuDemo,
+  "true-focus": TrueFocusDemo,
+  "border-glow": BorderGlowDemo,
+  "gradient-text": GradientTextDemo,
 };
 
 interface ComponentPreviewProps {

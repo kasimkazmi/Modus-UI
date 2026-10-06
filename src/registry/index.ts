@@ -144,5 +144,23 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/flowing-menu.tsx"],
   },
+  {
+    name: "true-focus",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/true-focus.tsx"],
+  },
+  {
+    name: "border-glow",
+    type: "components:ui",
+    dependencies: ["clsx", "tailwind-merge"],
+    files: ["registry/border-glow.tsx"],
+  },
+  {
+    name: "gradient-text",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/gradient-text.tsx"],
+  },
 ];
 

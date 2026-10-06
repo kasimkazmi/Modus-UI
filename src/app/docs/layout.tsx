@@ -60,11 +60,20 @@ const DOC_CATEGORIES = [
     title: "Typography",
     icon: Type,
     items: [
+      { title: "True Focus", href: "/docs/true-focus" },
+      { title: "Gradient Text", href: "/docs/gradient-text" },
       { title: "Blur Text", href: "/docs/blur-text" },
       { title: "Split Text", href: "/docs/split-text" },
       { title: "Decrypted Text", href: "/docs/decrypted-text" },
       { title: "Shimmer Text", href: "/docs/shimmer-text" },
       { title: "Floating Text", href: "/docs/floating-text" },
+    ]
+  },
+  {
+    title: "Components",
+    icon: LayoutTemplate,
+    items: [
+      { title: "Border Glow", href: "/docs/border-glow" },
     ]
   },
   {

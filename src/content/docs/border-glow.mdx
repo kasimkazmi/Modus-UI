@@ -1,0 +1,43 @@
+---
+title: Border Glow
+description: An interactive card wrapper with an ambient glowing mesh gradient that mathematically tracks the mouse.
+---
+
+An interactive card wrapper with an ambient glowing mesh gradient that mathematically tracks the mouse. The glow traces the borders exactly and cascades over the inner padding realistically.
+
+<ComponentPreview name="border-glow" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add border-glow
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/border-glow.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BorderGlow } from "@/components/ui/border-glow";
+
+export default function Example() {
+  return (
+    <BorderGlow
+      className="w-[300px] h-[350px] p-8"
+      glowColor="200 100 65" 
+      colors={["#38bdf8", "#818cf8", "#c084fc"]}
+      animated={true}
+      backgroundColor="#09090b"
+    >
+      <h3 className="text-xl font-medium text-white">Interactive Glow</h3>
+      <p className="text-zinc-400">Content goes here.</p>
+    </BorderGlow>
+  );
+}
+```
