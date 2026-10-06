@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface MagnetProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,9 +29,11 @@ export function Magnet({
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const magnetRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (disabled) {
+    if (disabled || prefersReducedMotion) {
+      setIsActive(false);
       setPosition({ x: 0, y: 0 });
       return;
     }
@@ -61,16 +64,12 @@ export function Magnet({
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [padding, disabled, magnetStrength]);
+  }, [padding, disabled, magnetStrength, prefersReducedMotion]);
 
   const transitionStyle = isActive ? activeTransition : inactiveTransition;
 
   return (
-    <div
-      ref={magnetRef}
-      className={cn("relative inline-block", wrapperClassName)}
-      {...props}
-    >
+    <div ref={magnetRef} className={cn("relative inline-block", wrapperClassName)} {...props}>
       <div
         className={cn("will-change-transform", innerClassName)}
         style={{

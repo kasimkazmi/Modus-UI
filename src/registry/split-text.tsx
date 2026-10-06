@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,7 @@ export function SplitText({
 }: SplitTextProps) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, amount: threshold });
+  const prefersReducedMotion = useReducedMotion();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -51,12 +52,9 @@ export function SplitText({
     if (splitType === "words") {
       const words = text.split(" ");
       return words.map((word, i) => (
-        <motion.span
-          key={i}
-          variants={itemVariants}
-          className="inline-block whitespace-pre"
-        >
-          {word}{i !== words.length - 1 ? " " : ""}
+        <motion.span key={i} variants={itemVariants} className="inline-block whitespace-pre">
+          {word}
+          {i !== words.length - 1 ? " " : ""}
         </motion.span>
       ));
     }
@@ -79,7 +77,7 @@ export function SplitText({
       ));
     }
 
-    // Lines are a bit tricky without JS width measurement, 
+    // Lines are a bit tricky without JS width measurement,
     // but splitting by newline is a good fallback.
     const lines = text.split("\n");
     return lines.map((line, i) => (
@@ -95,8 +93,9 @@ export function SplitText({
     <MotionTag
       ref={ref}
       variants={containerVariants}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
+      // Reduced motion: render the settled text from the first frame.
+      initial={prefersReducedMotion ? false : "hidden"}
+      animate={prefersReducedMotion || inView ? "visible" : "hidden"}
       className={cn("overflow-hidden", className)}
       style={{ textAlign }}
     >

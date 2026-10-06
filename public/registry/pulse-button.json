@@ -9,7 +9,7 @@
   "files": [
     {
       "path": "registry/pulse-button.tsx",
-      "content": "\"use client\"\n\nimport { motion } from \"framer-motion\"\n\nimport { cn } from \"@/lib/utils\"\n\ninterface PulseButtonProps {\n  children: React.ReactNode\n  className?: string\n}\n\nexport function PulseButton({ children, className }: PulseButtonProps) {\n  return (\n    <motion.button\n      className={cn(\n        \"px-4 py-2 bg-green-500 text-white rounded-lg\",\n        className\n      )}\n      animate={{ scale: [1, 1.1, 1] }}\n      transition={{ duration: 1, repeat: Infinity }}\n    >\n      {children}\n    </motion.button>\n  )\n}"
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"framer-motion\";\n\nimport { cn } from \"@/lib/utils\";\n\ninterface PulseButtonProps {\n  children: React.ReactNode;\n  className?: string;\n}\n\nexport function PulseButton({ children, className }: PulseButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <motion.button\n      className={cn(\"rounded-lg bg-green-500 px-4 py-2 text-white\", className)}\n      // Reduced motion: no pulse; the button rests at its natural scale.\n      animate={prefersReducedMotion ? undefined : { scale: [1, 1.1, 1] }}\n      transition={prefersReducedMotion ? undefined : { duration: 1, repeat: Infinity }}\n    >\n      {children}\n    </motion.button>\n  );\n}\n"
     }
   ]
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const FALLBACK_RGB = { r: 255, g: 255, b: 255 };
@@ -34,6 +35,7 @@ export function LetterGlitch({
   const grid = useRef({ columns: 0, rows: 0 });
   const context = useRef<CanvasRenderingContext2D | null>(null);
   const lastGlitchTime = useRef(Date.now());
+  const prefersReducedMotion = useReducedMotion();
 
   const lettersAndSymbols = Array.from(characters);
 
@@ -191,13 +193,18 @@ export function LetterGlitch({
     animationRef.current = requestAnimationFrame(animate);
   };
 
+  // Reduced motion: resizeCanvas() draws one static frame; never start the loop.
+  const start = () => {
+    if (!prefersReducedMotion) animate();
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     context.current = canvas.getContext("2d");
     resizeCanvas();
-    animate();
+    start();
 
     let resizeTimeout: NodeJS.Timeout;
 
@@ -206,7 +213,7 @@ export function LetterGlitch({
       resizeTimeout = setTimeout(() => {
         if (animationRef.current) cancelAnimationFrame(animationRef.current);
         resizeCanvas();
-        animate();
+        start();
       }, 100);
     };
 
@@ -216,17 +223,17 @@ export function LetterGlitch({
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
     };
-  }, [glitchSpeed, smooth]);
+  }, [glitchSpeed, smooth, prefersReducedMotion]);
 
   return (
     <div
-      className={cn("relative w-full h-full overflow-hidden", className)}
+      className={cn("relative h-full w-full overflow-hidden", className)}
       style={{ backgroundColor: backgroundColor || (lightMode ? "#ffffff" : "#09090b") }}
     >
-      <canvas ref={canvasRef} className="block w-full h-full" />
+      <canvas ref={canvasRef} className="block h-full w-full" />
       {outerVignette && (
         <div
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          className="pointer-events-none absolute left-0 top-0 h-full w-full"
           style={{
             background: lightMode
               ? "radial-gradient(circle, rgba(255,255,255,0) 58%, rgba(255,255,255,0.96) 100%)"
@@ -236,7 +243,7 @@ export function LetterGlitch({
       )}
       {centerVignette && (
         <div
-          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          className="pointer-events-none absolute left-0 top-0 h-full w-full"
           style={{
             background: lightMode
               ? "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%)"

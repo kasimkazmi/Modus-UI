@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface FocusCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -9,19 +10,20 @@ export interface FocusCardProps extends React.HTMLAttributes<HTMLDivElement> {
   spotlightColor?: string;
 }
 
-export function FocusCard({ 
-  children, 
-  className, 
+export function FocusCard({
+  children,
+  className,
   spotlightColor = "rgba(255, 255, 255, 0.15)",
-  ...props 
+  ...props
 }: FocusCardProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current || isFocused) return;
+    if (!divRef.current || isFocused || prefersReducedMotion) return;
 
     const rect = divRef.current.getBoundingClientRect();
     setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -55,15 +57,18 @@ export function FocusCard({
       onMouseLeave={handleMouseLeave}
       className={cn(
         "relative overflow-hidden rounded-3xl border border-border bg-card p-8",
-        className
+        className,
       )}
       {...props}
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out motion-reduce:transition-none"
         style={{
           opacity,
-          background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)`,
+          // Reduced motion: a static, centred spotlight instead of one that follows the pointer.
+          background: prefersReducedMotion
+            ? `radial-gradient(circle at 50% 50%, ${spotlightColor}, transparent 80%)`
+            : `radial-gradient(circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 80%)`,
         }}
         aria-hidden="true"
       />

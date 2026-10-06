@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface FloatingDockItem {
@@ -19,15 +26,17 @@ export interface FloatingDockProps {
 
 export function FloatingDock({ items, className, direction = "bottom" }: FloatingDockProps) {
   const mouseX = useMotionValue(Infinity);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
-      onMouseMove={(e) => mouseX.set(e.pageX)}
+      // Reduced motion: keep icons at rest size instead of magnifying toward the pointer.
+      onMouseMove={(e) => !prefersReducedMotion && mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "mx-auto flex h-16 items-end gap-4 rounded-3xl border border-[#E0DEDB] bg-[#F7F5F3]/90 px-4 pb-3 shadow-xl backdrop-blur-md relative overflow-hidden",
-        "before:absolute before:inset-0 before:opacity-[0.03] before:pointer-events-none before:bg-[radial-gradient(circle,_#37322F_1px,_transparent_1px)] before:bg-[length:8px_8px]",
-        className
+        "relative mx-auto flex h-16 items-end gap-4 overflow-hidden rounded-3xl border border-[#E0DEDB] bg-[#F7F5F3]/90 px-4 pb-3 shadow-xl backdrop-blur-md",
+        "before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle,_#37322F_1px,_transparent_1px)] before:bg-[length:8px_8px] before:opacity-[0.03]",
+        className,
       )}
     >
       {items.map((item, idx) => (
@@ -39,6 +48,7 @@ export function FloatingDock({ items, className, direction = "bottom" }: Floatin
           href={item.href}
           onClick={item.onClick}
           direction={direction}
+          reducedMotion={!!prefersReducedMotion}
         />
       ))}
     </motion.div>
@@ -52,9 +62,10 @@ interface DockIconProps {
   href?: string;
   onClick?: () => void;
   direction: "top" | "bottom";
+  reducedMotion: boolean;
 }
 
-function DockIcon({ mouseX, title, icon, href, onClick, direction }: DockIconProps) {
+function DockIcon({ mouseX, title, icon, href, onClick, direction, reducedMotion }: DockIconProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -85,23 +96,33 @@ function DockIcon({ mouseX, title, icon, href, onClick, direction }: DockIconPro
       style={{ width: size, height: size }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      whileTap={{ scale: 0.9 }}
+      whileTap={reducedMotion ? undefined : { scale: 0.9 }}
       className={cn(
         "relative flex items-center justify-center rounded-full border border-[#E0DEDB] bg-white text-[#37322F] shadow-sm transition-colors hover:bg-[#FAF9F7]",
-        "group cursor-pointer"
+        "group cursor-pointer",
       )}
       onClick={onClick}
     >
       <AnimatePresence>
         {hovered && (
           <motion.div
-            initial={{ opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }}
+            initial={
+              reducedMotion
+                ? { opacity: 0, y: direction === "bottom" ? -36 : 36, scale: 1 }
+                : { opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }
+            }
             animate={{ opacity: 1, y: direction === "bottom" ? -36 : 36, scale: 1 }}
-            exit={{ opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            exit={
+              reducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: direction === "bottom" ? -10 : 10, scale: 0.95 }
+            }
+            transition={
+              reducedMotion ? { duration: 0.15 } : { type: "spring", stiffness: 300, damping: 20 }
+            }
             className={cn(
-              "absolute z-50 rounded-md border border-[#E0DEDB] bg-[#F7F5F3] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#37322F] shadow-sm whitespace-nowrap",
-              direction === "bottom" ? "-top-2" : "-bottom-2"
+              "absolute z-50 whitespace-nowrap rounded-md border border-[#E0DEDB] bg-[#F7F5F3] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#37322F] shadow-sm",
+              direction === "bottom" ? "-top-2" : "-bottom-2",
             )}
           >
             {title}

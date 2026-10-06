@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 const springValues = {
   damping: 30,
@@ -54,6 +54,8 @@ export function TiltedCard({
   });
 
   const [lastY, setLastY] = useState(0);
+  // Reduced motion: no tilt, zoom or caption swing; the caption still fades in and tracks the pointer.
+  const prefersReducedMotion = useReducedMotion();
 
   function handleMouse(e: React.MouseEvent<HTMLElement>) {
     if (!ref.current) return;
@@ -65,19 +67,21 @@ export function TiltedCard({
     const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
     const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
 
-    rotateX.set(rotationX);
-    rotateY.set(rotationY);
+    if (!prefersReducedMotion) {
+      rotateX.set(rotationX);
+      rotateY.set(rotationY);
+    }
 
     x.set(e.clientX - rect.left);
     y.set(e.clientY - rect.top);
 
     const velocityY = offsetY - lastY;
-    rotateFigcaption.set(-velocityY * 0.6);
+    if (!prefersReducedMotion) rotateFigcaption.set(-velocityY * 0.6);
     setLastY(offsetY);
   }
 
   function handleMouseEnter() {
-    scale.set(scaleOnHover);
+    if (!prefersReducedMotion) scale.set(scaleOnHover);
     opacity.set(1);
   }
 
@@ -92,7 +96,7 @@ export function TiltedCard({
   return (
     <figure
       ref={ref}
-      className="relative w-full h-full [perspective:800px] flex flex-col items-center justify-center"
+      className="relative flex h-full w-full flex-col items-center justify-center [perspective:800px]"
       style={{
         height: containerHeight,
         width: containerWidth,
@@ -102,7 +106,7 @@ export function TiltedCard({
       onMouseLeave={handleMouseLeave}
     >
       {showMobileWarning && (
-        <div className="absolute top-4 text-center text-sm block sm:hidden text-muted-foreground">
+        <div className="absolute top-4 block text-center text-sm text-muted-foreground sm:hidden">
           This effect is optimized for desktop pointers.
         </div>
       )}
@@ -120,7 +124,7 @@ export function TiltedCard({
         <motion.img
           src={imageSrc}
           alt={altText}
-          className="absolute top-0 left-0 object-cover rounded-xl will-change-transform [transform:translateZ(0)] shadow-lg"
+          className="absolute left-0 top-0 rounded-xl object-cover shadow-lg will-change-transform [transform:translateZ(0)]"
           style={{
             width: imageWidth,
             height: imageHeight,
@@ -128,7 +132,7 @@ export function TiltedCard({
         />
 
         {displayOverlayContent && overlayContent && (
-          <motion.div className="absolute top-0 left-0 z-[2] will-change-transform [transform:translateZ(30px)]">
+          <motion.div className="absolute left-0 top-0 z-[2] will-change-transform [transform:translateZ(30px)]">
             {overlayContent}
           </motion.div>
         )}
@@ -136,7 +140,7 @@ export function TiltedCard({
 
       {showTooltip && (
         <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 rounded-md bg-foreground px-3 py-1.5 text-xs text-background opacity-0 z-[3] hidden sm:block shadow-xl font-medium"
+          className="pointer-events-none absolute left-0 top-0 z-[3] hidden rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-xl sm:block"
           style={{
             x,
             y,

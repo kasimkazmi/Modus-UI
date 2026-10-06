@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const useMedia = (queries: string[], values: number[], defaultValue: number) => {
@@ -61,10 +61,11 @@ export function MasonryGrid({
   const columns = useMedia(
     ["(min-width: 1500px)", "(min-width: 1000px)", "(min-width: 600px)", "(min-width: 400px)"],
     [5, 4, 3, 2],
-    1
+    1,
   );
 
   const [containerRef, { width }] = useMeasure();
+  const prefersReducedMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -128,18 +129,23 @@ export function MasonryGrid({
       style={{ height: containerHeight > 0 ? containerHeight : "100vh" }}
     >
       <AnimatePresence>
-        {mounted && width > 0 &&
+        {mounted &&
+          width > 0 &&
           grid.map((item, index) => (
             <motion.div
               key={item.id}
               layout
-              initial={{
-                opacity: 0,
-                ...getInitialPosition(item),
-                width: item.w,
-                height: item.h,
-                filter: "blur(10px)",
-              }}
+              initial={
+                prefersReducedMotion
+                  ? false
+                  : {
+                      opacity: 0,
+                      ...getInitialPosition(item),
+                      width: item.w,
+                      height: item.h,
+                      filter: "blur(10px)",
+                    }
+              }
               animate={{
                 opacity: 1,
                 x: item.x,
@@ -148,17 +154,25 @@ export function MasonryGrid({
                 height: item.h,
                 filter: "blur(0px)",
               }}
-              exit={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                opacity: { duration: 0.5, delay: index * stagger },
-                filter: { duration: 0.5, delay: index * stagger },
-                layout: { type: "spring", stiffness: 300, damping: 30 },
-              }}
+              exit={
+                prefersReducedMotion
+                  ? { opacity: 0 }
+                  : { opacity: 0, scale: 0.9, filter: "blur(10px)" }
+              }
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                      opacity: { duration: 0.5, delay: index * stagger },
+                      filter: { duration: 0.5, delay: index * stagger },
+                      layout: { type: "spring", stiffness: 300, damping: 30 },
+                    }
+              }
               className="absolute box-border overflow-hidden"
-              whileHover={{ scale: 0.98 }}
+              whileHover={prefersReducedMotion ? undefined : { scale: 0.98 }}
             >
               {item.content}
             </motion.div>

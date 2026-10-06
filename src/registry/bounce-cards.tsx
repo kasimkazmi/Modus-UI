@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BounceCardsProps {
@@ -32,6 +32,8 @@ export function BounceCards({
   ],
 }: BounceCardsProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // Reduced motion: cards start in place and hover rearrangements snap instantly.
+  const prefersReducedMotion = useReducedMotion();
 
   const getTransform = (index: number, baseTransform: string) => {
     if (!enableHover || hoveredIndex === null) return baseTransform;
@@ -48,12 +50,9 @@ export function BounceCards({
 
     if (match) {
       const currentX = parseFloat(match[1]);
-      return baseTransform.replace(
-        translateRegex,
-        `translate(${currentX + pushOffset}px)`
-      );
+      return baseTransform.replace(translateRegex, `translate(${currentX + pushOffset}px)`);
     }
-    
+
     return baseTransform === "none"
       ? `translate(${pushOffset}px)`
       : `${baseTransform} translate(${pushOffset}px)`;
@@ -77,33 +76,33 @@ export function BounceCards({
         return (
           <motion.div
             key={idx}
-            className="absolute w-[200px] aspect-square border-8 border-background rounded-[30px] overflow-hidden shadow-xl"
-            initial={{ scale: 0 }}
-            animate={{ 
+            className="absolute aspect-square w-[200px] overflow-hidden rounded-[30px] border-8 border-background shadow-xl"
+            initial={prefersReducedMotion ? false : { scale: 0 }}
+            animate={{
               scale: 1,
               transform: currentTransform,
             }}
-            transition={{
-              scale: {
-                type: "spring",
-                bounce: 0.5,
-                delay: animationDelay + idx * animationStagger,
-              },
-              transform: {
-                type: "spring",
-                bounce: 0.4,
-                delay: hoveredIndex !== null ? pushDelay : 0,
-              }
-            }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : {
+                    scale: {
+                      type: "spring",
+                      bounce: 0.5,
+                      delay: animationDelay + idx * animationStagger,
+                    },
+                    transform: {
+                      type: "spring",
+                      bounce: 0.4,
+                      delay: hoveredIndex !== null ? pushDelay : 0,
+                    },
+                  }
+            }
             onMouseEnter={() => setHoveredIndex(idx)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="w-full h-full object-cover"
-              src={src}
-              alt={`card-${idx}`}
-            />
+            <img className="h-full w-full object-cover" src={src} alt={`card-${idx}`} />
           </motion.div>
         );
       })}

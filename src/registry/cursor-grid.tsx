@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface CursorGridProps {
@@ -56,6 +57,8 @@ export function CursorGrid({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
+  // Reduced motion: the static grid is drawn, but cursor glow and click pulses are off.
+  const prefersReducedMotion = useReducedMotion();
 
   const propsRef = useRef({
     color,
@@ -309,8 +312,10 @@ export function CursorGrid({
     rebuild();
     wake();
 
-    container.addEventListener("pointermove", onPointerMove as EventListener);
-    container.addEventListener("pointerdown", onPointerDown as EventListener);
+    if (!prefersReducedMotion) {
+      container.addEventListener("pointermove", onPointerMove as EventListener);
+      container.addEventListener("pointerdown", onPointerDown as EventListener);
+    }
 
     return () => {
       cancelAnimationFrame(raf);
@@ -318,7 +323,7 @@ export function CursorGrid({
       container.removeEventListener("pointermove", onPointerMove as EventListener);
       container.removeEventListener("pointerdown", onPointerDown as EventListener);
     };
-  }, [cellSize]);
+  }, [cellSize, prefersReducedMotion]);
 
   useEffect(() => {
     wakeRef.current?.();

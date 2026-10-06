@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export interface GridMotionProps {
@@ -37,7 +37,7 @@ function GridRow({
         const content = combinedItems[rowIndex * 7 + itemIndex];
         return (
           <div key={itemIndex} className="relative">
-            <div className="relative flex h-full w-full cursor-default items-center justify-center overflow-hidden rounded-[16px] border border-border bg-card text-[1.5rem] text-foreground shadow-sm transition-transform duration-300 hover:scale-[1.02]">
+            <div className="relative flex h-full w-full cursor-default items-center justify-center overflow-hidden rounded-[16px] border border-border bg-card text-[1.5rem] text-foreground shadow-sm transition-transform duration-300 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100">
               {typeof content === "string" && content.startsWith("http") ? (
                 <div
                   className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
@@ -68,15 +68,18 @@ export function GridMotion({
 
   const mouseX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
   const smoothX = useSpring(mouseX, { damping: 50, stiffness: 400 });
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    // Reduced motion: the rows stay at rest instead of following the pointer.
+    if (prefersReducedMotion) return;
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX]);
+  }, [mouseX, prefersReducedMotion]);
 
   return (
     <div

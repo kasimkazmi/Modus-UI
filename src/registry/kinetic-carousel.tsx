@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useTransform, PanInfo } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const DRAG_BUFFER = 0;
@@ -36,7 +36,7 @@ function CarouselItem({
 
   return (
     <motion.div
-      className="relative shrink-0 flex flex-col overflow-hidden cursor-grab active:cursor-grabbing border border-border bg-card rounded-2xl"
+      className="relative flex shrink-0 cursor-grab flex-col overflow-hidden rounded-2xl border border-border bg-card active:cursor-grabbing"
       style={{
         width: itemWidth,
         rotateY: rotateY,
@@ -83,6 +83,7 @@ export function KineticCarousel({
   const [isJumping, setIsJumping] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (pauseOnHover && containerRef.current) {
@@ -99,7 +100,8 @@ export function KineticCarousel({
   }, [pauseOnHover]);
 
   useEffect(() => {
-    if (!autoplay || itemsForRender.length <= 1) return;
+    // Reduced motion: no auto-advance; drag and the dots still work.
+    if (!autoplay || prefersReducedMotion || itemsForRender.length <= 1) return;
     if (pauseOnHover && isHovered) return;
 
     const timer = setInterval(() => {
@@ -107,7 +109,14 @@ export function KineticCarousel({
     }, autoplayDelay);
 
     return () => clearInterval(timer);
-  }, [autoplay, autoplayDelay, isHovered, pauseOnHover, itemsForRender.length]);
+  }, [
+    autoplay,
+    prefersReducedMotion,
+    autoplayDelay,
+    isHovered,
+    pauseOnHover,
+    itemsForRender.length,
+  ]);
 
   useEffect(() => {
     const startingPosition = loop ? 1 : 0;
@@ -121,7 +130,7 @@ export function KineticCarousel({
     }
   }, [itemsForRender.length, loop, position]);
 
-  const effectiveTransition = isJumping ? { duration: 0 } : SPRING_OPTIONS;
+  const effectiveTransition = isJumping || prefersReducedMotion ? { duration: 0 } : SPRING_OPTIONS;
 
   const handleAnimationStart = () => setIsAnimating(true);
 
@@ -163,8 +172,8 @@ export function KineticCarousel({
       offset.x < -DRAG_BUFFER || velocity.x < -VELOCITY_THRESHOLD
         ? 1
         : offset.x > DRAG_BUFFER || velocity.x > VELOCITY_THRESHOLD
-        ? -1
-        : 0;
+          ? -1
+          : 0;
 
     if (direction === 0) return;
 
@@ -188,8 +197,8 @@ export function KineticCarousel({
     items.length === 0
       ? 0
       : loop
-      ? (position - 1 + items.length) % items.length
-      : Math.min(position, items.length - 1);
+        ? (position - 1 + items.length) % items.length
+        : Math.min(position, items.length - 1);
 
   if (items.length === 0) return null;
 
@@ -197,8 +206,8 @@ export function KineticCarousel({
     <div
       ref={containerRef}
       className={cn(
-        "relative overflow-hidden p-4 rounded-[24px] border border-border bg-background",
-        className
+        "relative overflow-hidden rounded-[24px] border border-border bg-background p-4",
+        className,
       )}
       style={{ width: baseWidth }}
       {...props}
@@ -234,7 +243,7 @@ export function KineticCarousel({
         ))}
       </motion.div>
 
-      <div className="flex w-full justify-center mt-4">
+      <div className="mt-4 flex w-full justify-center">
         <div className="flex w-[150px] justify-between px-8">
           {items.map((_, index) => (
             <motion.button
@@ -243,12 +252,12 @@ export function KineticCarousel({
               aria-label={`Go to slide ${index + 1}`}
               aria-current={activeIndex === index}
               className={cn(
-                "h-2 w-2 rounded-full cursor-pointer appearance-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-                activeIndex === index ? "bg-primary" : "bg-muted-foreground/30"
+                "h-2 w-2 cursor-pointer appearance-none rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                activeIndex === index ? "bg-primary" : "bg-muted-foreground/30",
               )}
               animate={{ scale: activeIndex === index ? 1.2 : 1 }}
               onClick={() => setPosition(loop ? index + 1 : index)}
-              transition={{ duration: 0.15 }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.15 }}
             />
           ))}
         </div>

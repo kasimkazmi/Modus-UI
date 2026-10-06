@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface AnimatedItemProps {
@@ -15,16 +15,19 @@ interface AnimatedItemProps {
 const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }: AnimatedItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.5, once: false });
-  
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.div
       ref={ref}
       data-index={index}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
-      transition={{ duration: 0.2, delay }}
+      initial={prefersReducedMotion ? false : { scale: 0.8, opacity: 0 }}
+      animate={
+        prefersReducedMotion || inView ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }
+      }
+      transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2, delay }}
       className="mb-4 cursor-pointer"
     >
       {children}
@@ -45,8 +48,16 @@ export interface AnimatedListProps {
 
 export function AnimatedList({
   items = [
-    "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", 
-    "Item 6", "Item 7", "Item 8", "Item 9", "Item 10"
+    "Item 1",
+    "Item 2",
+    "Item 3",
+    "Item 4",
+    "Item 5",
+    "Item 6",
+    "Item 7",
+    "Item 8",
+    "Item 9",
+    "Item 10",
   ],
   onItemSelect,
   showGradients = true,
@@ -57,6 +68,7 @@ export function AnimatedList({
   initialSelectedIndex = -1,
 }: AnimatedListProps) {
   const listRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex);
   const [keyboardNav, setKeyboardNav] = useState(false);
   const [topGradientOpacity, setTopGradientOpacity] = useState(0);
@@ -73,7 +85,7 @@ export function AnimatedList({
         onItemSelect(item, index);
       }
     },
-    [onItemSelect]
+    [onItemSelect],
   );
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
@@ -119,24 +131,29 @@ export function AnimatedList({
       const itemTop = selectedItem.offsetTop;
       const itemBottom = itemTop + selectedItem.offsetHeight;
       if (itemTop < containerScrollTop + extraMargin) {
-        container.scrollTo({ top: itemTop - extraMargin, behavior: "smooth" });
+        container.scrollTo({
+          top: itemTop - extraMargin,
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        });
       } else if (itemBottom > containerScrollTop + containerHeight - extraMargin) {
         container.scrollTo({
           top: itemBottom - containerHeight + extraMargin,
-          behavior: "smooth",
+          behavior: prefersReducedMotion ? "auto" : "smooth",
         });
       }
     }
     setKeyboardNav(false);
-  }, [selectedIndex, keyboardNav]);
+  }, [selectedIndex, keyboardNav, prefersReducedMotion]);
 
   return (
-    <div className={cn("relative w-full max-w-md mx-auto", className)}>
+    <div className={cn("relative mx-auto w-full max-w-md", className)}>
       <div
         ref={listRef}
         className={cn(
           "max-h-[400px] overflow-y-auto p-4",
-          displayScrollbar ? "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted" : "scrollbar-hide"
+          displayScrollbar
+            ? "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted"
+            : "scrollbar-hide",
         )}
         onScroll={handleScroll}
         style={{
@@ -153,11 +170,11 @@ export function AnimatedList({
           >
             <div
               className={cn(
-                "p-4 rounded-xl border transition-all duration-200",
+                "rounded-xl border p-4 transition-all duration-200 motion-reduce:transition-none",
                 selectedIndex === index
-                  ? "bg-accent border-border shadow-sm text-accent-foreground"
-                  : "bg-card border-transparent text-muted-foreground hover:text-foreground",
-                itemClassName
+                  ? "border-border bg-accent text-accent-foreground shadow-sm"
+                  : "border-transparent bg-card text-muted-foreground hover:text-foreground",
+                itemClassName,
               )}
             >
               {typeof item === "string" ? <p className="m-0 font-medium">{item}</p> : item}
@@ -165,15 +182,15 @@ export function AnimatedList({
           </AnimatedItem>
         ))}
       </div>
-      
+
       {showGradients && (
         <>
           <div
-            className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-background to-transparent pointer-events-none transition-opacity duration-300 ease"
+            className="ease pointer-events-none absolute left-0 right-0 top-0 h-12 bg-gradient-to-b from-background to-transparent transition-opacity duration-300"
             style={{ opacity: topGradientOpacity }}
           />
           <div
-            className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent pointer-events-none transition-opacity duration-300 ease"
+            className="ease pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent transition-opacity duration-300"
             style={{ opacity: bottomGradientOpacity }}
           />
         </>

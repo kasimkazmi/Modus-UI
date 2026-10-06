@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface MagnetLinesProps {
@@ -25,10 +26,12 @@ export function MagnetLines({
   className,
 }: MagnetLinesProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    // Reduced motion: lines stay at baseAngle instead of tracking the pointer.
+    if (!container || prefersReducedMotion) return;
 
     const items = container.querySelectorAll("span");
 
@@ -62,7 +65,7 @@ export function MagnetLines({
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
     };
-  }, [rows, columns]);
+  }, [rows, columns, prefersReducedMotion]);
 
   const total = rows * columns;
   const spans = Array.from({ length: total }, (_, i) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 class Pixel {
@@ -30,7 +31,7 @@ class Pixel {
     y: number,
     color: string,
     speed: number,
-    delay: number
+    delay: number,
   ) {
     this.width = canvas.width;
     this.height = canvas.height;
@@ -175,9 +176,8 @@ export function PixelCard({
   const pixelsRef = useRef<Pixel[]>([]);
   const animationRef = useRef<number | null>(null);
   const timePreviousRef = useRef(performance.now());
-  const reducedMotion = useRef(
-    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ).current;
+  const prefersReducedMotion = useReducedMotion();
+  const reducedMotion = !!prefersReducedMotion;
 
   const variantCfg = VARIANTS[variant] || VARIANTS.default;
   const finalGap = gap ?? variantCfg.gap;
@@ -218,8 +218,8 @@ export function PixelCard({
             y,
             color,
             getEffectiveSpeed(finalSpeed, reducedMotion),
-            delay
-          )
+            delay,
+          ),
         );
       }
     }
@@ -253,8 +253,25 @@ export function PixelCard({
     }
   };
 
+  // Reduced motion: no rAF loop; pixels snap to a single static frame.
+  const drawStatic = (name: "appear" | "disappear") => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (name === "disappear") return;
+    for (const pixel of pixelsRef.current) {
+      pixel.size = pixel.maxSize;
+      pixel.draw();
+    }
+  };
+
   const handleAnimation = (name: "appear" | "disappear") => {
     if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    if (reducedMotion) {
+      drawStatic(name);
+      return;
+    }
     animationRef.current = requestAnimationFrame(() => doAnimate(name));
   };
 
@@ -281,29 +298,32 @@ export function PixelCard({
       observer.disconnect();
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [finalGap, finalSpeed, finalColors, finalNoFocus]);
+  }, [finalGap, finalSpeed, finalColors, finalNoFocus, reducedMotion]);
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "group relative overflow-hidden rounded-[25px] border border-border bg-background isolate transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] select-none",
-        className
+        "group relative isolate select-none overflow-hidden rounded-[25px] border border-border bg-background transition-colors duration-200 ease-[cubic-bezier(0.5,1,0.89,1)] motion-reduce:transition-none",
+        className,
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onFocus={finalNoFocus ? undefined : onFocus}
       onBlur={finalNoFocus ? undefined : onBlur}
       tabIndex={finalNoFocus ? -1 : 0}
-      style={{
-        "--pixel-card-active-color": variantCfg.activeColor || "rgba(255, 255, 255, 0.1)",
-      } as React.CSSProperties}
+      style={
+        {
+          "--pixel-card-active-color": variantCfg.activeColor || "rgba(255, 255, 255, 0.1)",
+        } as React.CSSProperties
+      }
     >
-      <div className="absolute inset-0 m-auto aspect-square bg-[radial-gradient(circle,var(--pixel-card-active-color),transparent_85%)] opacity-0 transition-opacity duration-800 ease-[cubic-bezier(0.5,1,0.89,1)] group-hover:opacity-100 group-focus-within:opacity-100" />
-      <canvas className="absolute inset-0 w-full h-full block pointer-events-none" ref={canvasRef} />
-      <div className="relative z-10 w-full h-full pointer-events-none">
-        {children}
-      </div>
+      <div className="duration-800 absolute inset-0 m-auto aspect-square bg-[radial-gradient(circle,var(--pixel-card-active-color),transparent_85%)] opacity-0 transition-opacity ease-[cubic-bezier(0.5,1,0.89,1)] group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none" />
+      <canvas
+        className="pointer-events-none absolute inset-0 block h-full w-full"
+        ref={canvasRef}
+      />
+      <div className="pointer-events-none relative z-10 h-full w-full">{children}</div>
     </div>
   );
 }

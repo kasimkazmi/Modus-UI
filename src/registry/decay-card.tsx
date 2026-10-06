@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface DecayCardProps {
@@ -36,8 +37,11 @@ export function DecayCard({
     y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
   });
   const cachedCursor = useRef({ ...cursor.current });
+  // Reduced motion: the card stays still and undistorted; no cursor-follow loop.
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     let winsize = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -124,7 +128,7 @@ export function DecayCard({
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [maxDisplacement, movementBound]);
+  }, [maxDisplacement, movementBound, prefersReducedMotion]);
 
   return (
     <div

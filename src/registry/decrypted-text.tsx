@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface DecryptedTextProps {
@@ -36,20 +36,29 @@ export function DecryptedText({
   const [displayText, setDisplayText] = useState(text);
   const [isHovering, setIsHovering] = useState(false);
   const [isDecrypted, setIsDecrypted] = useState(true); // Start fully decrypted unless view mode
-  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(new Set(text.split("").map((_, i) => i)));
+  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(
+    new Set(text.split("").map((_, i) => i)),
+  );
   const [hasAnimated, setHasAnimated] = useState(false);
   const containerRef = useRef<HTMLSpanElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (animateOn === "view") {
+    if (prefersReducedMotion) {
+      // Show the final readable text immediately.
+      setDisplayText(text);
+      setIsDecrypted(true);
+      setRevealedIndices(new Set(text.split("").map((_, i) => i)));
+    } else if (animateOn === "view") {
       setIsDecrypted(false);
       setRevealedIndices(new Set());
     }
-  }, [animateOn]);
+  }, [animateOn, prefersReducedMotion, text]);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     let interval: NodeJS.Timeout;
-    
+
     const startAnimation = () => {
       let currentIteration = 0;
       let currentRevealed = new Set<number>();
@@ -61,8 +70,11 @@ export function DecryptedText({
             revealDirection === "start"
               ? currentRevealed.size
               : revealDirection === "end"
-              ? text.length - 1 - currentRevealed.size
-              : Math.floor(text.length / 2) + (currentRevealed.size % 2 === 0 ? currentRevealed.size / 2 : -(currentRevealed.size + 1) / 2);
+                ? text.length - 1 - currentRevealed.size
+                : Math.floor(text.length / 2) +
+                  (currentRevealed.size % 2 === 0
+                    ? currentRevealed.size / 2
+                    : -(currentRevealed.size + 1) / 2);
 
           if (currentRevealed.size < text.length) {
             currentRevealed.add(nextIndex);
@@ -78,7 +90,7 @@ export function DecryptedText({
             currentRevealed = new Set(text.split("").map((_, i) => i));
           }
         }
-        
+
         setRevealedIndices(new Set(currentRevealed));
 
         setDisplayText(
@@ -93,7 +105,7 @@ export function DecryptedText({
               const randomChar = characters[Math.floor(Math.random() * characters.length)];
               return text[index] === " " ? " " : randomChar;
             })
-            .join("")
+            .join(""),
         );
       }, speed);
     };
@@ -109,7 +121,7 @@ export function DecryptedText({
             observer.disconnect();
           }
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       );
       if (containerRef.current) observer.observe(containerRef.current);
       return () => observer.disconnect();
@@ -118,6 +130,7 @@ export function DecryptedText({
     return () => clearInterval(interval);
   }, [
     isHovering,
+    prefersReducedMotion,
     animateOn,
     hasAnimated,
     text,
@@ -127,7 +140,7 @@ export function DecryptedText({
     revealDirection,
     useOriginalCharsOnly,
     characters,
-    delay
+    delay,
   ]);
 
   return (
@@ -142,10 +155,7 @@ export function DecryptedText({
         {displayText.split("").map((char, index) => {
           const isRevealed = revealedIndices.has(index) || isDecrypted;
           return (
-            <span
-              key={index}
-              className={isRevealed ? className : encryptedClassName}
-            >
+            <span key={index} className={isRevealed ? className : encryptedClassName}>
               {char}
             </span>
           );

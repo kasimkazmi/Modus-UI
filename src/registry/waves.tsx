@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 class Noise {
@@ -23,7 +24,7 @@ class Noise {
       let v = i & 1 ? seed & 255 : (seed >> 8) & 255;
       this.p[i] = v ^ Math.floor(Math.random() * 256);
       this.perm[i] = this.perm[i + 256] = this.p[i];
-      this.gradP[i] = this.gradP[i + 256] = (this.p[i] % 12) - 6; 
+      this.gradP[i] = this.gradP[i + 256] = (this.p[i] % 12) - 6;
     }
   }
 
@@ -36,14 +37,17 @@ class Noise {
   }
 
   perlin2(x: number, y: number) {
-    let X = Math.floor(x), Y = Math.floor(y);
-    x -= X; y -= Y;
-    X &= 255; Y &= 255;
-    
+    let X = Math.floor(x),
+      Y = Math.floor(y);
+    x -= X;
+    y -= Y;
+    X &= 255;
+    Y &= 255;
+
     // Fast dot product
     const dot2 = (hash: number, x: number, y: number) => {
       // Simplistic gradient fallback
-      return x * (hash % 12 - 6) + y * ((hash >> 1) % 12 - 6);
+      return x * ((hash % 12) - 6) + y * (((hash >> 1) % 12) - 6);
     };
 
     const n00 = dot2(this.perm[X + this.perm[Y]], x, y);
@@ -94,17 +98,58 @@ export function Waves({
   const noiseRef = useRef(new Noise(Math.random()));
   const linesRef = useRef<any[]>([]);
   const mouseRef = useRef({
-    x: -10, y: 0, lx: 0, ly: 0, sx: 0, sy: 0, v: 0, vs: 0, a: 0, set: false
+    x: -10,
+    y: 0,
+    lx: 0,
+    ly: 0,
+    sx: 0,
+    sy: 0,
+    v: 0,
+    vs: 0,
+    a: 0,
+    set: false,
   });
 
   const configRef = useRef({
-    lineColor, waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove, xGap, yGap
+    lineColor,
+    waveSpeedX,
+    waveSpeedY,
+    waveAmpX,
+    waveAmpY,
+    friction,
+    tension,
+    maxCursorMove,
+    xGap,
+    yGap,
   });
   const frameIdRef = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    configRef.current = { lineColor, waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove, xGap, yGap };
-  }, [lineColor, waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove, xGap, yGap]);
+    configRef.current = {
+      lineColor,
+      waveSpeedX,
+      waveSpeedY,
+      waveAmpX,
+      waveAmpY,
+      friction,
+      tension,
+      maxCursorMove,
+      xGap,
+      yGap,
+    };
+  }, [
+    lineColor,
+    waveSpeedX,
+    waveSpeedY,
+    waveAmpX,
+    waveAmpY,
+    friction,
+    tension,
+    maxCursorMove,
+    xGap,
+    yGap,
+  ]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -122,7 +167,8 @@ export function Waves({
     function setLines() {
       const { width, height } = boundingRef.current;
       linesRef.current = [];
-      const oWidth = width + 200, oHeight = height + 30;
+      const oWidth = width + 200,
+        oHeight = height + 30;
       const { xGap, yGap } = configRef.current;
       const totalLines = Math.ceil(oWidth / xGap);
       const totalPoints = Math.ceil(oHeight / yGap);
@@ -135,7 +181,7 @@ export function Waves({
             x: xStart + xGap * i,
             y: yStart + yGap * j,
             wave: { x: 0, y: 0 },
-            cursor: { x: 0, y: 0, vx: 0, vy: 0 }
+            cursor: { x: 0, y: 0, vx: 0, vy: 0 },
           });
         }
         linesRef.current.push(pts);
@@ -143,16 +189,23 @@ export function Waves({
     }
 
     function movePoints(time: number) {
-      const lines = linesRef.current, mouse = mouseRef.current, noise = noiseRef.current;
-      const { waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove } = configRef.current;
+      const lines = linesRef.current,
+        mouse = mouseRef.current,
+        noise = noiseRef.current;
+      const { waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove } =
+        configRef.current;
       lines.forEach((pts) => {
         pts.forEach((p: any) => {
-          const move = noise.perlin2((p.x + time * waveSpeedX) * 0.002, (p.y + time * waveSpeedY) * 0.0015) * 12;
+          const move =
+            noise.perlin2((p.x + time * waveSpeedX) * 0.002, (p.y + time * waveSpeedY) * 0.0015) *
+            12;
           p.wave.x = Math.cos(move) * waveAmpX;
           p.wave.y = Math.sin(move) * waveAmpY;
 
-          const dx = p.x - mouse.sx, dy = p.y - mouse.sy;
-          const dist = Math.hypot(dx, dy), l = Math.max(175, mouse.vs);
+          const dx = p.x - mouse.sx,
+            dy = p.y - mouse.sy;
+          const dist = Math.hypot(dx, dy),
+            l = Math.max(175, mouse.vs);
           if (dist < l) {
             const s = 1 - dist / l;
             const f = Math.cos(dist * 0.001) * s;
@@ -203,7 +256,8 @@ export function Waves({
       const mouse = mouseRef.current;
       mouse.sx += (mouse.x - mouse.sx) * 0.1;
       mouse.sy += (mouse.y - mouse.sy) * 0.1;
-      const dx = mouse.x - mouse.lx, dy = mouse.y - mouse.ly;
+      const dx = mouse.x - mouse.lx,
+        dy = mouse.y - mouse.ly;
       const d = Math.hypot(dx, dy);
       mouse.v = d;
       mouse.vs += (d - mouse.vs) * 0.1;
@@ -221,9 +275,16 @@ export function Waves({
       frameIdRef.current = requestAnimationFrame(tick);
     }
 
+    // Reduced motion: draw a single still wave field, redrawn only when the size changes.
+    function drawStill() {
+      movePoints(0);
+      drawLines();
+    }
+
     function onResize() {
       setSize();
       setLines();
+      if (prefersReducedMotion) drawStill();
     }
     function onMouseMove(e: MouseEvent) {
       updateMouse(e.clientX, e.clientY);
@@ -233,7 +294,8 @@ export function Waves({
       updateMouse(touch.clientX, touch.clientY);
     }
     function updateMouse(x: number, y: number) {
-      const mouse = mouseRef.current, b = boundingRef.current;
+      const mouse = mouseRef.current,
+        b = boundingRef.current;
       mouse.x = x - b.left;
       mouse.y = y - b.top;
       if (!mouse.set) {
@@ -247,8 +309,14 @@ export function Waves({
 
     setSize();
     setLines();
-    frameIdRef.current = requestAnimationFrame(tick);
     window.addEventListener("resize", onResize);
+
+    if (prefersReducedMotion) {
+      drawStill();
+      return () => window.removeEventListener("resize", onResize);
+    }
+
+    frameIdRef.current = requestAnimationFrame(tick);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: false });
 
@@ -258,22 +326,22 @@ export function Waves({
       window.removeEventListener("touchmove", onTouchMove);
       if (frameIdRef.current) cancelAnimationFrame(frameIdRef.current);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div
       ref={containerRef}
       style={{ backgroundColor, ...style }}
-      className={cn("absolute top-0 left-0 w-full h-full overflow-hidden", className)}
+      className={cn("absolute left-0 top-0 h-full w-full overflow-hidden", className)}
     >
       <div
-        className="absolute top-0 left-0 bg-[#37322F]/10 rounded-full w-2 h-2 pointer-events-none"
+        className="pointer-events-none absolute left-0 top-0 h-2 w-2 rounded-full bg-[#37322F]/10"
         style={{
           transform: "translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)",
           willChange: "transform",
         }}
       />
-      <canvas ref={canvasRef} className="block w-full h-full pointer-events-none" />
+      <canvas ref={canvasRef} className="pointer-events-none block h-full w-full" />
     </div>
   );
 }

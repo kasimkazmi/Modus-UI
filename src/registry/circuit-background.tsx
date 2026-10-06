@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // Self-contained ripple class for interactive mouse effects
@@ -110,6 +111,8 @@ export function CircuitBackground({
   const trailsRef = useRef<CircuitTrail[]>([]);
   const ripplesRef = useRef<CircuitRipple[]>([]);
   const animationRef = useRef<number | null>(null);
+  // Reduced motion: draw one still frame of fully grown traces; no loop, drift or ripples.
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
@@ -312,6 +315,31 @@ export function CircuitBackground({
       bufferCanvas.height = H * 1.5;
     }
 
+    function drawStatic() {
+      bufferCtx.setTransform(1, 0, 0, 1, 0, 0);
+      bufferCtx.clearRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+      trailsRef.current = Array.from({ length: Math.min(12, maxTrails) }, () => createTrail());
+      for (const trail of trailsRef.current) {
+        drawTrail(trail, trail.startTime + trail.growTime);
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(bufferCanvas, -W * 0.25, -H * 0.25, W * 1.5, H * 1.5);
+    }
+
+    if (prefersReducedMotion) {
+      const handleStaticResize = () => {
+        resize();
+        drawStatic();
+      };
+      handleStaticResize();
+      window.addEventListener("resize", handleStaticResize);
+      return () => {
+        window.removeEventListener("resize", handleStaticResize);
+        trailsRef.current = [];
+      };
+    }
+
     function animate(currentTime: number) {
       if (!running) return;
 
@@ -386,7 +414,15 @@ export function CircuitBackground({
       trailsRef.current = [];
       ripplesRef.current = [];
     };
-  }, [maxTrails, lineColor, circleColor, glowStrength, circleSize, spawnChance]);
+  }, [
+    maxTrails,
+    lineColor,
+    circleColor,
+    glowStrength,
+    circleSize,
+    spawnChance,
+    prefersReducedMotion,
+  ]);
 
   return (
     <>

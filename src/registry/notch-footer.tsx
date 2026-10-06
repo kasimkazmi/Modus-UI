@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface NotchFooterProps {
@@ -43,43 +43,46 @@ export function NotchFooter({
   className,
 }: NotchFooterProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  // Reduced motion: hover parallax is disabled; the footer stays static.
+  const hovered = isHovered && !prefersReducedMotion;
 
   return (
     <motion.footer
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={cn(
-        "relative w-full rounded-3xl overflow-hidden py-16 px-8 md:px-16 flex flex-col items-center justify-center text-center shadow-xl",
+        "relative flex w-full flex-col items-center justify-center overflow-hidden rounded-3xl px-8 py-16 text-center shadow-xl md:px-16",
         bgColorClass,
-        className
+        className,
       )}
     >
       {/* 0. Border Outline Layer (Spatially layered at z-5, constructs the bottom, left, and right border frames) */}
-      <div 
-        className="absolute inset-0 rounded-3xl border-b border-l border-r border-[#E0DEDB]/10 pointer-events-none"
+      <div
+        className="pointer-events-none absolute inset-0 rounded-3xl border-b border-l border-r border-[#E0DEDB]/10"
         style={{ zIndex: 5 }}
       />
       {/* Left Top Border Segment (Stops exactly at the start of the notch curves) */}
-      <div 
-        className="absolute top-0 left-0 h-[1px] bg-[#E0DEDB]/10 pointer-events-none"
+      <div
+        className="pointer-events-none absolute left-0 top-0 h-[1px] bg-[#E0DEDB]/10"
         style={{ zIndex: 5, width: "calc(50% - 120px)" }}
       />
       {/* Right Top Border Segment (Starts exactly at the end of the notch curves) */}
-      <div 
-        className="absolute top-0 right-0 h-[1px] bg-[#E0DEDB]/10 pointer-events-none"
+      <div
+        className="pointer-events-none absolute right-0 top-0 h-[1px] bg-[#E0DEDB]/10"
         style={{ zIndex: 5, width: "calc(50% - 120px)" }}
       />
 
       {/* 1. Fluid Liquid Notch Pocket (Layered at z-10 to mask the top border line perfectly) */}
-      <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[240px] h-[48px] select-none pointer-events-none"
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 h-[48px] w-[240px] -translate-x-1/2 select-none"
         style={{ zIndex: 10 }}
       >
         <svg
           viewBox="0 0 240 48"
           width="240"
           height="48"
-          className="w-full h-full"
+          className="h-full w-full"
           preserveAspectRatio="none"
         >
           <path
@@ -91,69 +94,81 @@ export function NotchFooter({
 
       {/* 2. Logo container floating inside the Notch (Spatially isolated static wrapper to avoid Framer Motion transform overrides) */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 h-[38px] flex items-center justify-center"
+        className="absolute left-1/2 top-0 flex h-[38px] -translate-x-1/2 items-center justify-center"
         style={{ zIndex: 20 }}
       >
         <motion.div
           animate={{
-            y: isHovered ? 4 : 0,
-            scale: isHovered ? 1.05 : 1,
+            y: hovered ? 4 : 0,
+            scale: hovered ? 1.05 : 1,
           }}
           transition={{ type: "spring", stiffness: 300, damping: 15 }}
           className="flex items-center justify-center"
         >
           {logo || (
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-white/95 rounded-full shadow-sm border border-[#E0DEDB]/40 select-none">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-[#37322F] animate-pulse">
+            <div className="flex select-none items-center gap-1.5 rounded-full border border-[#E0DEDB]/40 bg-white/95 px-3 py-1 shadow-sm">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="animate-pulse text-[#37322F] motion-reduce:animate-none"
+              >
                 <path d="M4 20V8a4 4 0 0 1 8 0v12" />
                 <path d="M12 20V8a4 4 0 0 1 8 0v12" />
               </svg>
-              <span className="font-serif text-[10px] font-bold text-[#37322F] tracking-wider uppercase">Modus</span>
+              <span className="font-serif text-[10px] font-bold uppercase tracking-wider text-[#37322F]">
+                Modus
+              </span>
             </div>
           )}
         </motion.div>
       </div>
 
       {/* 3. Left Dotted Grid Decoration */}
-      <div className="absolute bottom-6 left-6 hidden sm:block opacity-75">
+      <div className="absolute bottom-6 left-6 hidden opacity-75 sm:block">
         <motion.div
           animate={{
-            x: isHovered ? 3 : 0,
-            y: isHovered ? -3 : 0,
+            x: hovered ? 3 : 0,
+            y: hovered ? -3 : 0,
           }}
           transition={{ duration: 0.4 }}
           className="grid grid-cols-3 gap-2"
         >
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className={cn("w-1 h-1 rounded-full", dotColorClass)} />
+            <div key={i} className={cn("h-1 w-1 rounded-full", dotColorClass)} />
           ))}
         </motion.div>
       </div>
 
       {/* 4. Right Dotted Grid Decoration */}
-      <div className="absolute top-6 right-6 hidden sm:block opacity-75">
+      <div className="absolute right-6 top-6 hidden opacity-75 sm:block">
         <motion.div
           animate={{
-            x: isHovered ? -3 : 0,
-            y: isHovered ? 3 : 0,
+            x: hovered ? -3 : 0,
+            y: hovered ? 3 : 0,
           }}
           transition={{ duration: 0.4 }}
           className="grid grid-cols-3 gap-2"
         >
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className={cn("w-1 h-1 rounded-full", dotColorClass)} />
+            <div key={i} className={cn("h-1 w-1 rounded-full", dotColorClass)} />
           ))}
         </motion.div>
       </div>
 
       {/* 5. Center Title */}
       <motion.h3
-        initial={{ opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className={cn(
-          "font-sans text-xl md:text-3xl lg:text-4xl font-bold tracking-tight max-w-[700px] leading-tight mt-6 mb-8 relative z-10",
-          titleColorClass
+          "relative z-10 mb-8 mt-6 max-w-[700px] font-sans text-xl font-bold leading-tight tracking-tight md:text-3xl lg:text-4xl",
+          titleColorClass,
         )}
       >
         {title}
@@ -162,17 +177,12 @@ export function NotchFooter({
       {/* 6. Outline CTA Button */}
       <div className="relative z-10">
         {buttonHref ? (
-          <a
-            href={buttonHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block"
-          >
-            <CTAButton text={buttonText} isHovered={isHovered} buttonColorClass={buttonColorClass} />
+          <a href={buttonHref} target="_blank" rel="noopener noreferrer" className="inline-block">
+            <CTAButton text={buttonText} isHovered={hovered} buttonColorClass={buttonColorClass} />
           </a>
         ) : (
           <button onClick={onButtonClick} type="button">
-            <CTAButton text={buttonText} isHovered={isHovered} buttonColorClass={buttonColorClass} />
+            <CTAButton text={buttonText} isHovered={hovered} buttonColorClass={buttonColorClass} />
           </button>
         )}
       </div>
@@ -181,7 +191,15 @@ export function NotchFooter({
 }
 
 /* Internal CTA Button Component with physics scales */
-function CTAButton({ text, isHovered, buttonColorClass }: { text: string; isHovered: boolean; buttonColorClass: string }) {
+function CTAButton({
+  text,
+  isHovered,
+  buttonColorClass,
+}: {
+  text: string;
+  isHovered: boolean;
+  buttonColorClass: string;
+}) {
   return (
     <motion.div
       animate={{
@@ -189,8 +207,8 @@ function CTAButton({ text, isHovered, buttonColorClass }: { text: string; isHove
       }}
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
       className={cn(
-        "px-6 py-2.5 rounded-full border text-xs font-semibold tracking-wider uppercase transition-colors duration-300 shadow-md cursor-pointer select-none",
-        buttonColorClass
+        "cursor-pointer select-none rounded-full border px-6 py-2.5 text-xs font-semibold uppercase tracking-wider shadow-md transition-colors duration-300 motion-reduce:transition-none",
+        buttonColorClass,
       )}
     >
       {text}

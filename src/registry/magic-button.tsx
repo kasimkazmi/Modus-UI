@@ -1,14 +1,16 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export const MagicButton = () => {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium shadow-lg hover:bg-indigo-700 transition-colors"
+      whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+      className="rounded-lg bg-indigo-600 px-6 py-2 font-medium text-white shadow-lg transition-colors hover:bg-indigo-700 motion-reduce:transition-none"
     >
       Magic Button
     </motion.button>
