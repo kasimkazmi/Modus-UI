@@ -22,6 +22,8 @@ import GridMotionDemo from "@/registry/grid-motion-demo";
 import BlurTextDemo from "@/registry/blur-text-demo";
 import SplitTextDemo from "@/registry/split-text-demo";
 import DecryptedTextDemo from "@/registry/decrypted-text-demo";
+import BounceCardsDemo from "@/registry/bounce-cards-demo";
+import FlowingMenuDemo from "@/registry/flowing-menu-demo";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
 
@@ -49,6 +51,8 @@ const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
   "blur-text": BlurTextDemo,
   "split-text": SplitTextDemo,
   "decrypted-text": DecryptedTextDemo,
+  "bounce-cards": BounceCardsDemo,
+  "flowing-menu": FlowingMenuDemo,
 };
 
 interface ComponentPreviewProps {

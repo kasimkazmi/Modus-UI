@@ -132,5 +132,17 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/decrypted-text.tsx"],
   },
+  {
+    name: "bounce-cards",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/bounce-cards.tsx"],
+  },
+  {
+    name: "flowing-menu",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/flowing-menu.tsx"],
+  },
 ];
 

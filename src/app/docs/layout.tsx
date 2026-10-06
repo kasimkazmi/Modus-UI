@@ -17,6 +17,7 @@ const DOC_CATEGORIES = [
     title: "Navigation",
     icon: PanelTop,
     items: [
+      { title: "Flowing Menu", href: "/docs/flowing-menu" },
       { title: "Morphing Navbar", href: "/docs/morphing-navbar" },
       { title: "Floating Dock", href: "/docs/floating-dock" },
       { title: "Notch Footer", href: "/docs/notch-footer" },
@@ -36,6 +37,7 @@ const DOC_CATEGORIES = [
     title: "Data Display",
     icon: Layout,
     items: [
+      { title: "Bounce Cards", href: "/docs/bounce-cards" },
       { title: "Masonry Grid", href: "/docs/masonry-grid" },
       { title: "Animated List", href: "/docs/animated-list" },
       { title: "Kinetic Carousel", href: "/docs/kinetic-carousel" },

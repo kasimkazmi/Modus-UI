@@ -1,0 +1,46 @@
+---
+title: Bounce Cards
+description: A stack of playing cards that fan out and straighten out interactively when hovered.
+---
+
+A stack of playing cards that fan out and straighten out interactively when hovered. This component dynamically calculates transform positions and spring physics using purely Framer Motion, skipping heavy libraries like GSAP.
+
+<ComponentPreview name="bounce-cards" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add bounce-cards
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bounce-cards.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BounceCards } from "@/components/ui/bounce-cards";
+
+export default function Example() {
+  const images = [
+    "https://...",
+    "https://...",
+  ];
+
+  return (
+    <BounceCards
+      images={images}
+      containerWidth={500}
+      containerHeight={400}
+      animationDelay={0.2}
+      animationStagger={0.08}
+      enableHover={true}
+    />
+  );
+}
+```

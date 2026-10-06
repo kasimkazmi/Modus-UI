@@ -1,0 +1,41 @@
+---
+title: Flowing Menu
+description: A full-screen menu where hovering an item triggers an infinite scrolling marquee.
+---
+
+A full-screen menu where hovering an item triggers an infinite scrolling marquee mask that reveals the image and text based on mouse entry position.
+
+<ComponentPreview name="flowing-menu" />
+
+## Installation
+
+### CLI
+
+```bash
+npx modus-ui add flowing-menu
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/flowing-menu.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FlowingMenu } from "@/components/ui/flowing-menu";
+
+export default function Example() {
+  const items = [
+    { link: "#", text: "Home", image: "..." },
+    { link: "#", text: "About", image: "..." },
+  ];
+
+  return (
+    <div className="h-[400px]">
+      <FlowingMenu items={items} speed={20} />
+    </div>
+  );
+}
+```
