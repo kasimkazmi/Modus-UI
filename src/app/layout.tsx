@@ -11,6 +11,7 @@ import {
 } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { paletteScript } from "@/lib/themes";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
 // The default theme's fonts are preloaded; the rest download only when a theme uses them.
@@ -53,9 +54,17 @@ const fontVariables = [
   .join(" ");
 
 export const metadata: Metadata = {
-  title: "Modus UI",
-  description:
-    "A premium, editorial-grade React component library built with restraint and typographic precision.",
+  metadataBase: new URL(SITE.url),
+  title: { default: SITE.name, template: `%s · ${SITE.name}` },
+  description: SITE.description,
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    title: SITE.name,
+    description: SITE.description,
+    url: "/",
+  },
+  twitter: { card: "summary_large_image", title: SITE.name, description: SITE.description },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
