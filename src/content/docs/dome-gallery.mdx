@@ -1,0 +1,38 @@
+---
+title: Dome Gallery
+description: An immersive 3D gallery dome.
+---
+
+An interactive 3D sphere of images.
+
+<ComponentPreview name="dome-gallery" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dome-gallery
+```
+
+## Props
+
+| Prop                    | Type    | Default                  | Description                       |
+| :---------------------- | :------ | :----------------------- | :-------------------------------- |
+| images                  | any[]   | []                       | Array of images to display.       |
+| fit                     | number  | 0.5                      | Object fit.                       |
+| fitBasis                | string  | "auto"                   | Object fit basis.                 |
+| minRadius               | number  | 600                      | Min zoom radius.                  |
+| maxRadius               | number  | Infinity                 | Max zoom radius.                  |
+| padFactor               | number  | 0.25                     | Padding factor.                   |
+| overlayBlurColor        | string  | "hsl(var(--background))" | Overlay color.                    |
+| maxVerticalRotationDeg  | number  | 45                       | Max vertical rotation limit.      |
+| dragSensitivity         | number  | 0.5                      | Sensitivity of drag.              |
+| enlargeTransitionMs     | number  | 300                      | Transition timing.                |
+| segments                | number  | 8                        | Number of columns in the grid.    |
+| dragDampening           | number  | 2                        | Dampening on drag.                |
+| openedImageWidth        | string  | "400px"                  | Width.                            |
+| openedImageHeight       | string  | "400px"                  | Height.                           |
+| imageBorderRadius       | string  | "30px"                   | Border radius of closed images.   |
+| openedImageBorderRadius | string  | "30px"                   | Border radius of opened image.    |
+| grayscale               | boolean | true                     | Whether the images are grayscale. |

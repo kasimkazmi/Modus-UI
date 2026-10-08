@@ -54,6 +54,10 @@ import ComparisonSliderDemo from "./comparison-slider-demo";
 import DockDemo from "./dock-demo";
 import ProgressRingDemo from "./progress-ring-demo";
 import MarqueeDemo from "./marquee-demo";
+import ReflectiveCardDemo from "./reflective-card-demo";
+import FluidGlassDemo from "./fluid-glass-demo";
+import DomeGalleryDemo from "./dome-gallery-demo";
+import ChromaGridDemo from "./chroma-grid-demo";
 import type { ComponentName } from "./index";
 
 /** The demo rendered for each component in docs and standalone previews. */
@@ -113,6 +117,10 @@ export const demos: Record<ComponentName, ComponentType> = {
   dock: DockDemo,
   "progress-ring": ProgressRingDemo,
   marquee: MarqueeDemo,
+  "reflective-card": ReflectiveCardDemo,
+  "fluid-glass": FluidGlassDemo,
+  "dome-gallery": DomeGalleryDemo,
+  "chroma-grid": ChromaGridDemo,
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

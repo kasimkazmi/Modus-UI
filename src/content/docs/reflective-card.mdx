@@ -1,0 +1,32 @@
+---
+title: Reflective Card
+description: A shiny, reflective glass card with distorted background.
+---
+
+A highly realistic glass card effect ported from React Bits.
+
+<ComponentPreview name="reflective-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add reflective-card
+```
+
+## Props
+
+| Prop                 | Type   | Default                    | Description                                 |
+| :------------------- | :----- | :------------------------- | :------------------------------------------ |
+| blurStrength         | number | 12                         | The strength of the blur effect.            |
+| color                | string | "white"                    | Text color overlay.                         |
+| metalness            | number | 1                          | The metallic effect intensity.              |
+| roughness            | number | 0.4                        | The roughness of the reflection.            |
+| overlayColor         | string | "rgba(255, 255, 255, 0.1)" | Background overlay color.                   |
+| displacementStrength | number | 20                         | How much the glass distorts the background. |
+| noiseScale           | number | 1                          | The scale of the noise filter.              |
+| specularConstant     | number | 1.2                        | The shininess of the reflection.            |
+| grayscale            | number | 1                          | Grayscale strength of the webcam feed.      |
+| glassDistortion      | number | 0                          | The glass displacement effect.              |
+| className            | string | ""                         | -                                           |

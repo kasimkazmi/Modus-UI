@@ -465,6 +465,38 @@ export const registry = [
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/marquee.tsx"],
   },
+  {
+    name: "reflective-card",
+    title: "Reflective Card",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
+    files: ["registry/reflective-card.tsx"],
+  },
+  {
+    name: "fluid-glass",
+    title: "Fluid Glass",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/fluid-glass.tsx"],
+  },
+  {
+    name: "dome-gallery",
+    title: "Dome Gallery",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge", "@use-gesture/react"],
+    files: ["registry/dome-gallery.tsx"],
+  },
+  {
+    name: "chroma-grid",
+    title: "Chroma Grid",
+    category: "Components",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/chroma-grid.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];
