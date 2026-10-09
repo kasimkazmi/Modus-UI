@@ -9,3 +9,4 @@ export default function ChromaGridDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

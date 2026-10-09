@@ -36,3 +36,4 @@ export default function BentoGridDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

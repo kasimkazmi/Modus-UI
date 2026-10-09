@@ -1,0 +1,54 @@
+---
+title: Status Mark
+description: TODO one sentence on what Status Mark does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="status-mark" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add status-mark
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/status-mark.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StatusMark } from "@/components/ui/status-mark";
+
+export default function Example() {
+  return <StatusMark />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| status       | string  | "pending"             | -           |
+| progress     | any     | -                     | -           |
+| label        | any     | -                     | -           |
+| color        | string  | "currentColor"        | -           |
+| doneColor    | string  | "hsl(var(--primary))" | -           |
+| errorColor   | string  | "hsl(var(--primary))" | -           |
+| size         | number  | 20                    | -           |
+| strokeWidth  | number  | 2                     | -           |
+| dashes       | number  | 8                     | -           |
+| fontSize     | number  | 14                    | -           |
+| spinDuration | number  | 1100                  | -           |
+| arcLength    | number  | 0.68                  | -           |
+| drawDuration | number  | 240                   | -           |
+| fillOpacity  | number  | 0.06                  | -           |
+| strike       | boolean | true                  | -           |
+| strikeDelay  | number  | 60                    | -           |
+| style        | any     | -                     | -           |

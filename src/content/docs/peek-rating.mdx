@@ -1,0 +1,59 @@
+---
+title: Peek Rating
+description: TODO one sentence on what Peek Rating does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="peek-rating" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add peek-rating
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/peek-rating.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PeekRating } from "@/components/ui/peek-rating";
+
+export default function Example() {
+  return <PeekRating />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 0                     | -           |
+| onChange     | any     | -                     | -           |
+| onPreview    | any     | -                     | -           |
+| count        | number  | 5                     | -           |
+| shape        | string  | "star"                | -           |
+| icon         | any     | -                     | -           |
+| labels       | any     | []                    | -           |
+| activeColor  | string  | "hsl(var(--primary))" | -           |
+| idleColor    | string  | "hsl(var(--primary))" | -           |
+| tipColor     | string  | "hsl(var(--primary))" | -           |
+| tipTextColor | string  | "hsl(var(--primary))" | -           |
+| size         | number  | 28                    | -           |
+| lift         | number  | 6                     | -           |
+| magnify      | number  | 1.15                  | -           |
+| riseDuration | number  | 320                   | -           |
+| popScale     | number  | 1.3                   | -           |
+| showTip      | boolean | true                  | -           |
+| allowClear   | boolean | true                  | -           |
+| readOnly     | boolean | false                 | -           |
+| disabled     | boolean | false                 | -           |
+| ariaLabel    | string  | "Rating"              | -           |

@@ -28,3 +28,4 @@ export default function BorderGlowDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

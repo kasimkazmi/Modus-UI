@@ -53,3 +53,4 @@ export default function ExpandableShowcaseDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

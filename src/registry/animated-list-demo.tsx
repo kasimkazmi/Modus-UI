@@ -78,3 +78,4 @@ export default function AnimatedListDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

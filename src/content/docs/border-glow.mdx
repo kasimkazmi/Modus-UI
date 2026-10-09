@@ -31,9 +31,9 @@ export default function Example() {
     <BorderGlow
       className="h-[350px] w-[300px] p-8"
       glowColor="200 100 65"
-      colors={["#38bdf8", "#818cf8", "#c084fc"]}
+      colors={["hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))"]}
       animated={true}
-      backgroundColor="#09090b"
+      backgroundColor="hsl(var(--primary))"
     >
       <h3 className="text-xl font-medium text-white">Interactive Glow</h3>
       <p className="text-zinc-400">Content goes here.</p>
@@ -44,15 +44,15 @@ export default function Example() {
 
 ## Props
 
-| Prop              | Type       | Default                             | Description                                       |
-| :---------------- | :--------- | :---------------------------------- | :------------------------------------------------ |
-| `edgeSensitivity` | `number`   | `30`                                | How close in pixels to the edge the glow appears. |
-| `glowColor`       | `string`   | `"266 100 65"`                      | Glow colour as space-separated HSL values.        |
-| `backgroundColor` | `string`   | `"hsl(var(--card))"`                | Card background colour.                           |
-| `borderRadius`    | `number`   | `28`                                | Corner radius in pixels.                          |
-| `glowRadius`      | `number`   | `40`                                | Size of the glow in pixels.                       |
-| `glowIntensity`   | `number`   | `1`                                 | Strength of the glow.                             |
-| `coneSpread`      | `number`   | `25`                                | Angular spread of the glow in degrees.            |
-| `animated`        | `boolean`  | `false`                             | Runs an intro sweep of the glow.                  |
-| `colors`          | `string[]` | `["#c084fc", "#f472b6", "#38bdf8"]` | Colours of the border gradient.                   |
-| `fillOpacity`     | `number`   | `0.5`                               | Opacity of the inner glow fill.                   |
+| Prop              | Type       | Default                                                                 | Description                                       |
+| :---------------- | :--------- | :---------------------------------------------------------------------- | :------------------------------------------------ |
+| `edgeSensitivity` | `number`   | `30`                                                                    | How close in pixels to the edge the glow appears. |
+| `glowColor`       | `string`   | `"266 100 65"`                                                          | Glow colour as space-separated HSL values.        |
+| `backgroundColor` | `string`   | `"hsl(var(--card))"`                                                    | Card background colour.                           |
+| `borderRadius`    | `number`   | `28`                                                                    | Corner radius in pixels.                          |
+| `glowRadius`      | `number`   | `40`                                                                    | Size of the glow in pixels.                       |
+| `glowIntensity`   | `number`   | `1`                                                                     | Strength of the glow.                             |
+| `coneSpread`      | `number`   | `25`                                                                    | Angular spread of the glow in degrees.            |
+| `animated`        | `boolean`  | `false`                                                                 | Runs an intro sweep of the glow.                  |
+| `colors`          | `string[]` | `["hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))"]` | Colours of the border gradient.                   |
+| `fillOpacity`     | `number`   | `0.5`                                                                   | Opacity of the inner glow fill.                   |

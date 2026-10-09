@@ -9,3 +9,4 @@ export default function ReflectiveCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

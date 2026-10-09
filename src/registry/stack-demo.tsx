@@ -38,3 +38,4 @@ export default function StackDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -1,0 +1,56 @@
+---
+title: Rubber Segment
+description: TODO one sentence on what Rubber Segment does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="rubber-segment" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add rubber-segment
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/rubber-segment.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RubberSegment } from "@/components/ui/rubber-segment";
+
+export default function Example() {
+  return <RubberSegment />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default               | Description |
+| :-------------- | :------ | :-------------------- | :---------- |
+| items           | any     | -                     | -           |
+| value           | any     | -                     | -           |
+| defaultValue    | any     | -                     | -           |
+| onChange        | any     | -                     | -           |
+| trackColor      | string  | "hsl(var(--primary))" | -           |
+| thumbColor      | string  | "hsl(var(--primary))" | -           |
+| textColor       | string  | "hsl(var(--primary))" | -           |
+| activeTextColor | string  | "hsl(var(--primary))" | -           |
+| size            | string  | "md"                  | -           |
+| radius          | number  | 10                    | -           |
+| inset           | number  | 3                     | -           |
+| equalSlots      | boolean | true                  | -           |
+| stretch         | number  | 100                   | -           |
+| squash          | number  | 3                     | -           |
+| speed           | number  | 1                     | -           |
+| glide           | number  | 75                    | -           |
+| draggable       | boolean | true                  | -           |
+| disabled        | boolean | false                 | -           |
+| ariaLabel       | string  | "Segmented control"   | -           |

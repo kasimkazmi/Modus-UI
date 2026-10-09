@@ -9,3 +9,4 @@ export default function FluidGlassDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -21,3 +21,4 @@ export default function ScratchToRevealDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

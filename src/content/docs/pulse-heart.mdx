@@ -1,0 +1,57 @@
+---
+title: Pulse Heart
+description: TODO one sentence on what Pulse Heart does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="pulse-heart" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pulse-heart
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pulse-heart.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PulseHeart } from "@/components/ui/pulse-heart";
+
+export default function Example() {
+  return <PulseHeart />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| liked        | any     | -                     | -           |
+| defaultLiked | boolean | false                 | -           |
+| count        | number  | 0                     | -           |
+| onChange     | any     | -                     | -           |
+| showCount    | boolean | true                  | -           |
+| icon         | string  | "heart"               | -           |
+| idleOutline  | boolean | true                  | -           |
+| size         | number  | 40                    | -           |
+| corner       | number  | 32                    | -           |
+| likedColor   | string  | "hsl(var(--primary))" | -           |
+| idleColor    | string  | "hsl(var(--primary))" | -           |
+| pillColor    | string  | "hsl(var(--primary))" | -           |
+| textColor    | string  | "hsl(var(--primary))" | -           |
+| duration     | number  | 560                   | -           |
+| dotSize      | number  | 0.3                   | -           |
+| overshoot    | number  | 1.7                   | -           |
+| beat         | number  | 3                     | -           |
+| rollDuration | number  | 350                   | -           |
+| disabled     | boolean | false                 | -           |
+| label        | string  | "Like"                | -           |

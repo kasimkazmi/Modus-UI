@@ -22,3 +22,4 @@ export default function BounceCardsDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

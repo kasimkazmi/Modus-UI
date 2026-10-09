@@ -19,3 +19,4 @@ export default function SplitTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

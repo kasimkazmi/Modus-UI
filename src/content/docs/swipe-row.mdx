@@ -1,0 +1,61 @@
+---
+title: Swipe Row
+description: TODO one sentence on what Swipe Row does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="swipe-row" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swipe-row
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swipe-row.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SwipeRow } from "@/components/ui/swipe-row";
+
+export default function Example() {
+  return <SwipeRow />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default               | Description |
+| :------------ | :------ | :-------------------- | :---------- |
+| children      | any     | -                     | -           |
+| actions       | any     | DEFAULT_ACTIONS       | -           |
+| actionColor   | string  | "hsl(var(--primary))" | -           |
+| drawerColor   | string  | "hsl(var(--primary))" | -           |
+| rowColor      | string  | "hsl(var(--primary))" | -           |
+| textColor     | string  | "hsl(var(--primary))" | -           |
+| height        | number  | 64                    | -           |
+| radius        | number  | 16                    | -           |
+| actionWidth   | number  | 80                    | -           |
+| direction     | string  | "left"                | -           |
+| snapBounce    | number  | 0.2                   | -           |
+| resistance    | number  | 0.55                  | -           |
+| collapseMs    | number  | 200                   | -           |
+| commitAt      | number  | 0.6                   | -           |
+| fullSwipe     | boolean | true                  | -           |
+| disabled      | boolean | false                 | -           |
+| open          | any     | -                     | -           |
+| onOpenChange  | any     | -                     | -           |
+| onAction      | any     | -                     | -           |
+| onCommit      | any     | -                     | -           |
+| closeOnAction | boolean | true                  | -           |
+| haptic        | boolean | true                  | -           |
+| label         | string  | "List item"           | -           |
+| style         | any     | -                     | -           |

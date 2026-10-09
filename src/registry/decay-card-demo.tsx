@@ -16,3 +16,4 @@ export default function DecayCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

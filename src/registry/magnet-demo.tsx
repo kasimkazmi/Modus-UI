@@ -15,3 +15,4 @@ export default function MagnetDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

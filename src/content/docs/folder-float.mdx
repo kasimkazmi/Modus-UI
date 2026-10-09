@@ -1,0 +1,64 @@
+---
+title: Folder Float
+description: TODO one sentence on what Folder Float does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="folder-float" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add folder-float
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/folder-float.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FolderFloat } from "@/components/ui/folder-float";
+
+export default function Example() {
+  return <FolderFloat />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default               | Description |
+| :------------ | :------ | :-------------------- | :---------- |
+| items         | any     | DEFAULT_ITEMS         | -           |
+| label         | string  | "Design feedback"     | -           |
+| sublabel      | string  | ""                    | -           |
+| trigger       | string  | "hover"               | -           |
+| defaultOpen   | boolean | false                 | -           |
+| closeOnSelect | boolean | true                  | -           |
+| physics       | boolean | true                  | -           |
+| drift         | number  | 0.5                   | -           |
+| onSelect      | any     | -                     | -           |
+| onOpenChange  | any     | -                     | -           |
+| folderColor   | string  | "hsl(var(--primary))" | -           |
+| frontColor    | string  | "hsl(var(--primary))" | -           |
+| paperColor    | string  | "hsl(var(--primary))" | -           |
+| itemColor     | string  | "hsl(var(--primary))" | -           |
+| itemTextColor | string  | "hsl(var(--primary))" | -           |
+| labelColor    | string  | "hsl(var(--primary))" | -           |
+| width         | number  | 200                   | -           |
+| height        | number  | 148                   | -           |
+| radius        | number  | 14                    | -           |
+| spread        | number  | 180                   | -           |
+| lift          | number  | 26                    | -           |
+| tilt          | number  | 8                     | -           |
+| flapAngle     | number  | 34                    | -           |
+| restAngle     | number  | 16                    | -           |
+| openDuration  | number  | 520                   | -           |
+| stagger       | number  | 45                    | -           |
+| bounce        | number  | 0.3                   | -           |

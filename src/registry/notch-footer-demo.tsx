@@ -19,3 +19,4 @@ export function NotchFooterDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

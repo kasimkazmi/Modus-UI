@@ -1,0 +1,58 @@
+---
+title: Comet Dial
+description: TODO one sentence on what Comet Dial does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="comet-dial" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add comet-dial
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/comet-dial.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CometDial } from "@/components/ui/comet-dial";
+
+export default function Example() {
+  return <CometDial />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 62                    | -           |
+| min          | number  | 0                     | -           |
+| max          | number  | 100                   | -           |
+| step         | number  | 1                     | -           |
+| unit         | string  | "%"                   | -           |
+| label        | string  | "Level"               | -           |
+| accent       | string  | "hsl(var(--primary))" | -           |
+| ink          | string  | "hsl(var(--primary))" | -           |
+| size         | number  | 250                   | -           |
+| sweep        | number  | 320                   | -           |
+| thickness    | number  | 5                     | -           |
+| speed        | number  | 25                    | -           |
+| tapBounce    | number  | 0.2                   | -           |
+| flickBounce  | number  | 0.1                   | -           |
+| momentum     | number  | 1                     | -           |
+| cometReach   | number  | 180                   | -           |
+| cometWidth   | number  | 12                    | -           |
+| disabled     | boolean | false                 | -           |
+| onChange     | any     | -                     | -           |
+| onChangeEnd  | any     | -                     | -           |

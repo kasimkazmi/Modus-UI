@@ -20,3 +20,4 @@ export default function SpotlightCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -1,0 +1,60 @@
+---
+title: Shredder
+description: TODO one sentence on what Shredder does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="shredder" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add shredder
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/shredder.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Shredder } from "@/components/ui/shredder";
+
+export default function Example() {
+  return <Shredder />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default               | Description |
+| :-------------- | :------ | :-------------------- | :---------- |
+| items           | any     | []                    | -           |
+| renderItem      | any     | -                     | -           |
+| onShred         | any     | -                     | -           |
+| onReorder       | any     | -                     | -           |
+| width           | number  | 340                   | -           |
+| height          | number  | 460                   | -           |
+| inset           | number  | 14                    | -           |
+| gap             | number  | 10                    | -           |
+| slitHeight      | number  | 4                     | -           |
+| fallHeight      | number  | 140                   | -           |
+| feedSpeed       | number  | 180                   | -           |
+| bite            | number  | 18                    | -           |
+| autoFeed        | boolean | true                  | -           |
+| stripWidth      | number  | 10                    | -           |
+| curl            | number  | 1                     | -           |
+| autoAnimate     | boolean | false                 | -           |
+| loop            | boolean | false                 | -           |
+| loopAfterDelete | boolean | false                 | -           |
+| dragTilt        | number  | 6                     | -           |
+| lift            | number  | 1.02                  | -           |
+| slitColor       | string  | "hsl(var(--primary))" | -           |
+| color           | string  | "hsl(var(--primary))" | -           |
+| disabled        | boolean | false                 | -           |

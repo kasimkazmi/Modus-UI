@@ -1,0 +1,57 @@
+---
+title: Dodge Field
+description: TODO one sentence on what Dodge Field does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="dodge-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dodge-field
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/dodge-field.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DodgeField } from "@/components/ui/dodge-field";
+
+export default function Example() {
+  return <DodgeField />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| children       | any     | -                     | -           |
+| taunts         | any     | DEFAULT_TAUNTS        | -           |
+| notice         | string  | ""                    | -           |
+| inkColor       | string  | "hsl(var(--primary))" | -           |
+| contrastColor  | string  | "hsl(var(--primary))" | -           |
+| fieldHeight    | number  | 240                   | -           |
+| reach          | number  | 72                    | -           |
+| radius         | number  | 120                   | -           |
+| falloff        | number  | 2                     | -           |
+| fleeDuration   | number  | 130                   | -           |
+| returnDuration | number  | 620                   | -           |
+| returnBounce   | number  | 0.1                   | -           |
+| axis           | string  | "both"                | -           |
+| wall           | string  | "clamp"               | -           |
+| patience       | number  | 4                     | -           |
+| disabled       | boolean | false                 | -           |
+| onDodge        | any     | -                     | -           |
+| onRelent       | any     | -                     | -           |
+| onCatch        | any     | -                     | -           |
+| style          | any     | -                     | -           |

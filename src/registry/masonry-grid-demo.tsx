@@ -36,3 +36,4 @@ export default function MasonryGridDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

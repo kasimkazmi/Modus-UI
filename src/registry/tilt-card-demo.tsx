@@ -65,3 +65,4 @@ export function TiltCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

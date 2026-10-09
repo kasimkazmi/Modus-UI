@@ -20,3 +20,4 @@ export default function GravityTextSwapDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

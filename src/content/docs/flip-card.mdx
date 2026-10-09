@@ -1,0 +1,64 @@
+---
+title: Flip Card
+description: TODO one sentence on what Flip Card does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="flip-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add flip-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/flip-card.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FlipCard } from "@/components/ui/flip-card";
+
+export default function Example() {
+  return <FlipCard />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| front          | any     | null                  | -           |
+| back           | any     | null                  | -           |
+| flipped        | any     | -                     | -           |
+| defaultFlipped | boolean | false                 | -           |
+| onFlipChange   | any     | -                     | -           |
+| axis           | string  | "y"                   | -           |
+| flipOnClick    | boolean | true                  | -           |
+| draggable      | boolean | true                  | -           |
+| dragDistance   | number  | 0                     | -           |
+| tilt           | boolean | true                  | -           |
+| tiltMax        | number  | 12                    | -           |
+| glare          | boolean | true                  | -           |
+| glareOpacity   | number  | 0.22                  | -           |
+| hoverScale     | number  | 1.03                  | -           |
+| perspective    | number  | 1100                  | -           |
+| stiffness      | number  | 170                   | -           |
+| damping        | number  | 20                    | -           |
+| width          | number  | 300                   | -           |
+| height         | number  | 400                   | -           |
+| radius         | number  | 22                    | -           |
+| background     | string  | "hsl(var(--primary))" | -           |
+| color          | string  | "hsl(var(--primary))" | -           |
+| shadow         | boolean | true                  | -           |
+| shadowColor    | string  | "hsl(var(--primary))" | -           |
+| shadowOpacity  | number  | 0.45                  | -           |
+| disabled       | boolean | false                 | -           |
+| ariaLabel      | string  | "Flip card"           | -           |

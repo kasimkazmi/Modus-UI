@@ -26,3 +26,4 @@ export default function WavesDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

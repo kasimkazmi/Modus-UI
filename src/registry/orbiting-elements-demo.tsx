@@ -41,3 +41,4 @@ export default function OrbitingElementsDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

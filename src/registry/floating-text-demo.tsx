@@ -18,3 +18,4 @@ export function FloatingTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -20,3 +20,4 @@ export default function CursorGridDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

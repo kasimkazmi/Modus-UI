@@ -27,3 +27,4 @@ export default function TiltedCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

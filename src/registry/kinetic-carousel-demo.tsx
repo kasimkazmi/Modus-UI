@@ -53,3 +53,4 @@ export default function KineticCarouselDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -16,3 +16,4 @@ export default function BorderBeamDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

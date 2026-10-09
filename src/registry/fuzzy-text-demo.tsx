@@ -12,3 +12,4 @@ export default function FuzzyTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

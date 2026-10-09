@@ -1,0 +1,56 @@
+---
+title: Slide Commit
+description: TODO one sentence on what Slide Commit does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="slide-commit" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add slide-commit
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/slide-commit.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SlideCommit } from "@/components/ui/slide-commit";
+
+export default function Example() {
+  return <SlideCommit />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| label        | string  | "Slide to pay"        | -           |
+| doneLabel    | string  | "Paid"                | -           |
+| errorLabel   | string  | "Payment failed"      | -           |
+| onConfirm    | any     | -                     | -           |
+| onDone       | any     | -                     | -           |
+| onError      | any     | -                     | -           |
+| trackColor   | string  | "hsl(var(--primary))" | -           |
+| handleColor  | string  | "hsl(var(--primary))" | -           |
+| successColor | string  | "hsl(var(--primary))" | -           |
+| dangerColor  | string  | "hsl(var(--primary))" | -           |
+| width        | number  | 280                   | -           |
+| height       | number  | 56                    | -           |
+| radius       | number  | 28                    | -           |
+| speed        | number  | 50                    | -           |
+| returnBounce | number  | 0.38                  | -           |
+| landingDip   | number  | 0.026                 | -           |
+| holdMs       | number  | 1500                  | -           |
+| disabled     | boolean | false                 | -           |
+| icon         | any     | -                     | -           |

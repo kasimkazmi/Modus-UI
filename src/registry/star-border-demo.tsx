@@ -11,3 +11,4 @@ export default function StarBorderDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

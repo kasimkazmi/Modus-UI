@@ -1,0 +1,51 @@
+---
+title: Refine Frame
+description: TODO one sentence on what Refine Frame does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="refine-frame" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add refine-frame
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/refine-frame.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RefineFrame } from "@/components/ui/refine-frame";
+
+export default function Example() {
+  return <RefineFrame />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default               | Description |
+| :------------ | :------ | :-------------------- | :---------- |
+| status        | string  | "generating"          | -           |
+| children      | any     | -                     | -           |
+| aspectRatio   | string  | "4 / 3"               | -           |
+| width         | number  | 320                   | -           |
+| radius        | number  | 16                    | -           |
+| background    | string  | "hsl(var(--primary))" | -           |
+| color         | string  | "hsl(var(--primary))" | -           |
+| stageDuration | number  | 400                   | -           |
+| sweep         | boolean | true                  | -           |
+| showStatus    | boolean | true                  | -           |
+| hideAfter     | number  | 1200                  | -           |
+| labels        | any     | DEFAULT_LABELS        | -           |
+| retryLabel    | string  | "Retry"               | -           |
+| onRetry       | any     | -                     | -           |

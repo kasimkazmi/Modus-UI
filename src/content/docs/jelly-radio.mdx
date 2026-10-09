@@ -1,0 +1,57 @@
+---
+title: Jelly Radio
+description: TODO one sentence on what Jelly Radio does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="jelly-radio" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add jelly-radio
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/jelly-radio.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { JellyRadio } from "@/components/ui/jelly-radio";
+
+export default function Example() {
+  return <JellyRadio />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default               | Description |
+| :-------------- | :------ | :-------------------- | :---------- |
+| items           | any     | DEFAULT_ITEMS         | -           |
+| value           | any     | -                     | -           |
+| defaultValue    | any     | -                     | -           |
+| onChange        | any     | -                     | -           |
+| chipColor       | string  | "hsl(var(--primary))" | -           |
+| activeColor     | string  | "hsl(var(--primary))" | -           |
+| textColor       | string  | "hsl(var(--primary))" | -           |
+| activeTextColor | string  | "hsl(var(--primary))" | -           |
+| size            | string  | "md"                  | -           |
+| gap             | number  | 8                     | -           |
+| radius          | number  | 18                    | -           |
+| swell           | number  | 0.2                   | -           |
+| barge           | number  | 6                     | -           |
+| shrink          | number  | 0.05                  | -           |
+| jelly           | number  | 1                     | -           |
+| bounce          | number  | 0.25                  | -           |
+| stagger         | number  | 22                    | -           |
+| stiffness       | number  | 580                   | -           |
+| disabled        | boolean | false                 | -           |
+| ariaLabel       | string  | "Options"             | -           |

@@ -1,0 +1,73 @@
+---
+title: Tear Ticket
+description: TODO one sentence on what Tear Ticket does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="tear-ticket" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tear-ticket
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tear-ticket.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TearTicket } from "@/components/ui/tear-ticket";
+
+export default function Example() {
+  return <TearTicket />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| children       | any     | null                  | -           |
+| stub           | any     | null                  | -           |
+| image          | string  | ""                    | -           |
+| imageAlt       | string  | ""                    | -           |
+| scrim          | boolean | true                  | -           |
+| imageRadius    | number  | 8                     | -           |
+| orientation    | string  | "horizontal"          | -           |
+| torn           | any     | -                     | -           |
+| defaultTorn    | boolean | false                 | -           |
+| onTear         | any     | -                     | -           |
+| width          | number  | 460                   | -           |
+| height         | number  | 250                   | -           |
+| stubSize       | number  | 150                   | -           |
+| radius         | number  | 16                    | -           |
+| holes          | number  | 12                    | -           |
+| holeSize       | number  | 6                     | -           |
+| notch          | number  | 3                     | -           |
+| roughness      | number  | 0                     | -           |
+| tearAngle      | number  | 30                    | -           |
+| stretch        | number  | 30                    | -           |
+| resistance     | number  | 0.45                  | -           |
+| rotate         | number  | 4                     | -           |
+| tilt           | boolean | true                  | -           |
+| tiltMax        | number  | 9                     | -           |
+| tiltReach      | number  | 260                   | -           |
+| parallax       | number  | 6                     | -           |
+| perspective    | number  | 1000                  | -           |
+| background     | string  | "hsl(var(--primary))" | -           |
+| color          | string  | "hsl(var(--primary))" | -           |
+| border         | boolean | true                  | -           |
+| borderColor    | string  | ""                    | -           |
+| borderWidth    | number  | 1                     | -           |
+| stubBackground | string  | ""                    | -           |
+| recenter       | boolean | true                  | -           |
+| disabled       | boolean | false                 | -           |
+| ariaLabel      | string  | "Tear off the stub"   | -           |

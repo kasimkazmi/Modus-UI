@@ -1,0 +1,55 @@
+---
+title: Paper Crumple
+description: An interactive paper that crumples and folds on drag.
+---
+
+An interactive canvas-based component that simulates crumpling paper with realistic fold physics.
+
+<ComponentPreview name="paper-crumple" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add paper-crumple
+```
+
+## Props
+
+| Prop            | Type     | Default             | Description                                        |
+| :-------------- | :------- | :------------------ | :------------------------------------------------- |
+| src             | string   | -                   | The image URL to display on the paper front.       |
+| alt             | string   | "Crumplable image"  | Accessible alt text.                               |
+| backSrc         | string   | ""                  | Optional back face image URL.                      |
+| width           | number   | 320                 | Width of the paper in pixels.                      |
+| height          | number   | 400                 | Height of the paper in pixels.                     |
+| sceneHeight     | number   | 560                 | Height of the container scene.                     |
+| imageFit        | string   | "cover"             | CSS object-fit for the image.                      |
+| releaseBehavior | string   | "restore"           | What happens on release: "restore" or "stay".      |
+| crumpleAmount   | number   | 0.85                | How much the paper crumples (0–1).                 |
+| crumpleDuration | number   | 0.55                | Duration of crumple animation in seconds.          |
+| releaseDuration | number   | 0.4                 | Duration of release animation in seconds.          |
+| foldCount       | number   | 6                   | Number of fold lines.                              |
+| foldSharpness   | number   | 0.6                 | Sharpness of the fold creases.                     |
+| wrinkleDepth    | number   | 0.65                | Depth of the wrinkle displacement.                 |
+| creaseStrength  | number   | 0.18                | Strength of crease shadowing.                      |
+| paperColor      | string   | "hsl(var(--muted))" | Color of the paper.                                |
+| roughness       | number   | 0.92                | Material roughness (0–1).                          |
+| paperTexture    | number   | 0.08                | Paper texture noise intensity.                     |
+| lightIntensity  | number   | 1.8                 | Light intensity on the paper.                      |
+| lightAngle      | number   | -35                 | Angle of the directional light in degrees.         |
+| shadow          | boolean  | true                | Whether to show a drop shadow.                     |
+| shadowOpacity   | number   | 0.08                | Opacity of the drop shadow.                        |
+| draggable       | boolean  | true                | Whether the paper can be dragged.                  |
+| dragRotation    | number   | 10                  | Max rotation on drag in degrees.                   |
+| dragRadius      | number   | 180                 | Max drag displacement radius.                      |
+| returnToOrigin  | boolean  | true                | Whether the paper snaps back on release.           |
+| rotation        | number   | 0                   | Initial rotation of the paper in degrees.          |
+| seed            | number   | 7                   | Random seed for wrinkle generation.                |
+| detail          | number   | 64                  | Mesh subdivision detail level.                     |
+| disabled        | boolean  | false               | Disables interaction.                              |
+| resetKey        | number   | 0                   | Change this value to programmatically reset state. |
+| onStateChange   | function | -                   | Callback fired on status change.                   |
+| onError         | function | -                   | Callback fired on load error.                      |
+| style           | object   | -                   | Inline style for the container.                    |

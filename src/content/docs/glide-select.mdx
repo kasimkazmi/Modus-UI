@@ -1,0 +1,57 @@
+---
+title: Glide Select
+description: TODO one sentence on what Glide Select does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="glide-select" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glide-select
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glide-select.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlideSelect } from "@/components/ui/glide-select";
+
+export default function Example() {
+  return <GlideSelect />;
+}
+```
+
+## Props
+
+| Prop             | Type    | Default               | Description |
+| :--------------- | :------ | :-------------------- | :---------- |
+| options          | any     | DEFAULT_OPTIONS       | -           |
+| value            | any     | -                     | -           |
+| defaultValue     | any     | -                     | -           |
+| onChange         | any     | -                     | -           |
+| placeholder      | string  | "Select…"             | -           |
+| showTags         | boolean | true                  | -           |
+| accentColor      | string  | "hsl(var(--primary))" | -           |
+| surfaceColor     | string  | "hsl(var(--primary))" | -           |
+| highlightColor   | string  | "hsl(var(--primary))" | -           |
+| textColor        | string  | "hsl(var(--primary))" | -           |
+| size             | string  | "md"                  | -           |
+| radius           | number  | 10                    | -           |
+| menuWidth        | number  | 176                   | -           |
+| placement        | string  | "bottom"              | -           |
+| align            | string  | "left"                | -           |
+| popDuration      | number  | 180                   | -           |
+| glideDuration    | number  | 220                   | -           |
+| rememberPosition | boolean | true                  | -           |
+| disabled         | boolean | false                 | -           |
+| ariaLabel        | string  | "Select"              | -           |

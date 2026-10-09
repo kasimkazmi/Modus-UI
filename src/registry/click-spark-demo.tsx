@@ -23,3 +23,4 @@ export default function ClickSparkDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

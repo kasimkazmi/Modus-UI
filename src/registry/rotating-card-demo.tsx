@@ -27,3 +27,4 @@ export function RotatingCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

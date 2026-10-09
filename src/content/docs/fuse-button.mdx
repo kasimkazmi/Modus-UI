@@ -1,0 +1,59 @@
+---
+title: Fuse Button
+description: TODO one sentence on what Fuse Button does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="fuse-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add fuse-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/fuse-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FuseButton } from "@/components/ui/fuse-button";
+
+export default function Example() {
+  return <FuseButton />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default               | Description |
+| :------------ | :------ | :-------------------- | :---------- |
+| label         | string  | "Archive"             | -           |
+| undoLabel     | string  | "Undo"                | -           |
+| doneLabel     | string  | "Archived"            | -           |
+| icon          | any     | -                     | -           |
+| color         | string  | "hsl(var(--primary))" | -           |
+| background    | string  | "hsl(var(--primary))" | -           |
+| fuseColor     | string  | "hsl(var(--primary))" | -           |
+| size          | string  | "md"                  | -           |
+| radius        | number  | 22                    | -           |
+| undoWindow    | number  | 4000                  | -           |
+| fuse          | string  | "outline"             | -           |
+| fuseThickness | number  | 1.5                   | -           |
+| crossfadeMs   | number  | 200                   | -           |
+| commitOn      | string  | "press"               | -           |
+| pauseOnHover  | boolean | true                  | -           |
+| settle        | string  | "reset"               | -           |
+| disabled      | boolean | false                 | -           |
+| onCommit      | any     | -                     | -           |
+| onUndo        | any     | -                     | -           |
+| onFuseEnd     | any     | -                     | -           |
+| onPhaseChange | any     | -                     | -           |
+| type          | string  | "button"              | -           |

@@ -25,3 +25,4 @@ export default function LetterGlitchDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

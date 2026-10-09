@@ -1,0 +1,58 @@
+---
+title: Swipe Toast
+description: TODO one sentence on what Swipe Toast does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="swipe-toast" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swipe-toast
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swipe-toast.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SwipeToast } from "@/components/ui/swipe-toast";
+
+export default function Example() {
+  return <SwipeToast />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default               | Description |
+| :------------ | :------ | :-------------------- | :---------- |
+| title         | string  | "File archived"       | -           |
+| description   | string  | ""                    | -           |
+| icon          | any     | -                     | -           |
+| actionLabel   | string  | ""                    | -           |
+| onAction      | any     | -                     | -           |
+| open          | boolean | true                  | -           |
+| onClose       | any     | -                     | -           |
+| background    | string  | "hsl(var(--primary))" | -           |
+| color         | string  | "hsl(var(--primary))" | -           |
+| fuseColor     | string  | "hsl(var(--primary))" | -           |
+| width         | number  | 356                   | -           |
+| radius        | number  | 12                    | -           |
+| slideMs       | number  | 400                   | -           |
+| settleBounce  | number  | 0.2                   | -           |
+| swipeDistance | number  | 40                    | -           |
+| duration      | number  | 4000                  | -           |
+| fuse          | string  | "bottom"              | -           |
+| pauseOnHover  | boolean | true                  | -           |
+| closeButton   | boolean | false                 | -           |
+| inline        | boolean | false                 | -           |
+| dismissible   | boolean | true                  | -           |

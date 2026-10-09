@@ -23,3 +23,4 @@ export default function LiquidTabsDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

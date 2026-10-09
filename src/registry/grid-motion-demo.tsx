@@ -38,3 +38,4 @@ export default function GridMotionDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

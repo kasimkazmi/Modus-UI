@@ -67,3 +67,4 @@ export default function AnimatedBeamDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

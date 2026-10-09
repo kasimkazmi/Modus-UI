@@ -30,7 +30,12 @@ export default function Example() {
   return (
     <GradientText
       className="text-4xl font-bold"
-      colors={["#f43f5e", "#d946ef", "#8b5cf6", "#3b82f6"]}
+      colors={[
+        "hsl(var(--primary))",
+        "hsl(var(--primary))",
+        "hsl(var(--primary))",
+        "hsl(var(--primary))",
+      ]}
       animationSpeed={5}
     >
       Fluid Gradient Text
@@ -41,11 +46,11 @@ export default function Example() {
 
 ## Props
 
-| Prop             | Type                                       | Default                                                   | Description                                           |
-| :--------------- | :----------------------------------------- | :-------------------------------------------------------- | :---------------------------------------------------- |
-| `colors`         | `string[]`                                 | `["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#34d399"]` | Colours of the gradient.                              |
-| `animationSpeed` | `number`                                   | `8`                                                       | Seconds for one gradient cycle.                       |
-| `showBorder`     | `boolean`                                  | `false`                                                   | Adds an animated gradient border.                     |
-| `direction`      | `"horizontal" \| "vertical" \| "diagonal"` | `"horizontal"`                                            | Direction the gradient moves.                         |
-| `pauseOnHover`   | `boolean`                                  | `false`                                                   | Pauses the animation while hovered.                   |
-| `yoyo`           | `boolean`                                  | `true`                                                    | Reverses the animation each cycle instead of looping. |
+| Prop             | Type                                       | Default                                                                                                               | Description                                           |
+| :--------------- | :----------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
+| `colors`         | `string[]`                                 | `["hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))"]` | Colours of the gradient.                              |
+| `animationSpeed` | `number`                                   | `8`                                                                                                                   | Seconds for one gradient cycle.                       |
+| `showBorder`     | `boolean`                                  | `false`                                                                                                               | Adds an animated gradient border.                     |
+| `direction`      | `"horizontal" \| "vertical" \| "diagonal"` | `"horizontal"`                                                                                                        | Direction the gradient moves.                         |
+| `pauseOnHover`   | `boolean`                                  | `false`                                                                                                               | Pauses the animation while hovered.                   |
+| `yoyo`           | `boolean`                                  | `true`                                                                                                                | Reverses the animation each cycle instead of looping. |

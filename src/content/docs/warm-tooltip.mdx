@@ -1,0 +1,55 @@
+---
+title: Warm Tooltip
+description: TODO one sentence on what Warm Tooltip does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="warm-tooltip" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add warm-tooltip
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/warm-tooltip.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { WarmTooltip } from "@/components/ui/warm-tooltip";
+
+export default function Example() {
+  return <WarmTooltip />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| content      | any     | -                     | -           |
+| shortcut     | any     | -                     | -           |
+| children     | any     | -                     | -           |
+| side         | string  | "top"                 | -           |
+| delay        | any     | -                     | -           |
+| warmWindow   | any     | -                     | -           |
+| surfaceColor | string  | "hsl(var(--primary))" | -           |
+| inkColor     | string  | "hsl(var(--primary))" | -           |
+| size         | string  | "md"                  | -           |
+| radius       | number  | 8                     | -           |
+| gap          | number  | 8                     | -           |
+| arrow        | boolean | true                  | -           |
+| popDuration  | number  | 160                   | -           |
+| popScale     | number  | 0.94                  | -           |
+| popBlur      | number  | 4                     | -           |
+| showFuse     | boolean | false                 | -           |
+| longPress    | number  | 500                   | -           |
+| disabled     | boolean | false                 | -           |

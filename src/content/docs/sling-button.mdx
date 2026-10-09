@@ -1,0 +1,57 @@
+---
+title: Sling Button
+description: TODO one sentence on what Sling Button does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="sling-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add sling-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/sling-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SlingButton } from "@/components/ui/sling-button";
+
+export default function Example() {
+  return <SlingButton />;
+}
+```
+
+## Props
+
+| Prop        | Type    | Default               | Description |
+| :---------- | :------ | :-------------------- | :---------- |
+| children    | any     | -                     | -           |
+| onSend      | any     | -                     | -           |
+| padColor    | string  | "hsl(var(--primary))" | -           |
+| iconColor   | string  | "hsl(var(--primary))" | -           |
+| accentColor | string  | "hsl(var(--primary))" | -           |
+| wellColor   | string  | "hsl(var(--primary))" | -           |
+| bandColor   | string  | "hsl(var(--primary))" | -           |
+| size        | number  | 56                    | -           |
+| strokeWidth | number  | 3                     | -           |
+| armAt       | number  | 48                    | -           |
+| maxPull     | number  | 160                   | -           |
+| launchSpeed | number  | 2600                  | -           |
+| recoil      | number  | 0.2                   | -           |
+| flight      | number  | 120                   | -           |
+| particles   | number  | 14                    | -           |
+| spread      | number  | 60                    | -           |
+| axis        | string  | "any"                 | -           |
+| tapSends    | boolean | true                  | -           |
+| disabled    | boolean | false                 | -           |
+| ariaLabel   | string  | "Send"                | -           |

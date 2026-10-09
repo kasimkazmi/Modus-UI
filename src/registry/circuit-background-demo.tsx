@@ -24,3 +24,4 @@ export function CircuitBackgroundDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

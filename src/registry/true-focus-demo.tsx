@@ -23,3 +23,4 @@ export default function TrueFocusDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

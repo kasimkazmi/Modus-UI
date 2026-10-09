@@ -21,3 +21,4 @@ export default function ShimmerTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

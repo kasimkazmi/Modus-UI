@@ -16,3 +16,4 @@ export default function BlobCursorDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

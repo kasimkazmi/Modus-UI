@@ -1,0 +1,64 @@
+---
+title: Bell Toggle
+description: TODO one sentence on what Bell Toggle does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="bell-toggle" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add bell-toggle
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bell-toggle.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BellToggle } from "@/components/ui/bell-toggle";
+
+export default function Example() {
+  return <BellToggle />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| offLabel       | string  | "Notify me"           | -           |
+| onLabel        | string  | "You'll be notified"  | -           |
+| icon           | any     | -                     | -           |
+| label          | any     | -                     | -           |
+| color          | string  | "hsl(var(--primary))" | -           |
+| background     | string  | "hsl(var(--primary))" | -           |
+| onColor        | string  | "hsl(var(--primary))" | -           |
+| onBackground   | string  | "hsl(var(--primary))" | -           |
+| size           | string  | "md"                  | -           |
+| radius         | number  | 22                    | -           |
+| ringAmplitude  | number  | 17                    | -           |
+| ringPasses     | number  | 5                     | -           |
+| ringDecay      | number  | 1                     | -           |
+| ringDuration   | number  | 820                   | -           |
+| ringPivot      | number  | 16                    | -           |
+| crossfadeMs    | number  | 200                   | -           |
+| revealBounce   | number  | 0                     | -           |
+| count          | number  | 0                     | -           |
+| badge          | boolean | true                  | -           |
+| badgeColor     | string  | "hsl(var(--primary))" | -           |
+| badgeTextColor | string  | "hsl(var(--primary))" | -           |
+| waves          | boolean | true                  | -           |
+| clapper        | boolean | false                 | -           |
+| pressed        | any     | -                     | -           |
+| defaultPressed | boolean | false                 | -           |
+| onChange       | any     | -                     | -           |
+| disabled       | boolean | false                 | -           |

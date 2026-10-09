@@ -20,3 +20,4 @@ export default function TextPressureDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

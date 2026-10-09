@@ -1,0 +1,59 @@
+---
+title: Thought Line
+description: TODO one sentence on what Thought Line does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="thought-line" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add thought-line
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/thought-line.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ThoughtLine } from "@/components/ui/thought-line";
+
+export default function Example() {
+  return <ThoughtLine />;
+}
+```
+
+## Props
+
+| Prop             | Type    | Default        | Description |
+| :--------------- | :------ | :------------- | :---------- |
+| label            | string  | "Thinking…"    | -           |
+| doneLabel        | string  | ""             | -           |
+| renderLabel      | any     | -              | -           |
+| glyph            | string  | "sparkle"      | -           |
+| steps            | any     | EMPTY_STEPS    | -           |
+| collapsible      | boolean | true           | -           |
+| collapseOnSettle | boolean | true           | -           |
+| color            | string  | "currentColor" | -           |
+| glyphColor       | string  | ""             | -           |
+| fontSize         | number  | 16             | -           |
+| breathPeriod     | number  | 1.6            | -           |
+| breathDepth      | number  | 0.45           | -           |
+| shimmer          | boolean | true           | -           |
+| shimmerDuration  | number  | 1.8            | -           |
+| settleDuration   | number  | 350            | -           |
+| settleBlur       | number  | 2              | -           |
+| working          | boolean | true           | -           |
+| settleAfter      | number  | 0              | -           |
+| elapsed          | any     | -              | -           |
+| showTimer        | boolean | true           | -           |
+| onSettle         | any     | -              | -           |
+| style            | any     | -              | -           |

@@ -1,0 +1,55 @@
+---
+title: Call Chip
+description: TODO one sentence on what Call Chip does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="call-chip" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add call-chip
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/call-chip.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CallChip } from "@/components/ui/call-chip";
+
+export default function Example() {
+  return <CallChip />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default               | Description |
+| :-------------- | :------ | :-------------------- | :---------- |
+| icon            | string  | "terminal"            | -           |
+| name            | string  | "bash"                | -           |
+| argument        | string  | "npm test"            | -           |
+| status          | string  | "running"             | -           |
+| expectedMs      | number  | 2500                  | -           |
+| size            | number  | 34                    | -           |
+| radius          | number  | 10                    | -           |
+| color           | string  | "currentColor"        | -           |
+| surfaceColor    | string  | "hsl(var(--primary))" | -           |
+| progressColor   | string  | "currentColor"        | -           |
+| progressOpacity | number  | 0.08                  | -           |
+| doneColor       | string  | "hsl(var(--primary))" | -           |
+| errorColor      | string  | "hsl(var(--primary))" | -           |
+| washOpacity     | number  | 0.14                  | -           |
+| shake           | number  | 6                     | -           |
+| showTimer       | boolean | true                  | -           |
+| onRetry         | any     | -                     | -           |
+| style           | any     | -                     | -           |

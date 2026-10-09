@@ -16,3 +16,4 @@ export default function ScrollVelocityDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

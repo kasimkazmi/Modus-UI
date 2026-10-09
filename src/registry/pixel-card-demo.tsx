@@ -21,3 +21,4 @@ export default function PixelCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

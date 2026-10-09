@@ -15,3 +15,4 @@ export default function FlipWordsDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

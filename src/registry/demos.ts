@@ -58,6 +58,40 @@ import ReflectiveCardDemo from "./reflective-card-demo";
 import FluidGlassDemo from "./fluid-glass-demo";
 import DomeGalleryDemo from "./dome-gallery-demo";
 import ChromaGridDemo from "./chroma-grid-demo";
+import BellToggleDemo from "./bell-toggle-demo";
+import BranchedMenuDemo from "./branched-menu-demo";
+import CallChipDemo from "./call-chip-demo";
+import CodeSlotsDemo from "./code-slots-demo";
+import CometDialDemo from "./comet-dial-demo";
+import DodgeFieldDemo from "./dodge-field-demo";
+import FlipCardDemo from "./flip-card-demo";
+import FolderFloatDemo from "./folder-float-demo";
+import FuseButtonDemo from "./fuse-button-demo";
+import GlideSelectDemo from "./glide-select-demo";
+import HoldButtonDemo from "./hold-button-demo";
+import JellyRadioDemo from "./jelly-radio-demo";
+import LatticeLoaderDemo from "./lattice-loader-demo";
+import PaperCrumpleDemo from "./paper-crumple-demo";
+import PeekRatingDemo from "./peek-rating-demo";
+import PromptBarDemo from "./prompt-bar-demo";
+import PulseHeartDemo from "./pulse-heart-demo";
+import RefineFrameDemo from "./refine-frame-demo";
+import RubberSegmentDemo from "./rubber-segment-demo";
+import ScrubFieldDemo from "./scrub-field-demo";
+import ShredderDemo from "./shredder-demo";
+import SlideCommitDemo from "./slide-commit-demo";
+import SlingButtonDemo from "./sling-button-demo";
+import SloshGaugeDemo from "./slosh-gauge-demo";
+import SpringCheckDemo from "./spring-check-demo";
+import SquishSwitchDemo from "./squish-switch-demo";
+import StatusMarkDemo from "./status-mark-demo";
+import SwipeRowDemo from "./swipe-row-demo";
+import SwipeToastDemo from "./swipe-toast-demo";
+import TearTicketDemo from "./tear-ticket-demo";
+import ThoughtLineDemo from "./thought-line-demo";
+import VoicePillDemo from "./voice-pill-demo";
+import WakeSliderDemo from "./wake-slider-demo";
+import WarmTooltipDemo from "./warm-tooltip-demo";
 import type { ComponentName } from "./index";
 
 /** The demo rendered for each component in docs and standalone previews. */
@@ -121,6 +155,40 @@ export const demos: Record<ComponentName, ComponentType> = {
   "fluid-glass": FluidGlassDemo,
   "dome-gallery": DomeGalleryDemo,
   "chroma-grid": ChromaGridDemo,
+  "bell-toggle": BellToggleDemo,
+  "branched-menu": BranchedMenuDemo,
+  "call-chip": CallChipDemo,
+  "code-slots": CodeSlotsDemo,
+  "comet-dial": CometDialDemo,
+  "dodge-field": DodgeFieldDemo,
+  "flip-card": FlipCardDemo,
+  "folder-float": FolderFloatDemo,
+  "fuse-button": FuseButtonDemo,
+  "glide-select": GlideSelectDemo,
+  "hold-button": HoldButtonDemo,
+  "jelly-radio": JellyRadioDemo,
+  "lattice-loader": LatticeLoaderDemo,
+  "paper-crumple": PaperCrumpleDemo,
+  "peek-rating": PeekRatingDemo,
+  "prompt-bar": PromptBarDemo,
+  "pulse-heart": PulseHeartDemo,
+  "refine-frame": RefineFrameDemo,
+  "rubber-segment": RubberSegmentDemo,
+  "scrub-field": ScrubFieldDemo,
+  shredder: ShredderDemo,
+  "slide-commit": SlideCommitDemo,
+  "sling-button": SlingButtonDemo,
+  "slosh-gauge": SloshGaugeDemo,
+  "spring-check": SpringCheckDemo,
+  "squish-switch": SquishSwitchDemo,
+  "status-mark": StatusMarkDemo,
+  "swipe-row": SwipeRowDemo,
+  "swipe-toast": SwipeToastDemo,
+  "tear-ticket": TearTicketDemo,
+  "thought-line": ThoughtLineDemo,
+  "voice-pill": VoicePillDemo,
+  "wake-slider": WakeSliderDemo,
+  "warm-tooltip": WarmTooltipDemo,
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

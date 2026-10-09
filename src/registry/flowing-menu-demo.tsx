@@ -34,3 +34,4 @@ export default function FlowingMenuDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

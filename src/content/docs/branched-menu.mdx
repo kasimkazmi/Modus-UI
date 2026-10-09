@@ -1,0 +1,54 @@
+---
+title: Branched Menu
+description: TODO one sentence on what Branched Menu does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="branched-menu" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add branched-menu
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/branched-menu.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BranchedMenu } from "@/components/ui/branched-menu";
+
+export default function Example() {
+  return <BranchedMenu />;
+}
+```
+
+## Props
+
+| Prop          | Type   | Default               | Description |
+| :------------ | :----- | :-------------------- | :---------- |
+| items         | any    | DEFAULT_ITEMS         | -           |
+| defaultOpen   | number | 0                     | -           |
+| defaultActive | string | ""                    | -           |
+| onSelect      | any    | -                     | -           |
+| onToggle      | any    | -                     | -           |
+| color         | string | "hsl(var(--primary))" | -           |
+| accentColor   | string | "hsl(var(--primary))" | -           |
+| lineColor     | string | "hsl(var(--primary))" | -           |
+| width         | number | 240                   | -           |
+| rowHeight     | number | 36                    | -           |
+| indent        | number | 40                    | -           |
+| trunk         | number | 14                    | -           |
+| radius        | number | 10                    | -           |
+| lineWidth     | number | 1.5                   | -           |
+| fontSize      | number | 14                    | -           |
+| drawDuration  | number | 400                   | -           |
+| foldDuration  | number | 300                   | -           |

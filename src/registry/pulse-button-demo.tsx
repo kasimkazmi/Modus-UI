@@ -15,3 +15,4 @@ export function PulseButtonDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

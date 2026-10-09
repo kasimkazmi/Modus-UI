@@ -1,0 +1,54 @@
+---
+title: Slosh Gauge
+description: TODO one sentence on what Slosh Gauge does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="slosh-gauge" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add slosh-gauge
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/slosh-gauge.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SloshGauge } from "@/components/ui/slosh-gauge";
+
+export default function Example() {
+  return <SloshGauge />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 60                    | -           |
+| onChange     | any     | -                     | -           |
+| interactive  | boolean | false                 | -           |
+| showValue    | boolean | true                  | -           |
+| disabled     | boolean | false                 | -           |
+| liquidColor  | string  | "hsl(var(--primary))" | -           |
+| glassColor   | string  | "hsl(var(--primary))" | -           |
+| width        | number  | 88                    | -           |
+| height       | number  | 180                   | -           |
+| radius       | number  | 20                    | -           |
+| ticks        | number  | 4                     | -           |
+| viscosity    | number  | 0.15                  | -           |
+| tilt         | number  | 0.45                  | -           |
+| splash       | number  | 0.42                  | -           |
+| unit         | string  | "%"                   | -           |
+| ariaLabel    | string  | "Level"               | -           |

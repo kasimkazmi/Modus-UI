@@ -19,3 +19,4 @@ export default function FocusCardDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

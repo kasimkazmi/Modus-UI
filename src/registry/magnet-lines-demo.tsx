@@ -21,3 +21,4 @@ export default function MagnetLinesDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

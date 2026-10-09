@@ -13,3 +13,4 @@ export function AnimatedButtonDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

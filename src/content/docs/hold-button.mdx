@@ -1,0 +1,58 @@
+---
+title: Hold Button
+description: TODO one sentence on what Hold Button does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="hold-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hold-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hold-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { HoldButton } from "@/components/ui/hold-button";
+
+export default function Example() {
+  return <HoldButton />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default               | Description |
+| :-------------- | :------ | :-------------------- | :---------- |
+| children        | string  | "Hold to delete"      | -           |
+| doneLabel       | string  | "Deleted"             | -           |
+| icon            | any     | null                  | -           |
+| doneIcon        | any     | null                  | -           |
+| backgroundColor | string  | "hsl(var(--primary))" | -           |
+| fillColor       | string  | "hsl(var(--primary))" | -           |
+| textColor       | string  | "hsl(var(--primary))" | -           |
+| fillTextColor   | string  | "hsl(var(--primary))" | -           |
+| size            | string  | "md"                  | -           |
+| radius          | number  | 14                    | -           |
+| fillDirection   | string  | "right"               | -           |
+| holdTime        | number  | 2000                  | -           |
+| releaseTime     | number  | 200                   | -           |
+| pressScale      | number  | 0.97                  | -           |
+| wave            | boolean | true                  | -           |
+| waveAmplitude   | number  | 6                     | -           |
+| glow            | boolean | true                  | -           |
+| resetAfter      | number  | 1200                  | -           |
+| disabled        | boolean | false                 | -           |
+| onHold          | any     | -                     | -           |
+| onTap           | any     | -                     | -           |

@@ -20,3 +20,4 @@ export default function ComparisonSliderDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

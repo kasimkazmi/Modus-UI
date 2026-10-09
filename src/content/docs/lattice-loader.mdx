@@ -1,0 +1,57 @@
+---
+title: Lattice Loader
+description: TODO one sentence on what Lattice Loader does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="lattice-loader" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add lattice-loader
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/lattice-loader.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { LatticeLoader } from "@/components/ui/lattice-loader";
+
+export default function Example() {
+  return <LatticeLoader />;
+}
+```
+
+## Props
+
+| Prop        | Type    | Default               | Description |
+| :---------- | :------ | :-------------------- | :---------- |
+| label       | string  | "Thinking"            | -           |
+| doneLabel   | string  | "Done in"             | -           |
+| errorLabel  | string  | "Failed after"        | -           |
+| status      | string  | "working"             | -           |
+| pattern     | string  | "orbit"               | -           |
+| grid        | number  | 3                     | -           |
+| shape       | string  | "round"               | -           |
+| color       | string  | "currentColor"        | -           |
+| doneColor   | string  | "hsl(var(--primary))" | -           |
+| errorColor  | string  | "hsl(var(--primary))" | -           |
+| cellSize    | number  | 6                     | -           |
+| gap         | number  | 2                     | -           |
+| fontSize    | number  | 14                    | -           |
+| step        | number  | 90                    | -           |
+| idleOpacity | number  | 0.15                  | -           |
+| glow        | boolean | false                 | -           |
+| glowColor   | string  | ""                    | -           |
+| showTimer   | boolean | true                  | -           |
+| elapsed     | any     | -                     | -           |
+| style       | any     | -                     | -           |

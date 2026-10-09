@@ -1,0 +1,60 @@
+---
+title: Code Slots
+description: TODO one sentence on what Code Slots does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="code-slots" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add code-slots
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/code-slots.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CodeSlots } from "@/components/ui/code-slots";
+
+export default function Example() {
+  return <CodeSlots />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| length       | number  | 6                     | -           |
+| value        | any     | -                     | -           |
+| defaultValue | string  | ""                    | -           |
+| onChange     | any     | -                     | -           |
+| onComplete   | any     | -                     | -           |
+| status       | string  | "idle"                | -           |
+| mask         | boolean | false                 | -           |
+| caret        | boolean | true                  | -           |
+| disabled     | boolean | false                 | -           |
+| autoFocus    | boolean | false                 | -           |
+| accentColor  | string  | "hsl(var(--primary))" | -           |
+| inkColor     | string  | "hsl(var(--primary))" | -           |
+| slotColor    | string  | "hsl(var(--primary))" | -           |
+| digitColor   | string  | "hsl(var(--primary))" | -           |
+| dangerColor  | string  | "hsl(var(--primary))" | -           |
+| slotSize     | number  | 44                    | -           |
+| gap          | number  | 8                     | -           |
+| radius       | number  | 12                    | -           |
+| bounce       | number  | 0.2                   | -           |
+| settle       | number  | 0.3                   | -           |
+| rise         | number  | 8                     | -           |
+| cascade      | number  | 20                    | -           |
+| ariaLabel    | string  | "One-time code"       | -           |

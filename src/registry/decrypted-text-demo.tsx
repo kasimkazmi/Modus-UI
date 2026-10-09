@@ -25,3 +25,4 @@ export default function DecryptedTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

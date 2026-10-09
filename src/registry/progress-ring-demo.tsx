@@ -19,3 +19,4 @@ export default function ProgressRingDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -1,0 +1,60 @@
+---
+title: Voice Pill
+description: TODO one sentence on what Voice Pill does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="voice-pill" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add voice-pill
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/voice-pill.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { VoicePill } from "@/components/ui/voice-pill";
+
+export default function Example() {
+  return <VoicePill />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| accentColor    | string  | "hsl(var(--primary))" | -           |
+| iconColor      | string  | "hsl(var(--primary))" | -           |
+| background     | string  | "hsl(var(--primary))" | -           |
+| size           | number  | 28                    | -           |
+| shape          | string  | "pill"                | -           |
+| reach          | number  | 8                     | -           |
+| showTime       | boolean | true                  | -           |
+| waveform       | boolean | true                  | -           |
+| slideToCancel  | boolean | true                  | -           |
+| cancelDistance | number  | 64                    | -           |
+| attack         | number  | 40                    | -           |
+| release        | number  | 240                   | -           |
+| sensitivity    | number  | 1                     | -           |
+| floor          | number  | 0.1                   | -           |
+| openDuration   | number  | 200                   | -           |
+| pressScale     | number  | 0.95                  | -           |
+| mode           | string  | "auto"                | -           |
+| holdAfter      | number  | 300                   | -           |
+| reactive       | string  | "simulated"           | -           |
+| disabled       | boolean | false                 | -           |
+| ariaLabel      | string  | "Dictate"             | -           |
+| onStart        | any     | -                     | -           |
+| onStop         | any     | -                     | -           |

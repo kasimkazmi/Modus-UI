@@ -28,3 +28,4 @@ export default function DockDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

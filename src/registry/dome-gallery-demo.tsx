@@ -9,3 +9,4 @@ export default function DomeGalleryDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

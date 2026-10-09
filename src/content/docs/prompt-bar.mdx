@@ -1,0 +1,62 @@
+---
+title: Prompt Bar
+description: TODO one sentence on what Prompt Bar does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="prompt-bar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add prompt-bar
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/prompt-bar.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PromptBar } from "@/components/ui/prompt-bar";
+
+export default function Example() {
+  return <PromptBar />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| placeholder    | string  | "Ask anything"        | -           |
+| sources        | any     | DEFAULT_SOURCES       | -           |
+| commands       | any     | DEFAULT_COMMANDS      | -           |
+| models         | any     | DEFAULT_MODELS        | -           |
+| defaultModel   | string  | ""                    | -           |
+| efforts        | any     | DEFAULT_EFFORTS       | -           |
+| defaultEffort  | string  | ""                    | -           |
+| onEffortChange | any     | -                     | -           |
+| busy           | boolean | false                 | -           |
+| onSend         | any     | -                     | -           |
+| onStop         | any     | -                     | -           |
+| onAttach       | any     | -                     | -           |
+| onDictate      | any     | -                     | -           |
+| background     | string  | "hsl(var(--primary))" | -           |
+| color          | string  | "hsl(var(--primary))" | -           |
+| menuBackground | string  | "hsl(var(--primary))" | -           |
+| sparkColor     | string  | "hsl(var(--primary))" | -           |
+| sparkBoost     | number  | 1                     | -           |
+| width          | number  | 400                   | -           |
+| radius         | number  | 16                    | -           |
+| maxRows        | number  | 5                     | -           |
+| morphDuration  | number  | 240                   | -           |
+| squash         | number  | 0.12                  | -           |
+| tilt           | number  | 8                     | -           |
+| pressScale     | number  | 0.96                  | -           |

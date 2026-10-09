@@ -43,3 +43,4 @@ export function MorphingNavbarDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

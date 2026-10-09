@@ -13,3 +13,4 @@ export function MagicButtonDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

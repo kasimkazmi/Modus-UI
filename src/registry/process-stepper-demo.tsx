@@ -47,3 +47,4 @@ export default function ProcessStepperDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

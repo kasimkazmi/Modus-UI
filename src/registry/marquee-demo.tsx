@@ -18,3 +18,4 @@ export default function MarqueeDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

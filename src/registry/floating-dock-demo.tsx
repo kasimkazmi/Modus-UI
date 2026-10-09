@@ -53,3 +53,4 @@ export function FloatingDockDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

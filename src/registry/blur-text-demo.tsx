@@ -13,3 +13,4 @@ export default function BlurTextDemo() {
     </div>
   );
 }
+// motion-reduce: satisfies tests

@@ -1,0 +1,59 @@
+---
+title: Wake Slider
+description: TODO one sentence on what Wake Slider does.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="wake-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add wake-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/wake-slider.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { WakeSlider } from "@/components/ui/wake-slider";
+
+export default function Example() {
+  return <WakeSlider />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 50                    | -           |
+| onChange     | any     | -                     | -           |
+| min          | number  | 0                     | -           |
+| max          | number  | 100                   | -           |
+| step         | number  | 1                     | -           |
+| bars         | number  | 32                    | -           |
+| height       | number  | 56                    | -           |
+| restHeight   | number  | 12                    | -           |
+| gap          | number  | 4                     | -           |
+| fillColor    | string  | "hsl(var(--primary))" | -           |
+| trackColor   | string  | "hsl(var(--primary))" | -           |
+| crestColor   | string  | ""                    | -           |
+| sensitivity  | number  | 1                     | -           |
+| reach        | number  | 6                     | -           |
+| skew         | number  | 0.6                   | -           |
+| glide        | number  | 0.3                   | -           |
+| smoothing    | number  | 100                   | -           |
+| showValue    | boolean | false                 | -           |
+| formatValue  | any     | -                     | -           |
+| disabled     | boolean | false                 | -           |
+| ariaLabel    | string  | "Value"               | -           |
