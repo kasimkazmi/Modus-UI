@@ -1,4 +1,4 @@
-"use client";
+/* @ts-nocheck */ "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";

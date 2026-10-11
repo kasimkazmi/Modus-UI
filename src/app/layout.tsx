@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import {
   DM_Sans,
   Fraunces,
@@ -73,6 +74,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: paletteScript }} />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-SV5J2G7VGN"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-SV5J2G7VGN');
+          `}
+        </Script>
       </head>
       <body className="antialiased">
         <ThemeProvider
