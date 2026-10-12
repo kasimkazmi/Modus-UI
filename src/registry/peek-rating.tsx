@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -7,22 +6,22 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { FavouriteIcon, FlashIcon, StarIcon } from "@hugeicons/core-free-icons";
 
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
-const SHAPES = { star: StarIcon, heart: FavouriteIcon, bolt: FlashIcon };
+const SHAPES = { star: StarIcon, heart: FavouriteIcon, bolt: FlashIcon } as const;
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const reducedMotion = () =>
   typeof window !== "undefined" &&
   !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 interface PeekRatingProps {
-  value?: any;
+  value?: number;
   defaultValue?: number;
-  onChange?: any;
-  onPreview?: any;
+  onChange?: (value: number) => void;
+  onPreview?: (value: number | null) => void;
   count?: number;
-  shape?: string;
-  icon?: any;
-  labels?: any;
+  shape?: keyof typeof SHAPES;
+  icon?: React.ReactNode;
+  labels?: string[];
   activeColor?: string;
   idleColor?: string;
   tipColor?: string;
@@ -37,7 +36,6 @@ interface PeekRatingProps {
   readOnly?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
-  className?: string;
   className?: string;
 }
 
@@ -70,13 +68,20 @@ export function PeekRating({
   const value = clamp(valueProp ?? inner, 0, count);
   const interactive = !readOnly && !disabled;
 
-  const rootRef = useRef(null);
-  const rowRef = useRef(null);
-  const tipEl = useRef(null);
-  const starEls = useRef([]);
-  const liftEls = useRef([]);
-  const glyphEls = useRef([]);
-  const st = useRef({
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const rowRef = useRef<HTMLDivElement | null>(null);
+  const tipEl = useRef<HTMLSpanElement | null>(null);
+  const starEls = useRef<(HTMLElement | null)[]>([]);
+  const liftEls = useRef<(HTMLSpanElement | null)[]>([]);
+  const glyphEls = useRef<(HTMLSpanElement | null)[]>([]);
+  const st = useRef<{
+    hover: number | null;
+    pressing: boolean;
+    pointerId: number | null;
+    settled: boolean;
+    rect: DOMRect | null;
+    rtl: boolean;
+  }>({
     hover: null,
     pressing: false,
     pointerId: null,
@@ -88,18 +93,18 @@ export function PeekRating({
   const paint = () => {
     const { hover, settled, rtl } = st.current;
     const previewing = hover !== null && !settled;
-    const shown = previewing ? hover + 1 : value;
+    const shown = previewing ? hover! + 1 : value;
     const still = reducedMotion();
 
     for (let i = 0; i < count; i++) {
       const liftEl = liftEls.current[i];
       const glyphEl = glyphEls.current[i];
       if (!liftEl || !glyphEl) continue;
-      const lifted = previewing && !still && i <= hover;
+      const lifted = previewing && !still && i <= hover!;
       liftEl.style.transform = lifted
         ? `translateY(${-lift}px) scale(${i === hover ? magnify : 1})`
         : "translateY(0px) scale(1)";
-      glyphEl.dataset.lit = i < shown;
+      glyphEl.dataset.lit = String(i < shown);
     }
 
     const tip = tipEl.current;
@@ -107,10 +112,10 @@ export function PeekRating({
     if (previewing && showTip) {
       const row = rowRef.current;
       const slot = row ? row.clientWidth / count : size;
-      const visual = rtl ? count - 1 - hover : hover;
+      const visual = rtl ? count - 1 - hover! : hover!;
       const wasHidden = tip.dataset.show !== "true";
       if (wasHidden) tip.style.transition = "none";
-      tip.textContent = labels[hover] ?? String(hover + 1);
+      tip.textContent = labels[hover!] ?? String(hover! + 1);
       tip.style.transform = `translate(calc(${slot * (visual + 0.5)}px - 50%), 0)`;
       if (wasHidden) {
         void tip.offsetWidth;
@@ -123,7 +128,7 @@ export function PeekRating({
   };
   useLayoutEffect(paint);
 
-  const setHover = (index) => {
+  const setHover = (index: number | null) => {
     if (index === st.current.hover) return;
     st.current.hover = index;
     if (index !== null) st.current.settled = false;
@@ -140,7 +145,7 @@ export function PeekRating({
     st.current.rtl = getComputedStyle(row).direction === "rtl";
   };
 
-  const indexAt = (x, y) => {
+  const indexAt = (x: number, y: number) => {
     const { rect, pressing, rtl } = st.current;
     if (!rect || !rect.width) return null;
     if (pressing && (y < rect.top - size || y > rect.bottom + size)) return null;
@@ -148,7 +153,7 @@ export function PeekRating({
     return rtl ? count - 1 - index : index;
   };
 
-  const commit = (next, pop = true) => {
+  const commit = (next: number, pop = true) => {
     if (valueProp === undefined) setInner(next);
     onChange?.(next);
     st.current.settled = true;
@@ -174,13 +179,13 @@ export function PeekRating({
     }
   };
 
-  const handlePointerEnter = (e) => {
+  const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!interactive || e.pointerType !== "mouse") return;
     rootRef.current?.removeAttribute("data-instant");
     measure();
   };
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!interactive || e.button !== 0 || st.current.pointerId !== null) return;
     rootRef.current?.removeAttribute("data-instant");
     try {
@@ -192,7 +197,7 @@ export function PeekRating({
     setHover(indexAt(e.clientX, e.clientY));
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!interactive) return;
     const { pressing, pointerId } = st.current;
     if (e.pointerType !== "mouse" && !pressing) return;
@@ -201,7 +206,7 @@ export function PeekRating({
     setHover(indexAt(e.clientX, e.clientY));
   };
 
-  const endPress = (e) => {
+  const endPress = (e: React.PointerEvent<HTMLDivElement>) => {
     const { pressing, pointerId, hover } = st.current;
     if (!pressing || e.pointerId !== pointerId) return;
     st.current.pressing = false;
@@ -217,10 +222,10 @@ export function PeekRating({
     if (!st.current.pressing) setHover(null);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (!interactive) return;
     const min = allowClear ? 0 : 1;
-    let next;
+    let next: number;
     switch (e.key) {
       case "ArrowRight":
       case "ArrowUp":
@@ -243,7 +248,7 @@ export function PeekRating({
         break;
       case " ":
       case "Enter": {
-        const index = starEls.current.indexOf(e.target);
+        const index = starEls.current.indexOf(e.target as HTMLElement);
         if (index === -1) return;
         next = allowClear && index + 1 === value ? 0 : index + 1;
         break;
@@ -286,17 +291,19 @@ export function PeekRating({
       aria-label={readOnly ? `${value} of ${count}` : ariaLabel}
       aria-disabled={disabled || undefined}
       className={`group inline-flex font-[inherit] text-inherit aria-disabled:pointer-events-none aria-disabled:opacity-50${className ? ` ${className}` : ""}`}
-      style={{
-        "--pr-active": activeColor,
-        "--pr-idle": idleColor,
-        "--pr-tip": tipColor,
-        "--pr-tip-text": tipTextColor,
-        "--pr-size": `${size}px`,
-        "--pr-gap": `${Math.round(size * 0.22)}px`,
-        "--pr-room": `${lift + tipRoom}px`,
-        "--pr-rise": `${riseDuration}ms`,
-        "--pr-ease-out": EASE_OUT,
-      }}
+      style={
+        {
+          "--pr-active": activeColor,
+          "--pr-idle": idleColor,
+          "--pr-tip": tipColor,
+          "--pr-tip-text": tipTextColor,
+          "--pr-size": `${size}px`,
+          "--pr-gap": `${Math.round(size * 0.22)}px`,
+          "--pr-room": `${lift + tipRoom}px`,
+          "--pr-rise": `${riseDuration}ms`,
+          "--pr-ease-out": EASE_OUT,
+        } as React.CSSProperties
+      }
       onKeyDown={readOnly ? undefined : handleKeyDown}
     >
       <div

@@ -1,0 +1,50 @@
+---
+title: Neon Sign
+description: Hand-bent glass neon lettering on canvas that breathes and flickers one letter.
+---
+
+Single-stroke glass tubing drawn on a 2D canvas in layered passes — wall spill, bloom, a hot core and a specular streak — with capped tube ends and electrode feeds. The sign breathes gently and one letter drops out and re-strikes on a seeded flicker schedule. By default it is graded to grayscale as in ThreeUI; turn `monochrome` off to see the pink glass. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="neon-sign" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add neon-sign
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/neon-sign.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { NeonSign } from "@/components/ui/neon-sign";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full">
+      <NeonSign text={"OPEN\nLATE"} />
+    </div>
+  );
+}
+```
+
+Letters A–Z and spaces are supported; use `\n` for a new line.
+
+## Props
+
+| Prop              | Type                | Default          | Description                                      |
+| :---------------- | :------------------ | :--------------- | :----------------------------------------------- |
+| `text`            | `string`            | `"GLASS\nBLOWN"` | Lettering; `\n` starts a new line.               |
+| `mode`            | `"dark" \| "light"` | `"dark"`         | Lit on black, or inverted onto paper.            |
+| `monochrome`      | `boolean`           | `true`           | Grade the sign to grayscale, as ThreeUI does.    |
+| `backgroundColor` | `string`            | —                | Stage colour. Defaults to the mode's background. |
+| `hue`             | `number`            | `0`              | Hue rotation of the final frame, in degrees.     |
+| `saturation`      | `number`            | `1`              | Saturation of the final frame.                   |
+| `brightness`      | `number`            | `1`              | Brightness of the final frame.                   |

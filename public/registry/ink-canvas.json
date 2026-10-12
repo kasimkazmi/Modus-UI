@@ -1,0 +1,18 @@
+{
+  "name": "ink-canvas",
+  "title": "Ink Canvas",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/ink-canvas.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { InkFlow, Glow, Shader, SolidColor } from \"shaders/react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface InkCanvasProps {\n  backgroundColor?: string;\n  colorMode?: \"rainbow\" | \"single\";\n  color?: string;\n  radius?: number;\n  curl?: number;\n  decay?: number;\n  glow?: number;\n  className?: string;\n}\n\nexport function InkCanvas({\n  backgroundColor = \"#07070b\",\n  colorMode = \"rainbow\",\n  color = \"#ff2d7e\",\n  radius = 1,\n  curl = 0.5,\n  decay = 0.6,\n  glow = 0.4,\n  className,\n}: InkCanvasProps) {\n  // Reduced motion keeps the ink where it is drawn instead of swirling it.\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <SolidColor color={backgroundColor} />\n      <InkFlow\n        colorMode={colorMode}\n        color={color}\n        radius={radius}\n        curl={reduce ? 0 : curl}\n        decay={decay}\n      />\n      <Glow intensity={glow} threshold={0.3} size={16} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -19,14 +18,23 @@ const ROW = 52;
 const DRAG_MIN = 4;
 const ZONE_PAD = 8;
 
-const jitter = (i) => {
+const jitter = (i: number) => {
   const x = Math.sin(i * 12.9898 + 4.1414) * 43758.5453;
   return x - Math.floor(x);
 };
 
-const layout = (list, spread, lift, tilt, sizes) => {
-  const rows = [];
-  let row = [];
+type Size = { w: number; h: number };
+type Pos = { x: number; y: number; r: number };
+type Slot = { i: number; pw: number };
+
+export interface FolderItem {
+  label: string;
+  value: string;
+}
+
+const layout = (list: FolderItem[], spread: number, lift: number, tilt: number, sizes: Size[]) => {
+  const rows: { items: Slot[]; width: number }[] = [];
+  let row: Slot[] = [];
   let width = 0;
   list.forEach((item, i) => {
     const pw = sizes[i]?.w ?? PAD + item.label.length * CHAR;
@@ -39,7 +47,7 @@ const layout = (list, spread, lift, tilt, sizes) => {
     width += (row.length > 1 ? GAP : 0) + pw;
   });
   if (row.length) rows.push({ items: row, width });
-  const pos = [];
+  const pos: Pos[] = [];
   rows.forEach((r, ri) => {
     let x = -r.width / 2;
     const shift = (ri % 2 ? 1 : -1) * Math.min(16, spread * 0.1);
@@ -61,17 +69,39 @@ const STYLE = `
 @keyframes folder-float-pop { 30% { scale: 1.1; } 100% { scale: 1; } }
 `;
 
+interface Drag {
+  i: number;
+  id: number;
+  dx: number;
+  dy: number;
+  sx: number;
+  sy: number;
+  moved: boolean;
+}
+
+interface World {
+  engine: Matter.Engine | null;
+  bodies: Matter.Body[];
+  sizes: Size[];
+  raf: number;
+  last: number;
+  t0: number;
+  drag: Drag | null;
+  zone: { left: number; right: number; top: number; bottom: number } | null;
+  live: boolean;
+}
+
 interface FolderFloatProps {
-  items?: any;
+  items?: (string | FolderItem)[];
   label?: string;
   sublabel?: string;
-  trigger?: string;
+  trigger?: "hover" | "click";
   defaultOpen?: boolean;
   closeOnSelect?: boolean;
   physics?: boolean;
   drift?: number;
-  onSelect?: any;
-  onOpenChange?: any;
+  onSelect?: (value: string, index: number) => void;
+  onOpenChange?: (open: boolean) => void;
   folderColor?: string;
   frontColor?: string;
   paperColor?: string;
@@ -89,7 +119,6 @@ interface FolderFloatProps {
   openDuration?: number;
   stagger?: number;
   bounce?: number;
-  className?: string;
   className?: string;
 }
 
@@ -126,10 +155,10 @@ export function FolderFloat({
   const [open, setOpen] = useState(defaultOpen);
   const [popped, setPopped] = useState(-1);
   const [live, setLive] = useState(false);
-  const [sizes, setSizes] = useState([]);
-  const anchorRef = useRef(null);
-  const pillRefs = useRef([]);
-  const world = useRef({
+  const [sizes, setSizes] = useState<Size[]>([]);
+  const anchorRef = useRef<HTMLDivElement | null>(null);
+  const pillRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const world = useRef<World>({
     engine: null,
     bodies: [],
     sizes: [],
@@ -140,11 +169,12 @@ export function FolderFloat({
     zone: null,
     live: false,
   });
-  const latest = useRef({});
-  latest.current = { onSelect, onOpenChange, drift, reduce: false };
-  const popTimer = useRef(undefined);
-  const liveTimer = useRef(undefined);
-  const list = items.map((item) =>
+  const latestValue = { onSelect, onOpenChange, drift, reduce: false };
+  const latest = useRef(latestValue);
+  latest.current = latestValue;
+  const popTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const liveTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const list = items.map((item): FolderItem =>
     typeof item === "string" ? { label: item, value: item } : item,
   );
   const n = list.length;
@@ -157,7 +187,7 @@ export function FolderFloat({
       const next = pillRefs.current
         .slice(0, n)
         .map((el) => (el ? { w: el.offsetWidth, h: el.offsetHeight } : null));
-      if (next.some((s) => !s)) return;
+      if (!next.every((s): s is Size => s !== null)) return;
       setSizes((prev) =>
         prev.length === next.length && prev.every((s, i) => s.w === next[i].w && s.h === next[i].h)
           ? prev
@@ -195,7 +225,7 @@ export function FolderFloat({
     const w = world.current;
     if (w.engine) return;
     const els = pillRefs.current.slice(0, n);
-    if (els.some((el) => !el)) return;
+    if (!els.every((el): el is HTMLButtonElement => el !== null)) return;
     const engine = Engine.create({ gravity: { x: 0, y: 0 } });
     engine.enableSleeping = false;
     w.engine = engine;
@@ -264,7 +294,7 @@ export function FolderFloat({
     w.last = 0;
     w.t0 = performance.now();
     setLive(true);
-    const tick = (now) => {
+    const tick = (now: number) => {
       const s = world.current;
       if (!s.engine) return;
       const dt = s.last ? Math.min(32, now - s.last) : 16;
@@ -293,7 +323,7 @@ export function FolderFloat({
   }, [n, spread, lift, pos.map((p) => `${p.x},${p.y}`).join("|")]);
 
   const set = useCallback(
-    (next) => {
+    (next: boolean) => {
       if (!next) stopPhysics();
       setOpen((prev) => {
         if (prev === next) return prev;
@@ -333,7 +363,7 @@ export function FolderFloat({
     [stopPhysics],
   );
 
-  const pick = (item, i) => {
+  const pick = (item: FolderItem, i: number) => {
     latest.current.onSelect?.(item.value, i);
     clearTimeout(popTimer.current);
     setPopped(i);
@@ -341,11 +371,11 @@ export function FolderFloat({
     if (closeOnSelect) set(false);
   };
 
-  const pointerAt = (e) => {
+  const pointerAt = (e: React.PointerEvent<HTMLButtonElement>) => {
     const r = anchorRef.current?.getBoundingClientRect();
     return r ? { x: e.clientX - r.left, y: e.clientY - r.top } : { x: 0, y: 0 };
   };
-  const down = (e, i) => {
+  const down = (e: React.PointerEvent<HTMLButtonElement>, i: number) => {
     const w = world.current;
     if (!w.live || e.button !== 0) return;
     const b = w.bodies[i];
@@ -364,7 +394,7 @@ export function FolderFloat({
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
   };
-  const move = (e, i) => {
+  const move = (e: React.PointerEvent<HTMLButtonElement>, i: number) => {
     const w = world.current;
     const d = w.drag;
     if (!d || d.i !== i || d.id !== e.pointerId) return;
@@ -375,14 +405,14 @@ export function FolderFloat({
     if (!d.moved) return;
     const b = w.bodies[i];
     const { w: bw, h: bh } = w.sizes[i];
-    const z = w.zone;
+    const z = w.zone!;
     const p = pointerAt(e);
     const x = Math.min(z.right - bw / 2, Math.max(z.left + bw / 2, p.x + d.dx));
     const y = Math.min(z.bottom - bh / 2, Math.max(z.top + bh / 2, p.y + d.dy));
     Body.setVelocity(b, { x: (x - b.position.x) * 0.6, y: (y - b.position.y) * 0.6 });
     Body.setPosition(b, { x, y });
   };
-  const up = (e, i, item) => {
+  const up = (e: React.PointerEvent<HTMLButtonElement>, i: number, item: FolderItem) => {
     const w = world.current;
     const d = w.drag;
     if (!d || d.i !== i || d.id !== e.pointerId) return;
@@ -417,28 +447,30 @@ export function FolderFloat({
           set(false);
         }
       }}
-      style={{
-        "--ff-w": `${width}px`,
-        "--ff-h": `${height}px`,
-        "--ff-r": `${radius}px`,
-        "--ff-back": folderColor,
-        "--ff-front": frontColor,
-        "--ff-paper": paperColor,
-        "--ff-item": itemColor,
-        "--ff-item-ink": itemTextColor,
-        "--ff-label": labelColor,
-        "--ff-spread": `${spread}px`,
-        "--ff-lift": `${lift}px`,
-        "--ff-angle": `${flapAngle}deg`,
-        "--ff-rest": `${restAngle}deg`,
-        "--ff-open": `${openDuration}ms`,
-        "--ff-close": `${Math.round(openDuration * 0.6)}ms`,
-        "--ff-stagger": `${stagger}ms`,
-        "--ff-n": n,
-        "--ff-tab": "14px",
-        "--ff-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        "--ff-spring": `cubic-bezier(0.34, ${(1 + bounce * 1.9).toFixed(2)}, 0.64, 1)`,
-      }}
+      style={
+        {
+          "--ff-w": `${width}px`,
+          "--ff-h": `${height}px`,
+          "--ff-r": `${radius}px`,
+          "--ff-back": folderColor,
+          "--ff-front": frontColor,
+          "--ff-paper": paperColor,
+          "--ff-item": itemColor,
+          "--ff-item-ink": itemTextColor,
+          "--ff-label": labelColor,
+          "--ff-spread": `${spread}px`,
+          "--ff-lift": `${lift}px`,
+          "--ff-angle": `${flapAngle}deg`,
+          "--ff-rest": `${restAngle}deg`,
+          "--ff-open": `${openDuration}ms`,
+          "--ff-close": `${Math.round(openDuration * 0.6)}ms`,
+          "--ff-stagger": `${stagger}ms`,
+          "--ff-n": n,
+          "--ff-tab": "14px",
+          "--ff-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "--ff-spring": `cubic-bezier(0.34, ${(1 + bounce * 1.9).toFixed(2)}, 0.64, 1)`,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       <div
@@ -458,12 +490,14 @@ export function FolderFloat({
               tabIndex={open ? 0 : -1}
               aria-hidden={!open}
               data-pop={popped === i ? "" : undefined}
-              style={{
-                "--i": i,
-                "--x": `${p.x.toFixed(1)}px`,
-                "--y": `${p.y.toFixed(1)}px`,
-                "--r": `${p.r.toFixed(2)}deg`,
-              }}
+              style={
+                {
+                  "--i": i,
+                  "--x": `${p.x.toFixed(1)}px`,
+                  "--y": `${p.y.toFixed(1)}px`,
+                  "--r": `${p.r.toFixed(2)}deg`,
+                } as React.CSSProperties
+              }
               onPointerDown={(e) => down(e, i)}
               onPointerMove={(e) => move(e, i)}
               onPointerUp={(e) => up(e, i, item)}

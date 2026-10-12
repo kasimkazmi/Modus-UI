@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -23,12 +22,25 @@ const POWER_CAP = 1.5;
 const DOT_MS = 300;
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const rubberband = (o, dim, c = 0.55) => (o * dim * c) / (dim + c * Math.abs(o));
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const rubberband = (o: number, dim: number, c = 0.55) => (o * dim * c) / (dim + c * Math.abs(o));
+
+type Sample = { x: number; y: number; t: number };
+
+interface Grip {
+  id: number;
+  startX: number;
+  startY: number;
+  scale: number;
+  moved: boolean;
+  hist: Sample[];
+  rawOrigin: { x: number; y: number };
+  slop: number;
+}
 
 interface SlingButtonProps {
-  children?: any;
-  onSend?: any;
+  children?: React.ReactNode;
+  onSend?: () => void;
   padColor?: string;
   iconColor?: string;
   accentColor?: string;
@@ -43,11 +55,10 @@ interface SlingButtonProps {
   flight?: number;
   particles?: number;
   spread?: number;
-  axis?: string;
+  axis?: "any" | "horizontal" | "vertical";
   tapSends?: boolean;
   disabled?: boolean;
   ariaLabel?: string;
-  className?: string;
   className?: string;
 }
 
@@ -86,22 +97,22 @@ export function SlingButton({
   const [held, setHeld] = useState(false);
   const [armed, setArmed] = useState(false);
   const [sent, setSent] = useState(false);
-  const rootRef = useRef(null);
-  const padRef = useRef(null);
-  const fxRef = useRef(null);
-  const bandRef = useRef(null);
-  const hotRef = useRef(null);
-  const arcRef = useRef(null);
-  const dotRefs = useRef([]);
+  const rootRef = useRef<HTMLSpanElement | null>(null);
+  const padRef = useRef<HTMLButtonElement | null>(null);
+  const fxRef = useRef<SVGGElement | null>(null);
+  const bandRef = useRef<SVGPathElement | null>(null);
+  const hotRef = useRef<SVGPathElement | null>(null);
+  const arcRef = useRef<SVGCircleElement | null>(null);
+  const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const power = useRef(0);
-  const iconRef = useRef(null);
-  const grip = useRef(null);
+  const iconRef = useRef<HTMLSpanElement | null>(null);
+  const grip = useRef<Grip | null>(null);
   const dir = useRef({ ux: 0, uy: -1 });
-  const animX = useRef(null);
-  const animY = useRef(null);
+  const animX = useRef<ReturnType<typeof animate> | null>(null);
+  const animY = useRef<ReturnType<typeof animate> | null>(null);
   const armedRef = useRef(false);
   const dotPending = useRef(false);
-  const dotTimer = useRef(undefined);
+  const dotTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const paintQueued = useRef(false);
   const skipClick = useRef(false);
   const hintId = useId();
@@ -151,7 +162,7 @@ export function SlingButton({
     });
   };
 
-  const aimIcon = (ux, uy, dist) => {
+  const aimIcon = (ux: number, uy: number, dist: number) => {
     const icon = iconRef.current;
     if (!icon) return;
     const angle = (Math.atan2(-uy, -ux) * 180) / Math.PI + 90;
@@ -217,7 +228,7 @@ export function SlingButton({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size, strokeWidth, armAt, maxPull, axis]);
 
-  const settle = (v0) => {
+  const settle = (v0: { x: number; y: number }) => {
     if (reduce) {
       const fx = fxRef.current;
       if (fx) {
@@ -245,7 +256,7 @@ export function SlingButton({
     });
   };
 
-  const onPointerDown = (e) => {
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (disabled || grip.current || e.button !== 0) return;
     const el = rootRef.current;
     if (!el) return;
@@ -273,7 +284,7 @@ export function SlingButton({
     } catch {}
     setHeld(true);
   };
-  const onPointerMove = (e) => {
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     const g = grip.current;
     if (!g || g.id !== e.pointerId) return;
     const dx = (e.clientX - g.startX) / g.scale;
@@ -300,7 +311,7 @@ export function SlingButton({
       setArmed(isArmed);
     }
   };
-  const release = (pointerId, cancelled) => {
+  const release = (pointerId: number, cancelled: boolean) => {
     const g = grip.current;
     if (!g || g.id !== pointerId) return;
     grip.current = null;
@@ -375,17 +386,19 @@ export function SlingButton({
       className={`group/root relative inline-block [width:var(--sl-size)] [height:var(--sl-size)]${className ? ` ${className}` : ""}`}
       data-armed={armed ? "" : undefined}
       data-sent={sent ? "" : undefined}
-      style={{
-        "--sl-size": `${size}px`,
-        "--sl-svg": `${2 * H}px`,
-        "--sl-pad": padColor,
-        "--sl-icon": iconColor,
-        "--sl-accent": accentColor,
-        "--sl-well": wellColor,
-        "--sl-band": bandColor,
-        "--sl-stroke": `${strokeWidth}px`,
-        "--sl-dot": `${DOT}px`,
-      }}
+      style={
+        {
+          "--sl-size": `${size}px`,
+          "--sl-svg": `${2 * H}px`,
+          "--sl-pad": padColor,
+          "--sl-icon": iconColor,
+          "--sl-accent": accentColor,
+          "--sl-well": wellColor,
+          "--sl-band": bandColor,
+          "--sl-stroke": `${strokeWidth}px`,
+          "--sl-dot": `${DOT}px`,
+        } as React.CSSProperties
+      }
     >
       <svg
         className="pointer-events-none absolute left-1/2 top-1/2 overflow-visible [height:var(--sl-svg)] [margin:calc(var(--sl-svg)/-2)_0_0_calc(var(--sl-svg)/-2)] [shape-rendering:geometricPrecision] [width:var(--sl-svg)]"

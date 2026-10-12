@@ -1,21 +1,20 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { animate, useReducedMotion } from "framer-motion";
+import { animate, useReducedMotion, type BezierDefinition } from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, SparklesIcon, Tick02Icon } from "@hugeicons/core-free-icons";
-const EASE_OUT = [0.23, 1, 0.32, 1];
-const EASE_IN_OUT = [0.77, 0, 0.175, 1];
+const EASE_OUT: BezierDefinition = [0.23, 1, 0.32, 1];
+const EASE_IN_OUT: BezierDefinition = [0.77, 0, 0.175, 1];
 const GLYPH_DONE = 0.55;
-const EMPTY_STEPS = [];
+const EMPTY_STEPS: string[] = [];
 
-const fmt = (ds) =>
+const fmt = (ds: number) =>
   ds < 600
     ? `${(ds / 10).toFixed(1)}s`
     : `${Math.floor(ds / 600)}m ${((ds % 600) / 10).toFixed(1)}s`;
-const spoken = (ds) =>
+const spoken = (ds: number) =>
   ds < 600
     ? `${(ds / 10).toFixed(1)} seconds`
     : `${Math.floor(ds / 600)} minutes ${((ds % 600) / 10).toFixed(1)} seconds`;
@@ -28,9 +27,9 @@ const STYLE = `
 interface ThoughtLineProps {
   label?: string;
   doneLabel?: string;
-  renderLabel?: any;
-  glyph?: string;
-  steps?: any;
+  renderLabel?: (text: string, working: boolean) => React.ReactNode;
+  glyph?: "sparkle" | "dot" | "none" | React.ReactNode;
+  steps?: string[];
   collapsible?: boolean;
   collapseOnSettle?: boolean;
   color?: string;
@@ -44,12 +43,11 @@ interface ThoughtLineProps {
   settleBlur?: number;
   working?: boolean;
   settleAfter?: number;
-  elapsed?: any;
+  elapsed?: number;
   showTimer?: boolean;
-  onSettle?: any;
+  onSettle?: (seconds: number) => void;
   className?: string;
-  style?: any;
-  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function ThoughtLine({
@@ -88,15 +86,15 @@ export function ThoughtLine({
   const trough = 1 - depth;
   const sheen = shimmer && !reduce;
 
-  const glyphRef = useRef(null);
-  const breathRef = useRef(null);
-  const timerRef = useRef(null);
-  const stackRef = useRef(null);
-  const workRef = useRef(null);
-  const doneRef = useRef(null);
+  const glyphRef = useRef<HTMLSpanElement | null>(null);
+  const breathRef = useRef<HTMLSpanElement | null>(null);
+  const timerRef = useRef<HTMLSpanElement | null>(null);
+  const stackRef = useRef<HTMLSpanElement | null>(null);
+  const workRef = useRef<HTMLSpanElement | null>(null);
+  const doneRef = useRef<HTMLSpanElement | null>(null);
   const dsRef = useRef(0);
   const prevWorking = useRef(isWorking);
-  const latest = useRef({});
+  const latest = useRef<Pick<ThoughtLineProps, "onSettle">>({});
   latest.current = { onSettle };
   const [announce, setAnnounce] = useState(label);
 
@@ -113,14 +111,14 @@ export function ThoughtLine({
     const breathEl = breathRef.current;
     if (!breathEl) return undefined;
     const s = settleDuration / 1000;
-    const loop = (el, delay) =>
+    const loop = (el: HTMLElement, delay: number) =>
       animate(
         el,
         { opacity: [trough, 1, trough] },
         { duration: period, ease: EASE_IN_OUT, repeat: Infinity, delay },
       );
     let cancelled = false;
-    const running = [];
+    const running: ReturnType<typeof animate>[] = [];
     if (isWorking) {
       if (depth > 0) {
         if (sheen)
@@ -152,7 +150,7 @@ export function ThoughtLine({
     };
   }, [isWorking, period, depth, trough, settleDuration, glyph, sheen]);
 
-  const paint = (ds) => {
+  const paint = (ds: number) => {
     dsRef.current = ds;
     if (timerRef.current) timerRef.current.textContent = fmt(ds);
   };
@@ -176,7 +174,7 @@ export function ThoughtLine({
     const t = timerRef.current;
     const stack = stackRef.current;
     if (!t || !stack) return undefined;
-    const place = (glide) => {
+    const place = (glide: boolean) => {
       const active = isWorking ? workRef.current : doneRef.current;
       if (!active) return;
       const shift = active.offsetWidth - stack.offsetWidth;
@@ -275,15 +273,17 @@ export function ThoughtLine({
       className={`group inline-flex flex-col items-start font-medium leading-[1.2] [color:var(--tl-color)] [font-family:inherit] [font-size:var(--tl-font)]${className ? ` ${className}` : ""}`}
       data-working={isWorking ? "" : undefined}
       data-open={open && hasTrace ? "" : undefined}
-      style={{
-        "--tl-font": `${fontSize}px`,
-        "--tl-color": color,
-        "--tl-glyph": glyphColor || color,
-        "--tl-settle": `${settleDuration}ms`,
-        "--tl-blur": `${settleBlur}px`,
-        "--tl-shimmer": `${shimmerDuration}s`,
-        ...style,
-      }}
+      style={
+        {
+          "--tl-font": `${fontSize}px`,
+          "--tl-color": color,
+          "--tl-glyph": glyphColor || color,
+          "--tl-settle": `${settleDuration}ms`,
+          "--tl-blur": `${settleBlur}px`,
+          "--tl-shimmer": `${shimmerDuration}s`,
+          ...style,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       {collapsible ? (
@@ -312,7 +312,7 @@ export function ThoughtLine({
         >
           <div className="min-h-0 overflow-y-clip overflow-x-visible">
             <div className="flex w-max flex-col gap-[0.45em] whitespace-nowrap pb-[0.2em] pl-[1.6em] pt-[0.6em] text-[0.875em] font-normal">
-              {steps.map((text, i) => {
+              {steps.map((text: string, i: number) => {
                 const done = !isWorking || i < steps.length - 1;
                 return (
                   <div

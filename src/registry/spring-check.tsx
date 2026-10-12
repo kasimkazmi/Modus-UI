@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -10,18 +9,20 @@ const VISUAL_DURATION = 0.2;
 const RULE_END = 0.84;
 const SWELL = 0.35;
 const TICK_PATH = String(Tick02Icon[0][1].d);
-const ORIGIN = {
+type Strike = "left" | "center" | "right" | "none";
+
+const ORIGIN: Record<Strike, string> = {
   left: "left center",
   center: "center",
   right: "right center",
   none: "left center",
 };
 
-const clamp01 = (value) => Math.min(1, Math.max(0, value));
-const zetaOf = (bounce) =>
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+const zetaOf = (bounce: number) =>
   bounce <= 0 ? 1 : -Math.log(bounce) / Math.sqrt(Math.PI ** 2 + Math.log(bounce) ** 2);
 
-const readings = (t, doneOpacity, strikeLag) => {
+const readings = (t: number, doneOpacity: number, strikeLag: number) => {
   const held = clamp01(t);
   return {
     fill: `scale(${Math.max(t, 0)})`,
@@ -34,9 +35,9 @@ const readings = (t, doneOpacity, strikeLag) => {
 
 interface SpringCheckProps {
   label?: string;
-  checked?: any;
+  checked?: boolean;
   defaultChecked?: boolean;
-  onChange?: any;
+  onChange?: (checked: boolean) => void;
   disabled?: boolean;
   color?: string;
   fillColor?: string;
@@ -47,9 +48,8 @@ interface SpringCheckProps {
   bounce?: number;
   strikeLag?: number;
   doneOpacity?: number;
-  strike?: string;
-  ariaLabel?: any;
-  className?: string;
+  strike?: Strike;
+  ariaLabel?: string;
   className?: string;
 }
 
@@ -80,21 +80,21 @@ export function SpringCheck({
   const t = useMotionValue(on ? 1 : 0);
   const viaPointer = useRef(false);
   const instant = useRef(false);
-  const rowRef = useRef(null);
-  const boxRef = useRef(null);
-  const fillRef = useRef(null);
-  const tickRef = useRef(null);
-  const wordRef = useRef(null);
-  const ruleRef = useRef(null);
+  const rowRef = useRef<HTMLButtonElement | null>(null);
+  const boxRef = useRef<HTMLSpanElement | null>(null);
+  const fillRef = useRef<HTMLSpanElement | null>(null);
+  const tickRef = useRef<SVGPathElement | null>(null);
+  const wordRef = useRef<HTMLSpanElement | null>(null);
+  const ruleRef = useRef<HTMLSpanElement | null>(null);
   const cfg = useRef({ doneOpacity, strikeLag });
   cfg.current = { doneOpacity, strikeLag };
 
-  const write = (value) => {
+  const write = (value: number) => {
     const r = readings(value, cfg.current.doneOpacity, cfg.current.strikeLag);
     if (fillRef.current) fillRef.current.style.transform = r.fill;
     if (boxRef.current) boxRef.current.style.transform = r.box;
-    if (tickRef.current) tickRef.current.style.strokeDashoffset = r.tick;
-    if (wordRef.current) wordRef.current.style.opacity = r.word;
+    if (tickRef.current) tickRef.current.style.strokeDashoffset = String(r.tick);
+    if (wordRef.current) wordRef.current.style.opacity = String(r.word);
     if (ruleRef.current) ruleRef.current.style.transform = r.rule;
   };
   useMotionValueEvent(t, "change", write);
@@ -118,7 +118,7 @@ export function SpringCheck({
     return () => controls.stop();
   }, [on, reduce, bounce, t]);
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.button !== 0 || disabled) return;
     viaPointer.current = true;
     if (!reduce && rowRef.current) rowRef.current.dataset.pressed = "";
@@ -153,20 +153,22 @@ export function SpringCheck({
       aria-label={ariaLabel}
       disabled={disabled}
       className={`group relative inline-flex min-h-[var(--sc-row)] cursor-pointer touch-manipulation select-none items-center gap-[var(--sc-gap)] border-0 bg-transparent p-0 text-left text-[length:var(--sc-font)] font-medium leading-[1.2] tracking-[-0.01em] outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [color:var(--sc-ink)] disabled:cursor-not-allowed disabled:opacity-50${className ? ` ${className}` : ""}`}
-      style={{
-        "--sc-ink": color,
-        "--sc-fill": fillColor,
-        "--sc-check": checkColor,
-        "--sc-box": `${boxSize}px`,
-        "--sc-radius": `${boxRadius}px`,
-        "--sc-font": `${fontSize}px`,
-        "--sc-ring": `${ring}px`,
-        "--sc-gap": `${gap}px`,
-        "--sc-row": `${Math.max(44, boxSize + 16)}px`,
-        "--sc-rule": `${ruleHeight}px`,
-        "--sc-origin": ORIGIN[strike] || ORIGIN.left,
-        "--sc-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-      }}
+      style={
+        {
+          "--sc-ink": color,
+          "--sc-fill": fillColor,
+          "--sc-check": checkColor,
+          "--sc-box": `${boxSize}px`,
+          "--sc-radius": `${boxRadius}px`,
+          "--sc-font": `${fontSize}px`,
+          "--sc-ring": `${ring}px`,
+          "--sc-gap": `${gap}px`,
+          "--sc-row": `${Math.max(44, boxSize + 16)}px`,
+          "--sc-rule": `${ruleHeight}px`,
+          "--sc-origin": ORIGIN[strike] || ORIGIN.left,
+          "--sc-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+        } as React.CSSProperties
+      }
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}

@@ -1,0 +1,53 @@
+---
+title: Liquid Chrome Orb
+description: A molten liquid-metal torus, sphere or blob floating in a lit studio.
+---
+
+A 3D liquid-metal shape with flowing folds and prismatic edges, set against a studio backdrop. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="liquid-chrome-orb" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add liquid-chrome-orb
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/liquid-chrome-orb.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { LiquidChromeOrb } from "@/components/ui/liquid-chrome-orb";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LiquidChromeOrb />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                            | Default     | Description                    |
+| :---------------- | :------------------------------ | :---------- | :----------------------------- |
+| `shape`           | `"torus" \| "sphere" \| "blob"` | `"torus"`   | 3D shape to render.            |
+| `lightColor`      | `string`                        | `"#eef0f6"` | Highlight colour of the metal. |
+| `darkColor`       | `string`                        | `"#141414"` | Shadow colour of the metal.    |
+| `backgroundColor` | `string`                        | `"#0b0b0f"` | Studio backdrop colour.        |
+| `speed`           | `number`                        | `1`         | Flow speed of the metal.       |
+| `turbulence`      | `number`                        | `1`         | Strength of the surface folds. |
+| `dispersion`      | `number`                        | `0.6`       | Prismatic fringe on the edges. |
+| `scale`           | `number`                        | `1`         | Size of the shape.             |

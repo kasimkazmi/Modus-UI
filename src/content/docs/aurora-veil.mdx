@@ -1,0 +1,54 @@
+---
+title: Aurora Veil
+description: Layered aurora curtains drifting over a night sky with soft noise, film grain and a vignette.
+---
+
+Aurora curtains screened over a deep night background, textured with soft-light simplex noise and film grain and framed by a vignette. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="aurora-veil" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add aurora-veil
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/aurora-veil.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { AuroraVeil } from "@/components/ui/aurora-veil";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <AuroraVeil />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                                       |
+| :---------------- | :------- | :---------- | :------------------------------------------------ |
+| `colorA`          | `string` | `"#22d3ee"` | First curtain colour.                             |
+| `colorB`          | `string` | `"#a855f7"` | Second curtain colour.                            |
+| `colorC`          | `string` | `"#34d399"` | Third curtain colour.                             |
+| `backgroundColor` | `string` | `"#030712"` | Sky colour behind the curtains and vignette tint. |
+| `speed`           | `number` | `5`         | Animation speed (0 to 100 scale).                 |
+| `intensity`       | `number` | `80`        | Brightness of the curtains (0 to 100).            |
+| `curtainCount`    | `number` | `4`         | Number of aurora curtains.                        |
+| `waviness`        | `number` | `50`        | How much the curtains undulate (0 to 100).        |
+| `grain`           | `number` | `0.08`      | Film grain strength.                              |

@@ -1,14 +1,20 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import {
+  animate,
+  motion,
+  type MotionValue,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "framer-motion";
 
-const EASE_OUT = [0.23, 1, 0.32, 1];
-const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 };
-const SPRING_MOMENTUM = { type: "spring", duration: 0.4, bounce: 0.2 };
-const SPRING_RELAX = { type: "spring", duration: 0.16, bounce: 0 };
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 } as const;
+const SPRING_MOMENTUM = { type: "spring", duration: 0.4, bounce: 0.2 } as const;
+const SPRING_RELAX = { type: "spring", duration: 0.16, bounce: 0 } as const;
 const DILATE = 0.19;
 const HANDOFF = 0.15;
 const FLICK = 110;
@@ -20,22 +26,49 @@ const SIZES = {
   sm: { height: 28, font: 12, pad: 10, min: 36 },
   md: { height: 36, font: 13, pad: 14, min: 44 },
   lg: { height: 44, font: 14, pad: 18, min: 48 },
-};
+} as const;
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-const rubber = (over, dim) => (over * dim * RUBBER) / (dim + RUBBER * Math.abs(over));
-const project = (v, glide) => {
+export type RubberSegmentSize = keyof typeof SIZES;
+
+export interface RubberSegmentItem {
+  value: string;
+  label: React.ReactNode;
+  icon?: React.ReactNode;
+}
+
+interface Slot {
+  l: number;
+  r: number;
+}
+
+type Sample = [time: number, x: number];
+
+interface DragState {
+  id: number;
+  x0: number;
+  slot: number;
+  onThumb: boolean;
+  live: boolean;
+  offset: number;
+  w: number;
+  hist: Sample[];
+}
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const rubber = (over: number, dim: number) =>
+  (over * dim * RUBBER) / (dim + RUBBER * Math.abs(over));
+const project = (v: number, glide: number) => {
   const d = 1 - 0.1 * Math.pow(0.05, glide / 100);
   return ((v / 1000) * d) / (1 - d);
 };
-const velocityOf = (hist, now) => {
+const velocityOf = (hist: Sample[], now: number) => {
   const recent = hist.filter(([t]) => now - t <= 100);
   if (recent.length < 2) return 0;
   const [t0, x0] = recent[0];
   const [t1, x1] = recent[recent.length - 1];
   return t1 - t0 >= 8 ? ((x1 - x0) / (t1 - t0)) * 1000 : 0;
 };
-const nearestSlot = (slots, x) => {
+const nearestSlot = (slots: Slot[], x: number) => {
   let best = 0;
   for (let i = 1; i < slots.length; i++) {
     if (
@@ -48,15 +81,15 @@ const nearestSlot = (slots, x) => {
 };
 
 interface RubberSegmentProps {
-  items?: any;
-  value?: any;
-  defaultValue?: any;
-  onChange?: any;
+  items: (string | RubberSegmentItem)[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string, index: number) => void;
   trackColor?: string;
   thumbColor?: string;
   textColor?: string;
   activeTextColor?: string;
-  size?: string;
+  size?: RubberSegmentSize;
   radius?: number;
   inset?: number;
   equalSlots?: boolean;
@@ -68,7 +101,6 @@ interface RubberSegmentProps {
   disabled?: boolean;
   className?: string;
   ariaLabel?: string;
-  className?: string;
 }
 
 export function RubberSegment({
@@ -93,7 +125,7 @@ export function RubberSegment({
   className = "",
   ariaLabel = "Segmented control",
 }: RubberSegmentProps) {
-  const list = items.map((item) =>
+  const list: RubberSegmentItem[] = items.map((item) =>
     typeof item === "string" ? { value: item, label: item } : item,
   );
   const [inner, setInner] = useState(defaultValue ?? list[0]?.value);
@@ -104,13 +136,13 @@ export function RubberSegment({
   );
   const reduce = useReducedMotion();
 
-  const trackRef = useRef(null);
-  const itemRefs = useRef([]);
-  const slots = useRef([]);
-  const box = useRef(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const slots = useRef<Slot[]>([]);
+  const box = useRef<DOMRect | null>(null);
   const committed = useRef(index);
-  const handoff = useRef(0);
-  const drag = useRef(null);
+  const handoff = useRef<ReturnType<typeof setTimeout> | number>(0);
+  const drag = useRef<DragState | null>(null);
   const gen = useRef(0);
 
   const edgeL = useMotionValue(0);
@@ -122,9 +154,9 @@ export function RubberSegment({
       `inset(0 ${Math.max(0, innerW.get() - edgeR.get())}px 0 ${Math.max(0, edgeL.get())}px round ${thumbRadius}px)`,
   );
 
-  const t = (seconds) => seconds / speed;
+  const t = (seconds: number) => seconds / speed;
 
-  const jumpTo = (i) => {
+  const jumpTo = (i: number) => {
     const s = slots.current[i];
     if (!s) return;
     clearTimeout(handoff.current);
@@ -174,21 +206,21 @@ export function RubberSegment({
     [edgeL, edgeR],
   );
 
-  const commit = (i) => {
+  const commit = (i: number) => {
     committed.current = i;
     if (i === index) return;
     if (value === undefined) setInner(list[i].value);
     onChange?.(list[i].value, i);
   };
 
-  const land = (to, v, flick, withSquash) => {
+  const land = (to: number, v: number | null, flick: boolean, withSquash: boolean) => {
     const b = slots.current[to];
     if (!b) return;
     const g = ++gen.current;
     const dir = Math.sign((b.l + b.r) / 2 - (edgeL.get() + edgeR.get()) / 2) || 1;
     const [lead, leadTo, trail, trailTo] =
       dir > 0 ? [edgeR, b.r, edgeL, b.l] : [edgeL, b.l, edgeR, b.r];
-    const velocityFor = (mv) =>
+    const velocityFor = (mv: MotionValue<number>) =>
       clamp(v === null ? mv.getVelocity() : v, -MAX_VELOCITY, MAX_VELOCITY);
     animate(lead, leadTo, {
       ...(flick ? SPRING_MOMENTUM : SPRING_UI),
@@ -209,7 +241,7 @@ export function RubberSegment({
     });
   };
 
-  const travel = (from, to) => {
+  const travel = (from: number, to: number) => {
     const a = slots.current[from];
     const b = slots.current[to];
     if (!a || !b) return;
@@ -227,11 +259,12 @@ export function RubberSegment({
     handoff.current = setTimeout(() => land(to, null, false, true), t(HANDOFF) * 1000);
   };
 
-  const localX = (e) => e.clientX - (box.current ? box.current.left : 0) - inset;
+  const localX = (e: React.PointerEvent) =>
+    e.clientX - (box.current ? box.current.left : 0) - inset;
 
-  const handlePointerDown = (e, i) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>, i: number) => {
     if (disabled || drag.current || e.button !== 0) return;
-    box.current = trackRef.current.getBoundingClientRect();
+    box.current = trackRef.current!.getBoundingClientRect();
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
@@ -257,7 +290,7 @@ export function RubberSegment({
     }
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || e.pointerId !== d.id || !d.onThumb) return;
     const x = localX(e);
@@ -290,7 +323,7 @@ export function RubberSegment({
   };
 
   const release = () => {
-    const d = drag.current;
+    const d = drag.current!;
     drag.current = null;
     if (trackRef.current) delete trackRef.current.dataset.held;
     const el = itemRefs.current[d.slot];
@@ -298,7 +331,7 @@ export function RubberSegment({
     return d;
   };
 
-  const handlePointerUp = (e) => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || e.pointerId !== d.id) return;
     release();
@@ -320,7 +353,7 @@ export function RubberSegment({
     else land(to, v, flick, flick);
   };
 
-  const handlePointerCancel = (e) => {
+  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || e.pointerId !== d.id) return;
     release();
@@ -329,10 +362,10 @@ export function RubberSegment({
     else land(committed.current, null, false, false);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (disabled) return;
     const last = list.length - 1;
-    let next = null;
+    let next: number | null = null;
     if (e.key === "ArrowRight" || e.key === "ArrowDown") next = Math.min(last, index + 1);
     else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = Math.max(0, index - 1);
     else if (e.key === "Home") next = 0;
@@ -356,20 +389,22 @@ export function RubberSegment({
       data-equal={equalSlots ? "" : undefined}
       data-draggable={draggable && !disabled ? "" : undefined}
       className={`group relative inline-grid touch-pan-y select-none auto-cols-auto grid-flow-col rounded-[var(--rs-radius)] p-[var(--rs-inset)] align-middle [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [background:var(--rs-track)] [font-family:inherit] aria-disabled:pointer-events-none data-[held]:cursor-grabbing data-[equal]:auto-cols-[minmax(0,1fr)] aria-disabled:opacity-50${className ? ` ${className}` : ""}`}
-      style={{
-        "--rs-track": trackColor,
-        "--rs-thumb": thumbColor,
-        "--rs-ink": textColor,
-        "--rs-ink-active": activeTextColor,
-        "--rs-radius": `${radius}px`,
-        "--rs-inset": `${inset}px`,
-        "--rs-thumb-radius": `${thumbRadius}px`,
-        "--rs-h": `${preset.height}px`,
-        "--rs-font": `${preset.font}px`,
-        "--rs-pad": `${preset.pad}px`,
-        "--rs-min": `${preset.min}px`,
-        "--rs-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-      }}
+      style={
+        {
+          "--rs-track": trackColor,
+          "--rs-thumb": thumbColor,
+          "--rs-ink": textColor,
+          "--rs-ink-active": activeTextColor,
+          "--rs-radius": `${radius}px`,
+          "--rs-inset": `${inset}px`,
+          "--rs-thumb-radius": `${thumbRadius}px`,
+          "--rs-h": `${preset.height}px`,
+          "--rs-font": `${preset.font}px`,
+          "--rs-pad": `${preset.pad}px`,
+          "--rs-min": `${preset.min}px`,
+          "--rs-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+        } as React.CSSProperties
+      }
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}

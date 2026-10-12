@@ -1,0 +1,44 @@
+---
+title: Temple Night
+description: A Kyoto mountain temple after dark, with rain, mist, falling maple leaves and a blood moon.
+---
+
+A Three.js world with a temple hall, a torii gate and lanterns up a stone flight, maples, rain, mist and drifting leaves, finished with bloom post-processing. The camera follows the pointer. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="temple-night" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add temple-night
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/temple-night.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TempleNight } from "@/components/ui/temple-night";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <TempleNight />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type             | Default          | Description                                   |
+| :---------------- | :--------------- | :--------------- | :-------------------------------------------- |
+| `variant`         | `"temple-night"` | `"temple-night"` | Scene variant.                                |
+| `backgroundColor` | `string`         | `"#05070a"`      | Colour shown behind the canvas while loading. |

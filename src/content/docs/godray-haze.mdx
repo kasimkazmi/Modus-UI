@@ -1,0 +1,52 @@
+---
+title: Godray Haze
+description: Volumetric light rays through a hazy gradient sky.
+---
+
+Volumetric god rays streaming from the top corner over a sky gradient, with soft fractal haze and a vignette. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="godray-haze" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add godray-haze
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/godray-haze.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GodrayHaze } from "@/components/ui/godray-haze";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GodrayHaze />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type     | Default     | Description                      |
+| :------------ | :------- | :---------- | :------------------------------- |
+| `rayColor`    | `string` | `"#fde68a"` | Colour of the light rays.        |
+| `skyColor`    | `string` | `"#1e293b"` | Top colour of the sky gradient.  |
+| `groundColor` | `string` | `"#020617"` | Bottom colour and vignette tint. |
+| `speed`       | `number` | `0.5`       | Ray animation speed.             |
+| `intensity`   | `number` | `0.6`       | Brightness of the rays.          |
+| `density`     | `number` | `0.3`       | Density of the rays.             |
+| `spotty`      | `number` | `1`         | How broken up the rays are.      |

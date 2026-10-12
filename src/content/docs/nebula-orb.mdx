@@ -1,0 +1,53 @@
+---
+title: Nebula Orb
+description: A volumetric gas nebula sealed in a glass sphere over a twinkling star field.
+---
+
+Billowing emission clouds inside a glass sphere, floating over a radial gradient and a twinkling dot-grid star field. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="nebula-orb" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add nebula-orb
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/nebula-orb.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { NebulaOrb } from "@/components/ui/nebula-orb";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <NebulaOrb />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                            |
+| :---------------- | :------- | :---------- | :------------------------------------- |
+| `coreColor`       | `string` | `"#ffd9b0"` | Colour of the hot cores.               |
+| `gasColor`        | `string` | `"#ff5e7a"` | Main gas colour.                       |
+| `veilColor`       | `string` | `"#3a5bdb"` | Colour of the outer veil.              |
+| `backgroundColor` | `string` | `"#05030f"` | Outer colour of the backdrop gradient. |
+| `speed`           | `number` | `1`         | Gas animation speed.                   |
+| `density`         | `number` | `1`         | Density of the gas.                    |
+| `glow`            | `number` | `1`         | Glow of the cores.                     |
+| `radius`          | `number` | `0.38`      | Radius of the sphere.                  |

@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -7,7 +6,7 @@ import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
-const EASE_OUT = [0.23, 1, 0.32, 1];
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 const FLICK = 0.11;
 const DEAD_ZONE = 3;
 const RESIST_PX = 24;
@@ -16,8 +15,12 @@ const EXIT = 0.7;
 const BURN = [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }];
 const HAS_STARTING_STYLE = typeof window !== "undefined" && "CSSStartingStyleRule" in window;
 
-const rubberband = (over, dim, c = 0.55) => (over * dim * c) / (dim + c * Math.abs(over));
-const velocityOf = (hist) => {
+type CloseReason = "timeout" | "programmatic" | "escape" | "action" | "close" | "swipe";
+type Sample = [time: number, y: number];
+
+const rubberband = (over: number, dim: number, c = 0.55) =>
+  (over * dim * c) / (dim + c * Math.abs(over));
+const velocityOf = (hist: Sample[]) => {
   if (hist.length < 2) return 0;
   const [t0, y0] = hist[0];
   const [t1, y1] = hist[hist.length - 1];
@@ -27,11 +30,11 @@ const velocityOf = (hist) => {
 interface SwipeToastProps {
   title?: string;
   description?: string;
-  icon?: any;
+  icon?: React.ReactNode;
   actionLabel?: string;
-  onAction?: any;
+  onAction?: () => void;
   open?: boolean;
-  onClose?: any;
+  onClose?: (reason: CloseReason) => void;
   background?: string;
   color?: string;
   fuseColor?: string;
@@ -41,12 +44,11 @@ interface SwipeToastProps {
   settleBounce?: number;
   swipeDistance?: number;
   duration?: number;
-  fuse?: string;
+  fuse?: "bottom" | "top" | "none";
   pauseOnHover?: boolean;
   closeButton?: boolean;
   inline?: boolean;
   dismissible?: boolean;
-  className?: string;
   className?: string;
 }
 
@@ -75,22 +77,28 @@ export function SwipeToast({
   className = "",
 }: SwipeToastProps) {
   const reduce = useReducedMotion();
-  const [phase, setPhase] = useState("open");
+  const [phase, setPhase] = useState<"open" | "closing" | "gone">("open");
   const [instant, setInstant] = useState(false);
   const [mounted, setMounted] = useState(HAS_STARTING_STYLE);
-  const cardRef = useRef(null);
-  const fuseRef = useRef(null);
-  const anim = useRef(null);
-  const drag = useRef(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const fuseRef = useRef<HTMLElement | null>(null);
+  const anim = useRef<Animation | null>(null);
+  const drag = useRef<{
+    id: number;
+    startY: number;
+    grab: number | null;
+    moved: boolean;
+    hist: Sample[];
+  } | null>(null);
   const flags = useRef({ hover: false, interacting: false, focus: false, hidden: false });
-  const lastInput = useRef("pointer");
-  const pendingClose = useRef(null);
-  const closeTimer = useRef(undefined);
-  const reason = useRef("timeout");
+  const lastInput = useRef<"pointer" | "keyboard">("pointer");
+  const pendingClose = useRef<CloseReason | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const reason = useRef<CloseReason>("timeout");
   const leaving = useRef(false);
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
-  const latest = useRef({});
+  const latest = useRef({ onClose, onAction, slideMs, inline });
   latest.current = { onClose, onAction, slideMs, inline };
 
   const y = useMotionValue(0);
@@ -104,14 +112,14 @@ export function SwipeToast({
     if (f.hover || f.interacting || f.focus || f.hidden) a.pause();
     else if (a.playState === "paused") a.play();
   };
-  const finish = (why) => {
+  const finish = (why: CloseReason) => {
     setPhase("gone");
     leaving.current = false;
     if (latest.current.inline)
       closeTimer.current = setTimeout(() => latest.current.onClose?.(why), COLLAPSE_MS);
     else latest.current.onClose?.(why);
   };
-  const close = (why) => {
+  const close = (why: CloseReason) => {
     if (phaseRef.current !== "open" || leaving.current) return;
     if (drag.current) {
       pendingClose.current = why;
@@ -180,7 +188,7 @@ export function SwipeToast({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const swipeOut = (dy, v) => {
+  const swipeOut = (dy: number, v: number) => {
     anim.current?.pause();
     leaving.current = true;
     pendingClose.current = null;
@@ -194,14 +202,14 @@ export function SwipeToast({
     }
     animate(fade, 0, { duration: 0.2, ease: EASE_OUT }).then(() => finish("swipe"));
   };
-  const onPointerDown = (e) => {
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     lastInput.current = "pointer";
     if (
       e.button !== 0 ||
       !dismissible ||
       drag.current ||
       leaving.current ||
-      e.target.closest("button")
+      (e.target as Element).closest("button")
     )
       return;
     if (phaseRef.current === "closing") rescue();
@@ -219,7 +227,7 @@ export function SwipeToast({
     flags.current.interacting = true;
     syncFuse();
   };
-  const onPointerMove = (e) => {
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     if (d.grab === null) {
@@ -234,7 +242,7 @@ export function SwipeToast({
     d.hist.push([performance.now(), next]);
     if (d.hist.length > 4) d.hist.shift();
   };
-  const onPointerUp = (e) => {
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     drag.current = null;
@@ -273,15 +281,17 @@ export function SwipeToast({
       data-dismissible={dismissible ? "true" : "false"}
       data-instant={instant ? "" : undefined}
       data-mounted={mounted ? "true" : "false"}
-      style={{
-        "--st-bg": background,
-        "--st-ink": color,
-        "--st-fuse": fuseColor,
-        "--st-w": `${width}px`,
-        "--st-radius": `${radius}px`,
-        "--st-slide": `${slideMs}ms`,
-        "--st-gap": "10px",
-      }}
+      style={
+        {
+          "--st-bg": background,
+          "--st-ink": color,
+          "--st-fuse": fuseColor,
+          "--st-w": `${width}px`,
+          "--st-radius": `${radius}px`,
+          "--st-slide": `${slideMs}ms`,
+          "--st-gap": "10px",
+        } as React.CSSProperties
+      }
     >
       <div className="min-h-0">
         <div className="starting:opacity-0 starting:[transform:translateY(100%)] group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] motion-reduce:[transform:none]! opacity-100 [transform:translateY(0)] [transition:transform_var(--st-slide)_cubic-bezier(0.23,1,0.32,1),opacity_calc(var(--st-slide)*0.6)_ease] group-data-[phase=gone]:invisible group-data-[inline=true]:mt-[var(--st-gap)] group-data-[mounted=false]:opacity-0 group-data-[phase=closing]:opacity-0 group-data-[phase=gone]:opacity-0 group-data-[mounted=false]:[transform:translateY(100%)] group-data-[phase=closing]:[transform:translateY(100%)] group-data-[phase=gone]:[transform:translateY(100%)] group-data-[phase=closing]:[transition:transform_calc(var(--st-slide)*0.7)_cubic-bezier(0.23,1,0.32,1),opacity_calc(var(--st-slide)*0.5)_ease] motion-reduce:[transition:opacity_200ms_ease]">

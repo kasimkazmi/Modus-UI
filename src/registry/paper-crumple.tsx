@@ -1,12 +1,25 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-const spring = (value = 0) => ({ value, target: value, velocity: 0 });
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-const finite = (value, fallback) => (Number.isFinite(value) ? value : fallback);
-function advance(s, dt, duration, instant) {
+import { cn } from "@/lib/utils";
+
+interface Spring {
+  value: number;
+  target: number;
+  velocity: number;
+}
+interface PaperPath {
+  samples: Float32Array[];
+  creased: Float32Array;
+}
+type PaperState = "flat" | "holding" | "crumpled" | "creased";
+type PaperStatus = "loading" | "ready" | "error";
+
+const spring = (value = 0): Spring => ({ value, target: value, velocity: 0 });
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const finite = (value: number, fallback: number) => (Number.isFinite(value) ? value : fallback);
+function advance(s: Spring, dt: number, duration: number, instant?: boolean) {
   if (instant || duration <= 0) {
     s.value = s.target;
     s.velocity = 0;
@@ -25,7 +38,7 @@ function advance(s, dt, duration, instant) {
   }
   return true;
 }
-function randomSource(seed) {
+function randomSource(seed: number) {
   let value = seed | 0;
   return () => {
     value |= 0;
@@ -35,14 +48,22 @@ function randomSource(seed) {
     return ((n ^ (n >>> 14)) >>> 0) / 4294967296;
   };
 }
-function createPaperPath(rest, triangles, shortSide, density, sharpness, depth, seed) {
+function createPaperPath(
+  rest: Float32Array,
+  triangles: number[],
+  shortSide: number,
+  density: number,
+  sharpness: number,
+  depth: number,
+  seed: number,
+): PaperPath {
   const count = rest.length / 3;
   const points = Float64Array.from(rest);
   const previous = Float64Array.from(rest);
   const before = Float64Array.from(rest);
-  const edges = [];
-  const hinges = [];
-  const adjacency = new Map();
+  const edges: number[] = [];
+  const hinges: number[] = [];
+  const adjacency = new Map<number, { a: number; b: number; opposite: number }>();
   const random = randomSource(seed);
   const guides = Array.from({ length: density }, () => {
     const angle = random() * Math.PI * 2;
@@ -83,7 +104,7 @@ function createPaperPath(rest, triangles, shortSide, density, sharpness, depth, 
   }
   const spacing = Math.sqrt((shortSide * shortSide) / count);
   const thickness = shortSide * 0.008;
-  const samples = [rest.slice()];
+  const samples: Float32Array[] = [rest.slice()];
   const frameCount = 64;
   const stepsPerFrame = 3;
   const totalSteps = frameCount * stepsPerFrame;
@@ -91,7 +112,7 @@ function createPaperPath(rest, triangles, shortSide, density, sharpness, depth, 
   for (let i = 0; i < rest.length; i += 3)
     initialRadius = Math.max(initialRadius, Math.hypot(rest[i] / 0.94, rest[i + 1] / 1.02));
   initialRadius *= 1.02;
-  function constrain(list, stride, stiffness, reverse) {
+  function constrain(list: number[], stride: number, stiffness: number, reverse?: boolean) {
     for (let n = 0; n < list.length; n += stride) {
       const edge = reverse ? list.length - stride - n : n;
       const a = list[edge],
@@ -258,8 +279,8 @@ export interface PaperCrumpleProps {
   width?: number;
   height?: number;
   sceneHeight?: number;
-  imageFit?: string;
-  releaseBehavior?: string;
+  imageFit?: "cover" | "contain";
+  releaseBehavior?: "restore" | "creased" | "stay";
   crumpleAmount?: number;
   crumpleDuration?: number;
   releaseDuration?: number;
@@ -283,8 +304,8 @@ export interface PaperCrumpleProps {
   detail?: number;
   disabled?: boolean;
   resetKey?: number;
-  onStateChange?: (state: any) => void;
-  onError?: (error: any) => void;
+  onStateChange?: (state: PaperState) => void;
+  onError?: (error: Error) => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -326,13 +347,13 @@ export const PaperCrumple = ({
   className = "",
   style,
 }: PaperCrumpleProps) => {
-  const pathCache = useRef(null);
-  const rootRef = useRef(null);
-  const canvasRef = useRef(null);
-  const hitRef = useRef(null);
-  const resetRef = useRef(null);
-  const cancelRef = useRef(null);
-  const [status, setStatus] = useState("loading");
+  const pathCache = useRef<{ key: string; value: PaperPath } | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const hitRef = useRef<HTMLButtonElement | null>(null);
+  const resetRef = useRef<(() => void) | null>(null);
+  const cancelRef = useRef<(() => void) | null>(null);
+  const [status, setStatus] = useState<PaperStatus>("loading");
   const options = useRef({
     releaseBehavior,
     crumpleAmount,
@@ -362,10 +383,11 @@ export const PaperCrumple = ({
     onError,
   };
   useEffect(() => {
-    const root = rootRef.current,
-      canvas = canvasRef.current,
-      hit = hitRef.current;
-    if (!root || !canvas || !hit) return;
+    if (!rootRef.current || !canvasRef.current || !hitRef.current) return;
+    // Bound as non-null consts so the hoisted handlers below keep the narrowing.
+    const root: HTMLDivElement = rootRef.current,
+      canvas: HTMLCanvasElement = canvasRef.current,
+      hit: HTMLButtonElement = hitRef.current;
     setStatus("loading");
     hit.disabled = true;
     hit.dataset.held = "false";
@@ -380,7 +402,7 @@ export const PaperCrumple = ({
     );
     root.style.setProperty("--pc-image-width", `${initialWidth * initialScale}px`);
     root.style.setProperty("--pc-image-height", `${initialHeight * initialScale}px`);
-    let renderer;
+    let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         canvas,
@@ -410,7 +432,7 @@ export const PaperCrumple = ({
     const original = new Float32Array(count * 3);
     const positions = new Float32Array(count * 3);
     const uvs = new Float32Array(count * 2);
-    const indices = [];
+    const indices: number[] = [];
     for (let row = 0; row <= rows; row++) {
       for (let col = 0; col <= columns; col++) {
         const index = row * (columns + 1) + col;
@@ -460,7 +482,7 @@ export const PaperCrumple = ({
     const renderNormals = new Float32Array(indices.length * 3);
     const renderUvs = new Float32Array(indices.length * 2);
     const faceNormals = new Float32Array(indices.length);
-    const incidentFaces = Array.from({ length: count }, () => []);
+    const incidentFaces = Array.from({ length: count }, (): number[] => []);
     for (let i = 0; i < indices.length; i++) {
       renderUvs[i * 2] = uvs[indices[i] * 2];
       renderUvs[i * 2 + 1] = uvs[indices[i] * 2 + 1];
@@ -611,7 +633,7 @@ export const PaperCrumple = ({
       speedY = 0;
     let held = false,
       keyboard = false,
-      pointerId = null;
+      pointerId: number | null = null;
     let peak = 0,
       disposed = false,
       ready = false,
@@ -619,14 +641,14 @@ export const PaperCrumple = ({
       contextLost = false;
     let frame = 0,
       lastTime = 0,
-      state = "flat";
-    const textures = new Set();
+      state: PaperState = "flat";
+    const textures = new Set<THREE.Texture>();
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduceMotion = media.matches;
     let previousAmount = -1,
       previousMemory = -1;
     const baseRotation = THREE.MathUtils.degToRad(finite(rotation, 0));
-    function publish(next) {
+    function publish(next: PaperState) {
       if (next === state) return;
       state = next;
       options.current.onStateChange?.(next);
@@ -719,11 +741,11 @@ export const PaperCrumple = ({
       hit.style.width = `${Math.max(24, maxX - minX)}px`;
       hit.style.height = `${Math.max(24, maxY - minY)}px`;
     }
-    function setPointer(x, y) {
+    function setPointer(x: number, y: number) {
       pointer.set((x / viewportWidth) * 2 - 1, 1 - (y / viewportHeight) * 2);
       raycaster.setFromCamera(pointer, camera);
     }
-    function render(time) {
+    function render(time: number) {
       frame = 0;
       if (disposed || !ready || contextLost || !inView || document.hidden) return;
       const dt = lastTime ? Math.min(0.04, (time - lastTime) / 1000) : 1 / 60;
@@ -898,7 +920,7 @@ export const PaperCrumple = ({
       publish("holding");
       wake();
     }
-    function pointerDown(event) {
+    function pointerDown(event: PointerEvent) {
       if (!ready || options.current.disabled || held || event.button !== 0 || !event.isPrimary)
         return;
       const rect = root.getBoundingClientRect();
@@ -925,7 +947,7 @@ export const PaperCrumple = ({
       hit.setPointerCapture(event.pointerId);
       start();
     }
-    function pointerMove(event) {
+    function pointerMove(event: PointerEvent) {
       if (!held || event.pointerId !== pointerId || !options.current.draggable) return;
       const rect = root.getBoundingClientRect();
       const now = performance.now();
@@ -946,10 +968,10 @@ export const PaperCrumple = ({
       tiltY.target = clamp(speedX / 1800, -1, 1) * maxTilt;
       wake();
     }
-    function pointerUp(event) {
+    function pointerUp(event: PointerEvent) {
       if (event.pointerId === pointerId) finish();
     }
-    function pointerCancel(event) {
+    function pointerCancel(event: PointerEvent) {
       if (event.pointerId === pointerId) finish(true);
     }
     function cancel() {
@@ -959,7 +981,7 @@ export const PaperCrumple = ({
       hit.dataset.pointer = "false";
       cancel();
     }
-    function keyDown(event) {
+    function keyDown(event: KeyboardEvent) {
       if (options.current.disabled || !ready) return;
       hit.dataset.pointer = "false";
       if (event.key === "Escape") {
@@ -996,7 +1018,7 @@ export const PaperCrumple = ({
         wake();
       }
     }
-    function keyUp(event) {
+    function keyUp(event: KeyboardEvent) {
       if (keyboard && (event.key === " " || event.key === "Enter")) {
         event.preventDefault();
         finish(true);
@@ -1012,7 +1034,7 @@ export const PaperCrumple = ({
       if (reduceMotion) tiltX.target = tiltY.target = 0;
       wake();
     }
-    function loseContext(event) {
+    function loseContext(event: Event) {
       event.preventDefault();
       contextLost = true;
       cancel();
@@ -1054,8 +1076,8 @@ export const PaperCrumple = ({
     resize();
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin("anonymous");
-    function load(url) {
-      return new Promise((resolve, reject) => {
+    function load(url: string) {
+      return new Promise<THREE.Texture>((resolve, reject) => {
         loader.load(
           url,
           (texture) => {
@@ -1179,7 +1201,7 @@ export const PaperCrumple = ({
   return (
     <div
       ref={rootRef}
-      className={`relative isolate w-full overflow-hidden ${className}`}
+      className={cn("relative isolate w-full overflow-hidden", className)}
       style={{ height: sceneHeight, ...style }}
       data-status={status}
     >

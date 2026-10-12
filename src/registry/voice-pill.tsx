@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -6,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft01Icon, Mic01Icon } from "@hugeicons/core-free-icons";
 const LOOP = 4.8;
-const SYLLABLES = [
+const SYLLABLES: ReadonlyArray<readonly [number, number, number]> = [
   [0.1, 0.16, 0.9],
   [0.3, 0.12, 0.7],
   [0.5, 0.2, 1],
@@ -21,7 +20,7 @@ const SYLLABLES = [
   [3.4, 0.12, 0.75],
   [3.6, 0.16, 0.9],
 ];
-const MIC_BINS = [
+const MIC_BINS: ReadonlyArray<readonly [number, number]> = [
   [1, 4],
   [4, 11],
   [11, 33],
@@ -32,7 +31,7 @@ const SLIDE_MIN = 4;
 const WAVE_EVERY = 4;
 const WAVE_MAX = 80;
 
-const simulatedLevel = (t) => {
+const simulatedLevel = (t: number) => {
   const u = t % LOOP;
   let a = 0.06;
   for (const [s, d, p] of SYLLABLES) {
@@ -41,7 +40,7 @@ const simulatedLevel = (t) => {
   }
   return a * (0.7 + 0.3 * Math.abs(Math.sin(2 * Math.PI * 7.1 * u)));
 };
-const micLevel = (analyser, buf) => {
+const micLevel = (analyser: AnalyserNode, buf: Uint8Array<ArrayBuffer>) => {
   analyser.getByteFrequencyData(buf);
   let total = 0;
   for (const [lo, hi] of MIC_BINS) {
@@ -51,7 +50,38 @@ const micLevel = (analyser, buf) => {
   }
   return (total / MIC_BINS.length) * MIC_GAIN;
 };
-const drawWave = (s, canvas, level, color, floor) => {
+type WaveState = { hist: number[]; tick: number; acc: number };
+
+interface MicAudio {
+  ctx: AudioContext;
+  stream?: MediaStream | null;
+  src?: MediaStreamAudioSourceNode | null;
+  analyser?: AnalyserNode | null;
+  buf?: Uint8Array<ArrayBuffer> | null;
+}
+
+interface PillState extends WaveState {
+  listening: boolean;
+  pointerId: number | null;
+  ownPress: boolean;
+  downX: number;
+  sliding: boolean;
+  downAt: number;
+  startedAt: number;
+  raf: number;
+  last: number;
+  env: number;
+  t0: number;
+  audio: MicAudio | null;
+}
+
+const drawWave = (
+  s: WaveState,
+  canvas: HTMLCanvasElement,
+  level: number,
+  color: string,
+  floor: number,
+) => {
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const rect = canvas.getBoundingClientRect();
   const W = Math.max(1, Math.round(rect.width * dpr));
@@ -88,13 +118,15 @@ const drawWave = (s, canvas, level, color, floor) => {
   }
   ctx.globalAlpha = 1;
 };
-const clock = (ms) => {
+const clock = (ms: number) => {
   const s = Math.floor(ms / 1000);
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 };
 
-const openMic = async (s) => {
-  const Ctx = window.AudioContext || window.webkitAudioContext;
+const openMic = async (s: PillState) => {
+  const Ctx =
+    window.AudioContext ||
+    (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctx || !navigator.mediaDevices?.getUserMedia) throw new Error("unsupported");
   s.audio ??= { ctx: new Ctx() };
   const a = s.audio;
@@ -112,7 +144,7 @@ const openMic = async (s) => {
   a.src.connect(a.analyser);
   a.buf = new Uint8Array(a.analyser.frequencyBinCount);
 };
-const closeMic = (s) => {
+const closeMic = (s: PillState) => {
   const a = s.audio;
   if (!a?.stream) return;
   a.stream.getTracks().forEach((t) => t.stop());
@@ -123,12 +155,18 @@ const closeMic = (s) => {
   a.buf = null;
 };
 
+type VoicePillMode = "auto" | "hold" | "toggle";
+type VoicePillSource = "simulated" | "mic";
+type VoicePillInput = "pointer" | "key";
+type VoicePillStopReason =
+  "mic-denied" | "cancel" | "release" | "tap" | "key" | "escape" | "blur" | "disabled" | "unmount";
+
 interface VoicePillProps {
   accentColor?: string;
   iconColor?: string;
   background?: string;
   size?: number;
-  shape?: string;
+  shape?: "pill" | "rounded";
   reach?: number;
   showTime?: boolean;
   waveform?: boolean;
@@ -140,14 +178,13 @@ interface VoicePillProps {
   floor?: number;
   openDuration?: number;
   pressScale?: number;
-  mode?: string;
+  mode?: VoicePillMode;
   holdAfter?: number;
-  reactive?: string;
+  reactive?: VoicePillSource;
   disabled?: boolean;
   ariaLabel?: string;
-  onStart?: any;
-  onStop?: any;
-  className?: string;
+  onStart?: (detail: { source: VoicePillSource }) => void;
+  onStop?: (detail: { reason: VoicePillStopReason; duration: number }) => void;
   className?: string;
 }
 
@@ -179,11 +216,11 @@ export function VoicePill({
 }: VoicePillProps) {
   const [listening, setListening] = useState(false);
   const [pressed, setPressed] = useState(false);
-  const [input, setInput] = useState("pointer");
-  const timeRef = useRef(null);
-  const rootRef = useRef(null);
-  const waveRef = useRef(null);
-  const st = useRef({
+  const [input, setInput] = useState<VoicePillInput>("pointer");
+  const timeRef = useRef<HTMLSpanElement | null>(null);
+  const rootRef = useRef<HTMLButtonElement | null>(null);
+  const waveRef = useRef<HTMLCanvasElement | null>(null);
+  const st = useRef<PillState>({
     listening: false,
     pointerId: null,
     ownPress: false,
@@ -200,8 +237,7 @@ export function VoicePill({
     t0: 0,
     audio: null,
   });
-  const cfg = useRef({});
-  cfg.current = {
+  const config = {
     attack,
     release,
     sensitivity,
@@ -217,15 +253,17 @@ export function VoicePill({
     onStart,
     onStop,
   };
+  const cfg = useRef(config);
+  cfg.current = config;
 
-  const frame = (now) => {
+  const frame = (now: number) => {
     const s = st.current;
     const c = cfg.current;
     const dt = Math.min((now - s.last) / 1000, DT_MAX);
     s.last = now;
     let target = 0;
     if (s.listening) {
-      if (s.audio?.analyser) target = micLevel(s.audio.analyser, s.audio.buf);
+      if (s.audio?.analyser) target = micLevel(s.audio.analyser, s.audio.buf!);
       else if (c.reactive !== "mic") target = simulatedLevel((now - s.t0) / 1000);
     }
     target = Math.min(1, target * c.sensitivity);
@@ -240,7 +278,7 @@ export function VoicePill({
     s.raf = s.listening ? requestAnimationFrame(frame) : 0;
   };
 
-  const begin = (kind) => {
+  const begin = (kind: VoicePillInput) => {
     const s = st.current;
     const c = cfg.current;
     if (s.listening || disabled) return;
@@ -259,7 +297,7 @@ export function VoicePill({
     c.onStart?.({ source: c.reactive });
     if (c.reactive === "mic") openMic(s).catch(() => end("mic-denied"));
   };
-  const end = (reason) => {
+  const end = (reason: VoicePillStopReason) => {
     const s = st.current;
     const c = cfg.current;
     if (!s.listening) return;
@@ -279,7 +317,7 @@ export function VoicePill({
     root.style.setProperty("--vp-slide", "0px");
     root.style.setProperty("--vp-cancel", "0");
   };
-  const onPointerMove = (e) => {
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     const s = st.current;
     const c = cfg.current;
     const root = rootRef.current;
@@ -298,7 +336,7 @@ export function VoicePill({
       end("cancel");
     }
   };
-  const onPointerDown = (e) => {
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     const s = st.current;
     if (disabled || e.button !== 0 || !e.isPrimary || s.pointerId !== null) return;
     s.pointerId = e.pointerId;
@@ -311,7 +349,7 @@ export function VoicePill({
     s.ownPress = !s.listening;
     if (!s.listening) begin("pointer");
   };
-  const onPointerUp = (e) => {
+  const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
     const s = st.current;
     const c = cfg.current;
     if (e.pointerId !== s.pointerId) return;
@@ -331,7 +369,7 @@ export function VoicePill({
       end(held < c.holdAfter ? "tap" : "release");
     }
   };
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Escape") {
       end("escape");
       return;
@@ -342,8 +380,12 @@ export function VoicePill({
       else begin("key");
     }
   };
-  const onClick = (e) => {
-    if (e.detail === 0 && st.current.pointerId === null && !e.nativeEvent.pointerType) {
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (
+      e.detail === 0 &&
+      st.current.pointerId === null &&
+      !(e.nativeEvent as PointerEvent).pointerType
+    ) {
       if (st.current.listening) end("key");
       else begin("key");
     }
@@ -404,23 +446,25 @@ export function VoicePill({
       onKeyDown={onKeyDown}
       onClick={onClick}
       onContextMenu={(e) => e.preventDefault()}
-      style={{
-        "--vp-accent": accentColor,
-        "--vp-icon": iconColor,
-        "--vp-bg": background,
-        "--vp-size": `${size}px`,
-        "--vp-radius": `${radius}px`,
-        "--vp-reach": `${reach}px`,
-        "--vp-extra": `${extra}px`,
-        "--vp-clock-w": `${clockW}px`,
-        "--vp-wave-w": `${waveW}px`,
-        "--vp-stop": `${Math.round(size * 0.32)}px`,
-        "--vp-icon-size": `${Math.round(size * 0.54)}px`,
-        "--vp-time-size": `${timeSize}px`,
-        "--vp-open": `${openDuration}ms`,
-        "--vp-press": pressScale,
-        "--vp-hit": `${hit}px`,
-      }}
+      style={
+        {
+          "--vp-accent": accentColor,
+          "--vp-icon": iconColor,
+          "--vp-bg": background,
+          "--vp-size": `${size}px`,
+          "--vp-radius": `${radius}px`,
+          "--vp-reach": `${reach}px`,
+          "--vp-extra": `${extra}px`,
+          "--vp-clock-w": `${clockW}px`,
+          "--vp-wave-w": `${waveW}px`,
+          "--vp-stop": `${Math.round(size * 0.32)}px`,
+          "--vp-icon-size": `${Math.round(size * 0.54)}px`,
+          "--vp-time-size": `${timeSize}px`,
+          "--vp-open": `${openDuration}ms`,
+          "--vp-press": pressScale,
+          "--vp-hit": `${hit}px`,
+        } as React.CSSProperties
+      }
     >
       <span
         className="group-data-[input=key]:[transition-duration motion-reduce:transition-none:0ms] pointer-events-none absolute [background:var(--vp-bg)] [border-radius:var(--vp-radius)] [clip-path:inset(0_0_0_calc(var(--vp-reach)+var(--vp-extra))_round_var(--vp-radius))] [inset:0_0_0_calc(-1*(var(--vp-reach)+var(--vp-extra)))] [transition:clip-path_var(--vp-open)_cubic-bezier(0.23,1,0.32,1),background-color_150ms_ease] group-data-[state=listening]:[clip-path:inset(0_0_round_var(--vp-radius))] motion-reduce:[transition:background-color_150ms_ease] [@media(hover:hover)_and_(pointer:fine)]:group-enabled:group-data-[state=idle]:group-hover:[background:color-mix(in_srgb,var(--vp-icon)_10%,var(--vp-bg))]"

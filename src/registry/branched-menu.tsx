@@ -1,8 +1,8 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { isValidElement, useLayoutEffect, useRef, useState } from "react";
+import type { CSSProperties, ReactElement } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CursorPointer01Icon,
@@ -14,7 +14,21 @@ import {
   Settings02Icon,
   TextFontIcon,
 } from "@hugeicons/core-free-icons";
-const DEFAULT_ITEMS = [
+type HugeIcon = React.ComponentProps<typeof HugeiconsIcon>["icon"];
+
+export interface BranchedMenuLeaf {
+  value: string;
+  label: string;
+  icon?: HugeIcon | ReactElement;
+}
+
+export interface BranchedMenuItem {
+  label: string;
+  value?: string;
+  children?: BranchedMenuLeaf[];
+}
+
+const DEFAULT_ITEMS: BranchedMenuItem[] = [
   {
     label: "Getting started",
     children: [
@@ -37,16 +51,21 @@ const DEFAULT_ITEMS = [
 const PAD = 6;
 const MARK = 16;
 
-const renderIcon = (icon) =>
-  isValidElement(icon) ? icon : <HugeiconsIcon icon={icon} size={16} strokeWidth={1.8} />;
-const toSet = (open) => new Set(Array.isArray(open) ? open : open >= 0 ? [open] : []);
+const renderIcon = (icon: HugeIcon | ReactElement) =>
+  isValidElement(icon) ? (
+    icon
+  ) : (
+    <HugeiconsIcon icon={icon as HugeIcon} size={16} strokeWidth={1.8} />
+  );
+const toSet = (open: number | number[]) =>
+  new Set(Array.isArray(open) ? open : open >= 0 ? [open] : []);
 
 interface BranchedMenuProps {
-  items?: any;
-  defaultOpen?: number;
+  items?: BranchedMenuItem[];
+  defaultOpen?: number | number[];
   defaultActive?: string;
-  onSelect?: any;
-  onToggle?: any;
+  onSelect?: (value: string, item: BranchedMenuItem | BranchedMenuLeaf) => void;
+  onToggle?: (index: number, open: boolean) => void;
   color?: string;
   accentColor?: string;
   lineColor?: string;
@@ -59,7 +78,6 @@ interface BranchedMenuProps {
   fontSize?: number;
   drawDuration?: number;
   foldDuration?: number;
-  className?: string;
   className?: string;
 }
 
@@ -89,22 +107,22 @@ export function BranchedMenu({
     const first = items.find((it, i) => it.children && toSet(defaultOpen).has(i));
     return first?.children?.[0]?.value ?? "";
   });
-  const navRef = useRef(null);
-  const heads = useRef([]);
-  const markerRef = useRef(null);
-  const latest = useRef({});
+  const navRef = useRef<HTMLElement | null>(null);
+  const heads = useRef<(HTMLButtonElement | null)[]>([]);
+  const markerRef = useRef<HTMLSpanElement | null>(null);
+  const latest = useRef<Pick<BranchedMenuProps, "onSelect" | "onToggle">>({});
   latest.current = { onSelect, onToggle };
 
   const activeSection = items.findIndex((it) => it.children?.some((kid) => kid.value === active));
   const markerShown = activeSection >= 0 && open.has(activeSection);
   useLayoutEffect(() => {
-    const place = (glide) => {
+    const place = (glide: boolean) => {
       const m = markerRef.current;
       const el = heads.current[activeSection];
       if (!m) return;
       const on = markerShown && el;
       if (!glide) m.style.transition = "none";
-      if (on) m.style.top = `${el.offsetTop + (el.offsetHeight - MARK) / 2}px`;
+      if (on && el) m.style.top = `${el.offsetTop + (el.offsetHeight - MARK) / 2}px`;
       m.toggleAttribute("data-on", Boolean(on));
       if (!glide) {
         void m.offsetHeight;
@@ -124,11 +142,11 @@ export function BranchedMenu({
     return () => ro.disconnect();
   }, [activeSection, markerShown, items, fontSize, rowHeight]);
 
-  const select = (value, item) => {
+  const select = (value: string, item: BranchedMenuItem | BranchedMenuLeaf) => {
     setActive(value);
     latest.current.onSelect?.(value, item);
   };
-  const toggle = (i) => {
+  const toggle = (i: number) => {
     setOpen((prev) => {
       const next = new Set(prev);
       const isOpen = !next.has(i);
@@ -141,30 +159,32 @@ export function BranchedMenu({
 
   const r = Math.min(radius, rowHeight / 2 - 2);
   const endX = indent - 8;
-  const rowY = (k) => PAD + k * rowHeight + rowHeight / 2;
-  const branch = (k) =>
+  const rowY = (k: number) => PAD + k * rowHeight + rowHeight / 2;
+  const branch = (k: number) =>
     `M ${trunk} ${rowY(k) - r} A ${r} ${r} 0 0 0 ${trunk + r} ${rowY(k)} H ${endX}`;
-  const reach = (k) =>
+  const reach = (k: number) =>
     `M ${trunk} 0 V ${rowY(k) - r} A ${r} ${r} 0 0 0 ${trunk + r} ${rowY(k)} H ${endX}`;
-  const length = (k) => rowY(k) - r + (Math.PI * r) / 2 + (endX - trunk - r);
+  const length = (k: number) => rowY(k) - r + (Math.PI * r) / 2 + (endX - trunk - r);
 
   return (
     <nav
       ref={navRef}
       className={`relative flex w-fit max-w-[min(var(--bm-w),100%)] flex-col pl-3.5 leading-[1.2] [color:var(--bm-ink)] [font-family:inherit] [font-size:var(--bm-font)] before:absolute before:bottom-0 before:left-0 before:top-2 before:w-0.5 before:rounded-[1px] before:[background:linear-gradient(to_bottom,var(--bm-line)_0%,var(--bm-line)_55%,transparent_100%)] before:content-['']${className ? ` ${className}` : ""}`}
-      style={{
-        "--bm-w": `${width}px`,
-        "--bm-ink": color,
-        "--bm-accent": accentColor,
-        "--bm-line": lineColor,
-        "--bm-font": `${fontSize}px`,
-        "--bm-row": `${rowHeight}px`,
-        "--bm-indent": `${indent}px`,
-        "--bm-line-w": lineWidth,
-        "--bm-draw": `${drawDuration}ms`,
-        "--bm-muted": `color-mix(in srgb, ${color} 55%, transparent)`,
-        "--bm-fold": `${foldDuration}ms`,
-      }}
+      style={
+        {
+          "--bm-w": `${width}px`,
+          "--bm-ink": color,
+          "--bm-accent": accentColor,
+          "--bm-line": lineColor,
+          "--bm-font": `${fontSize}px`,
+          "--bm-row": `${rowHeight}px`,
+          "--bm-indent": `${indent}px`,
+          "--bm-line-w": lineWidth,
+          "--bm-draw": `${drawDuration}ms`,
+          "--bm-muted": `color-mix(in srgb, ${color} 55%, transparent)`,
+          "--bm-fold": `${foldDuration}ms`,
+        } as CSSProperties
+      }
     >
       <span
         ref={markerRef}

@@ -144,6 +144,29 @@ import ClothStudyDemo from "./cloth-study-demo";
 import RippleStudyDemo from "./ripple-study-demo";
 import BallStudyDemo from "./ball-study-demo";
 import BrandOrbDemo from "./brand-orb-demo";
+import AuroraVeilDemo from "./aurora-veil-demo";
+import SilkMeshDemo from "./silk-mesh-demo";
+import LiquidChromeOrbDemo from "./liquid-chrome-orb-demo";
+import PlasmaGlowDemo from "./plasma-glow-demo";
+import NebulaOrbDemo from "./nebula-orb-demo";
+import GodrayHazeDemo from "./godray-haze-demo";
+import InkCanvasDemo from "./ink-canvas-demo";
+import HoloFoilDemo from "./holo-foil-demo";
+import CrystalCellsDemo from "./crystal-cells-demo";
+import FlutedGradientDemo from "./fluted-gradient-demo";
+import RipplePoolDemo from "./ripple-pool-demo";
+import AsciiFlowDemo from "./ascii-flow-demo";
+import SylvaWorldDemo from "./sylva-world-demo";
+import TempleNightDemo from "./temple-night-demo";
+import ProceduralLandscapeDemo from "./procedural-landscape-demo";
+import TowerLandscapeDemo from "./tower-landscape-demo";
+import BookshelfSceneDemo from "./bookshelf-scene-demo";
+import AmberHalftoneDemo from "./amber-halftone-demo";
+import NeonSignDemo from "./neon-sign-demo";
+import GalleryHeadingDemo from "./gallery-heading-demo";
+import RectangleButtonDemo from "./rectangle-button-demo";
+import EditorialIntroDemo from "./editorial-intro-demo";
+import NewsletterFooterDemo from "./newsletter-footer-demo";
 import DiagnosticsPanelDemo from "./diagnostics-panel-demo";
 import SkeuomorphicToggleDemo from "./skeuomorphic-toggle-demo";
 import WireframeFormDemo from "./wireframe-form-demo";
@@ -335,6 +358,29 @@ export const demos: Record<ComponentName, ComponentType> = {
   "ripple-study": RippleStudyDemo,
   "ball-study": BallStudyDemo,
   "brand-orb": BrandOrbDemo,
+  "aurora-veil": AuroraVeilDemo,
+  "silk-mesh": SilkMeshDemo,
+  "liquid-chrome-orb": LiquidChromeOrbDemo,
+  "plasma-glow": PlasmaGlowDemo,
+  "nebula-orb": NebulaOrbDemo,
+  "godray-haze": GodrayHazeDemo,
+  "ink-canvas": InkCanvasDemo,
+  "holo-foil": HoloFoilDemo,
+  "crystal-cells": CrystalCellsDemo,
+  "fluted-gradient": FlutedGradientDemo,
+  "ripple-pool": RipplePoolDemo,
+  "ascii-flow": AsciiFlowDemo,
+  "sylva-world": SylvaWorldDemo,
+  "temple-night": TempleNightDemo,
+  "procedural-landscape": ProceduralLandscapeDemo,
+  "tower-landscape": TowerLandscapeDemo,
+  "bookshelf-scene": BookshelfSceneDemo,
+  "amber-halftone": AmberHalftoneDemo,
+  "neon-sign": NeonSignDemo,
+  "gallery-heading": GalleryHeadingDemo,
+  "rectangle-button": RectangleButtonDemo,
+  "editorial-intro": EditorialIntroDemo,
+  "newsletter-footer": NewsletterFooterDemo,
   "diagnostics-panel": DiagnosticsPanelDemo,
   "skeuomorphic-toggle": SkeuomorphicToggleDemo,
   "wireframe-form": WireframeFormDemo,

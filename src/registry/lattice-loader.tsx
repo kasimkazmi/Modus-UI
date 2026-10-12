@@ -1,10 +1,29 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 
-const PATTERNS = {
+type Grid = 3 | 4;
+type LatticeStatus = "working" | "done" | "error";
+type LatticePatternName =
+  "arrow" | "dots" | "ripple" | "spiral" | "orbit" | "snake" | "sweep" | "spin" | "rain" | "pulse";
+
+interface PatternSpec {
+  cells: (number | null)[];
+  loop: number;
+  scale: number;
+  lit?: number;
+}
+
+export interface LatticeCustomPattern {
+  cells: (number | null)[];
+  loop?: number;
+  scale?: number;
+  lit?: number;
+}
+
+const PATTERNS: Record<LatticePatternName, Partial<Record<Grid, PatternSpec>>> = {
   arrow: { 3: { cells: [1, 2, 3, 0, 1, 2, 1, 2, 3], loop: 7.2, scale: 1 } },
   dots: { 3: { cells: [0, 1, 2, 0, 1, 2, 0, 1, 2], loop: 3, scale: 2.4 } },
   ripple: { 3: { cells: [2, 1, 2, 1, 0, 1, 2, 1, 2], loop: 4.8, scale: 1.5 } },
@@ -45,16 +64,19 @@ const PATTERNS = {
     },
   },
 };
-const DEFAULT_PATTERN = { 3: "orbit", 4: "sweep" };
-const MARKS = {
+const DEFAULT_PATTERN: Record<Grid, LatticePatternName> = { 3: "orbit", 4: "sweep" };
+const MARKS: Record<Grid, Record<"done" | "error", number[]>> = {
   3: { done: [2, 3, 5, 7], error: [0, 2, 4, 6, 8] },
   4: { done: [7, 8, 10, 13], error: [0, 3, 5, 6, 9, 10, 12, 15] },
 };
 
-const resolvePattern = (pattern, grid) => {
+const resolvePattern = (
+  pattern: LatticePatternName | LatticeCustomPattern,
+  grid: Grid,
+): PatternSpec => {
   if (typeof pattern === "string") {
     const named = PATTERNS[pattern];
-    return (named && named[grid]) || PATTERNS[DEFAULT_PATTERN[grid]][grid];
+    return (named && named[grid]) || PATTERNS[DEFAULT_PATTERN[grid]][grid]!;
   }
   const cells = Array.from({ length: grid * grid }, (_, i) => pattern.cells[i] ?? null);
   const max = Math.max(0, ...cells.filter((v) => v != null));
@@ -67,7 +89,7 @@ const resolvePattern = (pattern, grid) => {
 };
 const CELL =
   "h-[var(--ll-cell)] w-[var(--ll-cell)] [border-radius:max(1px,calc(var(--ll-cell)*0.25))] [background:var(--ll-color)] group-data-[shape=round]:rounded-full";
-const LIT = {
+const LIT: Record<number, string> = {
   62: "animate-[lattice-on_var(--ll-cycle)_infinite]",
   45: "animate-[lattice-on-45_var(--ll-cycle)_infinite]",
   35: "animate-[lattice-on-35_var(--ll-cycle)_infinite]",
@@ -85,11 +107,11 @@ const STYLE = `
   .ll-text { filter: none !important; }
 }
 `;
-const fmt = (ds) =>
+const fmt = (ds: number) =>
   ds < 600
     ? `${(ds / 10).toFixed(1)}s`
     : `${Math.floor(ds / 600)}m ${((ds % 600) / 10).toFixed(1)}s`;
-const spoken = (ds) =>
+const spoken = (ds: number) =>
   ds < 600
     ? `${(ds / 10).toFixed(1)} seconds`
     : `${Math.floor(ds / 600)} minutes ${((ds % 600) / 10).toFixed(1)} seconds`;
@@ -98,8 +120,8 @@ interface LatticeLoaderProps {
   label?: string;
   doneLabel?: string;
   errorLabel?: string;
-  status?: string;
-  pattern?: string;
+  status?: LatticeStatus;
+  pattern?: LatticePatternName | LatticeCustomPattern;
   grid?: number;
   shape?: string;
   color?: string;
@@ -113,10 +135,9 @@ interface LatticeLoaderProps {
   glow?: boolean;
   glowColor?: string;
   showTimer?: boolean;
-  elapsed?: any;
+  elapsed?: number;
   className?: string;
-  style?: any;
-  className?: string;
+  style?: CSSProperties;
 }
 
 export function LatticeLoader({
@@ -142,20 +163,20 @@ export function LatticeLoader({
   className = "",
   style,
 }: LatticeLoaderProps) {
-  const n = grid === 4 ? 4 : 3;
+  const n: Grid = grid === 4 ? 4 : 3;
   const pat = resolvePattern(pattern, n);
   const marks = MARKS[n];
   const d = step * pat.scale;
   const cycle = Math.round(pat.loop * d);
 
-  const timerRef = useRef(null);
+  const timerRef = useRef<HTMLSpanElement | null>(null);
   const dsRef = useRef(0);
-  const markRef = useRef("done");
+  const markRef = useRef<"done" | "error">("done");
   const mark = status === "working" ? markRef.current : status;
   markRef.current = mark;
   const [announce, setAnnounce] = useState(`${label}, in progress`);
 
-  const paint = (ds) => {
+  const paint = (ds: number) => {
     dsRef.current = ds;
     if (timerRef.current) timerRef.current.textContent = fmt(ds);
   };
@@ -188,22 +209,24 @@ export function LatticeLoader({
       data-status={status}
       data-shape={shape}
       data-glow={glow ? "" : undefined}
-      style={{
-        "--ll-n": n,
-        "--ll-cell": `${cellSize}px`,
-        "--ll-gap": `${gap}px`,
-        "--ll-font": `${fontSize}px`,
-        "--ll-color": color,
-        "--ll-mark": status === "error" ? errorColor : doneColor,
-        "--ll-idle": idleOpacity,
-        "--ll-glow": glowColor || color,
-        "--ll-mark-glow": glowColor || (status === "error" ? errorColor : doneColor),
-        "--ll-cycle": `${cycle}ms`,
-        "--ll-peak": 1,
-        "--ll-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        "--ll-ease-in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
-        ...style,
-      }}
+      style={
+        {
+          "--ll-n": n,
+          "--ll-cell": `${cellSize}px`,
+          "--ll-gap": `${gap}px`,
+          "--ll-font": `${fontSize}px`,
+          "--ll-color": color,
+          "--ll-mark": status === "error" ? errorColor : doneColor,
+          "--ll-idle": idleOpacity,
+          "--ll-glow": glowColor || color,
+          "--ll-mark-glow": glowColor || (status === "error" ? errorColor : doneColor),
+          "--ll-cycle": `${cycle}ms`,
+          "--ll-peak": 1,
+          "--ll-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+          "--ll-ease-in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
+          ...style,
+        } as CSSProperties
+      }
     >
       <style>{STYLE}</style>
       <span className="grid shrink-0" aria-hidden="true">

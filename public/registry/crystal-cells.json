@@ -1,0 +1,18 @@
+{
+  "name": "crystal-cells",
+  "title": "Crystal Cells",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/crystal-cells.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { Crystal, Shader, Vignette, Voronoi } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface CrystalCellsProps {\n  colorA?: string;\n  colorB?: string;\n  borderColor?: string;\n  speed?: number;\n  scale?: number;\n  facets?: number;\n  refraction?: number;\n  dispersion?: number;\n  radius?: number;\n  className?: string;\n}\n\nexport function CrystalCells({\n  colorA = \"#0f172a\",\n  colorB = \"#6366f1\",\n  borderColor = \"#e0e7ff\",\n  speed = 0.5,\n  scale = 6,\n  facets = 5,\n  refraction = 0.5,\n  dispersion = 0.5,\n  radius = 0.32,\n  className,\n}: CrystalCellsProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <Voronoi\n        colorA={colorA}\n        colorB={colorB}\n        colorBorder={borderColor}\n        colorSpace=\"oklch\"\n        scale={scale}\n        speed={reduce ? 0 : speed}\n        edgeIntensity={0.6}\n      />\n      <Crystal\n        shape={{ type: \"polygonSDF\", radius, sides: 6, rounding: 0 }}\n        facets={facets}\n        refraction={refraction}\n        dispersion={dispersion}\n      />\n      <Vignette color=\"#000000\" intensity={0.5} radius={0.75} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

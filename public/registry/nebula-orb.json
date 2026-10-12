@@ -1,0 +1,18 @@
+{
+  "name": "nebula-orb",
+  "title": "Nebula Orb",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/nebula-orb.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { DotGrid, Nebula, RadialGradient, Shader } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface NebulaOrbProps {\n  coreColor?: string;\n  gasColor?: string;\n  veilColor?: string;\n  backgroundColor?: string;\n  speed?: number;\n  density?: number;\n  glow?: number;\n  radius?: number;\n  className?: string;\n}\n\nexport function NebulaOrb({\n  coreColor = \"#ffd9b0\",\n  gasColor = \"#ff5e7a\",\n  veilColor = \"#3a5bdb\",\n  backgroundColor = \"#05030f\",\n  speed = 1,\n  density = 1,\n  glow = 1,\n  radius = 0.38,\n  className,\n}: NebulaOrbProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <RadialGradient colorA=\"#1b1145\" colorB={backgroundColor} radius={0.9} colorSpace=\"oklab\" />\n      <DotGrid\n        color=\"#ffffff\"\n        density={60}\n        dotSize={0.08}\n        twinkle={1}\n        speed={reduce ? 0 : 1}\n        opacity={0.35}\n      />\n      <Nebula\n        shape={{ type: \"sphere3D\", radius }}\n        coreColor={coreColor}\n        gasColor={gasColor}\n        veilColor={veilColor}\n        speed={reduce ? 0 : speed}\n        density={density}\n        glow={glow}\n      />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

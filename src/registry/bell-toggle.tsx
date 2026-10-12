@@ -1,21 +1,34 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type MotionStyle,
+  type Transition,
+} from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Notification03Icon } from "@hugeicons/core-free-icons";
-const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 };
+const SPRING_UI: Transition = { type: "spring", duration: 0.3, bounce: 0 };
 const SEG_EASE = "cubic-bezier(0.77, 0, 0.175, 1)";
 const WARP = 0.6;
-const SIZES = { sm: [36, 12.5, 14, 15, 8], md: [44, 13.5, 16, 19, 9], lg: [52, 15, 18, 23, 10] };
+type BellSize = "sm" | "md" | "lg";
+const SIZES: Record<BellSize, [number, number, number, number, number]> = {
+  sm: [36, 12.5, 14, 15, 8],
+  md: [44, 13.5, 16, 19, 9],
+  lg: [52, 15, 18, 23, 10],
+};
 const WOBBLE = { amplitude: 0.4, passes: 3, duration: 420 };
 const BELL_BODY = "M6 16.5V10a6 6 0 0 1 12 0v6.5l1.6 2.3H4.4L6 16.5z";
 
-const passOffset = (k, passes) => 1 - Math.pow(1 - (k + 2 / 3) / (passes + 1), WARP);
-const ringKeyframes = (from, amplitude, passes, decay) => {
-  const frames = [{ transform: `rotate(${from}deg)`, offset: 0, easing: SEG_EASE }];
+const passOffset = (k: number, passes: number) =>
+  1 - Math.pow(1 - (k + 2 / 3) / (passes + 1), WARP);
+const ringKeyframes = (from: number, amplitude: number, passes: number, decay: number) => {
+  const frames: Keyframe[] = [{ transform: `rotate(${from}deg)`, offset: 0, easing: SEG_EASE }];
   for (let k = 0; k < passes; k++) {
     const angle = amplitude * Math.pow(1 - k / passes, decay) * (k % 2 ? 1 : -1);
     frames.push({
@@ -27,7 +40,7 @@ const ringKeyframes = (from, amplitude, passes, decay) => {
   frames.push({ transform: "rotate(0deg)", offset: 1 });
   return frames;
 };
-const liveAngle = (el) => {
+const liveAngle = (el: Element) => {
   const tf = getComputedStyle(el).transform;
   if (!tf || tf === "none") return 0;
   const m = new DOMMatrix(tf);
@@ -37,13 +50,13 @@ const liveAngle = (el) => {
 interface BellToggleProps {
   offLabel?: string;
   onLabel?: string;
-  icon?: any;
-  label?: any;
+  icon?: React.ReactNode;
+  label?: string;
   color?: string;
   background?: string;
   onColor?: string;
   onBackground?: string;
-  size?: string;
+  size?: BellSize;
   radius?: number;
   ringAmplitude?: number;
   ringPasses?: number;
@@ -58,11 +71,10 @@ interface BellToggleProps {
   badgeTextColor?: string;
   waves?: boolean;
   clapper?: boolean;
-  pressed?: any;
+  pressed?: boolean;
   defaultPressed?: boolean;
-  onChange?: any;
+  onChange?: (pressed: boolean) => void;
   disabled?: boolean;
-  className?: string;
   className?: string;
 }
 
@@ -99,23 +111,23 @@ export function BellToggle({
   const [inner, setInner] = useState(defaultPressed);
   const on = pressed ?? inner;
   const reduce = useReducedMotion();
-  const rootRef = useRef(null);
-  const glyphRef = useRef(null);
-  const clapperRef = useRef(null);
-  const waveLeft = useRef(null);
-  const waveRight = useRef(null);
-  const offRef = useRef(null);
-  const onRef = useRef(null);
-  const lastInput = useRef("pointer");
-  const pending = useRef(null);
-  const spring = useRef(null);
+  const rootRef = useRef<HTMLSpanElement | null>(null);
+  const glyphRef = useRef<HTMLSpanElement | null>(null);
+  const clapperRef = useRef<HTMLSpanElement | null>(null);
+  const waveLeft = useRef<SVGSVGElement | null>(null);
+  const waveRight = useRef<SVGSVGElement | null>(null);
+  const offRef = useRef<HTMLSpanElement | null>(null);
+  const onRef = useRef<HTMLSpanElement | null>(null);
+  const lastInput = useRef<"pointer" | "keyboard">("pointer");
+  const pending = useRef<"pointer" | "keyboard" | null>(null);
+  const spring = useRef<ReturnType<typeof animate> | null>(null);
   const prevCount = useRef(count);
   const [h, fs, iconSize, px, gap] = SIZES[size] ?? SIZES.md;
 
   const t = useMotionValue(on ? 1 : 0);
   const wOff = useMotionValue(0);
   const wOn = useMotionValue(0);
-  const clip = useTransform(
+  const clip = useTransform<number, string>(
     [t, wOff, wOn],
     ([v, a, b]) => `${Math.max(a, b) - (a + (b - a) * v)}px`,
   );
@@ -134,7 +146,7 @@ export function BellToggle({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offLabel, onLabel, size]);
 
-  const swing = (amplitude, passes, duration) => {
+  const swing = (amplitude: number, passes: number, duration: number) => {
     const el = glyphRef.current;
     if (!el) return;
     el.getAnimations().forEach((a) => a.cancel());
@@ -191,14 +203,14 @@ export function BellToggle({
     if (pressed === undefined) setInner(!on);
     onChange?.(!on);
   };
-  const press = (e) => {
+  const press = (e: React.PointerEvent<HTMLButtonElement>) => {
     lastInput.current = "pointer";
     if (e.button === 0 && !disabled && rootRef.current) rootRef.current.dataset.pressed = "";
   };
   const release = () => {
     if (rootRef.current) delete rootRef.current.dataset.pressed;
   };
-  const key = (e) => {
+  const key = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") lastInput.current = "keyboard";
   };
 
@@ -210,23 +222,25 @@ export function BellToggle({
       className={`group relative inline-grid select-none grid-cols-[max-content] [-webkit-touch-callout:none] [transition:transform_160ms_cubic-bezier(0.23,1,0.32,1)] data-[disabled]:data-[pressed]:scale-100 data-[pressed]:scale-[0.97] data-[disabled]:opacity-55 motion-reduce:data-[pressed]:scale-100${className ? ` ${className}` : ""}`}
       data-on={on ? "true" : "false"}
       data-disabled={disabled ? "" : undefined}
-      style={{
-        "--bt-clip": clip,
-        "--bt-color": color,
-        "--bt-bg": background,
-        "--bt-on-color": onColor,
-        "--bt-on-bg": onBackground,
-        "--bt-badge": badgeColor,
-        "--bt-badge-ink": badgeTextColor,
-        "--bt-radius": `${radius}px`,
-        "--bt-fade": `${crossfadeMs}ms`,
-        "--bt-pivot": `${ringPivot}%`,
-        "--bt-h": `${h}px`,
-        "--bt-fs": `${fs}px`,
-        "--bt-icon": `${iconSize}px`,
-        "--bt-px": `${px}px`,
-        "--bt-gap": `${gap}px`,
-      }}
+      style={
+        {
+          "--bt-clip": clip,
+          "--bt-color": color,
+          "--bt-bg": background,
+          "--bt-on-color": onColor,
+          "--bt-on-bg": onBackground,
+          "--bt-badge": badgeColor,
+          "--bt-badge-ink": badgeTextColor,
+          "--bt-radius": `${radius}px`,
+          "--bt-fade": `${crossfadeMs}ms`,
+          "--bt-pivot": `${ringPivot}%`,
+          "--bt-h": `${h}px`,
+          "--bt-fs": `${fs}px`,
+          "--bt-icon": `${iconSize}px`,
+          "--bt-px": `${px}px`,
+          "--bt-gap": `${gap}px`,
+        } as MotionStyle
+      }
     >
       <button
         type="button"

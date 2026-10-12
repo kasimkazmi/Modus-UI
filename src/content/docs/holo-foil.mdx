@@ -1,0 +1,54 @@
+---
+title: Holo Foil
+description: An iridescent holographic foil card with glitter and rainbow sheen.
+---
+
+A rounded holographic foil card with an animated rainbow sheen, crinkles and glitter, on a dark gradient with fine grain. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="holo-foil" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add holo-foil
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/holo-foil.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { HoloFoil } from "@/components/ui/holo-foil";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <HoloFoil />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop             | Type     | Default     | Description                                |
+| :--------------- | :------- | :---------- | :----------------------------------------- |
+| `backgroundFrom` | `string` | `"#18181b"` | Gradient start colour.                     |
+| `backgroundTo`   | `string` | `"#09090b"` | Gradient end colour.                       |
+| `speed`          | `number` | `1`         | Sheen animation speed.                     |
+| `saturation`     | `number` | `0.75`      | Saturation of the foil colours.            |
+| `sparkle`        | `number` | `0.4`       | Amount of glitter.                         |
+| `crinkle`        | `number` | `0.5`       | Amount of crinkle in the foil.             |
+| `width`          | `number` | `0.32`      | Card half-width (fraction of the canvas).  |
+| `height`         | `number` | `0.42`      | Card half-height (fraction of the canvas). |
+| `rounding`       | `number` | `0.06`      | Corner rounding.                           |

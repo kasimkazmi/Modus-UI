@@ -7,6 +7,7 @@ import { FileCode, RotateCcw, ExternalLink } from "lucide-react";
 import { CopyButton } from "./copy-button";
 import { cn } from "@/lib/utils";
 import { ThemePicker } from "@/components/theme-picker";
+import { CopyPromptButton } from "@/components/copy-prompt-button";
 
 interface ComponentPreviewClientProps {
   name: string;
@@ -51,7 +52,10 @@ export const ComponentPreviewClient = ({
               </Tabs.Trigger>
             ))}
           </Tabs.List>
-          <ThemePicker variant="icon" />
+          <div className="flex items-center gap-2">
+            <CopyPromptButton name={name} />
+            <ThemePicker variant="icon" />
+          </div>
         </div>
 
         <div className="mt-2">

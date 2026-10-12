@@ -1,0 +1,18 @@
+{
+  "name": "fluted-gradient",
+  "title": "Fluted Gradient",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/fluted-gradient.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { FilmGrain, FlowingGradient, FlutedGlass, Shader } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface FlutedGradientProps {\n  colorA?: string;\n  colorB?: string;\n  colorC?: string;\n  colorD?: string;\n  speed?: number;\n  distortion?: number;\n  frequency?: number;\n  angle?: number;\n  refraction?: number;\n  aberration?: number;\n  className?: string;\n}\n\nexport function FlutedGradient({\n  colorA = \"#0b1026\",\n  colorB = \"#ff6b3d\",\n  colorC = \"#7c3aed\",\n  colorD = \"#22d3ee\",\n  speed = 0.6,\n  distortion = 0.8,\n  frequency = 10,\n  angle = 0,\n  refraction = 1.5,\n  aberration = 0.2,\n  className,\n}: FlutedGradientProps) {\n  const reduce = useReducedMotion();\n  const classes = cn(\"absolute inset-0 h-full w-full\", className);\n  return (\n    <Shader className={classes}>\n      <FlowingGradient\n        colorA={colorA}\n        colorB={colorB}\n        colorC={colorC}\n        colorD={colorD}\n        colorSpace=\"oklab\"\n        speed={reduce ? 0 : speed}\n        distortion={distortion}\n      />\n      <FlutedGlass\n        frequency={frequency}\n        angle={angle}\n        refraction={refraction}\n        aberration={aberration}\n        speed={reduce ? 0 : 1}\n      />\n      <FilmGrain strength={0.05} animated={!reduce} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

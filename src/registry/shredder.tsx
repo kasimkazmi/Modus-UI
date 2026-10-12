@@ -1,8 +1,8 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { CSSProperties, KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { flushSync } from "react-dom";
 
 const FOLLOW = 30;
@@ -19,28 +19,156 @@ const ENTER = 22;
 const HYSTERESIS = 8;
 const DEG = Math.PI / 180;
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const ease = (from, to, dt, tau) => from + (to - from) * (1 - Math.exp(-dt / tau));
-const smooth = (t) => {
+type Key = string | number;
+type DragPhase = "drag" | "carry" | "return";
+
+export interface ShredderItem {
+  id: Key;
+}
+
+interface Snapshot {
+  tex: HTMLCanvasElement;
+  scale: number;
+}
+
+interface Metrics {
+  left: number;
+  top: number;
+  k: number;
+  rw: number;
+  lip: number;
+  exit: number;
+}
+
+interface Feed<T> {
+  key: Key;
+  item: T;
+  el: HTMLDivElement;
+  slot: HTMLLIElement;
+  W: number;
+  H: number;
+  rx: number;
+  ry: number;
+  tx: number;
+  tilt: number;
+  lift: number;
+  v: number;
+  age: number;
+  tex: HTMLCanvasElement | null;
+  ts: number;
+  consumed: boolean;
+  strips: number;
+}
+
+interface Strip<T> {
+  feed: Feed<T>;
+  x: number;
+  w: number;
+  H: number;
+  phase: "attached" | "free";
+  curl: number;
+  amp: number;
+  freq: number;
+  wave: number;
+  rA: number;
+  rB: number;
+  speed: number;
+  splay: number;
+  core: number;
+  rest: number;
+  alpha: number;
+  th: number;
+  ax: number;
+  ay: number;
+  vx: number;
+  vy: number;
+  hang: number;
+  pts: number[];
+}
+
+interface Shift {
+  el: HTMLLIElement;
+  y: number;
+  v: number;
+  target: number;
+  delay: number;
+  item: HTMLDivElement | null;
+}
+
+interface Drag<T> {
+  key: Key;
+  item: T;
+  el: HTMLDivElement;
+  slot: HTMLLIElement;
+  W: number;
+  H: number;
+  rx: number;
+  ry: number;
+  tx: number;
+  ty: number;
+  vx: number;
+  vy: number;
+  tilt: number;
+  lift: number;
+  gx: number;
+  gy: number;
+  px: number;
+  py: number;
+  ox: number;
+  oy: number;
+  moved: boolean;
+  from: number;
+  j: number;
+  phase: DragPhase;
+  id: number | null;
+  snap: Promise<Snapshot>;
+  fill: string;
+}
+
+interface Sim<T> {
+  raf: number;
+  last: number;
+  t: number;
+  drag: Drag<T> | null;
+  feeds: Feed<T>[];
+  strips: Strip<T>[];
+  shifts: Map<HTMLLIElement, Shift>;
+  tops: Map<HTMLLIElement, number>;
+  timers: Set<ReturnType<typeof setTimeout>>;
+  dpr: number;
+  cw: number;
+  ch: number;
+}
+
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const ease = (from: number, to: number, dt: number, tau: number) =>
+  from + (to - from) * (1 - Math.exp(-dt / tau));
+const smooth = (t: number) => {
   const u = clamp(t, 0, 1);
   return u * u * (3 - 2 * u);
 };
-const pick = (lo, hi) => lo + Math.random() * (hi - lo);
+const pick = (lo: number, hi: number) => lo + Math.random() * (hi - lo);
 const side = () => (Math.random() < 0.5 ? -1 : 1);
 const reduced = () =>
   typeof window !== "undefined" &&
   !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-const spring = (p, v, target, dt, omega) => {
+const spring = (
+  p: number,
+  v: number,
+  target: number,
+  dt: number,
+  omega: number,
+): [number, number] => {
   const offset = p - target;
   const term = v + omega * offset;
   const decay = Math.exp(-omega * dt);
   return [target + (offset + term * dt) * decay, (v - omega * term * dt) * decay];
 };
 
-const urls = new Map();
+const urls = new Map<string, Promise<string>>();
 
-const dataUrl = (src) => {
+const dataUrl = (src: string): Promise<string> => {
   if (!src || src.startsWith("data:")) return Promise.resolve(src);
   const hit = urls.get(src);
   if (hit) return hit;
@@ -48,9 +176,9 @@ const dataUrl = (src) => {
     .then((res) => res.blob())
     .then(
       (blob) =>
-        new Promise((resolve, reject) => {
+        new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
+          reader.onload = () => resolve(reader.result as string);
           reader.onerror = reject;
           reader.readAsDataURL(blob);
         }),
@@ -60,16 +188,19 @@ const dataUrl = (src) => {
   return job;
 };
 
-const snapshot = (node, W, H) => {
-  const clone = node.cloneNode(true);
-  const src = [node, ...node.querySelectorAll("*")];
-  const dst = [clone, ...clone.querySelectorAll("*")];
-  const images = [];
+const snapshot = (node: HTMLElement, W: number, H: number): Promise<Snapshot> => {
+  const clone = node.cloneNode(true) as HTMLElement;
+  const src = [node, ...node.querySelectorAll<HTMLElement>("*")];
+  const dst = [clone, ...clone.querySelectorAll<HTMLElement>("*")];
+  const images: [HTMLImageElement, string][] = [];
   for (let i = 0; i < src.length; i += 1) {
     const cs = getComputedStyle(src[i]);
     const style = dst[i].style;
     for (let j = 0; j < cs.length; j += 1) style.setProperty(cs[j], cs.getPropertyValue(cs[j]));
-    if (dst[i].tagName === "IMG") images.push([dst[i], src[i].currentSrc || src[i].src]);
+    if (dst[i].tagName === "IMG") {
+      const img = src[i] as HTMLImageElement;
+      images.push([dst[i] as HTMLImageElement, img.currentSrc || img.src]);
+    }
   }
   Object.assign(clone.style, {
     position: "relative",
@@ -96,7 +227,7 @@ const snapshot = (node, W, H) => {
     }),
   ).then(
     () =>
-      new Promise((resolve, reject) => {
+      new Promise<Snapshot>((resolve, reject) => {
         const markup = new XMLSerializer().serializeToString(clone);
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><foreignObject width="${W}" height="${H}">${markup}</foreignObject></svg>`;
         const img = new Image();
@@ -104,7 +235,7 @@ const snapshot = (node, W, H) => {
           const tex = document.createElement("canvas");
           tex.width = Math.ceil(W * scale);
           tex.height = Math.ceil(H * scale);
-          tex.getContext("2d").drawImage(img, 0, 0, tex.width, tex.height);
+          tex.getContext("2d")!.drawImage(img, 0, 0, tex.width, tex.height);
           resolve({ tex, scale });
         };
         img.onerror = () => reject(new Error("snapshot"));
@@ -113,17 +244,17 @@ const snapshot = (node, W, H) => {
   );
 };
 
-const flat = (W, H, fill) => {
+const flat = (W: number, H: number, fill: string): Snapshot => {
   const tex = document.createElement("canvas");
   tex.width = W;
   tex.height = H;
-  const ctx = tex.getContext("2d");
+  const ctx = tex.getContext("2d")!;
   ctx.fillStyle = fill;
   ctx.fillRect(0, 0, W, H);
   return { tex, scale: 1 };
 };
 
-const shape = (st, len, time, tear) => {
+const shape = (st: Strip<unknown>, len: number, time: number, tear: number) => {
   const pts = st.pts;
   pts.length = 0;
   let x = st.ax;
@@ -142,13 +273,18 @@ const shape = (st, len, time, tear) => {
   }
 };
 
-const middle = (pts) => {
+const middle = (pts: number[]) => {
   let y = 0;
   for (let j = 1; j < pts.length; j += 3) y += pts[j];
   return (y * 3) / pts.length;
 };
 
-const paintStrip = (ctx, st, len, dpr) => {
+const paintStrip = (
+  ctx: CanvasRenderingContext2D,
+  st: Strip<unknown>,
+  len: number,
+  dpr: number,
+) => {
   const { tex, ts } = st.feed;
   if (!tex) return;
   const pts = st.pts;
@@ -176,11 +312,11 @@ const paintStrip = (ctx, st, len, dpr) => {
   ctx.globalAlpha = 1;
 };
 
-interface ShredderProps {
-  items?: any;
-  renderItem?: any;
-  onShred?: any;
-  onReorder?: any;
+interface ShredderProps<T extends ShredderItem> {
+  items?: T[];
+  renderItem?: (item: T, index: number) => ReactNode;
+  onShred?: (item: T) => void;
+  onReorder?: (items: T[]) => void;
   width?: number;
   height?: number;
   inset?: number;
@@ -201,10 +337,9 @@ interface ShredderProps {
   color?: string;
   disabled?: boolean;
   className?: string;
-  className?: string;
 }
 
-export function Shredder({
+export function Shredder<T extends ShredderItem>({
   items = [],
   renderItem,
   onShred,
@@ -229,18 +364,17 @@ export function Shredder({
   color = "hsl(var(--primary))",
   disabled = false,
   className = "",
-}: ShredderProps) {
-  const [order, setOrder] = useState(() => items.map((item) => item.id));
+}: ShredderProps<T>) {
+  const [order, setOrder] = useState<Key[]>(() => items.map((item) => item.id));
   const rank = new Map(order.map((id, i) => [id, i]));
-  const weight = (item) => rank.get(item.id) ?? order.length + items.indexOf(item);
+  const weight = (item: T) => rank.get(item.id) ?? order.length + items.indexOf(item);
   const sorted = [...items].sort((a, b) => weight(a) - weight(b));
-  const rootRef = useRef(null);
-  const slitRef = useRef(null);
-  const canvasRef = useRef(null);
-  const slotEls = useRef(new Map());
-  const itemEls = useRef(new Map());
-  const cfg = useRef({});
-  cfg.current = {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const slitRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const slotEls = useRef(new Map<Key, HTMLLIElement>());
+  const itemEls = useRef(new Map<Key, HTMLDivElement>());
+  const config = {
     items: sorted,
     height,
     inset,
@@ -260,7 +394,9 @@ export function Shredder({
     onReorder,
     disabled,
   };
-  const sim = useRef({
+  const cfg = useRef(config);
+  cfg.current = config;
+  const sim = useRef<Sim<T>>({
     raf: 0,
     last: 0,
     t: 0,
@@ -275,19 +411,22 @@ export function Shredder({
     ch: 0,
   });
 
-  const metrics = () => {
+  const metrics = (): Metrics => {
     const c = cfg.current;
-    const root = rootRef.current;
+    const root = rootRef.current!;
     const r = root.getBoundingClientRect();
     const k = r.width / root.offsetWidth || 1;
     const lip = c.height - c.fallHeight - c.slitHeight;
     return { left: r.left, top: r.top, k, rw: root.offsetWidth, lip, exit: lip + c.slitHeight };
   };
-  const at = (el, m) => {
+  const at = (el: Element, m: Metrics) => {
     const r = el.getBoundingClientRect();
     return { x: (r.left - m.left) / m.k, y: (r.top - m.top) / m.k };
   };
-  const local = (e, m) => ({ x: (e.clientX - m.left) / m.k, y: (e.clientY - m.top) / m.k });
+  const local = (e: { clientX: number; clientY: number }, m: Metrics) => ({
+    x: (e.clientX - m.left) / m.k,
+    y: (e.clientY - m.top) / m.k,
+  });
 
   const run = () => {
     const s = sim.current;
@@ -296,7 +435,7 @@ export function Shredder({
     s.raf = requestAnimationFrame(step);
   };
 
-  const later = (ms, fn) => {
+  const later = (ms: number, fn: () => void) => {
     const s = sim.current;
     const id = setTimeout(() => {
       s.timers.delete(id);
@@ -305,8 +444,8 @@ export function Shredder({
     s.timers.add(id);
   };
 
-  const slotOf = (key) => slotEls.current.get(key);
-  const isLive = (key) => {
+  const slotOf = (key: Key) => slotEls.current.get(key);
+  const isLive = (key: Key) => {
     const slot = slotOf(key);
     return !!slot && slot.dataset.gone === undefined;
   };
@@ -319,7 +458,7 @@ export function Shredder({
         return !!slot && slot.dataset.gone !== undefined;
       });
 
-  const shiftOf = (slot) => {
+  const shiftOf = (slot: HTMLLIElement) => {
     const s = sim.current;
     let sh = s.shifts.get(slot);
     if (!sh) {
@@ -329,11 +468,11 @@ export function Shredder({
     return sh;
   };
 
-  const settle = (origin, entering) => {
+  const settle = (origin: HTMLLIElement | null, entering: Set<HTMLLIElement> | null) => {
     const s = sim.current;
     if (!rootRef.current) return;
     const m = metrics();
-    const next = new Map();
+    const next = new Map<HTMLLIElement, number>();
     const still = reduced();
     const active = s.drag ? s.drag.slot : null;
     const slots = cfg.current.items.map((item) => slotOf(item.id));
@@ -373,12 +512,16 @@ export function Shredder({
     run();
   };
 
-  const reflow = (mutate, origin, entering) => {
+  const reflow = (
+    mutate: () => void,
+    origin?: HTMLLIElement | null,
+    entering?: Set<HTMLLIElement> | null,
+  ) => {
     mutate();
     settle(origin || null, entering || null);
   };
 
-  const arrange = (key, index) => {
+  const arrange = (key: Key, index: number) => {
     const ids = cfg.current.items.map((item) => item.id).filter((id) => id !== key);
     const live = ids.filter(isLive);
     let anchor = 0;
@@ -388,20 +531,20 @@ export function Shredder({
     return ids;
   };
 
-  const commit = (ids) => {
+  const commit = (ids: Key[]) => {
     const same = ids.every((id, i) => id === cfg.current.items[i]?.id);
     if (same) return false;
     flushSync(() => setOrder(ids));
     return true;
   };
 
-  const revive = (keys, index) => {
+  const revive = (keys: Key[], index?: number) => {
     const s = sim.current;
     if (s.drag) {
       later(300, () => revive(keys, index));
       return;
     }
-    const entering = new Set();
+    const entering = new Set<HTMLLIElement>();
     reflow(
       () => {
         if (index !== undefined && keys.length === 1) commit(arrange(keys[0], index));
@@ -425,7 +568,7 @@ export function Shredder({
     );
   };
 
-  const afterShred = (key) => {
+  const afterShred = (key: Key) => {
     const c = cfg.current;
     if (c.loopAfterDelete) {
       later(700, () => revive([key], Math.floor(Math.random() * (liveKeys().length + 1))));
@@ -434,7 +577,7 @@ export function Shredder({
     }
   };
 
-  const collapse = (f, s) => {
+  const collapse = (f: Feed<T>, s: Sim<T>) => {
     f.consumed = true;
     f.el.style.visibility = "hidden";
     delete f.slot.dataset.active;
@@ -450,9 +593,9 @@ export function Shredder({
     afterShred(f.key);
   };
 
-  const consumeNow = (key, item, el, slot) => {
+  const consumeNow = (key: Key, item: T, el: HTMLDivElement, slot: HTMLLIElement) => {
     const s = sim.current;
-    const f = {
+    const f: Feed<T> = {
       key,
       item,
       el,
@@ -475,7 +618,7 @@ export function Shredder({
     run();
   };
 
-  const grab = (d, m) => {
+  const grab = (d: Drag<T>, m: Metrics) => {
     const s = sim.current;
     const c = cfg.current;
     s.drag = null;
@@ -492,7 +635,7 @@ export function Shredder({
     const hi = m.rw - c.inset + SLIT - d.W;
     const n = Math.max(1, Math.round(d.W / Math.max(4, c.stripWidth)));
     const sw = Math.floor(d.W / n);
-    const f = {
+    const f: Feed<T> = {
       key: d.key,
       item: d.item,
       el: d.el,
@@ -512,7 +655,7 @@ export function Shredder({
       strips: n,
     };
     let settled = false;
-    const use = ({ tex, scale }) => {
+    const use = ({ tex, scale }: Snapshot) => {
       if (settled) return;
       settled = true;
       f.tex = tex;
@@ -552,14 +695,14 @@ export function Shredder({
     }
   };
 
-  const place = (d, sp) => {
+  const place = (d: Drag<T>, sp: { x: number; y: number }) => {
     d.el.style.transform = `translate(${d.rx - sp.x}px, ${d.ry - sp.y}px) rotate(${d.tilt}deg) scale(${d.lift})`;
   };
 
-  const aim = (d, m) => {
+  const aim = (d: Drag<T>, m: Metrics) => {
     const s = sim.current;
     const c = cfg.current;
-    const rows = [];
+    const rows: { slot: HTMLLIElement; mid: number }[] = [];
     c.items.forEach((item) => {
       if (item.id === d.key) return;
       const slot = slotOf(item.id);
@@ -588,7 +731,7 @@ export function Shredder({
     });
   };
 
-  const drop = (d) => {
+  const drop = (d: Drag<T>) => {
     const s = sim.current;
     const c = cfg.current;
     const live = liveKeys().filter((key) => key !== d.key);
@@ -606,7 +749,7 @@ export function Shredder({
     if (changed) c.onReorder?.(cfg.current.items);
   };
 
-  const tick = (now) => {
+  const tick = (now: number) => {
     const s = sim.current;
     const c = cfg.current;
     const root = rootRef.current;
@@ -739,7 +882,7 @@ export function Shredder({
         moving = true;
       }
     });
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d")!;
     const dpr = s.dpr;
     if (s.strips.length) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -808,7 +951,7 @@ export function Shredder({
     }
   };
 
-  const step = (now) => {
+  const step = (now: number) => {
     const s = sim.current;
     try {
       tick(now);
@@ -818,7 +961,7 @@ export function Shredder({
     }
   };
 
-  const begin = (item, phase, e) => {
+  const begin = (item: T, phase: DragPhase, e: PointerEvent<HTMLDivElement> | null) => {
     const s = sim.current;
     const c = cfg.current;
     const key = item.id;
@@ -833,14 +976,14 @@ export function Shredder({
     const p = e ? local(e, m) : { x: sp.x, y: sp.y };
     const face = el.firstElementChild || el;
     const fill = getComputedStyle(face).backgroundColor;
-    let snap;
+    let snap: Promise<Snapshot>;
     try {
       snap = snapshot(el, W, H);
     } catch {
       snap = Promise.reject(new Error("snapshot"));
     }
     snap.catch(() => {});
-    const d = {
+    const d: Drag<T> = {
       key,
       item,
       el,
@@ -883,21 +1026,21 @@ export function Shredder({
     run();
   };
 
-  const onDown = (e, item) => {
+  const onDown = (e: PointerEvent<HTMLDivElement>, item: T) => {
     if (e.button !== 0) return;
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
     begin(item, "drag", e);
   };
-  const onMove = (e) => {
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
     const d = sim.current.drag;
     if (!d || d.id !== e.pointerId) return;
     const p = local(e, metrics());
     d.px = p.x;
     d.py = p.y;
   };
-  const onUp = (e) => {
+  const onUp = (e: PointerEvent<HTMLDivElement>) => {
     const d = sim.current.drag;
     if (!d || d.id !== e.pointerId) return;
     d.id = null;
@@ -913,7 +1056,7 @@ export function Shredder({
     }
     run();
   };
-  const onKey = (e, item) => {
+  const onKey = (e: KeyboardEvent<HTMLDivElement>, item: T) => {
     if (e.key !== "Delete" && e.key !== "Backspace") return;
     e.preventDefault();
     if (e.repeat) return;
@@ -978,9 +1121,9 @@ export function Shredder({
     if (!autoAnimate) return undefined;
     const s = sim.current;
     let alive = true;
-    let timer = 0;
-    const wait = (ms) =>
-      new Promise((resolve) => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
         timer = setTimeout(resolve, ms);
       });
     const idle = () =>
@@ -1027,28 +1170,32 @@ export function Shredder({
     };
   }, []);
 
-  const keep = (map, key) => (el) => {
-    if (el) map.current.set(key, el);
-    else map.current.delete(key);
-  };
+  const keep =
+    <E extends HTMLElement>(map: { current: Map<Key, E> }, key: Key) =>
+    (el: E | null) => {
+      if (el) map.current.set(key, el);
+      else map.current.delete(key);
+    };
 
   return (
     <div
       ref={rootRef}
       className={`group relative [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [color:var(--sh-ink)] [height:var(--sh-h)] [width:min(var(--sh-w),100%)] data-[disabled]:opacity-60${className ? ` ${className}` : ""}`}
       data-disabled={disabled ? "" : undefined}
-      style={{
-        "--sh-w": `${width}px`,
-        "--sh-h": `${height}px`,
-        "--sh-inset": `${inset}px`,
-        "--sh-gap": `${gap}px`,
-        "--sh-slit-h": `${slitHeight}px`,
-        "--sh-fall": `${fallHeight}px`,
-        "--sh-slit-inset": `${Math.max(0, inset - SLIT)}px`,
-        "--sh-over": `${OVER}px`,
-        "--sh-slit": slitColor,
-        "--sh-ink": color,
-      }}
+      style={
+        {
+          "--sh-w": `${width}px`,
+          "--sh-h": `${height}px`,
+          "--sh-inset": `${inset}px`,
+          "--sh-gap": `${gap}px`,
+          "--sh-slit-h": `${slitHeight}px`,
+          "--sh-fall": `${fallHeight}px`,
+          "--sh-slit-inset": `${Math.max(0, inset - SLIT)}px`,
+          "--sh-over": `${OVER}px`,
+          "--sh-slit": slitColor,
+          "--sh-ink": color,
+        } as CSSProperties
+      }
     >
       <ul className="absolute left-0 right-0 z-[1] m-0 list-none [bottom:calc(var(--sh-fall)+var(--sh-slit-h))] [clip-path:inset(-9999px_-9999px_0_-9999px)] [padding:0_var(--sh-inset)]">
         {sorted.map((item, index) => (
@@ -1070,7 +1217,7 @@ export function Shredder({
               onKeyDown={(e) => onKey(e, item)}
               onDragStart={(e) => e.preventDefault()}
             >
-              {renderItem(item, index)}
+              {renderItem!(item, index)}
             </div>
           </li>
         ))}

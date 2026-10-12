@@ -1,15 +1,16 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { animate, useMotionValue, useReducedMotion } from "framer-motion";
+import { animate, useMotionValue, useReducedMotion, type Transition } from "framer-motion";
 
-const UI = { type: "spring", duration: 0.3, bounce: 0 };
-const MORPH = { duration: 0.3, ease: [0.77, 0, 0.175, 1] };
+const UI: Transition = { type: "spring", duration: 0.3, bounce: 0 };
+const MORPH: Transition = { duration: 0.3, ease: [0.77, 0, 0.175, 1] };
 const CHECK = "M7.5 12.25 10.5 15.25 16.75 8.75";
 const CROSS = "M8.5 8.5 15.5 15.5M15.5 8.5 8.5 15.5";
-const TEXT = {
+type Status = "pending" | "running" | "done" | "failed" | "cancelled";
+
+const TEXT: Record<Status, string> = {
   pending: "Pending",
   running: "In progress",
   done: "Completed",
@@ -19,12 +20,12 @@ const TEXT = {
 const IDLE_DASH = 0.3;
 const STYLE = "@keyframes sm-breathe{50%{opacity:.45}}";
 
-const clamp01 = (v) => Math.min(1, Math.max(0, v));
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 interface StatusMarkProps {
-  status?: string;
-  progress?: any;
-  label?: any;
+  status?: Status;
+  progress?: number;
+  label?: React.ReactNode;
   color?: string;
   doneColor?: string;
   errorColor?: string;
@@ -39,8 +40,7 @@ interface StatusMarkProps {
   strike?: boolean;
   strikeDelay?: number;
   className?: string;
-  style?: any;
-  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function StatusMark({
@@ -70,12 +70,12 @@ export function StatusMark({
   const determinate = status === "running" && Number.isFinite(progress);
   const indeterminate = status === "running" && !determinate;
   const solid = status === "running" || status === "done" || status === "failed";
-  const targetArc = indeterminate ? arcLength : determinate ? clamp01(progress) : 1;
+  const targetArc = indeterminate ? arcLength : determinate ? clamp01(progress!) : 1;
 
   const mode = useMotionValue(solid ? 1 : 0);
   const arc = useMotionValue(targetArc);
   const travel = useMotionValue(0);
-  const ringRef = useRef(null);
+  const ringRef = useRef<SVGCircleElement | null>(null);
   const geo = useRef({ C, P });
   geo.current = { C, P };
   const gen = useRef(0);
@@ -136,7 +136,7 @@ export function StatusMark({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, determinate, targetArc, reduce, C, P, spinDuration]);
 
-  const spoken = TEXT[status] + (determinate ? `, ${Math.round(clamp01(progress) * 100)}%` : "");
+  const spoken = TEXT[status] + (determinate ? `, ${Math.round(clamp01(progress!) * 100)}%` : "");
   const hasLabel = label !== undefined && label !== null;
 
   return (
@@ -145,19 +145,21 @@ export function StatusMark({
       data-status={status}
       data-indeterminate={indeterminate ? "" : undefined}
       data-strike={strike ? "" : undefined}
-      style={{
-        "--sm-size": `${size}px`,
-        "--sm-stroke": strokeWidth,
-        "--sm-color": color,
-        "--sm-done": doneColor,
-        "--sm-error": errorColor,
-        "--sm-fill": fillOpacity,
-        "--sm-font": `${fontSize}px`,
-        "--sm-draw": `${drawDuration}ms`,
-        "--sm-strike-delay": `${120 + strikeDelay}ms`,
-        "--sm-check-delay": "120ms",
-        ...style,
-      }}
+      style={
+        {
+          "--sm-size": `${size}px`,
+          "--sm-stroke": strokeWidth,
+          "--sm-color": color,
+          "--sm-done": doneColor,
+          "--sm-error": errorColor,
+          "--sm-fill": fillOpacity,
+          "--sm-font": `${fontSize}px`,
+          "--sm-draw": `${drawDuration}ms`,
+          "--sm-strike-delay": `${120 + strikeDelay}ms`,
+          "--sm-check-delay": "120ms",
+          ...style,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       <svg

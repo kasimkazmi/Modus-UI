@@ -1,0 +1,18 @@
+{
+  "name": "godray-haze",
+  "title": "Godray Haze",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/godray-haze.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { FractalNoise, Godrays, LinearGradient, Shader, Vignette } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface GodrayHazeProps {\n  rayColor?: string;\n  skyColor?: string;\n  groundColor?: string;\n  speed?: number;\n  intensity?: number;\n  density?: number;\n  spotty?: number;\n  className?: string;\n}\n\nexport function GodrayHaze({\n  rayColor = \"#fde68a\",\n  skyColor = \"#1e293b\",\n  groundColor = \"#020617\",\n  speed = 0.5,\n  intensity = 0.6,\n  density = 0.3,\n  spotty = 1,\n  className,\n}: GodrayHazeProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <LinearGradient colorA={skyColor} colorB={groundColor} angle={180} colorSpace=\"oklab\" />\n      <Godrays\n        center={{ x: 0.2, y: 0 }}\n        rayColor={rayColor}\n        backgroundColor=\"transparent\"\n        speed={reduce ? 0 : speed}\n        intensity={intensity}\n        density={density}\n        spotty={spotty}\n        blendMode=\"screen\"\n      />\n      <FractalNoise\n        colorA=\"#000000\"\n        colorB=\"#ffffff\"\n        speed={reduce ? 0 : 0.2}\n        opacity={0.15}\n        blendMode=\"softLight\"\n      />\n      <Vignette color={groundColor} intensity={0.5} radius={0.8} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

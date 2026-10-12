@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -6,6 +5,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import {
   animate,
   motion,
+  type MotionStyle,
   useMotionTemplate,
   useMotionValue,
   useMotionValueEvent,
@@ -13,21 +13,34 @@ import {
   useTransform,
 } from "framer-motion";
 
-const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 };
+const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 } as const;
 const LEAN = 4;
 const SIZES = {
   sm: { height: 28, font: 12, radius: 6, width: 104 },
   md: { height: 34, font: 13, radius: 8, width: 128 },
   lg: { height: 44, font: 16, radius: 10, width: 160 },
-};
+} as const;
 
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-const decimalsOf = (n) => {
+export type ScrubFieldSize = keyof typeof SIZES;
+
+interface DragState {
+  id: number;
+  x: number;
+  raw: number;
+  mult: number;
+  moved: boolean;
+  before: number;
+  slack: number;
+  left: number;
+}
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const decimalsOf = (n: number) => {
   const s = String(n);
   const i = s.indexOf(".");
   return i < 0 ? 0 : s.length - i - 1;
 };
-const onColor = (hex) => {
+const onColor = (hex: string) => {
   const raw = hex.replace("#", "");
   const full = raw.length === 3 ? [...raw].map((ch) => ch + ch).join("") : raw.slice(0, 6);
   const n = parseInt(full, 16);
@@ -39,12 +52,12 @@ const onColor = (hex) => {
 interface ScrubFieldProps {
   label?: string;
   suffix?: string;
-  value?: any;
+  value?: number;
   defaultValue?: number;
   min?: number;
   max?: number;
   step?: number;
-  size?: string;
+  size?: ScrubFieldSize;
   sensitivity?: number;
   rubberReach?: number;
   returnDuration?: number;
@@ -56,9 +69,8 @@ interface ScrubFieldProps {
   accent?: string;
   chipColor?: string;
   disabled?: boolean;
-  onChange?: any;
-  onCommit?: any;
-  className?: string;
+  onChange?: (value: number) => void;
+  onCommit?: (value: number) => void;
   className?: string;
 }
 
@@ -91,44 +103,46 @@ export function ScrubField({
   const controlled = valueProp !== undefined;
   const [value, setValue] = useState(controlled ? valueProp : defaultValue);
   const [dragging, setDragging] = useState(false);
-  const [draft, setDraft] = useState(null);
+  const [draft, setDraft] = useState<string | null>(null);
   const display = useMotionValue(value);
-  const chipRef = useRef(null);
-  const inputRef = useRef(null);
-  const ghostRef = useRef(null);
-  const drag = useRef(null);
+  const chipRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const ghostRef = useRef<HTMLSpanElement | null>(null);
+  const drag = useRef<DragState | null>(null);
   const valueRef = useRef(value);
   const typingRef = useRef(false);
   const movedRef = useRef(false);
-  const endRef = useRef(() => {});
-  const escRef = useRef(null);
+  const endRef = useRef<(cancel?: boolean) => void>(() => {});
+  const escRef = useRef<((ev: KeyboardEvent) => void) | null>(null);
   const mounted = useRef(false);
 
   const baseDecimals = decimalsOf(step);
   const fineDecimals = Math.min(6, baseDecimals + decimalsOf(fineMultiplier));
   const preset = SIZES[size] || SIZES.md;
 
-  const fmt = (v) => {
+  const fmt = (v: number) => {
     const scaled = v * 10 ** baseDecimals;
     return v.toFixed(Math.abs(scaled - Math.round(scaled)) < 1e-6 ? baseDecimals : fineDecimals);
   };
-  const signed = (d) => (d < 0 ? "−" : "+") + fmt(Math.abs(d));
+  const signed = (d: number) => (d < 0 ? "−" : "+") + fmt(Math.abs(d));
 
   const reach = (rubberReach / 100) * Math.max(max - min, Number.EPSILON);
-  const bend = (raw) => (reach ? Math.sign(raw) * reach * Math.log1p(Math.abs(raw) / reach) : 0);
-  const unbend = (over) =>
+  const bend = (raw: number) =>
+    reach ? Math.sign(raw) * reach * Math.log1p(Math.abs(raw) / reach) : 0;
+  const unbend = (over: number) =>
     reach ? Math.sign(over) * reach * Math.expm1(Math.abs(over) / reach) : 0;
-  const toShown = (raw) => {
+  const toShown = (raw: number) => {
     const c = clamp(raw, min, max);
     return c + bend(raw - c);
   };
-  const toRaw = (shown) => {
+  const toRaw = (shown: number) => {
     const c = clamp(shown, min, max);
     return c + unbend(shown - c);
   };
-  const multiplierOf = (e) => (e.shiftKey ? coarseMultiplier : e.altKey ? fineMultiplier : 1);
+  const multiplierOf = (e: { shiftKey: boolean; altKey: boolean }) =>
+    e.shiftKey ? coarseMultiplier : e.altKey ? fineMultiplier : 1;
 
-  const commit = (next) => {
+  const commit = (next: number) => {
     const rounded = clamp(Number(next.toFixed(fineDecimals)), min, max);
     if (rounded === valueRef.current) return;
     valueRef.current = rounded;
@@ -150,7 +164,7 @@ export function ScrubField({
   );
   const fillTransform = useMotionTemplate`scaleX(${fill})`;
 
-  const adopt = (next) => {
+  const adopt = (next: number) => {
     valueRef.current = next;
     setValue(next);
     display.jump(next);
@@ -159,7 +173,7 @@ export function ScrubField({
 
   useEffect(() => {
     if (controlled && !drag.current && valueProp !== valueRef.current)
-      adopt(clamp(valueProp, min, max));
+      adopt(clamp(valueProp!, min, max));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueProp]);
   useEffect(() => {
@@ -175,7 +189,7 @@ export function ScrubField({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseDecimals, fineDecimals]);
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled || drag.current || e.button !== 0 || typingRef.current) return;
     if (e.pointerType !== "touch") e.preventDefault();
     display.stop();
@@ -193,13 +207,13 @@ export function ScrubField({
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
-    escRef.current = (ev) => {
+    escRef.current = (ev: KeyboardEvent) => {
       if (ev.key === "Escape") endRef.current(true);
     };
     window.addEventListener("keydown", escRef.current);
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const g = drag.current;
     if (!g || e.pointerId !== g.id) return;
     if (!g.moved) {
@@ -260,10 +274,10 @@ export function ScrubField({
     if (inputRef.current) inputRef.current.value = fmt(valueRef.current);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const typedNumber = draft !== null && draft.trim() !== "" ? Number(draft) : NaN;
     const from = Number.isNaN(typedNumber) ? valueRef.current : typedNumber;
-    const deltas = {
+    const deltas: Partial<Record<string, number>> = {
       ArrowUp: step * multiplierOf(e),
       ArrowDown: -step * multiplierOf(e),
       PageUp: step * coarseMultiplier,
@@ -287,7 +301,7 @@ export function ScrubField({
     }
   };
 
-  const handleFocus = (e) => {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     typingRef.current = true;
     setDraft(e.target.value);
     e.target.select();
@@ -327,17 +341,19 @@ export function ScrubField({
       onPointerUp={() => end()}
       onPointerCancel={() => end(true)}
       onLostPointerCapture={() => end()}
-      style={{
-        "--sf-accent": accent,
-        "--sf-chip": chipColor,
-        "--sf-ghost-ink": onColor(accent),
-        "--sf-h": `${preset.height}px`,
-        "--sf-fs": `${preset.font}px`,
-        "--sf-r": `${preset.radius}px`,
-        "--sf-w": `${preset.width}px`,
-        "--sf-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        transform: chipTransform,
-      }}
+      style={
+        {
+          "--sf-accent": accent,
+          "--sf-chip": chipColor,
+          "--sf-ghost-ink": onColor(accent),
+          "--sf-h": `${preset.height}px`,
+          "--sf-fs": `${preset.font}px`,
+          "--sf-r": `${preset.radius}px`,
+          "--sf-w": `${preset.width}px`,
+          "--sf-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+          transform: chipTransform,
+        } as MotionStyle
+      }
     >
       {showFill ? (
         <span

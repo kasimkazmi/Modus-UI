@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -12,20 +11,38 @@ const STAGES = {
   complete: { blur: 0, sat: 1, scale: 1, opacity: 1 },
   error: { blur: 2, sat: 0.5, scale: 1, opacity: 0.28 },
 };
-const TARGET = { queued: 0, generating: 0.5, refining: 0.875, complete: 1 };
+type RefineStatus = keyof typeof STAGES;
+const TARGET: Partial<Record<RefineStatus, number>> = {
+  queued: 0,
+  generating: 0.5,
+  refining: 0.875,
+  complete: 1,
+};
 const LEVELS = [48, 32, 20, 12, 8, 5, 3, 2, 1];
 const EDGE = 28;
 const STRIPS = 14;
-const DEFAULT_LABELS = {
+const DEFAULT_LABELS: Record<RefineStatus, string> = {
   queued: "Queued",
   generating: "Generating",
   refining: "Refining",
   complete: "Ready",
   error: "Failed",
 };
-const ACTIVE = new Set(["queued", "generating", "refining"]);
+const ACTIVE = new Set<RefineStatus>(["queued", "generating", "refining"]);
 
-const build = (s, canvas, img, dpr) => {
+interface SimState {
+  p: number;
+  raf: number;
+  last: number;
+  key: string;
+  w: number;
+  h: number;
+  levels: HTMLCanvasElement[];
+  glint: CanvasGradient | null;
+  sent: boolean;
+}
+
+const build = (s: SimState, canvas: HTMLCanvasElement, img: HTMLImageElement, dpr: number) => {
   const rect = canvas.getBoundingClientRect();
   const W = Math.max(1, Math.round(rect.width * dpr));
   const H = Math.max(1, Math.round(rect.height * dpr));
@@ -95,8 +112,8 @@ const STYLE = `
 `;
 
 interface RefineFrameProps {
-  status?: string;
-  children?: any;
+  status?: RefineStatus;
+  children?: React.ReactNode;
   aspectRatio?: string;
   width?: number;
   radius?: number;
@@ -106,10 +123,9 @@ interface RefineFrameProps {
   sweep?: boolean;
   showStatus?: boolean;
   hideAfter?: number;
-  labels?: any;
+  labels?: Partial<Record<RefineStatus, string>>;
   retryLabel?: string;
-  onRetry?: any;
-  className?: string;
+  onRetry?: () => void;
   className?: string;
 }
 
@@ -133,9 +149,9 @@ export function RefineFrame({
   const stage = STAGES[status] ?? STAGES.generating;
   const active = ACTIVE.has(status);
   const text = { ...DEFAULT_LABELS, ...labels };
-  const printRef = useRef(null);
-  const canvasRef = useRef(null);
-  const sim = useRef({
+  const printRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const sim = useRef<SimState>({
     p: 0,
     raf: 0,
     last: 0,
@@ -146,13 +162,13 @@ export function RefineFrame({
     glint: null,
     sent: false,
   });
-  const live = useRef({});
+  const live = useRef({ status, stageDuration, sweep, reduce: false });
   live.current = { status, stageDuration, sweep, reduce: false };
   const [mosaic, setMosaic] = useState(false);
   const [resolved, setResolved] = useState(false);
 
   const [chip, setChip] = useState(showStatus);
-  const timer = useRef(undefined);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useEffect(() => {
     clearTimeout(timer.current);
     if (!showStatus) {
@@ -166,7 +182,7 @@ export function RefineFrame({
     return () => clearTimeout(timer.current);
   }, [status, showStatus, hideAfter]);
 
-  const tick = (now) => {
+  const tick = (now: number) => {
     const s = sim.current;
     const c = live.current;
     const canvas = canvasRef.current;
@@ -285,18 +301,20 @@ export function RefineFrame({
       data-sweep={sweep && active ? "" : undefined}
       data-mosaic={mosaic ? "" : undefined}
       data-resolved={mosaic && resolved ? "" : undefined}
-      style={{
-        "--rf-w": `${width}px`,
-        "--rf-aspect": aspectRatio,
-        "--rf-radius": `${radius}px`,
-        "--rf-bg": background,
-        "--rf-ink": color,
-        "--rf-stage": `${stageDuration}ms`,
-        "--rf-blur": `${mosaic ? 0 : stage.blur}px`,
-        "--rf-sat": stage.sat,
-        "--rf-scale": mosaic ? 1 : stage.scale,
-        "--rf-opacity": stage.opacity,
-      }}
+      style={
+        {
+          "--rf-w": `${width}px`,
+          "--rf-aspect": aspectRatio,
+          "--rf-radius": `${radius}px`,
+          "--rf-bg": background,
+          "--rf-ink": color,
+          "--rf-stage": `${stageDuration}ms`,
+          "--rf-blur": `${mosaic ? 0 : stage.blur}px`,
+          "--rf-sat": stage.sat,
+          "--rf-scale": mosaic ? 1 : stage.scale,
+          "--rf-opacity": stage.opacity,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       <div

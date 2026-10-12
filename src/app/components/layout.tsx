@@ -13,6 +13,8 @@ import {
   LayoutTemplate,
   BookOpen,
   type LucideIcon,
+  Box,
+  PanelsTopLeft,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
 
@@ -21,7 +23,9 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Actions: MousePointer2,
   "Data Display": Layout,
   Backgrounds: Sparkles,
+  "Three.js": Box,
   Typography: Type,
+  Sections: PanelsTopLeft,
   Components: LayoutTemplate,
 };
 
@@ -46,35 +50,37 @@ const DOC_CATEGORIES: SidebarCategory[] = [
 export default async function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-background/40 backdrop-blur-xl md:flex">
-        <div className="flex items-center justify-between px-6 pb-6 pt-7">
-          <Link href="/" className="flex items-center gap-3 text-lg font-bold text-foreground">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary shadow-sm">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="translate-y-[1px] text-primary-foreground"
-              >
-                <path d="M4 20V8a4 4 0 0 1 8 0v12" />
-                <path d="M12 20V8a4 4 0 0 1 8 0v12" />
-              </svg>
-            </div>
-            <span className="font-serif text-xl tracking-tight">Modus UI</span>
-          </Link>
-          <GitHubStarsButton />
-        </div>
+      <aside className="sticky top-0 hidden h-screen w-72 shrink-0 p-3 md:block">
+        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/70 shadow-[0_1px_2px_hsl(var(--foreground)/0.04),0_12px_32px_-12px_hsl(var(--foreground)/0.18)] backdrop-blur-xl">
+          <div className="flex items-center justify-between px-6 pb-6 pt-7">
+            <Link href="/" className="flex items-center gap-3 text-lg font-bold text-foreground">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary shadow-sm">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="translate-y-[1px] text-primary-foreground"
+                >
+                  <path d="M4 20V8a4 4 0 0 1 8 0v12" />
+                  <path d="M12 20V8a4 4 0 0 1 8 0v12" />
+                </svg>
+              </div>
+              <span className="font-serif text-xl tracking-tight">Modus UI</span>
+            </Link>
+            <GitHubStarsButton />
+          </div>
 
-        <SidebarNav categories={DOC_CATEGORIES} />
+          <SidebarNav categories={DOC_CATEGORIES} />
 
-        <div className="space-y-2 border-t border-border p-4">
-          <ThemePicker className="w-full" />
-          <ModeSwitcher />
+          <div className="space-y-2 border-t border-border p-4">
+            <ThemePicker className="w-full" />
+            <ModeSwitcher />
+          </div>
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">

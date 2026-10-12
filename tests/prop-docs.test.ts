@@ -210,7 +210,8 @@ describe.each(registry)("$name props table", (item) => {
   it("documents the real scalar defaults", () => {
     const mismatches = rows.flatMap((row) => {
       if (!props.defaults.has(row.prop)) return [];
-      const actual = String(props.defaults.get(row.prop));
+      // Docs write a newline in a string default as the escape `\n`.
+      const actual = String(props.defaults.get(row.prop)).replace(/\n/g, "\\n");
       return normalize(row.default) === actual
         ? []
         : [`${row.prop}: doc ${row.default}, code ${actual}`];

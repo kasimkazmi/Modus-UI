@@ -1,0 +1,46 @@
+---
+title: Procedural Landscape
+description: A procedural terrain with sky, fog, stars, grass and stones, moving through seven time-of-day and weather states.
+---
+
+A Three.js polar heightfield coloured by slope and moisture. It has 100,000 GPU-shaded grass blades, instanced field stones, a gradient sky dome and 39,200 stars. Rain, storm lightning, drifting snow and blizzards ride with the camera. Drag to orbit, move the pointer for parallax, scroll or pinch to zoom, and double-click to reset. When focused, `T` cycles the time of day and `W` cycles the weather. The scene fills its positioned parent and pauses when off screen. When the user prefers reduced motion it shows a still frame. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="procedural-landscape" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add procedural-landscape
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/procedural-landscape.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { ProceduralLandscape } from "@/components/ui/procedural-landscape";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ProceduralLandscape variant="storm" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                                                        | Default                  | Description                     |
+| :-------- | :-------------------------------------------------------------------------- | :----------------------- | :------------------------------ |
+| `variant` | `"sunrise" \| "noon" \| "sunset" \| "night" \| "rain" \| "storm" \| "snow"` | `"sunrise"`              | Authored environment state.     |
+| `time`    | `"morning" \| "noon" \| "sunset" \| "night"`                                | The variant's time       | Overrides the time of day.      |
+| `weather` | `"clear" \| "rain" \| "storm" \| "snow"`                                    | The variant's weather    | Overrides the weather.          |
+| `label`   | `string`                                                                    | `"Procedural landscape"` | Accessible label for the scene. |

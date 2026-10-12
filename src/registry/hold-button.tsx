@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -6,10 +5,14 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 const TAP_MS = 250;
 const HIT_PAD = 10;
-const LINEAR = (t) => t;
-const EASE_OUT = (t) => 1 - Math.pow(1 - t, 3);
+const LINEAR = (t: number) => t;
+const EASE_OUT = (t: number) => 1 - Math.pow(1 - t, 3);
 
-const SIZES = {
+type Size = "sm" | "md" | "lg";
+type Phase = "idle" | "holding" | "done";
+type InputKind = "pointer" | "key";
+
+const SIZES: Record<Size, string> = {
   sm: "h-9 px-4 text-[13px]",
   md: "h-11 px-[22px] text-[15px]",
   lg: "h-[52px] px-7 text-[17px]",
@@ -40,15 +43,15 @@ const STYLE = `
 interface HoldButtonProps {
   children?: string;
   doneLabel?: string;
-  icon?: any;
-  doneIcon?: any;
+  icon?: React.ReactNode;
+  doneIcon?: React.ReactNode;
   backgroundColor?: string;
   fillColor?: string;
   textColor?: string;
   fillTextColor?: string;
-  size?: string;
+  size?: Size;
   radius?: number;
-  fillDirection?: string;
+  fillDirection?: "right" | "up";
   holdTime?: number;
   releaseTime?: number;
   pressScale?: number;
@@ -57,9 +60,8 @@ interface HoldButtonProps {
   glow?: boolean;
   resetAfter?: number;
   disabled?: boolean;
-  onHold?: any;
-  onTap?: any;
-  className?: string;
+  onHold?: () => void;
+  onTap?: () => void;
   className?: string;
 }
 
@@ -87,16 +89,20 @@ export function HoldButton({
   onTap,
   className = "",
 }: HoldButtonProps) {
-  const [phase, setPhase] = useState("idle");
-  const [input, setInput] = useState(null);
-  const phaseRef = useRef("idle");
-  const inputRef = useRef(null);
-  const buttonRef = useRef(null);
-  const gesture = useRef({ pointerId: null, start: 0, rect: null });
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [input, setInput] = useState<InputKind | null>(null);
+  const phaseRef = useRef<Phase>("idle");
+  const inputRef = useRef<InputKind | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const gesture = useRef<{ pointerId: number | null; start: number; rect: DOMRect | null }>({
+    pointerId: null,
+    start: 0,
+    rect: null,
+  });
   const timers = useRef({ complete: 0, reset: 0 });
   const hintId = useId();
 
-  const go = (next, kind = null) => {
+  const go = (next: Phase, kind: InputKind | null = null) => {
     phaseRef.current = next;
     inputRef.current = kind;
     setPhase(next);
@@ -109,13 +115,13 @@ export function HoldButton({
   };
 
   const motion = useRef({ raf: 0, p: 0, from: 0, to: 0, start: 0 });
-  const drive = (to, duration, ease) => {
+  const drive = (to: number, duration: number, ease: (t: number) => number) => {
     const m = motion.current;
     cancelAnimationFrame(m.raf);
     m.from = m.p;
     m.to = to;
     m.start = performance.now();
-    const step = (now) => {
+    const step = (now: number) => {
       const t = duration > 0 ? Math.min(1, (now - m.start) / duration) : 1;
       m.p = m.from + (m.to - m.from) * ease(t);
       buttonRef.current?.style.setProperty("--hb-p", m.p.toFixed(4));
@@ -136,14 +142,14 @@ export function HoldButton({
     go("done", inputRef.current);
     onHold?.();
     if (resetAfter > 0) {
-      timers.current.reset = setTimeout(() => {
+      timers.current.reset = window.setTimeout(() => {
         go("idle");
         drive(0, releaseTime, EASE_OUT);
       }, resetAfter);
     }
   };
 
-  const begin = (kind) => {
+  const begin = (kind: InputKind) => {
     if (disabled || phaseRef.current !== "idle") return false;
     const button = buttonRef.current;
     if (!button) return false;
@@ -151,7 +157,7 @@ export function HoldButton({
     gesture.current.rect = button.getBoundingClientRect();
     go("holding", kind);
     drive(1, holdTime, LINEAR);
-    timers.current.complete = setTimeout(complete, holdTime + 100);
+    timers.current.complete = window.setTimeout(complete, holdTime + 100);
     return true;
   };
 
@@ -166,7 +172,7 @@ export function HoldButton({
   const releaseRef = useRef(release);
   releaseRef.current = release;
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.button !== 0 || !e.isPrimary || gesture.current.pointerId !== null) return;
     if (!begin("pointer")) return;
     gesture.current.pointerId = e.pointerId;
@@ -175,7 +181,10 @@ export function HoldButton({
     } catch {}
   };
 
-  const endPointer = (e, options) => {
+  const endPointer = (
+    e: React.PointerEvent<HTMLButtonElement>,
+    options?: { drifted?: boolean },
+  ) => {
     if (e.pointerId !== gesture.current.pointerId) return;
     gesture.current.pointerId = null;
     try {
@@ -185,7 +194,7 @@ export function HoldButton({
     release(options);
   };
 
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.pointerId !== gesture.current.pointerId) return;
     const r = gesture.current.rect;
     if (!r) return;
@@ -197,11 +206,11 @@ export function HoldButton({
     if (out) endPointer(e, { drifted: true });
   };
 
-  const handlePointerLeave = (e) => {
+  const handlePointerLeave = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.pointerType !== "touch") endPointer(e, { drifted: true });
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Escape") {
       if (inputRef.current === "key") release({ drifted: true });
       return;
@@ -212,7 +221,7 @@ export function HoldButton({
     }
   };
 
-  const handleKeyUp = (e) => {
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === " " || e.key === "Enter") {
       e.preventDefault();
       if (inputRef.current === "key") release();
@@ -287,19 +296,21 @@ export function HoldButton({
       data-direction={direction}
       data-glow={glow ? "true" : undefined}
       aria-describedby={hintId}
-      style={{
-        "--hb-radius": `${radius}px`,
-        "--hb-bg": backgroundColor,
-        "--hb-fill": fillColor,
-        "--hb-text": textColor,
-        "--hb-fill-text": fillTextColor,
-        "--hb-hold": `${holdTime}ms`,
-        "--hb-cycles": holdTime / 1100,
-        "--hb-release": `${releaseTime}ms`,
-        "--hb-press": pressScale,
-        "--hb-wave": `${wave ? waveAmplitude : 0}px`,
-        "--hb-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-      }}
+      style={
+        {
+          "--hb-radius": `${radius}px`,
+          "--hb-bg": backgroundColor,
+          "--hb-fill": fillColor,
+          "--hb-text": textColor,
+          "--hb-fill-text": fillTextColor,
+          "--hb-hold": `${holdTime}ms`,
+          "--hb-cycles": holdTime / 1100,
+          "--hb-release": `${releaseTime}ms`,
+          "--hb-press": pressScale,
+          "--hb-wave": `${wave ? waveAmplitude : 0}px`,
+          "--hb-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+        } as React.CSSProperties
+      }
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={(e) => endPointer(e)}

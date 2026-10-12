@@ -1,0 +1,18 @@
+{
+  "name": "ripple-pool",
+  "title": "Ripple Pool",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/ripple-pool.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { CursorRipples, Shader, Swirl } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface RipplePoolProps {\n  colorA?: string;\n  colorB?: string;\n  speed?: number;\n  detail?: number;\n  intensity?: number;\n  radius?: number;\n  decay?: number;\n  chromaticSplit?: number;\n  className?: string;\n}\n\nexport function RipplePool({\n  colorA = \"#04121f\",\n  colorB = \"#38bdf8\",\n  speed = 0.5,\n  detail = 1,\n  intensity = 10,\n  radius = 0.5,\n  decay = 10,\n  chromaticSplit = 1,\n  className,\n}: RipplePoolProps) {\n  const reduce = useReducedMotion();\n  const classes = cn(\"absolute inset-0 h-full w-full\", className);\n  return (\n    <Shader className={classes}>\n      <Swirl\n        colorA={colorA}\n        colorB={colorB}\n        colorSpace=\"oklab\"\n        speed={reduce ? 0 : speed}\n        detail={detail}\n      />\n      <CursorRipples\n        intensity={intensity}\n        radius={radius}\n        decay={decay}\n        chromaticSplit={chromaticSplit}\n      />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

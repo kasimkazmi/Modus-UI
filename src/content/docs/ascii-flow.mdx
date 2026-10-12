@@ -1,0 +1,51 @@
+---
+title: ASCII Flow
+description: Flowing fractal noise rendered as ASCII characters in your theme colours.
+---
+
+Fractal noise drawn in your theme's background and primary tokens, converted into ASCII character art. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="ascii-flow" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ascii-flow
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ascii-flow.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { AsciiFlow } from "@/components/ui/ascii-flow";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <AsciiFlow />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type     | Default        | Description                                        |
+| :----------- | :------- | :------------- | :------------------------------------------------- |
+| `colorA`     | `string` | theme token    | Dark colour. Defaults to the `--background` token. |
+| `colorB`     | `string` | theme token    | Light colour. Defaults to the `--primary` token.   |
+| `characters` | `string` | `" .:-=+*#%@"` | Characters from darkest to brightest.              |
+| `cellSize`   | `number` | `16`           | Character cell size in pixels.                     |
+| `speed`      | `number` | `0.4`          | Noise animation speed.                             |
+| `contrast`   | `number` | `1.2`          | Noise contrast.                                    |

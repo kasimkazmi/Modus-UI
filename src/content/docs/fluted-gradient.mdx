@@ -1,0 +1,55 @@
+---
+title: Fluted Gradient
+description: A flowing silk gradient seen through ribbed fluted glass.
+---
+
+A four-colour flowing gradient refracted through vertical fluted glass bars, with fine grain. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="fluted-gradient" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add fluted-gradient
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/fluted-gradient.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { FlutedGradient } from "@/components/ui/fluted-gradient";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <FlutedGradient />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type     | Default     | Description                              |
+| :----------- | :------- | :---------- | :--------------------------------------- |
+| `colorA`     | `string` | `"#0b1026"` | First gradient colour.                   |
+| `colorB`     | `string` | `"#ff6b3d"` | Second gradient colour.                  |
+| `colorC`     | `string` | `"#7c3aed"` | Third gradient colour.                   |
+| `colorD`     | `string` | `"#22d3ee"` | Fourth gradient colour.                  |
+| `speed`      | `number` | `0.6`       | Gradient flow speed.                     |
+| `distortion` | `number` | `0.8`       | Gradient band distortion.                |
+| `frequency`  | `number` | `10`        | Number of glass flutes.                  |
+| `angle`      | `number` | `0`         | Angle of the flutes in degrees.          |
+| `refraction` | `number` | `1.5`       | Refraction strength.                     |
+| `aberration` | `number` | `0.2`       | Chromatic aberration at the flute edges. |

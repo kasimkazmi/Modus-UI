@@ -1,13 +1,15 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 187,
+  "count": 210,
   "categories": [
     "Navigation",
     "Actions",
     "Data Display",
     "Backgrounds",
+    "Three.js",
     "Typography",
+    "Sections",
     "Components"
   ],
   "components": [
@@ -2122,6 +2124,277 @@
       "category": "Backgrounds",
       "description": "A draggable stack of three koi cards over a swirling shader background, with pixel-tile reveals.",
       "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "sylva-world",
+      "title": "Sylva World",
+      "category": "Three.js",
+      "description": "A procedural moss-root world with pale flowers, ferns, drifting pollen, a scan-light entrance and a landing butterfly.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "temple-night",
+      "title": "Temple Night",
+      "category": "Three.js",
+      "description": "A Kyoto mountain temple after dark, with rain, mist, falling maple leaves and a blood moon.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "procedural-landscape",
+      "title": "Procedural Landscape",
+      "category": "Three.js",
+      "description": "A procedural terrain with sky, fog, stars, grass and stones, moving through seven time-of-day and weather states.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "tower-landscape",
+      "title": "Tower Landscape",
+      "category": "Three.js",
+      "description": "A procedurally generated tower assembles itself bottom-up behind a rising cut plane above a living landscape.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "bookshelf-scene",
+      "title": "Bookshelf Scene",
+      "category": "Three.js",
+      "description": "A Three.js room with a carousel shelf of seven cloth-bound volumes that retints the room to each book.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "amber-halftone",
+      "title": "Amber Halftone",
+      "category": "Backgrounds",
+      "description": "An animated amber-to-white Three.js point field rippling outward on a dark plane.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "neon-sign",
+      "title": "Neon Sign",
+      "category": "Typography",
+      "description": "Hand-bent glass neon lettering on canvas that breathes and flickers one letter.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gallery-heading",
+      "title": "Gallery Heading",
+      "category": "Typography",
+      "description": "An oversized headline ringed by twelve noise-shaded plates that orbit while hovered.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "rectangle-button",
+      "title": "Rectangle Button",
+      "category": "Actions",
+      "description": "Twenty-two authored rectangle-button and animated CTA treatments collected into one component.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "editorial-intro",
+      "title": "Editorial Intro",
+      "category": "Sections",
+      "description": "A centred editorial intro with a dimly lit device illustration, circuit traces and oversized gradient type.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "newsletter-footer",
+      "title": "Newsletter Footer",
+      "category": "Sections",
+      "description": "A dark product footer with an inline newsletter form, an oversized closing phrase and compact legal links.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "aurora-veil",
+      "title": "Aurora Veil",
+      "category": "Backgrounds",
+      "description": "Layered aurora curtains drifting over a night sky with soft noise, film grain and a vignette.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "silk-mesh",
+      "title": "Silk Mesh",
+      "category": "Backgrounds",
+      "description": "A soft flowing mesh gradient in your theme colours with grain and noise texture.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "liquid-chrome-orb",
+      "title": "Liquid Chrome Orb",
+      "category": "Backgrounds",
+      "description": "A molten liquid-metal torus, sphere or blob floating in a lit studio.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "plasma-glow",
+      "title": "Plasma Glow",
+      "category": "Backgrounds",
+      "description": "Glowing plasma with bloom, chromatic aberration and a vignette.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "nebula-orb",
+      "title": "Nebula Orb",
+      "category": "Backgrounds",
+      "description": "A volumetric gas nebula sealed in a glass sphere over a twinkling star field.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "godray-haze",
+      "title": "Godray Haze",
+      "category": "Backgrounds",
+      "description": "Volumetric light rays through a hazy gradient sky.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ink-canvas",
+      "title": "Ink Canvas",
+      "category": "Backgrounds",
+      "description": "Drag to paint swirling ribbons of ink through a live fluid simulation.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "holo-foil",
+      "title": "Holo Foil",
+      "category": "Backgrounds",
+      "description": "An iridescent holographic foil card with glitter and rainbow sheen.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "crystal-cells",
+      "title": "Crystal Cells",
+      "category": "Backgrounds",
+      "description": "A faceted crystal lens refracting a shifting Voronoi cell field.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "fluted-gradient",
+      "title": "Fluted Gradient",
+      "category": "Backgrounds",
+      "description": "A flowing silk gradient seen through ribbed fluted glass.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ripple-pool",
+      "title": "Ripple Pool",
+      "category": "Backgrounds",
+      "description": "A swirling gradient that ripples like water under the cursor.",
+      "dependencies": [
+        "shaders",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ascii-flow",
+      "title": "ASCII Flow",
+      "category": "Backgrounds",
+      "description": "Flowing fractal noise rendered as ASCII characters in your theme colours.",
+      "dependencies": [
+        "shaders",
         "framer-motion",
         "clsx",
         "tailwind-merge"

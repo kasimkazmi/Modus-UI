@@ -1,0 +1,53 @@
+---
+title: Ripple Pool
+description: A swirling gradient that ripples like water under the cursor.
+---
+
+A slow swirling gradient with fluid ripples that trail the cursor. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="ripple-pool" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ripple-pool
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ripple-pool.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { RipplePool } from "@/components/ui/ripple-pool";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <RipplePool />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop             | Type     | Default     | Description                  |
+| :--------------- | :------- | :---------- | :--------------------------- |
+| `colorA`         | `string` | `"#04121f"` | First swirl colour.          |
+| `colorB`         | `string` | `"#38bdf8"` | Second swirl colour.         |
+| `speed`          | `number` | `0.5`       | Swirl speed.                 |
+| `detail`         | `number` | `1`         | Swirl detail.                |
+| `intensity`      | `number` | `10`        | Ripple strength.             |
+| `radius`         | `number` | `0.5`       | Ripple radius.               |
+| `decay`          | `number` | `10`        | How quickly ripples settle.  |
+| `chromaticSplit` | `number` | `1`         | Colour split in the ripples. |

@@ -1,0 +1,54 @@
+---
+title: Crystal Cells
+description: A faceted crystal lens refracting a shifting Voronoi cell field.
+---
+
+A moving Voronoi cell pattern seen through a hexagonal faceted crystal with dispersion, framed by a vignette. It fills its positioned parent and freezes its animation when the user prefers reduced motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="crystal-cells" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add crystal-cells
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/crystal-cells.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { CrystalCells } from "@/components/ui/crystal-cells";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <CrystalCells />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type     | Default     | Description                  |
+| :------------ | :------- | :---------- | :--------------------------- |
+| `colorA`      | `string` | `"#0f172a"` | Cell centre colour.          |
+| `colorB`      | `string` | `"#6366f1"` | Cell edge colour.            |
+| `borderColor` | `string` | `"#e0e7ff"` | Colour of the cell borders.  |
+| `speed`       | `number` | `0.5`       | Cell animation speed.        |
+| `scale`       | `number` | `6`         | Number of cells.             |
+| `facets`      | `number` | `5`         | Number of crystal facets.    |
+| `refraction`  | `number` | `0.5`       | Refraction strength.         |
+| `dispersion`  | `number` | `0.5`       | Rainbow dispersion strength. |
+| `radius`      | `number` | `0.32`      | Size of the crystal.         |

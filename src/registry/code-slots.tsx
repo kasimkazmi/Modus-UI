@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -6,6 +5,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import {
   animate,
   motion,
+  type MotionValue,
   motionValue,
   useMotionValue,
   useReducedMotion,
@@ -14,7 +14,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 
-const EASE_OUT = [0.23, 1, 0.32, 1];
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 const WASH_IN = 0.3;
 const WASH_OUT = 0.2;
 const SINK_DELAY = 0.06;
@@ -23,26 +23,28 @@ const CHECK_DELAY = 0.28;
 const CHECK_RISE = 8;
 const SINK_FADE = 0.6;
 
-const clamp01 = (v) => Math.min(1, Math.max(0, v));
-const digitsOf = (raw) => String(raw ?? "").replace(/\D/g, "");
-const toSlots = (raw, n) => {
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const digitsOf = (raw: string | null | undefined) => String(raw ?? "").replace(/\D/g, "");
+const toSlots = (raw: string | null | undefined, n: number) => {
   const d = digitsOf(raw).slice(0, n);
   return Array.from({ length: n }, (_, i) => d[i] ?? "");
 };
-const firstEmptyOf = (slots) => {
+const firstEmptyOf = (slots: string[]) => {
   const i = slots.indexOf("");
   return i === -1 ? slots.length - 1 : i;
 };
-const isFull = (slots) => slots.every(Boolean);
+const isFull = (slots: string[]) => slots.every(Boolean);
 const STYLE = "@keyframes code-slots-blink{0%,49.9%{opacity:1}50%,100%{opacity:0}}";
+
+export type CodeSlotsStatus = "idle" | "error" | "success";
 
 interface CodeSlotsProps {
   length?: number;
-  value?: any;
+  value?: string;
   defaultValue?: string;
-  onChange?: any;
-  onComplete?: any;
-  status?: string;
+  onChange?: (code: string) => void;
+  onComplete?: (code: string) => void;
+  status?: CodeSlotsStatus;
   mask?: boolean;
   caret?: boolean;
   disabled?: boolean;
@@ -60,7 +62,6 @@ interface CodeSlotsProps {
   rise?: number;
   cascade?: number;
   ariaLabel?: string;
-  className?: string;
   className?: string;
 }
 
@@ -92,8 +93,8 @@ export function CodeSlots({
 }: CodeSlotsProps) {
   const uid = useId();
   const reduce = useReducedMotion();
-  const inputRef = useRef(null);
-  const rowRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const rowRef = useRef<HTMLDivElement | null>(null);
   const [slots, setSlots] = useState(() => toSlots(value ?? defaultValue, length));
   const [active, setActive] = useState(() => firstEmptyOf(slots));
   const [focused, setFocused] = useState(false);
@@ -101,15 +102,15 @@ export function CodeSlots({
   const activeMv = useMotionValue(active);
   const openMv = useMotionValue(status === "success" ? 1 : 0);
   const checkMv = useMotionValue(status === "success" ? 1 : 0);
-  const glide = useRef(new Set());
-  const target = useRef([]);
+  const glide = useRef(new Set<number>());
+  const target = useRef<number[]>([]);
   const draining = useRef(false);
-  const drainTimer = useRef(undefined);
+  const drainTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const statusRef = useRef(status);
   const emitted = useRef(digitsOf(value ?? defaultValue).slice(0, length));
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
-  const live = useRef({});
+  const live = useRef({ settle, bounce, cascade, reduce });
   live.current = { settle, bounce, cascade, reduce };
 
   const springs = useMemo(
@@ -126,7 +127,7 @@ export function CodeSlots({
   const washRadius = Math.min(radius, slotSize / 2);
 
   const drive = useCallback(
-    (i, to, delayMs = 0) => {
+    (i: number, to: number, delayMs = 0) => {
       const mv = mvs[i];
       if (!mv) return;
       target.current[i] = to;
@@ -145,14 +146,14 @@ export function CodeSlots({
     [mvs],
   );
   const land = useCallback(
-    (i, delayMs = 0) => {
+    (i: number, delayMs = 0) => {
       if (mvs[i].get() > 0) mvs[i].jump(0);
       drive(i, 1, delayMs);
     },
     [mvs, drive],
   );
   const moveActive = useCallback(
-    (next, crossed) => {
+    (next: number, crossed: number[]) => {
       crossed.forEach((j) => glide.current.add(j));
       activeMv.jump(next);
       setActive(next);
@@ -160,7 +161,7 @@ export function CodeSlots({
     [activeMv],
   );
   const jumpActive = useCallback(
-    (next) => {
+    (next: number) => {
       glide.current.clear();
       activeMv.jump(next);
       setActive(next);
@@ -195,7 +196,7 @@ export function CodeSlots({
   const checkOpacity = useTransform(checkMv, clamp01);
 
   const commit = useCallback(
-    (next) => {
+    (next: string[]) => {
       const prev = slotsRef.current;
       slotsRef.current = next;
       setSlots(next);
@@ -207,11 +208,11 @@ export function CodeSlots({
     [onChange, onComplete],
   );
 
-  const insert = (raw, from = active) => {
+  const insert = (raw: string, from = active) => {
     const digits = digitsOf(raw);
     if (!digits) return;
     const next = [...slotsRef.current];
-    const crossed = [];
+    const crossed: number[] = [];
     const step = reduce ? 0 : cascade;
     let i = from;
     for (const ch of digits) {
@@ -225,7 +226,7 @@ export function CodeSlots({
     commit(next);
     moveActive(Math.min(i, length - 1), crossed);
   };
-  const clearSlot = (i, stepBack = false) => {
+  const clearSlot = (i: number, stepBack = false) => {
     if (!slotsRef.current[i]) {
       if (stepBack) jumpActive(i);
       return;
@@ -238,7 +239,7 @@ export function CodeSlots({
   };
 
   const busy = disabled || draining.current || status === "success";
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (busy || e.metaKey || e.ctrlKey || e.altKey) return;
     const k = e.key;
     if (/^[0-9]$/.test(k)) {
@@ -265,18 +266,18 @@ export function CodeSlots({
       jumpActive(length - 1);
     }
   };
-  const onPaste = (e) => {
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     if (busy) return;
     e.preventDefault();
     insert(e.clipboardData.getData("text"));
   };
-  const onInput = (e) => {
+  const onInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (busy) return;
     const d = digitsOf(e.target.value);
     if (!d) return;
     insert(d, d.length === 1 ? active : 0);
   };
-  const onRowMouseDown = (e) => {
+  const onRowMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (disabled) return;
     e.preventDefault();
     const row = rowRef.current;
@@ -312,8 +313,8 @@ export function CodeSlots({
     const prev = slotsRef.current;
     const next = toSlots(clean, length);
     const hidden = statusRef.current === "success";
-    const landing = [];
-    const leaving = [];
+    const landing: number[] = [];
+    const leaving: number[] = [];
     next.forEach((ch, i) => {
       if (ch === prev[i]) return;
       (ch ? landing : leaving).push(i);
@@ -416,18 +417,20 @@ export function CodeSlots({
   return (
     <div
       className={`relative inline-block${className ? ` ${className}` : ""}`}
-      style={{
-        "--cs-accent": accentColor,
-        "--cs-ink": inkColor,
-        "--cs-slot": slotColor,
-        "--cs-digit": digitColor,
-        "--cs-danger": dangerColor,
-        "--cs-size": `${slotSize}px`,
-        "--cs-height": `${height}px`,
-        "--cs-gap": `${gap}px`,
-        "--cs-radius": `${Math.min(radius, slotSize / 2)}px`,
-        "--cs-font": `${Math.round(slotSize * 0.5)}px`,
-      }}
+      style={
+        {
+          "--cs-accent": accentColor,
+          "--cs-ink": inkColor,
+          "--cs-slot": slotColor,
+          "--cs-digit": digitColor,
+          "--cs-danger": dangerColor,
+          "--cs-size": `${slotSize}px`,
+          "--cs-height": `${height}px`,
+          "--cs-gap": `${gap}px`,
+          "--cs-radius": `${Math.min(radius, slotSize / 2)}px`,
+          "--cs-font": `${Math.round(slotSize * 0.5)}px`,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       <div
@@ -502,15 +505,27 @@ export function CodeSlots({
   );
 }
 
-function Slot({ mv, drop, char, active, rise, sink }) {
+interface SlotProps {
+  mv: MotionValue<number>;
+  drop: MotionValue<number>;
+  char: string;
+  active: boolean;
+  rise: number;
+  sink: number;
+}
+
+function Slot({ mv, drop, char, active, rise, sink }: SlotProps) {
   const [shown, setShown] = useState(char);
   if (char && char !== shown) setShown(char);
-  const fill = useTransform(mv, (t) => `scale(${Math.max(t, 0)})`);
+  const fill = useTransform(mv, (t: number) => `scale(${Math.max(t, 0)})`);
   const lift = useTransform(
     [mv, drop],
-    ([t, d]) => `translateY(${(1 - t) * rise + Math.max(d, 0) * sink}px)`,
+    ([t, d]: number[]) => `translateY(${(1 - t) * rise + Math.max(d, 0) * sink}px)`,
   );
-  const ink = useTransform([mv, drop], ([t, d]) => clamp01(t) * (1 - clamp01(d / SINK_FADE)));
+  const ink = useTransform(
+    [mv, drop],
+    ([t, d]: number[]) => clamp01(t) * (1 - clamp01(d / SINK_FADE)),
+  );
   return (
     <span
       className="in-data-[status=error]:[background-color:color-mix(in_srgb,var(--cs-danger)_20%,var(--cs-slot))] in-data-[status=error]:data-[active]:[background-color:color-mix(in_srgb,var(--cs-danger)_20%,var(--cs-slot))] [@media(hover:hover)_and_(pointer:fine)]:group-hover/row:in-data-[status=idle]:not-in-data-[disabled]:not-data-[active]:[background-color:color-mix(in_srgb,var(--cs-ink)_4%,var(--cs-slot))] relative h-[var(--cs-height)] w-[var(--cs-size)] select-none overflow-hidden rounded-[var(--cs-radius)] bg-[var(--cs-slot)] [transition:background-color_200ms_ease] data-[active]:[background-color:color-mix(in_srgb,var(--cs-ink)_8%,var(--cs-slot))]"

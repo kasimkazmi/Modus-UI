@@ -1,0 +1,18 @@
+{
+  "name": "plasma-glow",
+  "title": "Plasma Glow",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/plasma-glow.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { ChromaticAberration, Glow, Plasma, Shader, Vignette } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface PlasmaGlowProps {\n  colorA?: string;\n  colorB?: string;\n  speed?: number;\n  density?: number;\n  warp?: number;\n  glow?: number;\n  aberration?: number;\n  className?: string;\n}\n\nexport function PlasmaGlow({\n  colorA = \"#0b0221\",\n  colorB = \"#ff3fa4\",\n  speed = 1,\n  density = 1,\n  warp = 1,\n  glow = 0.6,\n  aberration = 0.3,\n  className,\n}: PlasmaGlowProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <Plasma\n        colorA={colorA}\n        colorB={colorB}\n        colorSpace=\"oklch\"\n        speed={reduce ? 0 : speed}\n        density={density}\n        warp={warp}\n      />\n      <Glow intensity={glow} threshold={0.4} size={20} />\n      <ChromaticAberration strength={aberration} />\n      <Vignette color=\"#000000\" intensity={0.5} radius={0.75} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

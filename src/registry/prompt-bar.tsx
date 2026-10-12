@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -12,7 +11,7 @@ import {
   useState,
 } from "react";
 import { animate, useMotionValue, useMotionValueEvent, useReducedMotion } from "framer-motion";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
   ArrowDown01Icon,
   Attachment01Icon,
@@ -30,11 +29,39 @@ import {
 } from "@hugeicons/core-free-icons";
 const ARROW_UP = [12, 4.5, 18.5, 11, 14.25, 11, 14.25, 19.5, 9.75, 19.5, 9.75, 11, 5.5, 11];
 const SQUARE = [12, 6, 18, 6, 18, 12, 18, 18, 6, 18, 6, 12, 6, 6];
-const EASE_IN_OUT = [0.77, 0, 0.175, 1];
+const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const;
 const LINE = 22;
 const EDGE = 11;
 
-const DEFAULT_SOURCES = [
+type PromptIcon = IconSvgElement | React.ReactElement;
+
+interface PromptItem {
+  key: string;
+  name: string;
+  description?: string;
+  icon?: PromptIcon;
+  attach?: boolean;
+  tag?: string;
+}
+
+interface PromptSendMeta {
+  attachments: string[];
+  model: PromptItem;
+  effort: string;
+}
+
+interface Spark {
+  x: number;
+  y: number;
+  r: number;
+  vy: number;
+  sway: number;
+  phase: number;
+  life: number;
+  span: number;
+}
+
+const DEFAULT_SOURCES: PromptItem[] = [
   {
     key: "files",
     name: "Photos & files",
@@ -53,22 +80,22 @@ const DEFAULT_SOURCES = [
     icon: Calendar03Icon,
   },
 ];
-const DEFAULT_COMMANDS = [
+const DEFAULT_COMMANDS: PromptItem[] = [
   { key: "summarize", name: "/summarize", description: "Digest the thread so far" },
   { key: "compare", name: "/compare", description: "Two options side by side" },
   { key: "draft", name: "/draft", description: "Write a first version" },
   { key: "explain", name: "/explain", description: "A plain-language walkthrough" },
   { key: "tasks", name: "/tasks", description: "Turn this into a to-do list" },
 ];
-const DEFAULT_MODELS = [
+const DEFAULT_MODELS: PromptItem[] = [
   { key: "nova-3", name: "Nova 3", tag: "Flagship" },
   { key: "nova-mini", name: "Nova Mini", tag: "Fast" },
   { key: "nova-2", name: "Nova 2", tag: "Legacy" },
 ];
 const DEFAULT_EFFORTS = ["Low", "Medium", "High", "Extra", "Max"];
 
-const mix = (a, b, t) => a + (b - a) * t;
-const pathAt = (a, b, t) => {
+const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+const pathAt = (a: number[], b: number[], t: number) => {
   let d = "";
   for (let i = 0; i < a.length; i += 2) {
     d += `${i ? "L" : "M"}${mix(a[i], b[i], t).toFixed(2)} ${mix(a[i + 1], b[i + 1], t).toFixed(2)}`;
@@ -76,23 +103,34 @@ const pathAt = (a, b, t) => {
   return `${d}Z`;
 };
 
-const parseToken = (draft) => {
+const parseToken = (draft: string) => {
   const m = /(^|\s)([@/])([\w-]*)$/.exec(draft);
   if (!m) return null;
   return {
-    kind: m[2] === "@" ? "at" : "slash",
+    kind: m[2] === "@" ? ("at" as const) : ("slash" as const),
     query: m[3].toLowerCase(),
     start: m.index + m[1].length,
   };
 };
 
-const renderIcon = (icon, size) =>
-  isValidElement(icon) ? icon : <HugeiconsIcon icon={icon} size={size} strokeWidth={1.8} />;
+const renderIcon = (icon: PromptIcon, size: number) =>
+  isValidElement(icon) ? (
+    icon
+  ) : (
+    <HugeiconsIcon icon={icon as IconSvgElement} size={size} strokeWidth={1.8} />
+  );
 
-function SendGlyph({ busy, morphDuration, squash, tilt }) {
+interface SendGlyphProps {
+  busy: boolean;
+  morphDuration: number;
+  squash: number;
+  tilt: number;
+}
+
+function SendGlyph({ busy, morphDuration, squash, tilt }: SendGlyphProps) {
   const reduce = useReducedMotion();
-  const svgRef = useRef(null);
-  const pathRef = useRef(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const pathRef = useRef<SVGPathElement | null>(null);
   const dir = useRef(busy ? 1 : -1);
   const t = useMotionValue(busy ? 1 : 0);
 
@@ -142,18 +180,19 @@ const STYLE = `
 
 interface PromptBarProps {
   placeholder?: string;
-  sources?: any;
-  commands?: any;
-  models?: any;
+  sources?: PromptItem[];
+  commands?: PromptItem[];
+  models?: PromptItem[];
   defaultModel?: string;
-  efforts?: any;
+  efforts?: string[];
   defaultEffort?: string;
-  onEffortChange?: any;
+  onEffortChange?: (effort: string) => void;
   busy?: boolean;
-  onSend?: any;
-  onStop?: any;
-  onAttach?: any;
-  onDictate?: any;
+  onSend?: (text: string, meta: PromptSendMeta) => void;
+  onStop?: () => void;
+  onAttach?: () =>
+    string | string[] | null | undefined | Promise<string | string[] | null | undefined>;
+  onDictate?: () => string | null | undefined | Promise<string | null | undefined>;
   background?: string;
   color?: string;
   menuBackground?: string;
@@ -166,7 +205,6 @@ interface PromptBarProps {
   squash?: number;
   tilt?: number;
   pressScale?: number;
-  className?: string;
   className?: string;
 }
 
@@ -199,21 +237,22 @@ export function PromptBar({
   className = "",
 }: PromptBarProps) {
   const reduce = useReducedMotion();
-  const rootRef = useRef(null);
-  const inputRef = useRef(null);
-  const glowRef = useRef(null);
-  const sparkRef = useRef(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const glowRef = useRef<HTMLDivElement | null>(null);
+  const sparkRef = useRef<HTMLCanvasElement | null>(null);
   const typing = useRef({ energy: 0, strokes: 0 });
   const boost = useRef(sparkBoost);
   boost.current = sparkBoost;
-  const rowRefs = useRef([]);
-  const lastOpen = useRef(null);
+  const rowRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const lastOpen = useRef<string | null>(null);
   const dictation = useRef(0);
-  const latest = useRef({});
-  latest.current = { onSend, onStop, onAttach, onDictate, onEffortChange };
+  const callbacks = { onSend, onStop, onAttach, onDictate, onEffortChange };
+  const latest = useRef(callbacks);
+  latest.current = callbacks;
 
   const [draft, setDraft] = useState("");
-  const [attachments, setAttachments] = useState([]);
+  const [attachments, setAttachments] = useState<string[]>([]);
   const [modelKey, setModelKey] = useState(defaultModel);
   const [plusOpen, setPlusOpen] = useState(false);
   const [modelOpen, setModelOpen] = useState(false);
@@ -278,8 +317,8 @@ export function PromptBar({
 
   useEffect(() => {
     if (!plusOpen && !modelOpen && !effortOpen) return undefined;
-    const onDown = (e) => {
-      if (!rootRef.current?.contains(e.target)) closeMenus();
+    const onDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) closeMenus();
     };
     document.addEventListener("pointerdown", onDown);
     return () => document.removeEventListener("pointerdown", onDown);
@@ -314,7 +353,7 @@ export function PromptBar({
     let due = 0;
     let speed = 1;
     let pulse = 0;
-    const parts = [];
+    const parts: Spark[] = [];
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -324,7 +363,7 @@ export function PromptBar({
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
-    const spawn = (burst) => {
+    const spawn = (burst: boolean) => {
       parts.push({
         x: Math.random() * w,
         y: burst ? h * (0.2 + Math.random() * 0.8) : h + 3,
@@ -336,7 +375,7 @@ export function PromptBar({
         span: 2.4 + Math.random() * 2.4,
       });
     };
-    const tick = (now) => {
+    const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const typed = typing.current;
@@ -399,18 +438,18 @@ export function PromptBar({
     };
   }, [maxed, reduce, sparkColor]);
 
-  const setEffort = (i) => {
+  const setEffort = (i: number) => {
     const next = Math.max(0, Math.min(efforts.length - 1, i));
     if (next === effortIndex) return;
     setEffortIndex(next);
     latest.current.onEffortChange?.(efforts[next]);
   };
-  const effortFromPointer = (e) => {
+  const effortFromPointer = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const k = (e.clientX - rect.left - EDGE) / Math.max(1, rect.width - 2 * EDGE);
     setEffort(Math.round(k * (efforts.length - 1)));
   };
-  const onEffortKey = (e) => {
+  const onEffortKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const step =
       e.key === "ArrowRight" || e.key === "ArrowUp"
         ? 1
@@ -431,11 +470,11 @@ export function PromptBar({
       focusInput();
     }
   };
-  const stepAt = (i) =>
+  const stepAt = (i: number) =>
     `calc(${EDGE}px + (100% - ${EDGE * 2}px) * ${i / Math.max(1, efforts.length - 1)})`;
-  const fillAt = (i) => (i === efforts.length - 1 ? "100%" : `calc(${stepAt(i)} + 7px)`);
+  const fillAt = (i: number) => (i === efforts.length - 1 ? "100%" : `calc(${stepAt(i)} + 7px)`);
 
-  const pick = (row) => {
+  const pick = (row: PromptItem) => {
     if (open === "model") {
       setModelKey(row.key);
       setModelOpen(false);
@@ -490,7 +529,7 @@ export function PromptBar({
     );
   };
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (open && list.length) {
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
@@ -517,7 +556,7 @@ export function PromptBar({
     }
   };
 
-  const down = (e) => {
+  const down = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (e.button !== 0 || !armed) return;
     setPressed(true);
   };
@@ -529,15 +568,17 @@ export function PromptBar({
       className={`group relative text-[14px] leading-[22px] [width:min(var(--pb-w),100%)] [color:var(--pb-ink)]${className ? ` ${className}` : ""}`}
       data-busy={busy ? "" : undefined}
       data-max={maxed ? "" : undefined}
-      style={{
-        "--pb-bg": background,
-        "--pb-ink": color,
-        "--pb-menu": menuBackground,
-        "--pb-w": `${width}px`,
-        "--pb-radius": `${radius}px`,
-        "--pb-spark": sparkColor,
-        "--pb-press": pressScale,
-      }}
+      style={
+        {
+          "--pb-bg": background,
+          "--pb-ink": color,
+          "--pb-menu": menuBackground,
+          "--pb-w": `${width}px`,
+          "--pb-radius": `${radius}px`,
+          "--pb-spark": sparkColor,
+          "--pb-press": pressScale,
+        } as React.CSSProperties
+      }
     >
       <style>{STYLE}</style>
       {open ? (
@@ -582,10 +623,12 @@ export function PromptBar({
                 aria-valuemax={efforts.length - 1}
                 aria-valuenow={effortIndex}
                 aria-valuetext={level}
-                style={{
-                  "--pb-effort-x": stepAt(effortIndex),
-                  "--pb-effort-fill": fillAt(effortIndex),
-                }}
+                style={
+                  {
+                    "--pb-effort-x": stepAt(effortIndex),
+                    "--pb-effort-fill": fillAt(effortIndex),
+                  } as React.CSSProperties
+                }
                 onPointerDown={(e) => {
                   if (e.button !== 0) return;
                   try {
@@ -633,7 +676,7 @@ export function PromptBar({
                 >
                   {open === "at" ? (
                     <span className="inline-flex w-5 flex-none justify-center [color:color-mix(in_srgb,var(--pb-ink)_70%,transparent)]">
-                      {renderIcon(row.icon, 15)}
+                      {renderIcon(row.icon!, 15)}
                     </span>
                   ) : null}
                   <span className="flex-none text-[13px] font-medium">{row.name}</span>

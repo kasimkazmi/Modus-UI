@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -9,6 +8,7 @@ import {
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
+  type Transition,
 } from "framer-motion";
 
 const COUNT_LINE = 0.55;
@@ -17,7 +17,17 @@ const CAUGHT_HOLD_MS = 760;
 const INSET = 12;
 const DEFAULT_TAUNTS = ["Catch me", "Nope", "Too slow", "Almost", "Okay, okay"];
 
-const wallIt = (t, room, wall) => {
+type DodgeAxis = "x" | "y" | "both";
+type DodgeWall = "clamp" | "bounce";
+
+interface DodgeState {
+  dodges: number;
+  gave: boolean;
+  caught: boolean;
+  fleeing: boolean;
+}
+
+const wallIt = (t: number, room: number, wall: DodgeWall) => {
   if (wall === "bounce") {
     if (t > room) return Math.max(-room, 2 * room - t);
     if (t < -room) return Math.min(room, -2 * room - t);
@@ -25,15 +35,15 @@ const wallIt = (t, room, wall) => {
   }
   return Math.min(room, Math.max(-room, t));
 };
-const bearingOf = (dx, dy, d, axis) => {
+const bearingOf = (dx: number, dy: number, d: number, axis: DodgeAxis) => {
   if (axis === "x") return { x: Math.sign(dx) || 1, y: 0 };
   if (axis === "y") return { x: 0, y: Math.sign(dy) || 1 };
   return { x: dx / d, y: dy / d };
 };
 
 interface DodgeFieldProps {
-  children?: any;
-  taunts?: any;
+  children?: React.ReactNode | ((state: DodgeState) => React.ReactNode);
+  taunts?: string[];
   notice?: string;
   inkColor?: string;
   contrastColor?: string;
@@ -44,16 +54,15 @@ interface DodgeFieldProps {
   fleeDuration?: number;
   returnDuration?: number;
   returnBounce?: number;
-  axis?: string;
-  wall?: string;
+  axis?: DodgeAxis;
+  wall?: DodgeWall;
   patience?: number;
   disabled?: boolean;
-  onDodge?: any;
-  onRelent?: any;
-  onCatch?: any;
+  onDodge?: (dodges: number) => void;
+  onRelent?: () => void;
+  onCatch?: () => void;
   className?: string;
-  style?: any;
-  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function DodgeField({
@@ -79,8 +88,8 @@ export function DodgeField({
   className = "",
   style,
 }: DodgeFieldProps) {
-  const fieldRef = useRef(null);
-  const moverRef = useRef(null);
+  const fieldRef = useRef<HTMLDivElement | null>(null);
+  const moverRef = useRef<HTMLDivElement | null>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const transform = useMotionTemplate`translate(${x}px, ${y}px)`;
@@ -92,14 +101,13 @@ export function DodgeField({
   const gave = dodges >= Math.max(1, patience);
   const still = gave || caught || disabled || !!reduce;
 
-  const pointer = useRef(null);
+  const pointer = useRef<{ x: number; y: number } | null>(null);
   const bearing = useRef({ x: 1, y: 0 });
   const armed = useRef(true);
   const room = useRef({ x: 0, y: 0 });
   const raf = useRef(0);
-  const hold = useRef(undefined);
-  const live = useRef({});
-  live.current = {
+  const hold = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const config = {
     reach,
     radius,
     falloff,
@@ -112,6 +120,8 @@ export function DodgeField({
     inside,
     reduce,
   };
+  const live = useRef(config);
+  live.current = config;
 
   useEffect(() => {
     const field = fieldRef.current;
@@ -161,7 +171,7 @@ export function DodgeField({
       x.jump(0);
       y.jump(0);
     } else {
-      const cfg =
+      const cfg: Transition =
         flee > 0
           ? { type: "spring", duration: L.fleeDuration / 1000, bounce: 0 }
           : { type: "spring", duration: L.returnDuration / 1000, bounce: L.returnBounce };
@@ -180,7 +190,7 @@ export function DodgeField({
     const tick = () => {
       if (!raf.current) raf.current = requestAnimationFrame(frame);
     };
-    const onMove = (e) => {
+    const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       pointer.current = { x: e.clientX, y: e.clientY };
       tick();
@@ -228,7 +238,7 @@ export function DodgeField({
     }, CAUGHT_HOLD_MS);
   };
 
-  const state = { dodges, gave, caught, fleeing: inside && !still };
+  const state: DodgeState = { dodges, gave, caught, fleeing: inside && !still };
   const index =
     gave || caught ? taunts.length - 1 : Math.min(dodges, Math.max(0, taunts.length - 2));
   const content =
@@ -261,13 +271,15 @@ export function DodgeField({
       className={`relative grid w-full place-items-center [height:var(--df-height)]${className ? ` ${className}` : ""}`}
       data-coarse={fine ? undefined : ""}
       data-flat={reduce ? "" : undefined}
-      style={{
-        "--df-ink": inkColor,
-        "--df-contrast": contrastColor,
-        "--df-height": `${fieldHeight}px`,
-        "--df-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        ...style,
-      }}
+      style={
+        {
+          "--df-ink": inkColor,
+          "--df-contrast": contrastColor,
+          "--df-height": `${fieldHeight}px`,
+          "--df-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
+          ...style,
+        } as React.CSSProperties
+      }
     >
       <motion.div
         ref={moverRef}

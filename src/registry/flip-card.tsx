@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -6,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   animate,
   motion,
+  type MotionStyle,
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
@@ -19,17 +19,17 @@ const LIFT_SPRING = { stiffness: 320, damping: 26 };
 const FLING = 0.16;
 const HISTORY_MS = 90;
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const snap = (deg) => Math.round(deg / 180) * 180;
-const isBack = (deg) => Math.abs(Math.round(deg / 180)) % 2 === 1;
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const snap = (deg: number) => Math.round(deg / 180) * 180;
+const isBack = (deg: number) => Math.abs(Math.round(deg / 180)) % 2 === 1;
 
 interface FlipCardProps {
-  front?: any;
-  back?: any;
-  flipped?: any;
+  front?: React.ReactNode;
+  back?: React.ReactNode;
+  flipped?: boolean;
   defaultFlipped?: boolean;
-  onFlipChange?: any;
-  axis?: string;
+  onFlipChange?: (flipped: boolean) => void;
+  axis?: "x" | "y";
   flipOnClick?: boolean;
   draggable?: boolean;
   dragDistance?: number;
@@ -52,7 +52,16 @@ interface FlipCardProps {
   disabled?: boolean;
   ariaLabel?: string;
   className?: string;
-  className?: string;
+}
+
+interface Grip {
+  id: number;
+  x: number;
+  y: number;
+  base: number;
+  moved: boolean;
+  slop: number;
+  hist: { t: number; v: number }[];
 }
 
 export function FlipCard({
@@ -92,9 +101,9 @@ export function FlipCard({
   const shown = controlled ? flipped : inner;
   const shownRef = useRef(shown);
   shownRef.current = shown;
-  const rootRef = useRef(null);
-  const grip = useRef(null);
-  const spin = useRef(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const grip = useRef<Grip | null>(null);
+  const spin = useRef<ReturnType<typeof animate> | null>(null);
   const target = useRef(shown ? 180 : 0);
 
   const turn = useMotionValue(shown ? 180 : 0);
@@ -105,8 +114,8 @@ export function FlipCard({
   const gx = useMotionValue(50);
   const gy = useMotionValue(50);
 
-  const sumX = useTransform([turn, tiltX], ([t, x]) => t + x);
-  const sumY = useTransform([turn, tiltY], ([t, y]) => t + y);
+  const sumX = useTransform([turn, tiltX], ([t, x]: number[]) => t + x);
+  const sumY = useTransform([turn, tiltY], ([t, y]: number[]) => t + y);
   const turnY = useMotionTemplate`perspective(${perspective}px) scale(${lift}) rotateX(${tiltX}deg) rotateY(${sumY}deg)`;
   const turnX = useMotionTemplate`perspective(${perspective}px) scale(${lift}) rotateY(${tiltY}deg) rotateX(${sumX}deg)`;
   const facing = useTransform(turn, (t) => Math.abs(Math.cos((t * Math.PI) / 180)));
@@ -115,7 +124,7 @@ export function FlipCard({
   const gxPct = useMotionTemplate`${gx}%`;
   const gyPct = useMotionTemplate`${gy}%`;
 
-  const settle = (to, velocity, instant) => {
+  const settle = (to: number, velocity: number, instant: boolean) => {
     spin.current?.stop();
     target.current = to;
     if (instant || reduce) turn.jump(to);
@@ -133,7 +142,7 @@ export function FlipCard({
     if (!controlled) setInner(next);
     onFlipChange?.(next);
   };
-  const flip = (instant) => {
+  const flip = (instant: boolean) => {
     const base = snap(turn.get());
     settle(isBack(base) ? base - 180 : base + 180, 0, instant);
   };
@@ -165,7 +174,7 @@ export function FlipCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled]);
 
-  const onPointerDown = (e) => {
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled || e.button !== 0 || grip.current) return;
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
@@ -182,7 +191,7 @@ export function FlipCard({
     };
     if (!reduce) lift.set(hoverScale);
   };
-  const onPointerMove = (e) => {
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const g = grip.current;
     if (g && g.id === e.pointerId) {
       const d = axis === "x" ? e.clientY - g.y : e.clientX - g.x;
@@ -212,7 +221,7 @@ export function FlipCard({
     gy.set(py * 100);
     sheen.set(1);
   };
-  const release = (e, cancelled) => {
+  const release = (e: React.PointerEvent<HTMLDivElement>, cancelled: boolean) => {
     const g = grip.current;
     if (!g || g.id !== e.pointerId) return;
     grip.current = null;
@@ -238,12 +247,12 @@ export function FlipCard({
       : clamp(snap(here + velocity * FLING), snap(here) - 180, snap(here) + 180);
     settle(to, velocity, false);
   };
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled || (e.key !== "Enter" && e.key !== " ")) return;
     e.preventDefault();
     if (!e.repeat) flip(true);
   };
-  const onClick = (e) => {
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!disabled && e.detail === 0) flip(true);
   };
 
@@ -252,7 +261,7 @@ export function FlipCard({
     "--fc-gx": gxPct,
     "--fc-gy": gyPct,
     "--fc-sheen": sheen,
-  };
+  } as MotionStyle;
 
   return (
     <div
@@ -282,16 +291,18 @@ export function FlipCard({
       onKeyDown={onKeyDown}
       onClick={onClick}
       onDragStart={(e) => e.preventDefault()}
-      style={{
-        "--fc-w": `${width}px`,
-        "--fc-h": `${height}px`,
-        "--fc-radius": `${radius}px`,
-        "--fc-bg": background,
-        "--fc-ink": color,
-        "--fc-shadow": shadowColor,
-        "--fc-shadow-o": shadowOpacity,
-        "--fc-glare": glareOpacity,
-      }}
+      style={
+        {
+          "--fc-w": `${width}px`,
+          "--fc-h": `${height}px`,
+          "--fc-radius": `${radius}px`,
+          "--fc-bg": background,
+          "--fc-ink": color,
+          "--fc-shadow": shadowColor,
+          "--fc-shadow-o": shadowOpacity,
+          "--fc-glare": glareOpacity,
+        } as React.CSSProperties
+      }
     >
       {shadow ? (
         <motion.span

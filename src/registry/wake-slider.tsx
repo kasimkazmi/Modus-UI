@@ -1,8 +1,8 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
 import {
   frame,
   useMotionValue,
@@ -17,10 +17,11 @@ const FULL_SPEED = 320;
 const MIN_REACH = 1.5;
 const FLAT = 0.002;
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const smoothstep = (s) => s * s * (3 - 2 * s);
-const toPct = (v, min, max) => (max > min ? ((v - min) / (max - min)) * 100 : 0);
-const snap = (v, min, max, step) => {
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const smoothstep = (s: number) => s * s * (3 - 2 * s);
+const toPct = (v: number, min: number, max: number) =>
+  max > min ? ((v - min) / (max - min)) * 100 : 0;
+const snap = (v: number, min: number, max: number, step: number) => {
   if (!(max > min)) return min;
   if (!(step > 0)) return clamp(v, min, max);
   const lastWhole = min + Math.floor(+((max - min) / step).toFixed(6)) * step;
@@ -29,9 +30,9 @@ const snap = (v, min, max, step) => {
 };
 
 interface WakeSliderProps {
-  value?: any;
+  value?: number;
   defaultValue?: number;
-  onChange?: any;
+  onChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -48,10 +49,9 @@ interface WakeSliderProps {
   glide?: number;
   smoothing?: number;
   showValue?: boolean;
-  formatValue?: any;
+  formatValue?: (value: number) => string;
   disabled?: boolean;
   ariaLabel?: string;
-  className?: string;
   className?: string;
 }
 
@@ -84,15 +84,15 @@ export function WakeSlider({
   const value = clamp(valueProp ?? inner, min, max);
   const pct = toPct(value, min, max);
   const reduce = useReducedMotion();
-  const format = formatValue ?? String;
+  const format: (value: number) => string = formatValue ?? String;
   const rest = Math.min(restHeight, height - 1) / height;
 
-  const rootRef = useRef(null);
-  const trackRef = useRef(null);
-  const handleRef = useRef(null);
-  const barEls = useRef([]);
-  const crestEls = useRef([]);
-  const pointerId = useRef(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const handleRef = useRef<HTMLButtonElement | null>(null);
+  const barEls = useRef<(HTMLSpanElement | null)[]>([]);
+  const crestEls = useRef<(HTMLSpanElement | null)[]>([]);
+  const pointerId = useRef<number | null>(null);
   const lastAmp = useRef(0);
   const latest = useRef(value);
   latest.current = value;
@@ -143,14 +143,14 @@ export function WakeSlider({
     paintRef.current(true);
   });
 
-  const commit = (next) => {
+  const commit = (next: number) => {
     const clean = snap(next, min, max, step);
     if (clean === latest.current) return;
     latest.current = clean;
     if (valueProp === undefined) setInner(clean);
     onChange?.(clean);
   };
-  const commitFromX = (x) => {
+  const commitFromX = (x: number) => {
     const track = trackRef.current;
     if (!track) return;
     const rect = track.getBoundingClientRect();
@@ -159,7 +159,7 @@ export function WakeSlider({
     if (getComputedStyle(track).direction === "rtl") ratio = 1 - ratio;
     commit(min + ratio * (max - min));
   };
-  const onPointerDown = (e) => {
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (disabled || pointerId.current !== null) return;
     pointerId.current = e.pointerId;
     try {
@@ -169,19 +169,19 @@ export function WakeSlider({
     handleRef.current?.focus({ preventScroll: true });
     commitFromX(e.clientX);
   };
-  const onPointerMove = (e) => {
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerId === pointerId.current) commitFromX(e.clientX);
   };
-  const endDrag = (e) => {
+  const endDrag = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerId !== pointerId.current) return;
     try {
       e.currentTarget.releasePointerCapture(e.pointerId);
     } catch {}
     pointerId.current = null;
   };
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if (disabled) return;
-    const jumps = {
+    const jumps: Record<string, number> = {
       ArrowRight: value + step,
       ArrowUp: value + step,
       ArrowLeft: value - step,
@@ -230,14 +230,16 @@ export function WakeSlider({
       ref={rootRef}
       className={`group inline-flex w-full items-center gap-3 [color:inherit] aria-disabled:pointer-events-none aria-disabled:opacity-50${className ? ` ${className}` : ""}`}
       aria-disabled={disabled || undefined}
-      style={{
-        "--ws-fill": fillColor,
-        "--ws-track": trackColor,
-        "--ws-crest": crestColor || fillColor,
-        "--ws-height": `${height}px`,
-        "--ws-gap": `${gap}px`,
-        "--ws-rest": rest,
-      }}
+      style={
+        {
+          "--ws-fill": fillColor,
+          "--ws-track": trackColor,
+          "--ws-crest": crestColor || fillColor,
+          "--ws-height": `${height}px`,
+          "--ws-gap": `${gap}px`,
+          "--ws-rest": rest,
+        } as CSSProperties
+      }
     >
       <div
         ref={trackRef}

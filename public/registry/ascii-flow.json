@@ -1,0 +1,18 @@
+{
+  "name": "ascii-flow",
+  "title": "ASCII Flow",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/ascii-flow.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useEffect, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { Ascii, FractalNoise, Shader } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\ntype Theme = { primary: string; accent: string; background: string; foreground: string };\n\nfunction readTheme(): Theme {\n  const style = getComputedStyle(document.documentElement);\n  const token = (name: string) => `hsl(${style.getPropertyValue(name).trim()})`;\n  return {\n    primary: token(\"--primary\"),\n    accent: token(\"--accent\"),\n    background: token(\"--background\"),\n    foreground: token(\"--foreground\"),\n  };\n}\n\nfunction useTheme() {\n  const [theme, setTheme] = useState<Theme | null>(null);\n  useEffect(() => {\n    const update = () => setTheme(readTheme());\n    update();\n    const observer = new MutationObserver(update);\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return theme;\n}\n\nexport interface AsciiFlowProps {\n  colorA?: string;\n  colorB?: string;\n  characters?: string;\n  cellSize?: number;\n  speed?: number;\n  contrast?: number;\n  className?: string;\n}\n\nexport function AsciiFlow({\n  colorA,\n  colorB,\n  characters = \" .:-=+*#%@\",\n  cellSize = 16,\n  speed = 0.4,\n  contrast = 1.2,\n  className,\n}: AsciiFlowProps) {\n  const reduce = useReducedMotion();\n  const theme = useTheme();\n  const classes = cn(\"absolute inset-0 h-full w-full\", className);\n  if (!theme) return <div className={classes} />;\n  return (\n    <Shader className={classes}>\n      <FractalNoise\n        colorA={colorA ?? theme.background}\n        colorB={colorB ?? theme.primary}\n        colorSpace=\"oklab\"\n        speed={reduce ? 0 : speed}\n        contrast={contrast}\n      />\n      <Ascii characters={characters} cellSize={cellSize} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

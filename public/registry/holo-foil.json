@@ -1,0 +1,18 @@
+{
+  "name": "holo-foil",
+  "title": "Holo Foil",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/holo-foil.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { FilmGrain, Holographic, LinearGradient, Shader } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface HoloFoilProps {\n  backgroundFrom?: string;\n  backgroundTo?: string;\n  speed?: number;\n  saturation?: number;\n  sparkle?: number;\n  crinkle?: number;\n  width?: number;\n  height?: number;\n  rounding?: number;\n  className?: string;\n}\n\nexport function HoloFoil({\n  backgroundFrom = \"#18181b\",\n  backgroundTo = \"#09090b\",\n  speed = 1,\n  saturation = 0.75,\n  sparkle = 0.4,\n  crinkle = 0.5,\n  width = 0.32,\n  height = 0.42,\n  rounding = 0.06,\n  className,\n}: HoloFoilProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <LinearGradient\n        colorA={backgroundFrom}\n        colorB={backgroundTo}\n        angle={135}\n        colorSpace=\"oklab\"\n      />\n      <Holographic\n        shape={{ type: \"roundedRectSDF\", width, height, rounding }}\n        speed={reduce ? 0 : speed}\n        saturation={saturation}\n        sparkle={sparkle}\n        crinkle={crinkle}\n      />\n      <FilmGrain strength={0.05} animated={!reduce} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

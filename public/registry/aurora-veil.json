@@ -1,0 +1,18 @@
+{
+  "name": "aurora-veil",
+  "title": "Aurora Veil",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/aurora-veil.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { Aurora, FilmGrain, Shader, SimplexNoise, SolidColor, Vignette } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface AuroraVeilProps {\n  colorA?: string;\n  colorB?: string;\n  colorC?: string;\n  backgroundColor?: string;\n  speed?: number;\n  intensity?: number;\n  curtainCount?: number;\n  waviness?: number;\n  grain?: number;\n  className?: string;\n}\n\nexport function AuroraVeil({\n  colorA = \"#22d3ee\",\n  colorB = \"#a855f7\",\n  colorC = \"#34d399\",\n  backgroundColor = \"#030712\",\n  speed = 5,\n  intensity = 80,\n  curtainCount = 4,\n  waviness = 50,\n  grain = 0.08,\n  className,\n}: AuroraVeilProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <SolidColor color={backgroundColor} />\n      <Aurora\n        colorA={colorA}\n        colorB={colorB}\n        colorC={colorC}\n        colorSpace=\"oklab\"\n        speed={reduce ? 0 : speed}\n        intensity={intensity}\n        curtainCount={curtainCount}\n        waviness={waviness}\n      />\n      <SimplexNoise\n        colorA=\"#000000\"\n        colorB=\"#ffffff\"\n        scale={3}\n        speed={reduce ? 0 : 0.3}\n        opacity={0.12}\n        blendMode=\"softLight\"\n      />\n      <FilmGrain strength={grain} animated={!reduce} />\n      <Vignette color={backgroundColor} intensity={0.6} radius={0.7} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

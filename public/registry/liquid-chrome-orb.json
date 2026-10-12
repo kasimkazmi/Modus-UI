@@ -1,0 +1,18 @@
+{
+  "name": "liquid-chrome-orb",
+  "title": "Liquid Chrome Orb",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/liquid-chrome-orb.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useReducedMotion } from \"framer-motion\";\nimport { LiquidMetal, Shader, StudioBackground } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface LiquidChromeOrbProps {\n  shape?: \"torus\" | \"sphere\" | \"blob\";\n  lightColor?: string;\n  darkColor?: string;\n  backgroundColor?: string;\n  speed?: number;\n  turbulence?: number;\n  dispersion?: number;\n  scale?: number;\n  className?: string;\n}\n\nconst SHAPES = {\n  torus: { type: \"torus3D\", radius: 0.3, tube: 0.12, rotX: 55, rotY: 0, rotZ: 0 },\n  sphere: { type: \"sphere3D\", radius: 0.35 },\n  blob: { type: \"blob3D\", radius: 0.35 },\n} as const;\n\nexport function LiquidChromeOrb({\n  shape = \"torus\",\n  lightColor = \"#eef0f6\",\n  darkColor = \"#141414\",\n  backgroundColor = \"#0b0b0f\",\n  speed = 1,\n  turbulence = 1,\n  dispersion = 0.6,\n  scale = 1,\n  className,\n}: LiquidChromeOrbProps) {\n  const reduce = useReducedMotion();\n  return (\n    <Shader className={cn(\"absolute inset-0 h-full w-full\", className)}>\n      <StudioBackground color={backgroundColor} brightness={15} ambientSpeed={reduce ? 0 : 0.5} />\n      <LiquidMetal\n        shape={SHAPES[shape]}\n        lightColor={lightColor}\n        darkColor={darkColor}\n        speed={reduce ? 0 : speed}\n        turbulence={turbulence}\n        dispersion={dispersion}\n        scale={scale}\n      />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

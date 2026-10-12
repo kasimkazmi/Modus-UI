@@ -1,0 +1,52 @@
+---
+title: Ink Canvas
+description: Drag to paint swirling ribbons of ink through a live fluid simulation.
+---
+
+An interactive fluid canvas: drag the cursor to paint ribbons of ink that keep swirling after you let go, with a soft glow. It fills its positioned parent. It only moves in response to the cursor, so it has no autoplaying motion. Built on the [shaders](https://shaders.com) library (MIT) and rendered with WebGPU.
+
+<ComponentPreview name="ink-canvas" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ink-canvas
+```
+
+### Manual
+
+1. Install `shaders` with `npm install shaders`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ink-canvas.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { InkCanvas } from "@/components/ui/ink-canvas";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <InkCanvas />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                    | Default     | Description                                   |
+| :---------------- | :---------------------- | :---------- | :-------------------------------------------- |
+| `backgroundColor` | `string`                | `"#07070b"` | Canvas colour.                                |
+| `colorMode`       | `"rainbow" \| "single"` | `"rainbow"` | `rainbow` cycles hues; `single` uses `color`. |
+| `color`           | `string`                | `"#ff2d7e"` | Ink colour when `colorMode` is `single`.      |
+| `radius`          | `number`                | `1`         | Brush radius.                                 |
+| `curl`            | `number`                | `0.5`       | Amount of curl in the flow.                   |
+| `decay`           | `number`                | `0.6`       | How quickly the ink fades.                    |
+| `glow`            | `number`                | `0.4`       | Glow intensity.                               |

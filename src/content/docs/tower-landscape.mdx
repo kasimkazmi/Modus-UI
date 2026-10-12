@@ -1,0 +1,44 @@
+---
+title: Tower Landscape
+description: A procedurally generated tower assembles itself bottom-up behind a rising cut plane above a living landscape.
+---
+
+A Three.js construction study. Choose a Japanese tenshu, Chinese pagoda, Vietnamese tháp, Thai prang, Khmer prasat or Ottoman mosque. Scaffolding grows and falls away as stone, timber and tile converge, stage by stage, over the procedural terrain with grass, stones and sky. Drag to orbit, move the pointer for parallax, scroll or pinch to zoom, and double-click to reset. When focused, `Space` pauses, `R` rebuilds, `S` changes the tower, `T` the time of day and `W` the weather. Surfaces are drawn procedurally unless you pass texture images. The scene pauses when off screen. When the user prefers reduced motion it shows the finished tower as a still frame. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="tower-landscape" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tower-landscape
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/tower-landscape.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TowerLandscape } from "@/components/ui/tower-landscape";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <TowerLandscape variant="china" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                                                                      | Default               | Description                                                                                                                                                                                           |
+| :--------- | :------------------------------------------------------------------------ | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`  | `"japan" \| "china" \| "vietnam" \| "thailand" \| "cambodia" \| "turkey"` | `"japan"`             | Which tower assembles.                                                                                                                                                                                |
+| `textures` | `Partial<Record<TowerTextureName, string>>`                               | None (all procedural) | Image urls (CORS-enabled) for `ishigaki`, `shikkui`, `kawara`, `timber`, `pine`, `redwall`, `greenglaze`, `orangetile`, `goldleaf`, `ground`, `sandstone`, `laterite`, `ashlar`, `leadroof`, `iznik`. |

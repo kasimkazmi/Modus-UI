@@ -1,0 +1,18 @@
+{
+  "name": "silk-mesh",
+  "title": "Silk Mesh",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "shaders",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/silk-mesh.tsx",
+      "content": "\"use client\";\n// Built on the shaders library (MIT, © 2026 Shader Effects Inc.).\n\nimport { useEffect, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { FilmGrain, MeshGradient, Shader, SimplexNoise } from \"shaders/react\";\nimport { cn } from \"@/lib/utils\";\n\ntype Theme = { primary: string; accent: string; background: string; foreground: string };\n\nfunction readTheme(): Theme {\n  const style = getComputedStyle(document.documentElement);\n  const token = (name: string) => `hsl(${style.getPropertyValue(name).trim()})`;\n  return {\n    primary: token(\"--primary\"),\n    accent: token(\"--accent\"),\n    background: token(\"--background\"),\n    foreground: token(\"--foreground\"),\n  };\n}\n\nfunction useTheme() {\n  const [theme, setTheme] = useState<Theme | null>(null);\n  useEffect(() => {\n    const update = () => setTheme(readTheme());\n    update();\n    const observer = new MutationObserver(update);\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return theme;\n}\n\nexport interface SilkMeshProps {\n  colorA?: string;\n  colorB?: string;\n  speed?: number;\n  count?: number;\n  swirl?: number;\n  smoothness?: number;\n  grain?: number;\n  className?: string;\n}\n\nexport function SilkMesh({\n  colorA,\n  colorB,\n  speed = 0.6,\n  count = 4,\n  swirl = 0.5,\n  smoothness = 0.6,\n  grain = 0.06,\n  className,\n}: SilkMeshProps) {\n  const reduce = useReducedMotion();\n  const theme = useTheme();\n  const classes = cn(\"absolute inset-0 h-full w-full\", className);\n  if (!theme) return <div className={classes} />;\n  return (\n    <Shader className={classes}>\n      <MeshGradient\n        colorA={colorA ?? theme.background}\n        colorB={colorB ?? theme.primary}\n        colorSpace=\"oklab\"\n        speed={reduce ? 0 : speed}\n        count={count}\n        swirl={swirl}\n        smoothness={smoothness}\n      />\n      <SimplexNoise\n        colorA=\"hsl(0 0% 0%)\"\n        colorB=\"hsl(0 0% 100%)\"\n        scale={3}\n        speed={reduce ? 0 : 0.5}\n        opacity={0.12}\n        blendMode=\"softLight\"\n      />\n      <FilmGrain strength={grain} animated={!reduce} />\n    </Shader>\n  );\n}\n"
+    }
+  ]
+}

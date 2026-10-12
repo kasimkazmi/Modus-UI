@@ -1,9 +1,15 @@
-// @ts-nocheck
 "use client";
 
 import { cn } from "@/lib/utils";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type Transition,
+} from "framer-motion";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Delete02Icon } from "@hugeicons/core-free-icons";
 
@@ -11,21 +17,49 @@ const HYST = 10;
 const FLICK = 110;
 const DECEL = 0.998;
 const VMAX = 1500;
-const EASE_OUT = [0.23, 1, 0.32, 1];
-const SPRING_UI = { type: "spring", duration: 0.3, bounce: 0 };
-const DEFAULT_ACTIONS = [{ id: "delete", label: "Delete" }];
+const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1];
+const SPRING_UI: Transition = { type: "spring", duration: 0.3, bounce: 0 };
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const rubber = (o, dim, c) => (o * dim * c) / (dim + c * Math.abs(o));
-const unrubber = (y, dim, c) => (y * dim) / (c * Math.max(1, dim - Math.abs(y)));
-const project = (v) => ((v / 1000) * DECEL) / (1 - DECEL);
-const velocityOf = (hist) => {
+export interface SwipeAction {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  color?: string;
+  dismiss?: boolean;
+  onSelect?: () => void;
+}
+
+type Sample = [t: number, ex: number];
+
+interface Grip {
+  id: number;
+  x0: number;
+  y0: number;
+  grab: number | null;
+  moved: boolean;
+  hist: Sample[];
+  touch: boolean;
+}
+
+interface LiveHandlers {
+  move: (e: PointerEvent) => void;
+  up: (e: PointerEvent) => void;
+}
+
+const DEFAULT_ACTIONS: SwipeAction[] = [{ id: "delete", label: "Delete" }];
+
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const rubber = (o: number, dim: number, c: number) => (o * dim * c) / (dim + c * Math.abs(o));
+const unrubber = (y: number, dim: number, c: number) =>
+  (y * dim) / (c * Math.max(1, dim - Math.abs(y)));
+const project = (v: number) => ((v / 1000) * DECEL) / (1 - DECEL);
+const velocityOf = (hist: Sample[]) => {
   if (hist.length < 2) return 0;
   const a = hist[0];
   const b = hist[hist.length - 1];
   return ((b[1] - a[1]) / Math.max(1, b[0] - a[0])) * 1000;
 };
-const onColor = (hex) => {
+const onColor = (hex: string) => {
   const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return "hsl(var(--primary))";
   const h = m[1].length === 3 ? [...m[1]].map((ch) => ch + ch).join("") : m[1];
@@ -36,12 +70,12 @@ const onColor = (hex) => {
     ? "hsl(var(--primary))"
     : "hsl(var(--primary))";
 };
-const watchWindow = (live) => {
-  const onMove = (e) => {
-    if (e.isTrusted) live.current.move(e);
+const watchWindow = (live: React.RefObject<LiveHandlers | null>) => {
+  const onMove = (e: PointerEvent) => {
+    if (e.isTrusted) live.current?.move(e);
   };
-  const onUp = (e) => {
-    if (e.isTrusted) live.current.up(e);
+  const onUp = (e: PointerEvent) => {
+    if (e.isTrusted) live.current?.up(e);
   };
   window.addEventListener("pointermove", onMove);
   window.addEventListener("pointerup", onUp);
@@ -54,8 +88,8 @@ const watchWindow = (live) => {
 };
 
 interface SwipeRowProps {
-  children?: any;
-  actions?: any;
+  children?: React.ReactNode;
+  actions?: SwipeAction[];
   actionColor?: string;
   drawerColor?: string;
   rowColor?: string;
@@ -63,23 +97,22 @@ interface SwipeRowProps {
   height?: number;
   radius?: number;
   actionWidth?: number;
-  direction?: string;
+  direction?: "left" | "right";
   snapBounce?: number;
   resistance?: number;
   collapseMs?: number;
   commitAt?: number;
   fullSwipe?: boolean;
   disabled?: boolean;
-  open?: any;
-  onOpenChange?: any;
-  onAction?: any;
-  onCommit?: any;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onAction?: (action: SwipeAction) => void;
+  onCommit?: (action: SwipeAction) => void;
   closeOnAction?: boolean;
   haptic?: boolean;
   label?: string;
   className?: string;
-  style?: any;
-  className?: string;
+  style?: React.CSSProperties;
 }
 
 export function SwipeRow({
@@ -118,18 +151,18 @@ export function SwipeRow({
   const c = clamp(resistance, 0.05, 1);
   const primary = actions[0];
   const [openState, setOpenState] = useState(false);
-  const [phase, setPhase] = useState("idle");
+  const [phase, setPhase] = useState<"idle" | "committing" | "collapsing">("idle");
   const [say, setSay] = useState("");
   const open = openProp ?? openState;
 
-  const root = useRef(null);
-  const surface = useRef(null);
+  const root = useRef<HTMLDivElement | null>(null);
+  const surface = useRef<HTMLDivElement | null>(null);
   const w = useRef(360);
-  const grip = useRef(null);
-  const unwatch = useRef(null);
-  const live = useRef({});
-  const foldTimer = useRef(undefined);
-  const heading = useRef(null);
+  const grip = useRef<Grip | null>(null);
+  const unwatch = useRef<(() => void) | null>(null);
+  const live = useRef<LiveHandlers | null>(null);
+  const foldTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const heading = useRef<number | null>(null);
 
   const x = useMotionValue(0);
   const spread = useMotionValue(0);
@@ -139,14 +172,14 @@ export function SwipeRow({
   const exposed = useTransform(x, (v) => s * v);
   const surfaceXf = useTransform(x, (v) => `translateX(${v}px)`);
   const railXf = useTransform(exposed, (e) => `translateX(${-s * Math.max(0, D - e)}px)`);
-  const shift = useTransform([exposed, spread], ([e, p]) => p * Math.max(0, e - A));
+  const shift = useTransform([exposed, spread], ([e, p]: number[]) => p * Math.max(0, e - A));
   const blockXf = useTransform(shift, (v) => `translateX(${s * v}px)`);
   const glyphXf = useTransform(
     [shift, landed],
-    ([v, l]) => `translateX(${-s * l * (v - (w.current - A) / 2)}px)`,
+    ([v, l]: number[]) => `translateX(${-s * l * (v - (w.current - A) / 2)}px)`,
   );
 
-  const map = (raw) => {
+  const map = (raw: number) => {
     const W = w.current;
     if (raw < 0) return rubber(raw, W, c);
     if (raw <= D) return raw;
@@ -155,7 +188,7 @@ export function SwipeRow({
     const knee = D + (C - D) / c;
     return raw <= knee ? D + c * (raw - D) : C + rubber(raw - knee, W, c);
   };
-  const inv = (ex) => {
+  const inv = (ex: number) => {
     const W = w.current;
     if (ex < 0) return unrubber(ex, W, c);
     if (ex <= D) return ex;
@@ -184,12 +217,12 @@ export function SwipeRow({
     [],
   );
 
-  const setOpen = (next) => {
+  const setOpen = (next: boolean) => {
     if (next === open) return;
     setOpenState(next);
     onOpenChange?.(next);
   };
-  const settle = (target, v = 0) => {
+  const settle = (target: number, v = 0) => {
     heading.current = target;
     if (reduce) {
       animate(x, s * target, { duration: 0.2, ease: EASE_OUT });
@@ -204,7 +237,7 @@ export function SwipeRow({
         : { ...SPRING_UI, velocity: s * v },
     );
   };
-  const setSpread = (on) => {
+  const setSpread = (on: boolean) => {
     if ((spread.get() === 1) === on) return;
     if (reduce) spread.set(on ? 1 : 0);
     else animate(spread, on ? 1 : 0, SPRING_UI);
@@ -213,7 +246,7 @@ export function SwipeRow({
       if (haptic && grip.current?.touch) navigator.vibrate?.(8);
     }
   };
-  const commit = (a, viaKey, v = 0) => {
+  const commit = (a: SwipeAction, viaKey: boolean, v = 0) => {
     const leap = a === primary;
     setPhase("committing");
     setSay(a.label);
@@ -250,7 +283,7 @@ export function SwipeRow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, D]);
 
-  const down = (e) => {
+  const down = (e: React.PointerEvent<HTMLDivElement>) => {
     if (disabled || n === 0 || phase !== "idle" || grip.current || e.button !== 0) return;
     x.stop();
     heading.current = null;
@@ -269,7 +302,7 @@ export function SwipeRow({
     unwatch.current?.();
     unwatch.current = watchWindow(live);
   };
-  const move = (e) => {
+  const move = (e: PointerEvent) => {
     const g = grip.current;
     if (!g || g.id !== e.pointerId) return;
     if (g.grab === null) {
@@ -286,7 +319,7 @@ export function SwipeRow({
     if (g.hist.length > 4) g.hist.shift();
     setSpread(canCommit() && ex >= commitPoint());
   };
-  const up = (e) => {
+  const up = (e: PointerEvent) => {
     const g = grip.current;
     if (!g || g.id !== e.pointerId) return;
     grip.current = null;
@@ -316,7 +349,7 @@ export function SwipeRow({
   };
   live.current = { move, up };
 
-  const act = (a, e) => {
+  const act = (a: SwipeAction, e: React.MouseEvent<HTMLButtonElement>) => {
     if (phase !== "idle") return;
     onAction?.(a);
     if (a === primary || a.dismiss) {
@@ -342,7 +375,7 @@ export function SwipeRow({
     x.set(0);
     setOpen(false);
   };
-  const onToggleKey = (e) => {
+  const onToggleKey = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (disabled || phase !== "idle" || n === 0) return;
     const openKey = s < 0 ? "ArrowLeft" : "ArrowRight";
     const closeKey = s < 0 ? "ArrowRight" : "ArrowLeft";
@@ -358,7 +391,7 @@ export function SwipeRow({
       commit(primary, true);
     }
   };
-  const onToggleClick = (e) => {
+  const onToggleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.detail !== 0 || disabled || phase !== "idle" || n === 0) return;
     if (open) closeNow();
     else openNow();
@@ -375,19 +408,21 @@ export function SwipeRow({
       data-open={open ? "" : undefined}
       data-phase={phase}
       data-disabled={disabled ? "" : undefined}
-      style={{
-        "--sr-h": `${height}px`,
-        "--sr-r": `${radius}px`,
-        "--sr-a": `${A}px`,
-        "--sr-row": rowColor,
-        "--sr-text": textColor,
-        "--sr-drawer": drawerColor,
-        "--sr-on-drawer": onColor(drawerColor),
-        "--sr-action": actionColor,
-        "--sr-on-action": onColor(actionColor),
-        "--sr-collapse": `${collapseMs}ms`,
-        ...style,
-      }}
+      style={
+        {
+          "--sr-h": `${height}px`,
+          "--sr-r": `${radius}px`,
+          "--sr-a": `${A}px`,
+          "--sr-row": rowColor,
+          "--sr-text": textColor,
+          "--sr-drawer": drawerColor,
+          "--sr-on-drawer": onColor(drawerColor),
+          "--sr-action": actionColor,
+          "--sr-on-action": onColor(actionColor),
+          "--sr-collapse": `${collapseMs}ms`,
+          ...style,
+        } as React.CSSProperties
+      }
     >
       <div className="relative overflow-hidden [background:var(--sr-row)] [border-radius:var(--sr-r)] [height:var(--sr-h)]">
         <motion.div
