@@ -255,7 +255,7 @@ export const registry = [
     title: "Iron Filings",
     category: "Backgrounds",
     type: "components:ui",
-    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    dependencies: ["clsx", "tailwind-merge"],
     files: ["registry/iron-filings.tsx"],
   },
   {
@@ -1513,7 +1513,7 @@ export const registry = [
     title: "Mirror Plate",
     category: "Components",
     type: "components:ui",
-    dependencies: ["lucide-react", "framer-motion", "clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "lucide-react", "clsx", "tailwind-merge"],
     files: ["registry/mirror-plate.tsx"],
   },
   {
@@ -1545,13 +1545,7 @@ export const registry = [
     title: "Chime Switch",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/chime-switch.tsx"],
   },
   {
@@ -1560,9 +1554,9 @@ export const registry = [
     category: "Components",
     type: "components:ui",
     dependencies: [
+      "framer-motion",
       "@hugeicons/react",
       "@hugeicons/core-free-icons",
-      "framer-motion",
       "clsx",
       "tailwind-merge",
     ],
@@ -1574,9 +1568,9 @@ export const registry = [
     category: "Components",
     type: "components:ui",
     dependencies: [
+      "framer-motion",
       "@hugeicons/react",
       "@hugeicons/core-free-icons",
-      "framer-motion",
       "clsx",
       "tailwind-merge",
     ],
@@ -1587,13 +1581,7 @@ export const registry = [
     title: "Cipher Reel",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/cipher-reel.tsx"],
   },
   {
@@ -1625,7 +1613,7 @@ export const registry = [
     title: "Paper Stack",
     category: "Components",
     type: "components:ui",
-    dependencies: ["matter-js", "framer-motion", "clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/paper-stack.tsx"],
   },
   {
@@ -1633,13 +1621,7 @@ export const registry = [
     title: "Cinder Trigger",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "framer-motion",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/cinder-trigger.tsx"],
   },
   {
@@ -1648,9 +1630,9 @@ export const registry = [
     category: "Components",
     type: "components:ui",
     dependencies: [
+      "framer-motion",
       "@hugeicons/react",
       "@hugeicons/core-free-icons",
-      "framer-motion",
       "clsx",
       "tailwind-merge",
     ],
@@ -1685,7 +1667,7 @@ export const registry = [
     title: "Folio Crush",
     category: "Components",
     type: "components:ui",
-    dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "three", "clsx", "tailwind-merge"],
     files: ["registry/folio-crush.tsx"],
   },
   {
@@ -1693,13 +1675,7 @@ export const registry = [
     title: "Glance Score",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "framer-motion",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/glance-score.tsx"],
   },
   {
@@ -1721,7 +1697,7 @@ export const registry = [
     title: "Beat Mark",
     category: "Components",
     type: "components:ui",
-    dependencies: ["@hugeicons/core-free-icons", "framer-motion", "clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/beat-mark.tsx"],
   },
   {
@@ -1730,9 +1706,9 @@ export const registry = [
     category: "Components",
     type: "components:ui",
     dependencies: [
+      "framer-motion",
       "@hugeicons/react",
       "@hugeicons/core-free-icons",
-      "framer-motion",
       "clsx",
       "tailwind-merge",
     ],
@@ -1767,13 +1743,7 @@ export const registry = [
     title: "Swipe Confirm",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/swipe-confirm.tsx"],
   },
   {
@@ -1803,7 +1773,7 @@ export const registry = [
     title: "Tally Box",
     category: "Components",
     type: "components:ui",
-    dependencies: ["framer-motion", "@hugeicons/core-free-icons", "clsx", "tailwind-merge"],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/tally-box.tsx"],
   },
   {
@@ -1827,13 +1797,7 @@ export const registry = [
     title: "Ledger Row",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/glide-ledger-row.tsx"],
   },
   {
@@ -1841,13 +1805,7 @@ export const registry = [
     title: "Flick Notice",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/flick-notice.tsx"],
   },
   {
@@ -1863,13 +1821,7 @@ export const registry = [
     title: "Ink Murmur",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "framer-motion",
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/ink-murmur.tsx"],
   },
   {
@@ -1877,13 +1829,7 @@ export const registry = [
     title: "Hum Capsule",
     category: "Components",
     type: "components:ui",
-    dependencies: [
-      "@hugeicons/react",
-      "@hugeicons/core-free-icons",
-      "framer-motion",
-      "clsx",
-      "tailwind-merge",
-    ],
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/hum-capsule.tsx"],
   },
   {

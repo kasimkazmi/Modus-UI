@@ -1,13 +1,14 @@
 "use client";
-// Ported from React Bits' Fuzzy Text (MIT, © David Haz).
-import React, { useEffect, useRef } from "react";
+// Display type drawn on a canvas whose pixel rows jitter sideways like a weak signal.
+
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface StaticTypeProps {
-  children: React.ReactNode;
-  fontSize?: number | string;
-  fontWeight?: number | string;
+  children?: React.ReactNode;
+  fontSize?: string;
+  fontWeight?: number;
   fontFamily?: string;
   color?: string;
   enableHover?: boolean;
@@ -15,6 +16,8 @@ interface StaticTypeProps {
   hoverIntensity?: number;
   className?: string;
 }
+
+const BAND = 3; // pixel rows that move together
 
 export function StaticType({
   children,
@@ -27,114 +30,67 @@ export function StaticType({
   hoverIntensity = 0.6,
   className,
 }: StaticTypeProps) {
+  const probeRef = useRef<HTMLSpanElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const hoverRef = useRef(false);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const reduced = useReducedMotion();
+  const text = String(children ?? "");
 
   useEffect(() => {
-    let animationFrameId: number;
-    let isHovering = false;
-
+    const probe = probeRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!probe || !canvas) return;
+    let frame = 0;
+    let cancelled = false;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const start = async () => {
+      await document.fonts.ready;
+      if (cancelled) return;
+      const style = getComputedStyle(probe);
+      const size = parseFloat(style.fontSize);
+      const font = `${fontWeight} ${size}px ${style.fontFamily}`;
+      const dpr = window.devicePixelRatio || 1;
+      const pad = size * 0.4;
 
-    // Canvas cannot resolve CSS variables; let the browser compute the color.
-    canvas.style.color = color;
-    const fill = getComputedStyle(canvas).color;
-    // Canvas cannot resolve CSS variables either; default to the Modus heading face.
-    const family =
-      fontFamily ||
-      getComputedStyle(document.documentElement).getPropertyValue("--font-heading").trim() ||
-      "serif";
+      const ink = document.createElement("canvas");
+      const ictx = ink.getContext("2d")!;
+      ictx.font = font;
+      const w = Math.ceil(ictx.measureText(text).width + pad * 2);
+      const h = Math.ceil(size * 1.3);
+      ink.width = w * dpr;
+      ink.height = h * dpr;
+      ictx.scale(dpr, dpr);
+      ictx.font = font;
+      ictx.fillStyle = style.color;
+      ictx.textBaseline = "middle";
+      ictx.fillText(text, pad, h / 2);
 
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      setBox({ w, h });
+      const ctx = canvas.getContext("2d")!;
+      const band = BAND * dpr;
 
-      // Draw base text
-      ctx.font = `${fontWeight} ${fontSize} ${family}`;
-      ctx.textBaseline = "middle";
-      ctx.textAlign = "center";
-      ctx.fillStyle = fill;
-
-      // We manually handle centering based on canvas dimensions
-      const text = String(children);
-      const metrics = ctx.measureText(text);
-
-      // Adjust canvas size based on text if not set
-      if (canvas.width === 0 || canvas.height === 0) {
-        // High DPI setup
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = (metrics.width + 100) * dpr;
-        canvas.height = 200 * dpr;
-        ctx.scale(dpr, dpr);
-        canvas.style.width = `${metrics.width + 100}px`;
-        canvas.style.height = `200px`;
-      }
-
-      const drawX = canvas.width / (2 * (window.devicePixelRatio || 1));
-      const drawY = canvas.height / (2 * (window.devicePixelRatio || 1));
-
-      ctx.fillText(text, drawX, drawY);
-
-      // Apply fuzzy displacement
-      const intensity = isHovering ? hoverIntensity : baseIntensity;
-      if (intensity > 0) {
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const pixels = imageData.data;
-        const newImageData = ctx.createImageData(canvas.width, canvas.height);
-        const newPixels = newImageData.data;
-
-        for (let y = 0; y < canvas.height; y++) {
-          for (let x = 0; x < canvas.width; x++) {
-            const index = (y * canvas.width + x) * 4;
-
-            // If pixel is not transparent
-            if (pixels[index + 3] > 0) {
-              // Displacement logic
-              const offsetX = (Math.random() - 0.5) * intensity * 34;
-              // Scanline static: rows tear sideways, barely any vertical drift.
-              const offsetY = (Math.random() - 0.5) * intensity * 3;
-
-              const srcX = Math.min(Math.max(Math.floor(x + offsetX), 0), canvas.width - 1);
-              const srcY = Math.min(Math.max(Math.floor(y + offsetY), 0), canvas.height - 1);
-
-              const srcIndex = (srcY * canvas.width + srcX) * 4;
-
-              newPixels[index] = pixels[srcIndex];
-              newPixels[index + 1] = pixels[srcIndex + 1];
-              newPixels[index + 2] = pixels[srcIndex + 2];
-              newPixels[index + 3] = pixels[srcIndex + 3];
-            }
-          }
+      const draw = () => {
+        const level = hoverRef.current && enableHover ? hoverIntensity : baseIntensity;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let y = 0; y < canvas.height; y += band) {
+          const kick = Math.random() < level * 0.5 ? (Math.random() - 0.5) * pad * 2 * level : 0;
+          const shift = (Math.random() - 0.5) * pad * 0.15 * level + kick;
+          ctx.drawImage(ink, 0, y, ink.width, band, shift * dpr, y, ink.width, band);
         }
-        ctx.putImageData(newImageData, 0, 0);
-      }
-
-      // Reduced motion: draw a single static fuzzy frame instead of looping.
-      if (!prefersReducedMotion) animationFrameId = requestAnimationFrame(draw);
+        if (!reduced) frame = requestAnimationFrame(draw);
+      };
+      draw();
     };
-
-    draw();
-
-    const handleMouseEnter = () => {
-      if (enableHover) isHovering = true;
-    };
-    const handleMouseLeave = () => {
-      if (enableHover) isHovering = false;
-    };
-
-    canvas.addEventListener("mouseenter", handleMouseEnter);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
-
+    start();
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      canvas.removeEventListener("mouseenter", handleMouseEnter);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
+      cancelled = true;
+      cancelAnimationFrame(frame);
     };
   }, [
-    children,
+    text,
     fontSize,
     fontWeight,
     fontFamily,
@@ -142,8 +98,27 @@ export function StaticType({
     enableHover,
     baseIntensity,
     hoverIntensity,
-    prefersReducedMotion,
+    reduced,
   ]);
 
-  return <canvas ref={canvasRef} className={cn("block max-w-full cursor-default", className)} />;
+  return (
+    <span
+      className={cn("relative inline-block font-serif", className)}
+      onPointerEnter={() => (hoverRef.current = true)}
+      onPointerLeave={() => (hoverRef.current = false)}
+    >
+      <span
+        ref={probeRef}
+        aria-hidden
+        className="pointer-events-none absolute opacity-0"
+        style={{ fontSize, fontFamily: fontFamily || undefined, color }}
+      />
+      <span className="sr-only">{text}</span>
+      <canvas
+        ref={canvasRef}
+        aria-hidden
+        style={{ width: box.w, height: box.h, display: "block" }}
+      />
+    </span>
+  );
 }

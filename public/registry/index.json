@@ -296,7 +296,6 @@
       "category": "Backgrounds",
       "description": "A field of fine ink filings that turn to face the pointer, like iron around a lodestone.",
       "dependencies": [
-        "framer-motion",
         "clsx",
         "tailwind-merge"
       ]
@@ -865,8 +864,8 @@
       "category": "Components",
       "description": "A member pass whose surface mirrors the webcam through a metallic glass filter.",
       "dependencies": [
-        "lucide-react",
         "framer-motion",
+        "lucide-react",
         "clsx",
         "tailwind-merge"
       ]
@@ -912,8 +911,6 @@
       "description": "A square-shouldered subscribe switch whose bell chimes as it flips to the theme ink.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -924,9 +921,9 @@
       "category": "Components",
       "description": "A docs-style navigation tree whose hairline roots draw out to each open chapter.",
       "dependencies": [
+        "framer-motion",
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
-        "framer-motion",
         "clsx",
         "tailwind-merge"
       ]
@@ -937,9 +934,9 @@
       "category": "Components",
       "description": "A monospace run tag that fills with theme ink while a command runs, then settles to done or retry.",
       "dependencies": [
+        "framer-motion",
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
-        "framer-motion",
         "clsx",
         "tailwind-merge"
       ]
@@ -951,8 +948,6 @@
       "description": "A one-time code field of paper slots with serif numerals that drop in and seal on success.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -996,7 +991,6 @@
       "category": "Components",
       "description": "A paper sleeve that fans out draggable note slips when opened.",
       "dependencies": [
-        "matter-js",
         "framer-motion",
         "clsx",
         "tailwind-merge"
@@ -1008,8 +1002,6 @@
       "category": "Components",
       "description": "A commit button that burns down an undo window along its edge before it settles.",
       "dependencies": [
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "framer-motion",
         "clsx",
         "tailwind-merge"
@@ -1021,9 +1013,9 @@
       "category": "Components",
       "description": "A compact select whose tray slides open from its chip with serif options.",
       "dependencies": [
+        "framer-motion",
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
-        "framer-motion",
         "clsx",
         "tailwind-merge"
       ]
@@ -1067,8 +1059,8 @@
       "category": "Components",
       "description": "A WebGL print you can hold to crush into a ball and drag around.",
       "dependencies": [
-        "three",
         "framer-motion",
+        "three",
         "clsx",
         "tailwind-merge"
       ]
@@ -1079,8 +1071,6 @@
       "category": "Components",
       "description": "A rating row whose icons lift as you hover, with a mono label tip.",
       "dependencies": [
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "framer-motion",
         "clsx",
         "tailwind-merge"
@@ -1105,7 +1095,6 @@
       "category": "Components",
       "description": "A like button whose icon bursts and whose counter rolls on press.",
       "dependencies": [
-        "@hugeicons/core-free-icons",
         "framer-motion",
         "clsx",
         "tailwind-merge"
@@ -1117,9 +1106,9 @@
       "category": "Components",
       "description": "A frame that resolves an image from pixel mosaic to sharp as generation progresses.",
       "dependencies": [
+        "framer-motion",
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
-        "framer-motion",
         "clsx",
         "tailwind-merge"
       ]
@@ -1164,8 +1153,6 @@
       "description": "A drag-to-confirm track for actions that should not happen by accident.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -1201,7 +1188,6 @@
       "description": "A checkbox whose box springs full and strikes through its label.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -1235,8 +1221,6 @@
       "description": "A list row that glides aside on a swipe to reveal a drawer of actions, set like an entry in a printed ledger.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -1248,8 +1232,6 @@
       "description": "A card-stock notice that slides in, burns down a thin primary fuse and flicks away under a swipe.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -1272,8 +1254,6 @@
       "description": "A mono status line that breathes while work is in progress and settles into a timed summary.",
       "dependencies": [
         "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "clsx",
         "tailwind-merge"
       ]
@@ -1284,8 +1264,6 @@
       "category": "Components",
       "description": "A dictation button that opens into a capsule with a live level meter and a running clock.",
       "dependencies": [
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
         "framer-motion",
         "clsx",
         "tailwind-merge"

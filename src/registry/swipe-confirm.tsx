@@ -1,97 +1,19 @@
 "use client";
-// Ported from React Bits' Slide Commit (© David Haz).
+// Drag-to-confirm track; a promise from onConfirm drives pending, signed and failed states.
 
+import { useEffect, useState } from "react";
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useReducedMotion,
-  useTransform,
-} from "framer-motion";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight02Icon, Tick02Icon } from "@hugeicons/core-free-icons";
-
-const PAD = 4;
-const SQUASH_MAX = 0.08;
-const SQUASH_DIV = 110;
-const SWELL = 1.03;
-const MIN_PENDING = 300;
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
-const SHAKE = [0, -5, 5, -3, 3, -1, 0];
-const STYLE = `
-@keyframes sc-spin { to { transform: rotate(360deg); } }
-.sc-spinner { animation: sc-spin 1s linear infinite; animation-play-state: paused; }
-.sc-root[data-phase='pending'] .sc-spinner { animation-play-state: running; }
-@media (prefers-reduced-motion: reduce) {
-  .sc-spinner { animation: sc-breathe 1.4s ease-in-out infinite; animation-play-state: paused; }
-  .sc-root[data-phase='pending'] .sc-spinner { animation-play-state: running; }
-  @keyframes sc-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-}
-`;
 
 type Phase = "idle" | "pending" | "done" | "error";
-type Sample = [time: number, x: number];
-
-interface Grip {
-  id: number;
-  grab: number | null;
-  moved: boolean;
-  hist: Sample[];
-}
-
-interface LiveHandlers {
-  move: (e: PointerEvent) => void;
-  up: (e: { pointerId: number }) => void;
-}
-
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-const velocityOf = (hist: Sample[]) => {
-  if (hist.length < 2) return 0;
-  const [t0, x0] = hist[0];
-  const [t1, x1] = hist[hist.length - 1];
-  return ((x1 - x0) / Math.max(1, t1 - t0)) * 1000;
-};
-const finePointer = () =>
-  typeof window !== "undefined" &&
-  !!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
-
-const Spinner = ({ size }: { size: number }) => (
-  <svg
-    className="sc-spinner block"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle
-      cx="12"
-      cy="12"
-      r="9"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeOpacity="0.25"
-    />
-    <path
-      d="M12 3a9 9 0 0 1 9 9"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-    />
-  </svg>
-);
 
 interface SwipeConfirmProps {
-  label?: React.ReactNode;
+  label?: string;
   doneLabel?: string;
   errorLabel?: string;
-  onConfirm?: () => void | PromiseLike<unknown>;
+  onConfirm?: () => unknown;
   onDone?: () => void;
-  onError?: (reason: unknown) => void;
+  onError?: (error: unknown) => void;
   trackColor?: string;
   handleColor?: string;
   successColor?: string;
@@ -99,14 +21,18 @@ interface SwipeConfirmProps {
   width?: number;
   height?: number;
   radius?: number;
+  /** Spring speed of the handle returning, 0–100. */
   speed?: number;
   returnBounce?: number;
+  /** How far the handle dips in scale when it lands at the end. */
   landingDip?: number;
   holdMs?: number;
   disabled?: boolean;
   icon?: React.ReactNode;
   className?: string;
 }
+
+const PAD = 4;
 
 export function SwipeConfirm({
   label = "Slide to sign",
@@ -128,348 +54,125 @@ export function SwipeConfirm({
   holdMs = 1500,
   disabled = false,
   icon,
-  className = "",
+  className,
 }: SwipeConfirmProps) {
-  const reduce = useReducedMotion();
+  const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("idle");
-  const [held, setHeld] = useState(false);
-  const [hot, setHot] = useState(false);
-
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const capsuleRef = useRef<HTMLDivElement | null>(null);
-  const grip = useRef<Grip | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | number>(0);
-  const homeTimer = useRef<ReturnType<typeof setTimeout> | number>(0);
-  const run = useRef(0);
-  const unwatch = useRef<(() => void) | null>(null);
-  const live = useRef<LiveHandlers>({ move: () => {}, up: () => {} });
-  const lastPercent = useRef(0);
-
-  const GRIP = height - PAD * 2;
-  const INNER = width - PAD * 2;
-  const TRAVEL = Math.max(1, INNER - GRIP);
-  const r = clamp(radius, 0, height / 2);
-  const gripR = Math.max(0, r - PAD);
-  const k = 260 + (clamp(speed, 0, 100) / 100) * 640;
-  const mass = 0.9;
-  const critical = 2 * Math.sqrt(k * mass);
-  const commitSpring = { type: "spring" as const, stiffness: k, damping: critical, mass };
-  const homeSpring = { ...commitSpring, damping: critical * (1 - clamp(returnBounce, 0, 0.5)) };
-
+  const knob = height - PAD * 2;
+  const travel = width - knob - PAD * 2;
   const x = useMotionValue(0);
-  const anchor = useMotionValue(0);
-  const shown = useMotionValue(1);
-  const spin = useMotionValue(0);
-  const pulse = useMotionValue(1);
-  const shake = useMotionValue(0);
-  const seen = useTransform(x, (v: number) => clamp(v, 0, TRAVEL));
-  const edge = useTransform(
-    [seen, anchor],
-    ([v, a]: number[]) => v + GRIP + clamp(a - v, 0, TRAVEL),
-  );
-  const clip = useTransform(edge, (R: number) => `inset(0 ${INNER - R}px 0 0 round ${gripR}px)`);
-  const content = useTransform(
-    [seen, edge],
-    ([v, R]: number[]) => `translateX(${(v + R) / 2 - INNER / 2}px)`,
-  );
-  const swell = hot && !held && phase === "idle" && !reduce ? SWELL : 1;
-  const shape = useTransform(x, (v) => {
-    const q = 1 - Math.min(SQUASH_MAX, Math.max(0, -v) / SQUASH_DIV);
-    return `scale(${q * swell}, ${swell / q})`;
-  });
-  const origin = useTransform(seen, (v) => `${v}px 50%`);
-  const say = useTransform(seen, [0, TRAVEL * 0.55], [1, 0]);
-  const arrow = useTransform(
-    [seen, shown],
-    ([v, on]: number[]) => on * clamp(1 - (v - TRAVEL * 0.55) / (TRAVEL * 0.4), 0, 1),
-  );
-  const trackTransform = useTransform(
-    [shake, pulse],
-    ([s, p]: number[]) => `translateX(${s}px) scale(${p})`,
-  );
+  const labelOpacity = useTransform(x, [0, travel * 0.6], [1, 0]);
+  const scale = useMotionValue(1);
+  const back = reduced
+    ? { duration: 0 }
+    : { type: "spring" as const, visualDuration: 0.9 - speed * 0.007, bounce: returnBounce };
 
-  const labelText = typeof label === "string" ? label : "Slide to confirm";
-  useMotionValueEvent(seen, "change", (v) => {
-    const percent = Math.round((v / TRAVEL) * 100);
-    if (percent === lastPercent.current || !capsuleRef.current) return;
-    lastPercent.current = percent;
-    capsuleRef.current.setAttribute("aria-valuenow", String(percent));
-    capsuleRef.current.setAttribute("aria-valuetext", `${labelText}, ${percent}%`);
-  });
+  useEffect(() => {
+    if (phase !== "done" && phase !== "error") return;
+    const t = setTimeout(() => {
+      setPhase("idle");
+      animate(x, 0, back);
+    }, holdMs);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, holdMs]);
 
-  useEffect(
-    () => () => {
-      clearTimeout(timer.current);
-      clearTimeout(homeTimer.current);
-      unwatch.current?.();
-      run.current += 1;
-    },
-    [],
-  );
-
-  const local = (clientX: number) => {
-    const rect = trackRef.current?.getBoundingClientRect();
-    if (!rect) return 0;
-    return (clientX - rect.left) / (rect.width / width || 1);
-  };
-
-  const goHome = (velocity: number) => {
-    if (reduce) animate(x, 0, { duration: 0.2, ease: EASE_OUT });
-    else animate(x, 0, { ...homeSpring, velocity: Math.min(0, velocity) });
-  };
-
-  const settle = () => {
-    setPhase("idle");
-    animate(shown, 1, { duration: 0.2, delay: 0.12 });
-    if (reduce) anchor.set(0);
-    else animate(anchor, 0, { type: "spring", duration: 0.3, bounce: 0 });
-  };
-
-  const resolve = (viaKey: boolean) => {
-    setPhase("done");
-    anchor.set(x.get());
-    animate(spin, 0, { duration: 0.12 });
-    if (reduce) x.set(0);
-    else {
-      animate(x, 0, commitSpring);
-      if (!viaKey && landingDip > 0) {
-        animate(pulse, [1, 1 - landingDip, 1], {
-          duration: 0.46,
-          times: [0, 0.62, 1],
-          ease: EASE_OUT,
-          delay: 0.1,
-        });
-      }
-    }
-    onDone?.();
-    if (holdMs > 0) timer.current = setTimeout(settle, holdMs);
-  };
-
-  const reject = (reason: unknown) => {
-    setPhase("error");
-    onError?.(reason);
-    animate(spin, 0, { duration: 0.12 });
-    animate(shown, 1, { duration: 0.2, delay: 0.12 });
-    if (reduce) goHome(0);
-    else {
-      animate(shake, SHAKE, { duration: 0.45, ease: EASE_OUT });
-      homeTimer.current = setTimeout(() => {
-        if (!grip.current) goHome(0);
-      }, 300);
-    }
-    timer.current = setTimeout(() => setPhase("idle"), Math.max(holdMs, 1500));
-  };
-
-  const commit = (viaKey: boolean) => {
-    clearTimeout(timer.current);
-    const id = ++run.current;
-    x.set(TRAVEL);
-    let out: void | PromiseLike<unknown>;
-    try {
-      out = onConfirm?.();
-    } catch (reason) {
-      reject(reason);
-      return;
-    }
-    const pending = out && typeof out.then === "function" ? out : null;
-    if (!pending) {
-      animate(shown, 0, { duration: 0.12 });
-      resolve(viaKey);
-      return;
-    }
+  const confirm = async () => {
+    animate(x, travel, reduced ? { duration: 0 } : { duration: 0.15 });
+    if (!reduced) animate(scale, [1, 1 - landingDip * 4, 1], { duration: 0.3 });
     setPhase("pending");
-    animate(shown, 0, { duration: 0.2 });
-    animate(spin, 1, { duration: 0.2 });
-    const t0 = performance.now();
-    const later = (fn: () => void) => {
-      setTimeout(
-        () => {
-          if (id === run.current) fn();
-        },
-        Math.max(0, MIN_PENDING - (performance.now() - t0)),
-      );
-    };
-    pending.then(
-      () => later(() => resolve(viaKey)),
-      (reason) => later(() => reject(reason)),
-    );
-  };
-
-  const down = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (disabled || grip.current || phase === "pending" || phase === "done" || e.button !== 0)
-      return;
-    x.stop();
-    grip.current = { id: e.pointerId, grab: null, moved: false, hist: [] };
-    setHeld(true);
     try {
-      trackRef.current?.setPointerCapture(e.pointerId);
-    } catch {}
-    unwatch.current?.();
-    const onMove = (ev: PointerEvent) => ev.isTrusted && live.current.move(ev);
-    const onUp = (ev: PointerEvent) => ev.isTrusted && live.current.up(ev);
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
-    unwatch.current = () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
-      unwatch.current = null;
-    };
-  };
-
-  const move = (e: PointerEvent) => {
-    const g = grip.current;
-    if (!g || g.id !== e.pointerId) return;
-    const at = local(e.clientX);
-    if (g.grab === null) {
-      g.grab = at - x.get();
-      return;
-    }
-    const next = clamp(at - g.grab, 0, TRAVEL);
-    if (Math.abs(next - x.get()) > 0.5) g.moved = true;
-    g.hist.push([e.timeStamp, next]);
-    if (g.hist.length > 4) g.hist.shift();
-    x.set(next);
-  };
-
-  const up = (e: { pointerId: number }) => {
-    const g = grip.current;
-    if (!g || g.id !== e.pointerId) return;
-    grip.current = null;
-    unwatch.current?.();
-    try {
-      trackRef.current?.releasePointerCapture(e.pointerId);
-    } catch {}
-    setHeld(false);
-    if (x.get() >= TRAVEL) commit(false);
-    else if (g.moved) goHome(velocityOf(g.hist));
-  };
-  live.current = { move, up };
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (disabled || phase === "pending" || phase === "done") return;
-    const step = TRAVEL / 10;
-    if (e.key === "End") {
-      e.preventDefault();
-      commit(true);
-    } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-      e.preventDefault();
-      const next = Math.min(TRAVEL, x.get() + step);
-      x.set(next);
-      if (next >= TRAVEL) commit(true);
-    } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-      e.preventDefault();
-      x.set(Math.max(0, x.get() - step));
-    } else if (e.key === "Home" || e.key === "Escape") {
-      e.preventDefault();
-      if (grip.current) up({ pointerId: grip.current.id });
-      else x.set(0);
+      await onConfirm?.();
+      setPhase("done");
+      onDone?.();
+    } catch (error) {
+      setPhase("error");
+      onError?.(error);
     }
   };
 
-  const fontSize = clamp(Math.round(height * 0.25), 13, 17);
-  const iconSize = Math.round(GRIP * 0.42);
-  const done = phase === "done";
+  const locked = disabled || phase !== "idle";
+  const tone = phase === "done" ? successColor : phase === "error" ? dangerColor : handleColor;
+  const text = phase === "done" ? doneLabel : phase === "error" ? errorLabel : label;
 
   return (
     <div
-      className={`sc-root group relative inline-block shrink-0 align-middle [font-family:inherit] data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.55]${className ? ` ${className}` : ""}`}
-      data-phase={phase}
-      data-held={held ? "" : undefined}
-      data-disabled={disabled ? "" : undefined}
-      style={
-        {
-          width,
-          height,
-          "--sc-track": trackColor,
-          "--sc-ink": handleColor,
-          "--sc-ok": successColor,
-          "--sc-no": dangerColor,
-          "--sc-on-ink": "hsl(var(--primary-foreground))",
-          "--sc-on-ok": "hsl(var(--background))",
-          "--sc-on-no": "hsl(var(--destructive-foreground))",
-          "--sc-radius": `${r}px`,
-          "--sc-grip-r": `${gripR}px`,
-          "--sc-pad": `${PAD}px`,
-          "--sc-font": `${fontSize}px`,
-        } as React.CSSProperties
-      }
+      className={cn(
+        "relative select-none border border-[hsl(var(--border))] font-mono text-xs uppercase tracking-[0.16em]",
+        disabled && "opacity-50",
+        className,
+      )}
+      style={{ width, height, borderRadius: radius, background: trackColor }}
     >
-      <style dangerouslySetInnerHTML={{ __html: STYLE }} />
-      <motion.div
-        ref={trackRef}
-        className="relative h-full w-full cursor-grab touch-none select-none rounded-[var(--sc-radius)] [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [background:var(--sc-track)] [box-shadow:inset_0_0_0_1px_hsl(var(--border))] group-data-[held]:cursor-grabbing group-data-[phase=done]:cursor-default group-data-[phase=pending]:cursor-default"
-        style={{ transform: trackTransform }}
-        onPointerDown={down}
+      <motion.span
+        aria-live="polite"
+        className="absolute inset-0 flex items-center justify-center text-[hsl(var(--muted-foreground))]"
+        style={{
+          opacity: phase === "idle" ? labelOpacity : 1,
+          paddingLeft: knob,
+          color: phase === "idle" ? undefined : tone,
+        }}
       >
-        <motion.span
-          className="pointer-events-none absolute inset-0 grid place-items-center whitespace-nowrap font-mono uppercase leading-none tracking-[0.16em] [font-size:calc(var(--sc-font)*0.8)]"
-          style={{ opacity: say }}
-          aria-hidden="true"
-        >
-          <span className="[color:color-mix(in_srgb,var(--sc-ink)_45%,transparent)] [grid-area:1/1] [transition:opacity_200ms_ease,filter_200ms_ease] group-data-[phase=error]:opacity-0 group-data-[phase=error]:blur-[2px]">
-            {label}
-          </span>
-          <span className="opacity-0 blur-[2px] [color:var(--sc-no)] [grid-area:1/1] [transition:opacity_200ms_ease,filter_200ms_ease] group-data-[phase=error]:opacity-100 group-data-[phase=error]:blur-none">
-            {errorLabel}
-          </span>
-        </motion.span>
-        <motion.div
-          ref={capsuleRef}
-          role="slider"
-          tabIndex={disabled ? -1 : 0}
-          aria-label={labelText}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={0}
-          aria-busy={phase === "pending" || undefined}
-          aria-disabled={disabled || undefined}
-          className="absolute left-[var(--sc-pad)] top-[var(--sc-pad)] h-[calc(100%-var(--sc-pad)*2)] w-[calc(100%-var(--sc-pad)*2)] outline-none [background:var(--sc-ink)] [color:var(--sc-on-ink)] [transition:background-color_200ms_ease,color_200ms_ease] focus-visible:[box-shadow:inset_0_0_0_2px_var(--sc-track)] group-data-[phase=error]:[background:var(--sc-no)] group-data-[phase=done]:[background:var(--sc-ok)] group-data-[phase=error]:[color:var(--sc-on-no)] group-data-[phase=done]:[color:var(--sc-on-ok)]"
-          style={{ clipPath: clip, transform: shape, transformOrigin: origin }}
-          onPointerEnter={(e) => {
-            if (e.pointerType === "mouse" && finePointer()) setHot(true);
-          }}
-          onPointerLeave={() => setHot(false)}
-          onKeyDown={onKeyDown}
-        >
-          <motion.div className="absolute inset-0" style={{ transform: content }}>
-            <motion.span
-              className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 whitespace-nowrap font-semibold leading-none tracking-[-0.006em] [font-size:var(--sc-font)] [transition:filter_200ms_ease] group-data-[phase=pending]:blur-[2px] [&>svg]:block"
-              style={{ opacity: arrow }}
-              aria-hidden="true"
+        {phase === "pending" ? "…" : text}
+      </motion.span>
+      <motion.button
+        type="button"
+        role="slider"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={phase === "idle" ? 0 : 100}
+        disabled={locked}
+        drag={locked ? false : "x"}
+        dragConstraints={{ left: 0, right: travel }}
+        dragElastic={0}
+        dragMomentum={false}
+        onDragEnd={() => (x.get() > travel * 0.9 ? confirm() : animate(x, 0, back))}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === "ArrowRight") && !locked && confirm()}
+        className="absolute flex cursor-grab items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] active:cursor-grabbing disabled:cursor-default"
+        style={{
+          left: PAD,
+          top: PAD,
+          width: knob,
+          height: knob,
+          x,
+          scale,
+          borderRadius: Math.max(0, radius - PAD),
+          background: tone,
+          color: "hsl(var(--primary-foreground))",
+          touchAction: "none",
+        }}
+      >
+        {phase === "pending" ? (
+          <motion.span
+            className="block h-4 w-4 rounded-full border-2 border-current border-t-transparent"
+            animate={reduced ? {} : { rotate: 360 }}
+            transition={{ duration: 0.8, ease: "linear", repeat: Infinity }}
+          />
+        ) : (
+          (icon ?? (
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
             >
-              {icon ?? <HugeiconsIcon icon={ArrowRight02Icon} size={iconSize} strokeWidth={2} />}
-            </motion.span>
-            <motion.span
-              className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 whitespace-nowrap font-semibold leading-none tracking-[-0.006em] blur-[2px] [font-size:var(--sc-font)] [transition:filter_200ms_ease] group-data-[phase=pending]:blur-none"
-              style={{ opacity: spin }}
-              aria-hidden="true"
-            >
-              <Spinner size={iconSize} />
-            </motion.span>
-            <motion.span
-              className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 whitespace-nowrap font-mono uppercase leading-none tracking-[0.16em] [font-size:var(--sc-font)] [&>svg]:block"
-              aria-hidden="true"
-              initial={false}
-              animate={{ opacity: done ? 1 : 0, scale: done || reduce ? 1 : 0.95 }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              <HugeiconsIcon icon={Tick02Icon} size={Math.round(GRIP * 0.38)} strokeWidth={2.5} />
-              {doneLabel}
-            </motion.span>
-          </motion.div>
-        </motion.div>
-        <span className="sr-only" aria-live="polite">
-          {phase === "pending"
-            ? "Working"
-            : phase === "done"
-              ? doneLabel
-              : phase === "error"
-                ? errorLabel
-                : ""}
-        </span>
-      </motion.div>
+              {phase === "done" ? (
+                <path d="M5 12.5l4.5 4.5L19 7.5" />
+              ) : phase === "error" ? (
+                <path d="M7 7l10 10M17 7L7 17" />
+              ) : (
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              )}
+            </svg>
+          ))
+        )}
+      </motion.button>
     </div>
   );
 }

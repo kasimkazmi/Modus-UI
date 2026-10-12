@@ -1,7 +1,7 @@
 "use client";
-
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+// A matted picture that drifts after the cursor and erodes harder the faster the pointer moves.
+import { useEffect, useId, useRef, type ReactNode } from "react";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface ErosionPlateProps {
@@ -13,7 +13,7 @@ interface ErosionPlateProps {
   seed?: number;
   maxDisplacement?: number;
   movementBound?: number;
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
@@ -29,165 +29,89 @@ export function ErosionPlate({
   children,
   className,
 }: ErosionPlateProps) {
-  const svgRef = useRef<HTMLDivElement>(null);
-  const displacementMapRef = useRef<SVGFEDisplacementMapElement>(null);
-
-  const cursor = useRef({
-    x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
-    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
-  });
-  const cachedCursor = useRef({ ...cursor.current });
-  // Reduced motion: the card stays still and undistorted; no cursor-follow loop.
-  const prefersReducedMotion = useReducedMotion();
+  const reduce = useReducedMotion();
+  const filterId = `erode-${useId().replace(/:/g, "")}`;
+  const plate = useRef<HTMLDivElement>(null);
+  const displace = useRef<SVGFEDisplacementMapElement>(null);
+  const dx = useMotionValue(0);
+  const dy = useMotionValue(0);
+  const x = useSpring(dx, { stiffness: 90, damping: 18 });
+  const y = useSpring(dy, { stiffness: 90, damping: 18 });
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    let winsize = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-
-    const lerp = (a: number, b: number, n: number) => (1 - n) * a + n * b;
-    const map = (x: number, a: number, b: number, c: number, d: number) =>
-      ((x - a) * (d - c)) / (b - a) + c;
-    const distance = (x1: number, x2: number, y1: number, y2: number) =>
-      Math.hypot(x1 - x2, y1 - y2);
-
-    const handleResize = () => {
-      winsize = { width: window.innerWidth, height: window.innerHeight };
-    };
-
-    const handleMouseMove = (ev: MouseEvent) => {
-      cursor.current = { x: ev.clientX, y: ev.clientY };
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-
-    const imgValues = {
-      imgTransforms: { x: 0, y: 0, rz: 0 },
-      displacementScale: 0,
-    };
-
-    let rafId: number;
-    const render = () => {
-      let targetX = lerp(
-        imgValues.imgTransforms.x,
-        map(cursor.current.x, 0, winsize.width, -120, 120),
-        0.1,
-      );
-      let targetY = lerp(
-        imgValues.imgTransforms.y,
-        map(cursor.current.y, 0, winsize.height, -120, 120),
-        0.1,
-      );
-      let targetRz = lerp(
-        imgValues.imgTransforms.rz,
-        map(cursor.current.x, 0, winsize.width, -10, 10),
-        0.1,
-      );
-
-      if (targetX > movementBound) targetX = movementBound + (targetX - movementBound) * 0.2;
-      if (targetX < -movementBound) targetX = -movementBound + (targetX + movementBound) * 0.2;
-      if (targetY > movementBound) targetY = movementBound + (targetY - movementBound) * 0.2;
-      if (targetY < -movementBound) targetY = -movementBound + (targetY + movementBound) * 0.2;
-
-      imgValues.imgTransforms.x = targetX;
-      imgValues.imgTransforms.y = targetY;
-      imgValues.imgTransforms.rz = targetRz;
-
-      if (svgRef.current) {
-        svgRef.current.style.transform = `translate(${imgValues.imgTransforms.x}px, ${imgValues.imgTransforms.y}px) rotate(${imgValues.imgTransforms.rz}deg)`;
+    if (reduce) return;
+    let wear = 0;
+    let last: { x: number; y: number; t: number } | null = null;
+    let frame = requestAnimationFrame(function decay() {
+      wear *= 0.92;
+      displace.current?.setAttribute("scale", wear.toFixed(1));
+      frame = requestAnimationFrame(decay);
+    });
+    const onMove = (e: PointerEvent) => {
+      const box = plate.current?.getBoundingClientRect();
+      if (!box) return;
+      const ox = e.clientX - (box.left + box.width / 2 - x.get());
+      const oy = e.clientY - (box.top + box.height / 2 - y.get());
+      // Soft leash: follows freely near the plate, then flattens out at movementBound.
+      dx.set(movementBound * Math.tanh(ox / (movementBound * 6)));
+      dy.set(movementBound * Math.tanh(oy / (movementBound * 6)));
+      const now = performance.now();
+      if (last) {
+        const speed =
+          Math.hypot(e.clientX - last.x, e.clientY - last.y) / Math.max(1, now - last.t);
+        wear = Math.min(maxDisplacement, Math.max(wear, speed * maxDisplacement * 0.25));
       }
-
-      const cursorTravelledDistance = distance(
-        cachedCursor.current.x,
-        cursor.current.x,
-        cachedCursor.current.y,
-        cursor.current.y,
-      );
-      imgValues.displacementScale = lerp(
-        imgValues.displacementScale,
-        map(cursorTravelledDistance, 0, 200, 0, maxDisplacement),
-        0.06,
-      );
-
-      if (displacementMapRef.current) {
-        displacementMapRef.current.setAttribute("scale", imgValues.displacementScale.toString());
-      }
-
-      cachedCursor.current = { ...cursor.current };
-
-      rafId = requestAnimationFrame(render);
+      last = { x: e.clientX, y: e.clientY, t: now };
     };
-
-    rafId = requestAnimationFrame(render);
-
+    window.addEventListener("pointermove", onMove);
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(frame);
     };
-  }, [maxDisplacement, movementBound, prefersReducedMotion]);
+  }, [reduce, maxDisplacement, movementBound, dx, dy, x, y]);
 
   return (
-    <div
-      ref={svgRef}
+    <motion.div
+      ref={plate}
       className={cn(
-        "relative z-10 w-full overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[0_30px_60px_-30px_hsl(var(--foreground)/0.45)] will-change-transform",
+        "relative overflow-hidden rounded-lg border border-border bg-card p-3 shadow-sm",
         className,
       )}
-      style={{ width: `${width}px`, height: `${height}px` }}
+      style={{ width, height, x: reduce ? 0 : x, y: reduce ? 0 : y }}
     >
-      <svg
-        viewBox="-60 -75 720 900"
-        preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-2 block h-[calc(100%-1rem)] w-[calc(100%-1rem)] rounded-xl grayscale-[0.35] sepia-[0.15]"
-      >
-        <filter id="imgFilter">
+      <svg className="absolute h-0 w-0" aria-hidden>
+        <filter id={filterId} x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
-            type="turbulence"
+            type="fractalNoise"
             baseFrequency={baseFrequency}
             numOctaves={numOctaves}
             seed={seed}
-            stitchTiles="stitch"
-            x="0%"
-            y="0%"
-            width="100%"
-            height="100%"
-            result="turbulence1"
+            result="grain"
           />
           <feDisplacementMap
-            ref={displacementMapRef}
+            ref={displace}
             in="SourceGraphic"
-            in2="turbulence1"
+            in2="grain"
             scale="0"
             xChannelSelector="R"
-            yChannelSelector="B"
-            x="0%"
-            y="0%"
-            width="100%"
-            height="100%"
-            result="displacementMap3"
+            yChannelSelector="G"
           />
         </filter>
-        <g>
-          <image
-            href={image}
-            x="-60"
-            y="-75"
-            width="720"
-            height="900"
-            filter="url(#imgFilter)"
-            preserveAspectRatio="xMidYMid slice"
-          />
-        </g>
       </svg>
-      {children && (
-        <div className="pointer-events-none absolute inset-2 z-20 flex flex-col items-start justify-end rounded-xl bg-gradient-to-t from-background/90 via-background/30 to-transparent p-6 text-foreground">
-          {children}
-        </div>
-      )}
-    </div>
+      <div className="relative h-full w-full overflow-hidden rounded-md">
+        <img
+          src={image}
+          alt=""
+          draggable={false}
+          className="h-full w-full scale-110 object-cover"
+          style={{ filter: `url(#${filterId})` }}
+        />
+        {children && (
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[hsl(var(--background))] via-[hsl(var(--background)/0.85)] to-transparent p-5 pt-16 text-foreground">
+            {children}
+          </div>
+        )}
+      </div>
+    </motion.div>
   );
 }

@@ -1,130 +1,20 @@
 "use client";
-// Ported from React Bits' Lattice Loader (© David Haz).
-
+// A small tile grid that pulses while work runs, then settles into a check or cross.
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 
-type Grid = 3 | 4;
-type TileWaitStatus = "working" | "done" | "error";
-type TileWaitPatternName =
-  "arrow" | "dots" | "ripple" | "spiral" | "orbit" | "snake" | "sweep" | "spin" | "rain" | "pulse";
-
-interface PatternSpec {
-  cells: (number | null)[];
-  loop: number;
-  scale: number;
-  lit?: number;
-}
-
-export interface TileWaitCustomPattern {
-  cells: (number | null)[];
-  loop?: number;
-  scale?: number;
-  lit?: number;
-}
-
-const PATTERNS: Record<TileWaitPatternName, Partial<Record<Grid, PatternSpec>>> = {
-  arrow: { 3: { cells: [1, 2, 3, 0, 1, 2, 1, 2, 3], loop: 7.2, scale: 1 } },
-  dots: { 3: { cells: [0, 1, 2, 0, 1, 2, 0, 1, 2], loop: 3, scale: 2.4 } },
-  ripple: { 3: { cells: [2, 1, 2, 1, 0, 1, 2, 1, 2], loop: 4.8, scale: 1.5 } },
-  spiral: { 3: { cells: [0, 1, 2, 7, 8, 3, 6, 5, 4], loop: 9, scale: 1.2, lit: 0.35 } },
-  orbit: {
-    3: { cells: [0, 1, 2, 7, null, 3, 6, 5, 4], loop: 8, scale: 1.2 },
-    4: {
-      cells: [0, 1, 2, 3, 11, null, null, 4, 10, null, null, 5, 9, 8, 7, 6],
-      loop: 6,
-      scale: 1.2,
-      lit: 0.45,
-    },
-  },
-  snake: {
-    3: { cells: [0, 1, 2, 5, 4, 3, 6, 7, 8], loop: 9, scale: 1, lit: 0.35 },
-    4: {
-      cells: [0, 1, 2, 3, 7, 6, 5, 4, 8, 9, 10, 11, 15, 14, 13, 12],
-      loop: 16,
-      scale: 1,
-      lit: 0.25,
-    },
-  },
-  sweep: {
-    4: { cells: [0, 1, 2, 3, 1, 2, 3, 4, 2, 3, 4, 5, 3, 4, 5, 6], loop: 5, scale: 1, lit: 0.45 },
-  },
-  spin: {
-    4: { cells: [0, 0, 1, 1, 0, 0, 1, 1, 3, 3, 2, 2, 3, 3, 2, 2], loop: 4, scale: 1.6, lit: 0.35 },
-  },
-  rain: {
-    4: { cells: [0, 2, 1, 3, 1, 3, 2, 4, 2, 4, 3, 5, 3, 5, 4, 6], loop: 4, scale: 1.2, lit: 0.35 },
-  },
-  pulse: {
-    4: {
-      cells: [2, 1, 1, 2, 1, 0, 0, 1, 1, 0, 0, 1, 2, 1, 1, 2],
-      loop: 2.4,
-      scale: 2.5,
-      lit: 0.45,
-    },
-  },
-};
-const DEFAULT_PATTERN: Record<Grid, TileWaitPatternName> = { 3: "orbit", 4: "sweep" };
-const MARKS: Record<Grid, Record<"done" | "error", number[]>> = {
-  3: { done: [2, 3, 5, 7], error: [0, 2, 4, 6, 8] },
-  4: { done: [7, 8, 10, 13], error: [0, 3, 5, 6, 9, 10, 12, 15] },
-};
-
-const resolvePattern = (
-  pattern: TileWaitPatternName | TileWaitCustomPattern,
-  grid: Grid,
-): PatternSpec => {
-  if (typeof pattern === "string") {
-    const named = PATTERNS[pattern];
-    return (named && named[grid]) || PATTERNS[DEFAULT_PATTERN[grid]][grid]!;
-  }
-  const cells = Array.from({ length: grid * grid }, (_, i) => pattern.cells[i] ?? null);
-  const max = Math.max(0, ...cells.filter((v) => v != null));
-  return {
-    cells,
-    loop: pattern.loop ?? max + 4.2,
-    scale: pattern.scale ?? 1,
-    lit: pattern.lit ?? 0.62,
-  };
-};
-const CELL =
-  "h-[var(--ll-cell)] w-[var(--ll-cell)] [border-radius:max(1px,calc(var(--ll-cell)*0.25))] [background:var(--ll-color)] group-data-[shape=round]:rounded-full";
-const LIT: Record<number, string> = {
-  62: "animate-[tile-wait-on_var(--ll-cycle)_infinite]",
-  45: "animate-[tile-wait-on-45_var(--ll-cycle)_infinite]",
-  35: "animate-[tile-wait-on-35_var(--ll-cycle)_infinite]",
-  25: "animate-[tile-wait-on-25_var(--ll-cycle)_infinite]",
-};
-const STYLE = `
-@keyframes tile-wait-on { 0%, 100% { opacity: var(--ll-idle); } 18%, 42% { opacity: var(--ll-peak); } 62% { opacity: var(--ll-idle); } }
-@keyframes tile-wait-on-45 { 0%, 100% { opacity: var(--ll-idle); } 13%, 31% { opacity: var(--ll-peak); } 45% { opacity: var(--ll-idle); } }
-@keyframes tile-wait-on-35 { 0%, 100% { opacity: var(--ll-idle); } 10%, 24% { opacity: var(--ll-peak); } 35% { opacity: var(--ll-idle); } }
-@keyframes tile-wait-on-25 { 0%, 100% { opacity: var(--ll-idle); } 7%, 17% { opacity: var(--ll-peak); } 25% { opacity: var(--ll-idle); } }
-@media (prefers-reduced-motion: reduce) {
-  .ll-run { --ll-peak: 0.7; }
-  .ll-run > span { animation-delay: 0ms !important; animation-duration: 1400ms !important; }
-  .ll-mark { transform: none !important; }
-  .ll-text { filter: none !important; }
-}
-`;
-const fmt = (ds: number) =>
-  ds < 600
-    ? `${(ds / 10).toFixed(1)}s`
-    : `${Math.floor(ds / 600)}m ${((ds % 600) / 10).toFixed(1)}s`;
-const spoken = (ds: number) =>
-  ds < 600
-    ? `${(ds / 10).toFixed(1)} seconds`
-    : `${Math.floor(ds / 600)} minutes ${((ds % 600) / 10).toFixed(1)} seconds`;
+type Status = "working" | "done" | "error";
+type Pattern = "ripple" | "sweep" | "scatter";
 
 interface TileWaitProps {
   label?: string;
   doneLabel?: string;
   errorLabel?: string;
-  status?: TileWaitStatus;
-  pattern?: TileWaitPatternName | TileWaitCustomPattern;
+  status?: Status;
+  pattern?: Pattern;
   grid?: number;
-  shape?: string;
+  shape?: "square" | "circle";
   color?: string;
   doneColor?: string;
   errorColor?: string;
@@ -136,9 +26,18 @@ interface TileWaitProps {
   glow?: boolean;
   glowColor?: string;
   showTimer?: boolean;
+  /** Elapsed seconds; when set it replaces the internal timer. */
   elapsed?: number;
-  className?: string;
   style?: CSSProperties;
+  className?: string;
+}
+
+/** Which "phase" each tile belongs to; the lit phase advances every tick. */
+function phaseOf(pattern: Pattern, row: number, col: number, grid: number) {
+  const mid = (grid - 1) / 2;
+  if (pattern === "sweep") return row + col;
+  if (pattern === "scatter") return (row * 7 + col * 13) % (grid + 1);
+  return Math.round(Math.max(Math.abs(row - mid), Math.abs(col - mid)));
 }
 
 export function TileWait({
@@ -161,135 +60,112 @@ export function TileWait({
   glowColor = "",
   showTimer = true,
   elapsed,
-  className = "",
   style,
+  className,
 }: TileWaitProps) {
-  const n: Grid = grid === 4 ? 4 : 3;
-  const pat = resolvePattern(pattern, n);
-  const marks = MARKS[n];
-  const d = step * pat.scale;
-  const cycle = Math.round(pat.loop * d);
-
-  const timerRef = useRef<HTMLSpanElement | null>(null);
-  const dsRef = useRef(0);
-  const markRef = useRef<"done" | "error">("done");
-  const mark = status === "working" ? markRef.current : status;
-  markRef.current = mark;
-  const [announce, setAnnounce] = useState(`${label}, in progress`);
-
-  const paint = (ds: number) => {
-    dsRef.current = ds;
-    if (timerRef.current) timerRef.current.textContent = fmt(ds);
-  };
-
-  useLayoutEffect(() => {
-    if (elapsed != null) {
-      paint(Math.round(elapsed * 10));
-      return undefined;
-    }
-    if (status !== "working") return undefined;
-    const startedAt = performance.now();
-    paint(0);
-    const id = setInterval(() => paint(Math.floor((performance.now() - startedAt) / 100)), 100);
-    return () => clearInterval(id);
-  }, [status, elapsed]);
+  const reduce = useReducedMotion();
+  const [tick, setTick] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const startedAt = useRef(0);
+  const working = status === "working";
 
   useEffect(() => {
-    if (status === "working") setAnnounce(`${label}, in progress`);
-    else
-      setAnnounce(
-        `${status === "done" ? doneLabel : errorLabel}${showTimer ? ` ${spoken(dsRef.current)}` : ""}`,
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+    if (!working || reduce) return;
+    const id = setInterval(() => setTick((t) => t + 1), step);
+    return () => clearInterval(id);
+  }, [working, reduce, step]);
+
+  useEffect(() => {
+    if (!working) return;
+    startedAt.current = performance.now();
+    setSeconds(0);
+    const id = setInterval(() => setSeconds((performance.now() - startedAt.current) / 1000), 100);
+    return () => clearInterval(id);
+  }, [working]);
+
+  const phases =
+    pattern === "sweep" ? grid * 2 - 1 : pattern === "scatter" ? grid + 1 : Math.ceil(grid / 2);
+  const lit = tick % phases;
+  const tone = status === "done" ? doneColor : status === "error" ? errorColor : color;
+  const box = grid * cellSize + (grid - 1) * gap;
+  const time = `${(elapsed ?? seconds).toFixed(1)}s`;
+  const caption = working ? label : status === "done" ? doneLabel : errorLabel;
+  const shadow = glow ? `drop-shadow(0 0 ${cellSize}px ${glowColor || tone})` : undefined;
 
   return (
     <span
       role="status"
-      className={`ll-root group relative inline-flex items-center leading-none [font-family:inherit] [gap:calc(var(--ll-font)*0.625)] [font-size:var(--ll-font)]${className ? ` ${className}` : ""}`}
-      data-status={status}
-      data-shape={shape}
-      data-glow={glow ? "" : undefined}
-      style={
-        {
-          "--ll-n": n,
-          "--ll-cell": `${cellSize}px`,
-          "--ll-gap": `${gap}px`,
-          "--ll-font": `${fontSize}px`,
-          "--ll-color": color,
-          "--ll-mark": status === "error" ? errorColor : doneColor,
-          "--ll-idle": idleOpacity,
-          "--ll-glow": glowColor || color,
-          "--ll-mark-glow": glowColor || (status === "error" ? errorColor : doneColor),
-          "--ll-cycle": `${cycle}ms`,
-          "--ll-peak": 1,
-          "--ll-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-          "--ll-ease-in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
-          ...style,
-        } as CSSProperties
-      }
+      aria-live="polite"
+      className={cn(
+        "inline-flex items-center gap-2.5 font-mono uppercase tracking-[0.18em]",
+        className,
+      )}
+      style={{ fontSize, ...style }}
     >
-      <style dangerouslySetInnerHTML={{ __html: STYLE }} />
-      <span className="grid shrink-0" aria-hidden="true">
-        <span className="ll-run grid [gap:var(--ll-gap)] [grid-area:1/1] [grid-template-columns:repeat(var(--ll-n),var(--ll-cell))] [transition:opacity_200ms_ease] group-data-[status=done]:opacity-0 group-data-[status=error]:opacity-0 group-data-[status=done]:[&>span]:[animation-play-state:paused] group-data-[status=error]:[&>span]:[animation-play-state:paused]">
-          {pat.cells.map((unit, i) => (
-            <span
-              key={i}
-              className={
-                unit == null
-                  ? `${CELL} [opacity:calc(var(--ll-idle)*0.47)]`
-                  : `${CELL} [opacity:var(--ll-idle)] ${LIT[Math.round((pat.lit ?? 0.62) * 100)] || LIT[62]} [animation-timing-function:var(--ll-ease-in-out)] group-data-[glow]:[box-shadow:0_0_calc(var(--ll-cell)*1.2)_calc(var(--ll-cell)*0.12)_var(--ll-glow)]`
-              }
-              data-hole={unit == null ? "" : undefined}
-              data-lit={pat.lit && pat.lit !== 0.62 ? Math.round(pat.lit * 100) : undefined}
-              style={unit == null ? undefined : { animationDelay: `${Math.round(unit * d)}ms` }}
-            />
-          ))}
-        </span>
-        <span className="ll-mark grid origin-center opacity-0 [gap:var(--ll-gap)] [grid-area:1/1] [grid-template-columns:repeat(var(--ll-n),var(--ll-cell))] [transform:scale(0.9)] [transition:opacity_160ms_var(--ll-ease-out),transform_160ms_var(--ll-ease-out)] group-data-[status=done]:opacity-100 group-data-[status=error]:opacity-100 group-data-[status=done]:[transform:none] group-data-[status=error]:[transform:none] group-data-[status=done]:[transition:opacity_200ms_ease,transform_200ms_var(--ll-ease-out)] group-data-[status=error]:[transition:opacity_200ms_ease,transform_200ms_var(--ll-ease-out)]">
-          {pat.cells.map((_, i) => (
-            <span
-              key={i}
-              className={`${CELL} [opacity:var(--ll-idle)] [transition:opacity_200ms_ease,background-color_200ms_ease] data-[on]:[background:var(--ll-mark)] data-[on]:[opacity:var(--ll-peak)] group-data-[glow]:data-[on]:[box-shadow:0_0_calc(var(--ll-cell)*1.2)_calc(var(--ll-cell)*0.12)_var(--ll-mark-glow)]`}
-              data-on={marks[mark].includes(i) ? "" : undefined}
-            />
-          ))}
-        </span>
-      </span>
       <span
-        className="relative inline-block font-mono uppercase tracking-[0.18em]"
-        aria-hidden="true"
+        className="relative inline-block shrink-0"
+        style={{ width: box, height: box, filter: shadow }}
       >
-        <span
-          className="ll-text absolute left-0 top-0 whitespace-nowrap opacity-0 [filter:blur(2px)] [transition:opacity_200ms_ease,filter_200ms_ease] data-[active]:static data-[active]:opacity-100 data-[active]:[filter:blur(0)]"
-          data-active={status === "working" ? "" : undefined}
-        >
-          {label}
-        </span>
-        <span
-          className="ll-text absolute left-0 top-0 whitespace-nowrap opacity-0 [filter:blur(2px)] [transition:opacity_200ms_ease,filter_200ms_ease] data-[active]:static data-[active]:opacity-100 data-[active]:[filter:blur(0)]"
-          data-active={status === "done" ? "" : undefined}
-        >
-          {doneLabel}
-        </span>
-        <span
-          className="ll-text absolute left-0 top-0 whitespace-nowrap opacity-0 [filter:blur(2px)] [transition:opacity_200ms_ease,filter_200ms_ease] data-[active]:static data-[active]:opacity-100 data-[active]:[filter:blur(0)]"
-          data-active={status === "error" ? "" : undefined}
-        >
-          {errorLabel}
-        </span>
+        <AnimatePresence mode="wait" initial={false}>
+          {working ? (
+            <motion.span
+              key="grid"
+              className="absolute inset-0 grid"
+              style={{ gridTemplateColumns: `repeat(${grid}, ${cellSize}px)`, gap }}
+              exit={{ opacity: 0, scale: 0.6 }}
+              transition={{ duration: reduce ? 0 : 0.18 }}
+            >
+              {Array.from({ length: grid * grid }, (_, i) => {
+                const on =
+                  !reduce && phaseOf(pattern, Math.floor(i / grid), i % grid, grid) === lit;
+                return (
+                  <motion.span
+                    key={i}
+                    animate={{ opacity: reduce ? 0.6 : on ? 1 : idleOpacity }}
+                    transition={{ duration: (step / 1000) * 1.5 }}
+                    style={{
+                      width: cellSize,
+                      height: cellSize,
+                      background: tone,
+                      borderRadius: shape === "circle" ? "50%" : 1,
+                    }}
+                  />
+                );
+              })}
+            </motion.span>
+          ) : (
+            <motion.svg
+              key={status}
+              viewBox="0 0 16 16"
+              className="absolute inset-0 h-full w-full"
+              fill="none"
+              stroke={tone}
+              strokeWidth={2.4}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ opacity: 0, scale: reduce ? 1 : 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduce ? 0 : 0.25 }}
+            >
+              <motion.path
+                d={status === "done" ? "M3 8.5 6.5 12 13 4.5" : "M4 4l8 8M12 4l-8 8"}
+                initial={{ pathLength: reduce ? 1 : 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: reduce ? 0 : 0.3 }}
+              />
+            </motion.svg>
+          )}
+        </AnimatePresence>
       </span>
-      {showTimer ? (
+      <span>{caption}</span>
+      {showTimer && (
         <span
-          ref={timerRef}
-          className="font-mono tabular-nums opacity-60 [font-size:calc(var(--ll-font)*0.875)]"
-          aria-hidden="true"
+          className="tabular-nums tracking-normal opacity-60"
+          style={{ fontSize: fontSize * 0.85 }}
         >
-          0.0s
+          {time}
         </span>
-      ) : null}
-      <span className="sr-only">{announce}</span>
+      )}
     </span>
   );
 }
-// motion-reduce: satisfies tests

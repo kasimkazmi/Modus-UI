@@ -33,25 +33,25 @@ export default function Example() {
 
 ## Props
 
-| Prop         | Type    | Default                        | Description |
-| :----------- | :------ | :----------------------------- | :---------- |
-| liked        | any     | -                              | -           |
-| defaultLiked | boolean | false                          | -           |
-| count        | number  | 128                            | -           |
-| onChange     | any     | -                              | -           |
-| showCount    | boolean | true                           | -           |
-| icon         | string  | "star"                         | -           |
-| idleOutline  | boolean | true                           | -           |
-| size         | number  | 40                             | -           |
-| corner       | number  | 10                             | -           |
-| likedColor   | string  | "hsl(var(--primary))"          | -           |
-| idleColor    | string  | "hsl(var(--muted-foreground))" | -           |
-| pillColor    | string  | "hsl(var(--muted))"            | -           |
-| textColor    | string  | "hsl(var(--foreground))"       | -           |
-| duration     | number  | 560                            | -           |
-| dotSize      | number  | 0.3                            | -           |
-| overshoot    | number  | 1.7                            | -           |
-| beat         | number  | 3                              | -           |
-| rollDuration | number  | 350                            | -           |
-| disabled     | boolean | false                          | -           |
-| label        | string  | "Like"                         | -           |
+| Prop         | Type    | Default                        | Description                               |
+| :----------- | :------ | :----------------------------- | :---------------------------------------- |
+| liked        | any     | -                              | Controlled liked state.                   |
+| defaultLiked | boolean | false                          | Initial liked state when uncontrolled.    |
+| count        | number  | 128                            | Count before your like.                   |
+| onChange     | any     | -                              | Called with the new liked state.          |
+| showCount    | boolean | true                           | Shows the rolling counter.                |
+| icon         | string  | "star"                         | Mark shape: "star" or "heart".            |
+| idleOutline  | boolean | true                           | Draws the idle mark as an outline.        |
+| size         | number  | 40                             | Mark box size in pixels.                  |
+| corner       | number  | 10                             | Pill corner radius in pixels.             |
+| likedColor   | string  | "hsl(var(--primary))"          | Mark and burst colour when liked.         |
+| idleColor    | string  | "hsl(var(--muted-foreground))" | Mark colour when idle.                    |
+| pillColor    | string  | "hsl(var(--muted))"            | Pill background colour.                   |
+| textColor    | string  | "hsl(var(--foreground))"       | Counter colour.                           |
+| duration     | number  | 560                            | Pop and burst duration in milliseconds.   |
+| dotSize      | number  | 0.3                            | Burst dot size as a fraction of the mark. |
+| overshoot    | number  | 1.7                            | How far the mark overshoots as it pops.   |
+| beat         | number  | 3                              | Burst dots per quarter turn.              |
+| rollDuration | number  | 350                            | Counter roll duration in milliseconds.    |
+| disabled     | boolean | false                          | Disables the button.                      |
+| label        | string  | "Like"                         | Accessible label.                         |

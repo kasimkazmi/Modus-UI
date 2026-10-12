@@ -1,49 +1,19 @@
 "use client";
-// Ported from React Bits' Dodge Field (© David Haz).
+// A key that sidesteps the pointer inside its field, teasing as it goes, until its patience runs out.
 
+import { useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from "react";
+import { animate, motion, useMotionValue, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  animate,
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useReducedMotion,
-  type Transition,
-} from "framer-motion";
 
-const COUNT_LINE = 0.55;
-const DEAD_ZONE = 6;
-const CAUGHT_HOLD_MS = 760;
-const INSET = 12;
-const DEFAULT_TAUNTS = ["Reach for it", "Not quite", "Closer", "Patience", "Fine, yours"];
-
-type DodgeAxis = "x" | "y" | "both";
-type DodgeWall = "clamp" | "bounce";
-
-interface DodgeState {
+export interface CoyKeyState {
   dodges: number;
-  gave: boolean;
-  caught: boolean;
-  fleeing: boolean;
+  relented: boolean;
 }
 
-const wallIt = (t: number, room: number, wall: DodgeWall) => {
-  if (wall === "bounce") {
-    if (t > room) return Math.max(-room, 2 * room - t);
-    if (t < -room) return Math.min(room, -2 * room - t);
-    return t;
-  }
-  return Math.min(room, Math.max(-room, t));
-};
-const bearingOf = (dx: number, dy: number, d: number, axis: DodgeAxis) => {
-  if (axis === "x") return { x: Math.sign(dx) || 1, y: 0 };
-  if (axis === "y") return { x: 0, y: Math.sign(dy) || 1 };
-  return { x: dx / d, y: dy / d };
-};
+const TAUNTS = ["Reach for it", "Not quite", "Closer", "Patience", "Fine, yours"];
 
-interface CoyKeyProps {
-  children?: React.ReactNode | ((state: DodgeState) => React.ReactNode);
+export interface CoyKeyProps {
+  children?: ReactNode | ((state: CoyKeyState) => ReactNode);
   taunts?: string[];
   notice?: string;
   inkColor?: string;
@@ -55,20 +25,20 @@ interface CoyKeyProps {
   fleeDuration?: number;
   returnDuration?: number;
   returnBounce?: number;
-  axis?: DodgeAxis;
-  wall?: DodgeWall;
+  axis?: "x" | "y" | "both";
+  wall?: "clamp" | "bounce";
   patience?: number;
   disabled?: boolean;
   onDodge?: (dodges: number) => void;
   onRelent?: () => void;
   onCatch?: () => void;
+  style?: CSSProperties;
   className?: string;
-  style?: React.CSSProperties;
 }
 
 export function CoyKey({
   children,
-  taunts = DEFAULT_TAUNTS,
+  taunts = TAUNTS,
   notice = "",
   inkColor = "hsl(var(--foreground))",
   contrastColor = "hsl(var(--background))",
@@ -86,218 +56,96 @@ export function CoyKey({
   onDodge,
   onRelent,
   onCatch,
-  className = "",
   style,
+  className,
 }: CoyKeyProps) {
-  const fieldRef = useRef<HTMLDivElement | null>(null);
-  const moverRef = useRef<HTMLDivElement | null>(null);
+  const reduce = useReducedMotion();
+  const field = useRef<HTMLDivElement>(null);
+  const key = useRef<HTMLButtonElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const transform = useMotionTemplate`translate(${x}px, ${y}px)`;
-  const reduce = useReducedMotion();
-  const [fine, setFine] = useState(true);
-  const [inside, setInside] = useState(false);
+  const busy = useRef(false);
   const [dodges, setDodges] = useState(0);
-  const [caught, setCaught] = useState(false);
-  const gave = dodges >= Math.max(1, patience);
-  const still = gave || caught || disabled || !!reduce;
+  const relented = dodges >= patience;
 
-  const pointer = useRef<{ x: number; y: number } | null>(null);
-  const bearing = useRef({ x: 1, y: 0 });
-  const armed = useRef(true);
-  const room = useRef({ x: 0, y: 0 });
-  const raf = useRef(0);
-  const hold = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const config = {
-    reach,
-    radius,
-    falloff,
-    fleeDuration,
-    returnDuration,
-    returnBounce,
-    axis,
-    wall,
-    still,
-    inside,
-    reduce,
-  };
-  const live = useRef(config);
-  live.current = config;
-
-  useEffect(() => {
-    const field = fieldRef.current;
-    const mover = moverRef.current;
-    if (!field || !mover) return undefined;
-    const measure = () => {
-      room.current = {
-        x: Math.max(0, (field.clientWidth - mover.offsetWidth) / 2 - INSET),
-        y: Math.max(0, (field.clientHeight - mover.offsetHeight) / 2 - INSET),
-      };
+  const home = () => {
+    const spring = {
+      type: "spring" as const,
+      duration: returnDuration / 1000,
+      bounce: returnBounce,
     };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(field);
-    observer.observe(mover);
-    return () => observer.disconnect();
-  }, []);
+    animate(x, 0, spring);
+    animate(y, 0, spring);
+  };
 
-  const frame = useCallback(() => {
-    raf.current = 0;
-    const field = fieldRef.current;
-    const p = pointer.current;
-    const L = live.current;
-    if (!field) return;
-    const rect = field.getBoundingClientRect();
-    const zoom = rect.width / (field.offsetWidth || rect.width) || 1;
-    const dx = p ? (p.x - (rect.left + rect.width / 2)) / zoom : Infinity;
-    const dy = p ? (p.y - (rect.top + rect.height / 2)) / zoom : Infinity;
+  // Keeps an offset inside the field; "bounce" reflects off the wall instead of stopping at it.
+  const fit = (v: number, limit: number) => {
+    if (Math.abs(v) <= limit) return v;
+    return wall === "bounce" ? Math.sign(v) * (2 * limit - Math.abs(v)) : Math.sign(v) * limit;
+  };
+
+  const onMove = (e: PointerEvent) => {
+    if (disabled || relented || busy.current || !field.current || !key.current) return;
+    const k = key.current.getBoundingClientRect();
+    const dx = k.left + k.width / 2 - e.clientX;
+    const dy = k.top + k.height / 2 - e.clientY;
     const d = Math.hypot(dx, dy);
-    const isInside = d <= L.radius;
-    if (!isInside && !L.inside) return;
-    if (!L.still) {
-      if (d < L.radius * COUNT_LINE) {
-        if (armed.current) {
-          armed.current = false;
-          setDodges((n) => n + 1);
-        }
-      } else if (d > L.radius) {
-        armed.current = true;
-      }
+    if (d > radius) return;
+    const f = field.current.getBoundingClientRect();
+    const strength = 0.4 + 0.6 * Math.pow(1 - d / radius, 1 / Math.max(falloff, 0.1));
+    const len = d || 1;
+    const nx = axis === "y" ? 0 : (dx || 1) / len;
+    const ny = axis === "x" ? 0 : dy / len;
+    const tx = fit(x.get() + nx * reach * strength, (f.width - k.width) / 2);
+    const ty = fit(y.get() + ny * reach * strength, (f.height - k.height) / 2);
+    const flee = { duration: reduce ? 0 : fleeDuration / 1000, ease: "easeOut" as const };
+    busy.current = true;
+    animate(x, tx, flee);
+    animate(y, ty, { ...flee, onComplete: () => (busy.current = false) });
+    const next = dodges + 1;
+    setDodges(next);
+    onDodge?.(next);
+    if (next >= patience) {
+      onRelent?.();
+      home();
     }
-    if (Number.isFinite(d) && d > DEAD_ZONE) bearing.current = bearingOf(dx, dy, d, L.axis);
-    const flee = isInside && !L.still ? (1 - d / L.radius) ** L.falloff : 0;
-    const tx = wallIt(-bearing.current.x * flee * L.reach, room.current.x, L.wall);
-    const ty = wallIt(-bearing.current.y * flee * L.reach, room.current.y, L.wall);
-    if (L.reduce) {
-      x.jump(0);
-      y.jump(0);
-    } else {
-      const cfg: Transition =
-        flee > 0
-          ? { type: "spring", duration: L.fleeDuration / 1000, bounce: 0 }
-          : { type: "spring", duration: L.returnDuration / 1000, bounce: L.returnBounce };
-      animate(x, tx, cfg);
-      animate(y, ty, cfg);
-    }
-    if (isInside !== L.inside) setInside(isInside);
-  }, [x, y]);
-
-  useEffect(() => {
-    const query = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const sync = () => setFine(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    if (!query.matches || disabled) return () => query.removeEventListener("change", sync);
-    const tick = () => {
-      if (!raf.current) raf.current = requestAnimationFrame(frame);
-    };
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      pointer.current = { x: e.clientX, y: e.clientY };
-      tick();
-    };
-    const onLeave = () => {
-      pointer.current = null;
-      tick();
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", tick, { passive: true, capture: true });
-    document.addEventListener("pointerleave", onLeave);
-    window.addEventListener("blur", onLeave);
-    return () => {
-      query.removeEventListener("change", sync);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", tick, { capture: true });
-      document.removeEventListener("pointerleave", onLeave);
-      window.removeEventListener("blur", onLeave);
-      cancelAnimationFrame(raf.current);
-      raf.current = 0;
-    };
-  }, [disabled, frame]);
-
-  useEffect(() => {
-    if (!raf.current) raf.current = requestAnimationFrame(frame);
-  }, [still, frame]);
-  useEffect(() => {
-    if (dodges) onDodge?.(dodges);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dodges]);
-  useEffect(() => {
-    if (gave) onRelent?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gave]);
-  useEffect(() => () => clearTimeout(hold.current), []);
-
-  const handleClick = () => {
-    setCaught(true);
-    onCatch?.();
-    clearTimeout(hold.current);
-    hold.current = setTimeout(() => {
-      setCaught(false);
-      setDodges(0);
-      armed.current = false;
-    }, CAUGHT_HOLD_MS);
   };
 
-  const state: DodgeState = { dodges, gave, caught, fleeing: inside && !still };
-  const index =
-    gave || caught ? taunts.length - 1 : Math.min(dodges, Math.max(0, taunts.length - 2));
-  const content =
-    typeof children === "function"
-      ? children(state)
-      : (children ?? (
-          <button
-            type="button"
-            className="focus-visible:outline-solid m-0 inline-flex h-[52px] cursor-pointer touch-manipulation select-none items-center justify-center rounded-md border border-dashed px-6 font-mono text-[12px] uppercase leading-none tracking-[0.18em] [-webkit-tap-highlight-color:transparent] [background:color-mix(in_srgb,var(--df-ink)_8%,transparent)] [border-color:color-mix(in_srgb,var(--df-ink)_35%,transparent)] [color:color-mix(in_srgb,var(--df-ink)_72%,transparent)] [transition:transform_160ms_var(--df-ease-out),background-color_220ms_ease,color_220ms_ease] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:[outline-color:color-mix(in_srgb,var(--df-ink)_60%,transparent)] active:[transform:scale(0.97)] group-data-[caught=true]:[background:var(--df-ink)] group-data-[caught=true]:[color:var(--df-contrast)] group-data-[relented=true]:[color:var(--df-ink)] group-data-[caught=true]:hover:[color:var(--df-contrast)] group-data-[relented=true]:hover:[color:var(--df-ink)] motion-reduce:[transition:background-color_220ms_ease,color_220ms_ease] motion-reduce:active:[transform:none] [@media(hover:hover)_and_(pointer:fine)]:hover:[color:color-mix(in_srgb,var(--df-ink)_90%,transparent)]"
-            aria-label={taunts[0]}
-          >
-            <span className="grid">
-              {taunts.map((taunt, i) => (
-                <span
-                  key={`${taunt}-${i}`}
-                  className="whitespace-nowrap [grid-area:1/1] [transition:opacity_200ms_ease,filter_200ms_ease] data-[active=false]:opacity-0 data-[active=false]:[filter:blur(2px)] motion-reduce:data-[active=false]:[filter:none]"
-                  data-active={i === index ? "true" : "false"}
-                  aria-hidden="true"
-                >
-                  {taunt}
-                </span>
-              ))}
-            </span>
-          </button>
-        ));
+  const state = { dodges, relented };
+  const caption = taunts[Math.min(dodges, taunts.length - 1)] ?? "";
 
   return (
-    <div
-      ref={fieldRef}
-      className={`relative grid w-full place-items-center [height:var(--df-height)]${className ? ` ${className}` : ""}`}
-      data-coarse={fine ? undefined : ""}
-      data-flat={reduce ? "" : undefined}
-      style={
-        {
-          "--df-ink": inkColor,
-          "--df-contrast": contrastColor,
-          "--df-height": `${fieldHeight}px`,
-          "--df-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-          ...style,
-        } as React.CSSProperties
-      }
-    >
-      <motion.div
-        ref={moverRef}
-        className="group inline-grid [will-change:transform]"
-        style={{ transform }}
-        data-fled={inside && !still ? "true" : "false"}
-        data-relented={gave ? "true" : "false"}
-        data-caught={caught ? "true" : "false"}
-        onClick={handleClick}
+    <div className={cn("w-full", className)} style={style}>
+      <div
+        ref={field}
+        onPointerMove={onMove}
+        onPointerLeave={() => !relented && home()}
+        className="relative grid w-full touch-none place-items-center overflow-hidden"
+        style={{ height: fieldHeight }}
       >
-        {content}
-      </motion.div>
-      {!fine && notice ? (
-        <p className="pointer-events-none absolute inset-x-0 bottom-3 m-0 text-center text-[12px] [color:color-mix(in_srgb,var(--df-ink)_55%,transparent)]">
+        <motion.button
+          ref={key}
+          type="button"
+          disabled={disabled}
+          onClick={() => onCatch?.()}
+          style={{
+            x,
+            y,
+            background: inkColor,
+            color: contrastColor,
+            outline: relented ? "none" : `1px dashed ${contrastColor}`,
+            outlineOffset: -5,
+          }}
+          className="rounded-md px-6 py-3 font-mono text-xs uppercase tracking-[0.2em] transition-[outline-color] focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] disabled:opacity-50 motion-reduce:transition-none"
+        >
+          {typeof children === "function" ? children(state) : (children ?? caption)}
+        </motion.button>
+      </div>
+      {notice && (
+        <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-[hsl(var(--muted-foreground))]">
           {notice}
         </p>
-      ) : null}
+      )}
     </div>
   );
 }

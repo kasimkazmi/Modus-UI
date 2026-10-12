@@ -33,26 +33,26 @@ export default function Example() {
 
 ## Props
 
-| Prop             | Type    | Default               | Description |
-| :--------------- | :------ | :-------------------- | :---------- |
-| label            | string  | "Weight"              | -           |
-| suffix           | string  | "pt"                  | -           |
-| value            | any     | -                     | -           |
-| defaultValue     | number  | 42                    | -           |
-| min              | number  | 0                     | -           |
-| max              | number  | 100                   | -           |
-| step             | number  | 1                     | -           |
-| size             | string  | "md"                  | -           |
-| sensitivity      | number  | 2                     | -           |
-| rubberReach      | number  | 8                     | -           |
-| returnDuration   | number  | 300                   | -           |
-| coarseMultiplier | number  | 10                    | -           |
-| fineMultiplier   | number  | 0.1                   | -           |
-| showDelta        | boolean | true                  | -           |
-| showDirty        | boolean | true                  | -           |
-| showFill         | boolean | true                  | -           |
-| accent           | string  | "hsl(var(--primary))" | -           |
-| chipColor        | string  | "hsl(var(--muted))"   | -           |
-| disabled         | boolean | false                 | -           |
-| onChange         | any     | -                     | -           |
-| onCommit         | any     | -                     | -           |
+| Prop             | Type    | Default               | Description                                            |
+| :--------------- | :------ | :-------------------- | :----------------------------------------------------- |
+| label            | string  | "Weight"              | Caption on the chip.                                   |
+| suffix           | string  | "pt"                  | Unit after the value.                                  |
+| value            | any     | -                     | Controlled value.                                      |
+| defaultValue     | number  | 42                    | Initial value; also the clean value for the dirty dot. |
+| min              | number  | 0                     | Lowest value.                                          |
+| max              | number  | 100                   | Highest value.                                         |
+| step             | number  | 1                     | Change per step.                                       |
+| size             | string  | "md"                  | Size: "sm", "md" or "lg".                              |
+| sensitivity      | number  | 2                     | Pixels of drag per step.                               |
+| rubberReach      | number  | 8                     | Furthest stretch past a limit, in pixels.              |
+| returnDuration   | number  | 300                   | Spring back duration in milliseconds.                  |
+| coarseMultiplier | number  | 10                    | Step multiplier while Shift is held.                   |
+| fineMultiplier   | number  | 0.1                   | Step multiplier while Alt is held.                     |
+| showDelta        | boolean | true                  | Shows the change while dragging.                       |
+| showDirty        | boolean | true                  | Marks a value that differs from the default.           |
+| showFill         | boolean | true                  | Shows the value as a fill.                             |
+| accent           | string  | "hsl(var(--primary))" | Fill, delta and dot colour.                            |
+| chipColor        | string  | "hsl(var(--muted))"   | Chip background.                                       |
+| disabled         | boolean | false                 | Disables the chip.                                     |
+| onChange         | any     | -                     | Called with each new value.                            |
+| onCommit         | any     | -                     | Called when a drag, key step or typed value lands.     |

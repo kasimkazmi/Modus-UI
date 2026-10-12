@@ -1,47 +1,45 @@
 "use client";
-// Ported from React Bits' Fuse Button (© David Haz).
+// Commit button with a recall window drawn as a fuse that burns along its edge.
 
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  animate,
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  type AnimationPlaybackControls,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useEffect, useId, useRef, useState } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Archive02Icon, Tick02Icon, Undo02Icon } from "@hugeicons/core-free-icons";
 
-const LINE = [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }];
-const OUTLINE = [{ strokeDashoffset: 0 }, { strokeDashoffset: -1 }];
-type FuseSize = "sm" | "md" | "lg";
-type FusePhase = "idle" | "armed" | "settled";
-type FuseCommitOn = "press" | "fuseEnd";
+export type CinderPhase = "idle" | "armed" | "done";
 
-const SIZES: Record<FuseSize, { height: number; font: number; icon: number; px: number }> = {
-  sm: { height: 36, font: 13, icon: 14, px: 16 },
-  md: { height: 44, font: 14, icon: 15, px: 20 },
-  lg: { height: 52, font: 15, icon: 17, px: 24 },
-};
+const SIZES = { sm: "h-8 px-3 text-[11px]", md: "h-10 px-4 text-xs", lg: "h-12 px-6 text-sm" };
 
-interface CinderTriggerProps {
+export interface CinderTriggerProps {
   label?: string;
   undoLabel?: string;
   doneLabel?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   color?: string;
   background?: string;
   fuseColor?: string;
-  size?: FuseSize;
+  size?: keyof typeof SIZES;
   radius?: number;
   undoWindow?: number;
   fuse?: "outline" | "top" | "bottom";
   fuseThickness?: number;
   crossfadeMs?: number;
-  commitOn?: FuseCommitOn;
+  commitOn?: "press" | "fuseEnd";
   pauseOnHover?: boolean;
   settle?: "reset" | "stay";
   disabled?: boolean;
-  onCommit?: (trigger: FuseCommitOn) => void;
+  onCommit?: () => void;
   onUndo?: () => void;
   onFuseEnd?: () => void;
-  onPhaseChange?: (phase: FusePhase) => void;
-  className?: string;
+  onPhaseChange?: (phase: CinderPhase) => void;
   type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 export function CinderTrigger({
@@ -66,259 +64,125 @@ export function CinderTrigger({
   onUndo,
   onFuseEnd,
   onPhaseChange,
-  className = "",
   type = "button",
+  className,
 }: CinderTriggerProps) {
-  const [phase, setPhase] = useState<FusePhase>("idle");
-  const [instant, setInstant] = useState(false);
-  const rootRef = useRef<HTMLSpanElement | null>(null);
-  const idleRef = useRef<HTMLButtonElement | null>(null);
-  const undoRef = useRef<HTMLButtonElement | null>(null);
-  const lineRef = useRef<HTMLElement | null>(null);
-  const rimRef = useRef<SVGRectElement | null>(null);
-  const anim = useRef<Animation | null>(null);
-  const pause = useRef({ hover: false, hidden: false, canHoverPause: false });
-  const lastInput = useRef<"pointer" | "keyboard">("pointer");
-  const windowRef = useRef(undoWindow);
-  const callbacks = { onCommit, onUndo, onFuseEnd, onPhaseChange, commitOn, settle };
-  const latest = useRef(callbacks);
-  latest.current = callbacks;
-  const statusId = useId();
-  const preset = SIZES[size] || SIZES.md;
+  const reduce = useReducedMotion();
+  const [phase, setPhase] = useState<CinderPhase>("idle");
+  const left = useMotionValue(1);
+  const burn = useRef<AnimationPlaybackControls | null>(null);
+  const latest = useRef({ onCommit, onFuseEnd, onPhaseChange, commitOn });
+  latest.current = { onCommit, onFuseEnd, onPhaseChange, commitOn };
 
-  const go = (next: FusePhase) => {
-    setInstant(lastInput.current === "keyboard");
+  const go = (next: CinderPhase) => {
     setPhase(next);
     latest.current.onPhaseChange?.(next);
   };
 
-  const syncPlayState = () => {
-    const a = anim.current;
-    if (!a) return;
-    const { hover, hidden } = pause.current;
-    if (hover || hidden) {
-      if (a.playState === "running") a.pause();
-    } else if (a.playState === "paused") {
-      a.play();
-    }
-  };
-
-  const light = (from = 0) => {
-    const el = fuse === "outline" ? rimRef.current : lineRef.current;
-    if (!el) return;
-    anim.current?.cancel();
-    const a = el.animate(fuse === "outline" ? OUTLINE : LINE, {
-      duration: windowRef.current,
-      easing: "linear",
-      fill: "forwards",
+  useEffect(() => {
+    if (phase !== "armed") return;
+    left.set(1);
+    burn.current = animate(left, 0, {
+      duration: undoWindow / 1000,
+      ease: "linear",
+      onComplete: () => {
+        const l = latest.current;
+        l.onFuseEnd?.();
+        if (l.commitOn === "fuseEnd") l.onCommit?.();
+        setPhase("done");
+        l.onPhaseChange?.("done");
+      },
     });
-    if (from) a.currentTime = from;
-    a.onfinish = () => {
-      const l = latest.current;
-      l.onFuseEnd?.();
-      if (l.commitOn === "fuseEnd") l.onCommit?.("fuseEnd");
-      lastInput.current = "pointer";
-      go(l.settle === "stay" ? "settled" : "idle");
-    };
-    anim.current = a;
-    syncPlayState();
-  };
+    return () => burn.current?.stop();
+  }, [phase, undoWindow, left]);
 
-  const arm = () => {
-    if (disabled || phase !== "idle") return;
-    windowRef.current = undoWindow;
-    light();
-    pause.current.canHoverPause = false;
-    pause.current.hover = false;
-    if (commitOn === "press") onCommit?.("press");
-    go("armed");
-  };
+  useEffect(() => {
+    if (phase !== "done" || settle !== "reset") return;
+    const t = setTimeout(() => {
+      setPhase("idle");
+      latest.current.onPhaseChange?.("idle");
+    }, 1400);
+    return () => clearTimeout(t);
+  }, [phase, settle]);
 
   const undo = () => {
-    if (phase !== "armed") return;
-    const a = anim.current;
-    if (a) {
-      a.onfinish = null;
-      a.pause();
-    }
+    burn.current?.stop();
     onUndo?.();
     go("idle");
   };
 
-  useEffect(() => {
-    const inside = rootRef.current?.contains(document.activeElement);
-    if (phase === "armed") undoRef.current?.focus({ preventScroll: true });
-    else if (inside)
-      (phase === "idle" ? idleRef.current : rootRef.current)?.focus({ preventScroll: true });
-  }, [phase]);
-
-  useEffect(() => {
-    const onVisibility = () => {
-      pause.current.hidden = document.hidden;
-      syncPlayState();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      anim.current?.cancel();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const a = anim.current;
-    if (!a || phase !== "armed") return;
-    light(Number(a.currentTime) || 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fuse]);
-
-  useEffect(() => {
-    if (pauseOnHover) return;
-    pause.current.hover = false;
-    syncPlayState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pauseOnHover]);
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLSpanElement>) => {
-    lastInput.current = "pointer";
-    const pressable = phase === "armed" || (phase === "idle" && !disabled);
-    if (e.button === 0 && pressable && rootRef.current) rootRef.current.dataset.pressed = "";
-  };
-  const release = () => {
-    if (rootRef.current) delete rootRef.current.dataset.pressed;
-  };
-  const handlePointerEnter = (e: React.PointerEvent<HTMLSpanElement>) => {
-    if (pauseOnHover && e.pointerType === "mouse" && pause.current.canHoverPause) {
-      pause.current.hover = true;
-      syncPlayState();
-    }
-  };
-  const handlePointerLeave = (e: React.PointerEvent<HTMLSpanElement>) => {
-    release();
-    if (e.pointerType !== "mouse") return;
-    pause.current.canHoverPause = true;
-    pause.current.hover = false;
-    syncPlayState();
-  };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
-    if (e.key === "Enter" || e.key === " ") lastInput.current = "keyboard";
-    if (e.key === "Escape" && phase === "armed") {
-      e.preventDefault();
-      lastInput.current = "keyboard";
-      undo();
-    }
+  const press = () => {
+    if (phase === "idle") {
+      if (commitOn === "press") onCommit?.();
+      go("armed");
+    } else if (phase === "armed") undo();
   };
 
-  const actionIcon = icon ?? (
-    <HugeiconsIcon icon={Archive02Icon} size={preset.icon} strokeWidth={1.8} />
-  );
-  const line = (
-    <i
-      ref={lineRef}
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[var(--fb-fuse-h)] origin-left [background:var(--fb-fuse)] [box-shadow:0_0_6px_color-mix(in_srgb,var(--fb-fuse)_55%,transparent)] group-data-[fuse=top]:bottom-auto group-data-[fuse=top]:top-0 forced-colors:[background:Highlight]"
-      aria-hidden="true"
-    />
-  );
+  const text = phase === "idle" ? label : phase === "armed" ? undoLabel : doneLabel;
+  const fade = reduce ? 0 : crossfadeMs / 2000;
 
   return (
-    <span
-      ref={rootRef}
-      tabIndex={-1}
-      className={`has-[:focus-visible]:outline-solid group relative isolate inline-grid h-[var(--fb-h)] touch-manipulation select-none grid-cols-[minmax(0,1fr)] overflow-hidden rounded-[var(--fb-radius)] font-mono uppercase leading-none tracking-[0.16em] outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [background:var(--fb-bg)] [color:var(--fb-ink)] [font-size:var(--fb-fs)] [transition:transform_160ms_var(--fb-ease-out)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[3px] has-[:focus-visible]:[outline-color:color-mix(in_srgb,var(--fb-ink)_60%,transparent)] data-[pressed]:[transform:scale(var(--fb-press))] data-[phase=idle]:has-[.fb-idle:disabled]:opacity-[0.55] motion-reduce:data-[pressed]:[transform:none] contrast-more:[box-shadow:inset_0_0_0_1px_color-mix(in_srgb,var(--fb-ink)_40%,transparent)]${className ? ` ${className}` : ""}`}
-      data-phase={phase}
-      data-fuse={fuse}
-      data-instant={instant ? "" : undefined}
-      aria-disabled={phase === "settled" || undefined}
-      style={
-        {
-          "--fb-ink": color,
-          "--fb-bg": background,
-          "--fb-fuse": fuseColor,
-          "--fb-fuse-h": `${fuseThickness}px`,
-          "--fb-radius": `${radius}px`,
-          "--fb-fade": `${crossfadeMs}ms`,
-          "--fb-h": `${preset.height}px`,
-          "--fb-fs": `${preset.font}px`,
-          "--fb-icon": `${preset.icon}px`,
-          "--fb-px": `${preset.px}px`,
-          "--fb-press": 0.97,
-          "--fb-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        } as React.CSSProperties
-      }
-      onPointerDown={handlePointerDown}
-      onPointerUp={release}
-      onPointerCancel={release}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
-      onKeyDown={handleKeyDown}
+    <motion.button
+      type={type}
+      disabled={disabled || (phase === "done" && settle === "stay")}
+      onClick={press}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && phase === "armed") undo();
+      }}
+      onHoverStart={() => pauseOnHover && burn.current?.pause()}
+      onHoverEnd={() => pauseOnHover && phase === "armed" && burn.current?.play()}
+      whileTap={reduce ? undefined : { scale: 0.97 }}
+      aria-live="polite"
+      className={cn(
+        "relative inline-flex select-none items-center justify-center gap-2 overflow-hidden font-mono uppercase tracking-[0.16em] outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--background))] disabled:opacity-60",
+        SIZES[size],
+        className,
+      )}
+      style={{ borderRadius: radius, background, color }}
     >
-      <button
-        type={type}
-        className="fb-idle group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=idle]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] focus-visible:outline-none disabled:cursor-default group-data-[phase=idle]:visible group-data-[phase=idle]:opacity-100 group-data-[phase=idle]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)] [@media(hover:hover)_and_(pointer:fine)]:enabled:hover:[background:color-mix(in_srgb,var(--fb-ink)_7%,transparent)]"
-        disabled={disabled}
-        ref={(el) => {
-          idleRef.current = el;
-          if (el) el.inert = phase !== "idle";
-        }}
-        onClick={arm}
-      >
-        <span
-          className="inline-flex h-[var(--fb-icon)] w-[var(--fb-icon)] [&>svg]:h-full [&>svg]:w-full"
-          aria-hidden="true"
+      {icon}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={phase}
+          initial={{ opacity: 0, y: reduce ? 0 : 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: reduce ? 0 : -4 }}
+          transition={{ duration: fade }}
         >
-          {actionIcon}
-        </span>
-        {label}
-      </button>
-      <button
-        type="button"
-        className="group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=armed]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] focus-visible:outline-none group-data-[phase=armed]:visible group-data-[phase=armed]:opacity-100 group-data-[phase=armed]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)] [@media(hover:hover)_and_(pointer:fine)]:hover:[background:color-mix(in_srgb,var(--fb-ink)_7%,transparent)]"
-        aria-describedby={statusId}
-        aria-keyshortcuts="Escape"
-        ref={(el) => {
-          undoRef.current = el;
-          if (el) el.inert = phase !== "armed";
-        }}
-        onClick={undo}
-      >
-        <span
-          className="inline-flex h-[var(--fb-icon)] w-[var(--fb-icon)] [transform:rotate(-70deg)] [transition:transform_var(--fb-fade)_var(--fb-ease-out)] group-data-[phase=armed]:[transform:rotate(0deg)] motion-reduce:transition-none motion-reduce:[transform:none] [&>svg]:h-full [&>svg]:w-full"
-          aria-hidden="true"
-        >
-          <HugeiconsIcon icon={Undo02Icon} size={preset.icon} strokeWidth={2} />
-        </span>
-        {undoLabel}
-        {fuse !== "outline" ? line : null}
-      </button>
-      <span
-        className="group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=settled]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-default cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] group-data-[phase=settled]:visible group-data-[phase=settled]:opacity-100 group-data-[phase=settled]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)]"
-        ref={(el) => {
-          if (el) el.inert = phase !== "settled";
-        }}
-      >
-        <span
-          className="inline-flex h-[var(--fb-icon)] w-[var(--fb-icon)] [&>svg]:h-full [&>svg]:w-full"
-          aria-hidden="true"
-        >
-          <HugeiconsIcon icon={Tick02Icon} size={preset.icon} strokeWidth={2.2} />
-        </span>
-        {doneLabel}
-      </span>
-      {fuse === "outline" ? (
-        <svg
-          className="group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] pointer-events-none absolute inset-0 h-full w-full overflow-visible opacity-0 [filter:drop-shadow(0_0_3px_color-mix(in_srgb,var(--fb-fuse)_60%,transparent))] [transition:opacity_var(--fb-fade)_ease] group-data-[phase=armed]:opacity-100"
-          aria-hidden="true"
-        >
-          <rect
-            ref={rimRef}
-            pathLength="1"
-            className="fill-none [height:calc(100%-var(--fb-fuse-h))] [rx:max(0px,calc(var(--fb-radius)-var(--fb-fuse-h)/2))] [stroke-dasharray:1] [stroke-linecap:round] [stroke-width:var(--fb-fuse-h)] [stroke:var(--fb-fuse)] [width:calc(100%-var(--fb-fuse-h))] [x:calc(var(--fb-fuse-h)/2)] [y:calc(var(--fb-fuse-h)/2)] forced-colors:[stroke:Highlight]"
+          {text}
+        </motion.span>
+      </AnimatePresence>
+      {phase === "armed" &&
+        (fuse === "outline" ? (
+          <svg
+            className="pointer-events-none absolute overflow-visible"
+            style={{
+              inset: fuseThickness / 2,
+              width: `calc(100% - ${fuseThickness}px)`,
+              height: `calc(100% - ${fuseThickness}px)`,
+            }}
+            aria-hidden
+          >
+            <motion.rect
+              width="100%"
+              height="100%"
+              rx={Math.max(0, radius - fuseThickness / 2)}
+              fill="none"
+              stroke={fuseColor}
+              strokeWidth={fuseThickness}
+              style={{ pathLength: left }}
+            />
+          </svg>
+        ) : (
+          <motion.span
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-x-0 origin-left",
+              fuse === "top" ? "top-0" : "bottom-0",
+            )}
+            style={{ height: fuseThickness, background: fuseColor, scaleX: left }}
           />
-        </svg>
-      ) : null}
-      <span className="sr-only" id={statusId} role="status" aria-live="polite">
-        {phase === "idle" ? "" : doneLabel}
-      </span>
-    </span>
+        ))}
+    </motion.button>
   );
 }

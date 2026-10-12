@@ -1,71 +1,58 @@
 "use client";
-// Ported from React Bits' Branched Menu (© David Haz).
+// A docs navigation tree whose hairline roots draw out to each open chapter's pages.
 
-import { cn } from "@/lib/utils";
-import { isValidElement, useLayoutEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactElement } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  CursorPointer01Icon,
-  Download04Icon,
+  Download01Icon,
   Layers01Icon,
-  Notification03Icon,
+  Notification01Icon,
   PaintBoardIcon,
   Rocket01Icon,
-  Settings02Icon,
+  Settings01Icon,
+  SquareIcon,
   TextFontIcon,
 } from "@hugeicons/core-free-icons";
-type HugeIcon = React.ComponentProps<typeof HugeiconsIcon>["icon"];
+import { cn } from "@/lib/utils";
 
-export interface RootNavLeaf {
-  value: string;
+export interface RootNavPage {
+  id: string;
   label: string;
-  icon?: HugeIcon | ReactElement;
+  icon?: IconSvgElement;
 }
 
-export interface RootNavItem {
-  label: string;
-  value?: string;
-  children?: RootNavLeaf[];
+export interface RootNavChapter {
+  title: string;
+  pages: RootNavPage[];
 }
 
-const DEFAULT_ITEMS: RootNavItem[] = [
+const DEFAULT_ITEMS: RootNavChapter[] = [
   {
-    label: "Foundations",
-    children: [
-      { value: "install", label: "Installation", icon: Download04Icon },
-      { value: "quick", label: "Quick start", icon: Rocket01Icon },
-      { value: "config", label: "Configuration", icon: Settings02Icon },
-      { value: "theming", label: "Theming", icon: PaintBoardIcon },
+    title: "Foundations",
+    pages: [
+      { id: "installation", label: "Installation", icon: Download01Icon },
+      { id: "quick-start", label: "Quick start", icon: Rocket01Icon },
+      { id: "configuration", label: "Configuration", icon: Settings01Icon },
+      { id: "theming", label: "Theming", icon: PaintBoardIcon },
     ],
   },
   {
-    label: "Library",
-    children: [
-      { value: "buttons", label: "Buttons", icon: CursorPointer01Icon },
-      { value: "typography", label: "Typography", icon: TextFontIcon },
-      { value: "overlays", label: "Overlays", icon: Layers01Icon },
-      { value: "toasts", label: "Toasts", icon: Notification03Icon },
+    title: "Library",
+    pages: [
+      { id: "buttons", label: "Buttons", icon: SquareIcon },
+      { id: "typography", label: "Typography", icon: TextFontIcon },
+      { id: "overlays", label: "Overlays", icon: Layers01Icon },
+      { id: "toasts", label: "Toasts", icon: Notification01Icon },
     ],
   },
 ];
-const PAD = 6;
-const MARK = 16;
 
-const renderIcon = (icon: HugeIcon | ReactElement) =>
-  isValidElement(icon) ? (
-    icon
-  ) : (
-    <HugeiconsIcon icon={icon as HugeIcon} size={16} strokeWidth={1.8} />
-  );
-const toSet = (open: number | number[]) =>
-  new Set(Array.isArray(open) ? open : open >= 0 ? [open] : []);
-
-interface RootNavProps {
-  items?: RootNavItem[];
-  defaultOpen?: number | number[];
+export interface RootNavProps {
+  items?: RootNavChapter[];
+  defaultOpen?: number;
   defaultActive?: string;
-  onSelect?: (value: string, item: RootNavItem | RootNavLeaf) => void;
+  onSelect?: (id: string) => void;
   onToggle?: (index: number, open: boolean) => void;
   color?: string;
   accentColor?: string;
@@ -100,178 +87,122 @@ export function RootNav({
   fontSize = 14,
   drawDuration = 400,
   foldDuration = 300,
-  className = "",
+  className,
 }: RootNavProps) {
-  const [open, setOpen] = useState(() => toSet(defaultOpen));
-  const [active, setActive] = useState(() => {
-    if (defaultActive) return defaultActive;
-    const first = items.find((it, i) => it.children && toSet(defaultOpen).has(i));
-    return first?.children?.[0]?.value ?? "";
-  });
-  const navRef = useRef<HTMLElement | null>(null);
-  const heads = useRef<(HTMLButtonElement | null)[]>([]);
-  const markerRef = useRef<HTMLSpanElement | null>(null);
-  const latest = useRef<Pick<RootNavProps, "onSelect" | "onToggle">>({});
-  latest.current = { onSelect, onToggle };
+  const reduce = useReducedMotion();
+  const [open, setOpen] = useState<Set<number>>(() => new Set([defaultOpen]));
+  const [active, setActive] = useState(defaultActive || items[defaultOpen]?.pages[0]?.id || "");
 
-  const activeSection = items.findIndex((it) => it.children?.some((kid) => kid.value === active));
-  const markerShown = activeSection >= 0 && open.has(activeSection);
-  useLayoutEffect(() => {
-    const place = (glide: boolean) => {
-      const m = markerRef.current;
-      const el = heads.current[activeSection];
-      if (!m) return;
-      const on = markerShown && el;
-      if (!glide) m.style.transition = "none";
-      if (on && el) m.style.top = `${el.offsetTop + (el.offsetHeight - MARK) / 2}px`;
-      m.toggleAttribute("data-on", Boolean(on));
-      if (!glide) {
-        void m.offsetHeight;
-        m.style.transition = "";
-      }
-    };
-    place(true);
-    let first = true;
-    const ro = new ResizeObserver(() => {
-      if (first) {
-        first = false;
-        return;
-      }
-      place(false);
-    });
-    if (navRef.current) ro.observe(navRef.current);
-    return () => ro.disconnect();
-  }, [activeSection, markerShown, items, fontSize, rowHeight]);
-
-  const select = (value: string, item: RootNavItem | RootNavLeaf) => {
-    setActive(value);
-    latest.current.onSelect?.(value, item);
-  };
   const toggle = (i: number) => {
-    setOpen((prev) => {
-      const next = new Set(prev);
-      const isOpen = !next.has(i);
-      if (isOpen) next.add(i);
-      else next.delete(i);
-      latest.current.onToggle?.(i, isOpen);
-      return next;
-    });
+    const next = new Set(open);
+    const isOpen = !next.has(i);
+    if (isOpen) next.add(i);
+    else next.delete(i);
+    setOpen(next);
+    onToggle?.(i, isOpen);
   };
-
-  const r = Math.min(radius, rowHeight / 2 - 2);
-  const endX = indent - 8;
-  const rowY = (k: number) => PAD + k * rowHeight + rowHeight / 2;
-  const branch = (k: number) =>
-    `M ${trunk} ${rowY(k) - r} A ${r} ${r} 0 0 0 ${trunk + r} ${rowY(k)} H ${endX}`;
-  const reach = (k: number) =>
-    `M ${trunk} 0 V ${rowY(k) - r} A ${r} ${r} 0 0 0 ${trunk + r} ${rowY(k)} H ${endX}`;
-  const length = (k: number) => rowY(k) - r + (Math.PI * r) / 2 + (endX - trunk - r);
 
   return (
-    <nav
-      ref={navRef}
-      className={`relative flex w-fit max-w-[min(var(--bm-w),100%)] flex-col pl-3.5 leading-[1.2] [color:var(--bm-ink)] [font-family:inherit] [font-size:var(--bm-font)] before:absolute before:bottom-0 before:left-0 before:top-2 before:w-0.5 before:rounded-[1px] before:[background:linear-gradient(to_bottom,var(--bm-line)_0%,var(--bm-line)_55%,transparent_100%)] before:content-['']${className ? ` ${className}` : ""}`}
-      style={
-        {
-          "--bm-w": `${width}px`,
-          "--bm-ink": color,
-          "--bm-accent": accentColor,
-          "--bm-line": lineColor,
-          "--bm-font": `${fontSize}px`,
-          "--bm-row": `${rowHeight}px`,
-          "--bm-indent": `${indent}px`,
-          "--bm-line-w": lineWidth,
-          "--bm-draw": `${drawDuration}ms`,
-          "--bm-muted": `color-mix(in srgb, ${color} 55%, transparent)`,
-          "--bm-fold": `${foldDuration}ms`,
-        } as CSSProperties
-      }
-    >
-      <span
-        ref={markerRef}
-        className="absolute -top-px left-0 z-[1] h-4 w-0.5 rounded-[1px] opacity-0 [background:var(--bm-accent)] [transition:top_220ms_cubic-bezier(0.23,1,0.32,1),opacity_150ms_ease] data-[on]:opacity-100 motion-reduce:[transition:opacity_150ms_ease]"
-        aria-hidden="true"
-      />
-      {items.map((item, i) => {
-        const kids = item.children;
-        const isOpen = kids ? open.has(i) : false;
-        const leafValue = item.value ?? item.label;
-        const leafActive = !kids && leafValue === active;
-        const bodyH = kids ? PAD * 2 + kids.length * rowHeight : 0;
+    <nav className={cn("select-none", className)} style={{ width, color, fontSize }}>
+      {items.map((chapter, ci) => {
+        const isOpen = open.has(ci);
+        const listId = `root-nav-${ci}`;
         return (
-          <div
-            key={item.value ?? item.label}
-            className="group/section flex flex-col"
-            data-open={isOpen ? "" : undefined}
-          >
+          <div key={chapter.title} className="relative">
             <button
-              ref={(el) => {
-                heads.current[i] = el;
-              }}
               type="button"
-              className="m-0 block cursor-pointer border-0 bg-transparent py-[9px] text-left font-mono uppercase tracking-[0.16em] outline-none [-webkit-tap-highlight-color:transparent] [color:var(--bm-muted)] [font-family:inherit] [font-size:calc(var(--bm-font)-3px)] [transition:color_200ms_ease] hover:[color:var(--bm-ink)] data-[active]:[color:var(--bm-ink)] group-data-[open]/section:[color:var(--bm-ink)]"
-              aria-expanded={kids ? isOpen : undefined}
-              aria-current={leafActive ? "true" : undefined}
-              data-active={leafActive ? "" : undefined}
-              onClick={() => (kids ? toggle(i) : select(leafValue, item))}
+              aria-expanded={isOpen}
+              aria-controls={listId}
+              onClick={() => toggle(ci)}
+              className={cn(
+                "flex w-full items-center font-mono text-[10px] uppercase tracking-[0.18em] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]",
+                !isOpen && "opacity-50 hover:opacity-80",
+              )}
+              style={{ height: rowHeight, paddingLeft: trunk + 10 }}
             >
-              {item.label}
+              {chapter.title}
             </button>
-            {kids ? (
-              <div className="grid [grid-template-rows:0fr] [transition:grid-template-rows_var(--bm-fold)_cubic-bezier(0.23,1,0.32,1)] group-data-[open]/section:[grid-template-rows:1fr] motion-reduce:transition-none">
-                <div className="min-h-0 overflow-hidden">
-                  <div className="relative box-border py-1.5" style={{ height: bodyH }}>
-                    <svg
-                      className="pointer-events-none absolute left-0 top-0 overflow-visible opacity-0 [transition:opacity_200ms_ease] group-data-[open]/section:opacity-100 group-data-[open]/section:[transition:opacity_250ms_ease_100ms]"
-                      width={indent}
-                      height={bodyH}
-                      aria-hidden="true"
-                    >
-                      <path
-                        className="fill-none [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:var(--bm-line-w)] [stroke:var(--bm-line)]"
-                        d={`M ${trunk} 0 V ${rowY(kids.length - 1) - r}`}
-                      />
-                      {kids.map((kid, k) => (
-                        <path
-                          key={kid.value}
-                          className="fill-none [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:var(--bm-line-w)] [stroke:var(--bm-line)]"
-                          d={branch(k)}
-                        />
-                      ))}
-                      {kids.map((kid, k) => (
-                        <path
-                          key={kid.value}
-                          className="fill-none [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:var(--bm-line-w)] [stroke:var(--bm-accent)] [transition:stroke-dashoffset_var(--bm-draw)_cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
-                          d={reach(k)}
-                          style={{
-                            strokeDasharray: length(k),
-                            strokeDashoffset: kid.value === active ? 0 : length(k),
+            {/* Tick marking the chapter; it inks in when the chapter is open. */}
+            <span
+              aria-hidden
+              className="absolute transition-colors"
+              style={{
+                left: trunk - lineWidth / 2,
+                top: rowHeight * 0.3,
+                height: isOpen ? rowHeight * 0.7 : rowHeight * 0.4,
+                width: lineWidth,
+                background: isOpen ? color : lineColor,
+              }}
+            />
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.ul
+                  id={listId}
+                  className="relative m-0 list-none overflow-hidden p-0"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{
+                    duration: reduce ? 0 : foldDuration / 1000,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
+                >
+                  {chapter.pages.map((page, pi) => {
+                    const on = page.id === active;
+                    const y = rowHeight / 2;
+                    const bend = Math.min(radius, y);
+                    const start = pi === 0 ? 0 : -y;
+                    const root = `M ${trunk} ${start} V ${y - bend} Q ${trunk} ${y} ${trunk + bend} ${y} H ${indent - 6}`;
+                    return (
+                      <li key={page.id} className="relative m-0 p-0" style={{ height: rowHeight }}>
+                        <svg
+                          aria-hidden
+                          className="pointer-events-none absolute left-0 top-0 overflow-visible"
+                          width={indent}
+                          height={rowHeight}
+                        >
+                          <motion.path
+                            d={root}
+                            fill="none"
+                            stroke={on ? accentColor : lineColor}
+                            strokeWidth={lineWidth}
+                            initial={{ pathLength: reduce ? 1 : 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{
+                              duration: reduce ? 0 : drawDuration / 1000,
+                              delay: reduce ? 0 : (pi * drawDuration) / 4000,
+                              ease: "easeOut",
+                            }}
+                          />
+                        </svg>
+                        <button
+                          type="button"
+                          aria-current={on ? "page" : undefined}
+                          onClick={() => {
+                            setActive(page.id);
+                            onSelect?.(page.id);
                           }}
-                        />
-                      ))}
-                    </svg>
-                    {kids.map((kid) => (
-                      <button
-                        key={kid.value}
-                        type="button"
-                        className="m-0 box-border flex w-full cursor-pointer items-center gap-2 border-0 bg-transparent py-0 pr-0 text-left outline-none [-webkit-tap-highlight-color:transparent] [color:var(--bm-muted)] [font-family:inherit] [height:var(--bm-row)] [padding-left:var(--bm-indent)] [transition:color_200ms_ease] hover:[color:var(--bm-ink)] data-[active]:font-medium data-[active]:[color:var(--bm-accent)]"
-                        aria-current={kid.value === active ? "true" : undefined}
-                        data-active={kid.value === active ? "" : undefined}
-                        tabIndex={isOpen ? 0 : -1}
-                        onClick={() => select(kid.value, kid)}
-                      >
-                        {kid.icon ? (
-                          <span className="inline-flex flex-none" aria-hidden="true">
-                            {renderIcon(kid.icon)}
-                          </span>
-                        ) : null}
-                        <span className="whitespace-nowrap">{kid.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : null}
+                          className={cn(
+                            "flex h-full w-full items-center gap-2 text-left transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]",
+                            on ? "font-medium" : "opacity-55 hover:opacity-90",
+                          )}
+                          style={{ paddingLeft: indent }}
+                        >
+                          {page.icon && (
+                            <HugeiconsIcon
+                              icon={page.icon}
+                              size={fontSize}
+                              color={on ? accentColor : "currentColor"}
+                            />
+                          )}
+                          {page.label}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         );
       })}

@@ -16,7 +16,7 @@ export default function PaperMillDemo() {
       <PaperMill
         items={DRAFTS}
         width={320}
-        height={440}
+        height={500}
         autoAnimate
         renderItem={(item) => (
           <div className="rounded-md border border-border bg-card px-4 py-3 shadow-sm">

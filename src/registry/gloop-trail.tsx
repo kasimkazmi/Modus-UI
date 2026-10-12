@@ -1,142 +1,102 @@
 "use client";
+// Drops that chase the pointer at different speeds and melt into one pool through a goo filter.
+import { useEffect, useId, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  type MotionValue,
+} from "framer-motion";
 
-import { useEffect, useRef, useCallback } from "react";
-import { useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
+type BlobType = "circle" | "square" | "almond";
 
 interface GloopTrailProps {
-  blobType?: "circle" | "square" | "almond";
+  blobType?: BlobType;
   fillColor?: string;
-  className?: string;
+}
+
+const DROPS = 4;
+const RADII: Record<BlobType, string> = { circle: "50%", square: "22%", almond: "50% 0" };
+
+function Drop({
+  x,
+  y,
+  index,
+  blobType,
+  fillColor,
+  still,
+}: {
+  x: MotionValue<number>;
+  y: MotionValue<number>;
+  index: number;
+  blobType: BlobType;
+  fillColor: string;
+  still: boolean;
+}) {
+  const spring = { stiffness: 520 - index * 110, damping: 28 + index * 4, mass: 0.6 };
+  const sx = useSpring(x, spring);
+  const sy = useSpring(y, spring);
+  const size = 64 - index * 10;
+  return (
+    <motion.div
+      className="absolute left-0 top-0"
+      style={{
+        x: still ? x : sx,
+        y: still ? y : sy,
+        width: size,
+        height: size,
+        marginLeft: -size / 2,
+        marginTop: -size / 2,
+        rotate: blobType === "almond" ? 45 : 0,
+        borderRadius: RADII[blobType],
+        background: `color-mix(in hsl, ${fillColor}, hsl(var(--muted-foreground)) ${index * 22}%)`,
+      }}
+    />
+  );
 }
 
 export function GloopTrail({
   blobType = "circle",
   fillColor = "hsl(var(--primary))",
-  className,
 }: GloopTrailProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const blobsRef = useRef<(HTMLDivElement | null)[]>([]);
-  // Reduced motion: no trailing lerp loop; the blobs jump straight to the pointer.
-  const prefersReducedMotion = useReducedMotion();
-
-  // Smooth trailing configuration
-  const trailCount = 8;
-  const positions = useRef<{ x: number; y: number }[]>(Array(trailCount).fill({ x: 0, y: 0 }));
-  const mousePos = useRef({ x: 0, y: 0 });
-
-  const handleMove = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-
-      let clientX, clientY;
-      if ("touches" in e) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      } else {
-        clientX = (e as React.MouseEvent).clientX;
-        clientY = (e as React.MouseEvent).clientY;
-      }
-
-      mousePos.current = {
-        x: clientX - rect.left,
-        y: clientY - rect.top,
-      };
-
-      if (prefersReducedMotion) {
-        const { x, y } = mousePos.current;
-        blobsRef.current.forEach((blob) => {
-          if (blob) blob.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-        });
-      }
-    },
-    [prefersReducedMotion],
-  );
+  const reduce = useReducedMotion();
+  const filterId = `gloop-${useId().replace(/:/g, "")}`;
+  const layer = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(-200);
+  const y = useMotionValue(-200);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    let animationFrameId: number;
-
-    const render = () => {
-      // Lerp logic for trail
-      for (let i = 0; i < trailCount; i++) {
-        const target = i === 0 ? mousePos.current : positions.current[i - 1];
-
-        // Easing depends on the blob position in the trail
-        const ease = i === 0 ? 0.3 : 0.4;
-
-        positions.current[i] = {
-          x: positions.current[i].x + (target.x - positions.current[i].x) * ease,
-          y: positions.current[i].y + (target.y - positions.current[i].y) * ease,
-        };
-
-        if (blobsRef.current[i]) {
-          blobsRef.current[i]!.style.transform =
-            `translate(${positions.current[i].x}px, ${positions.current[i].y}px) translate(-50%, -50%)`;
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(render);
+    const onMove = (e: PointerEvent) => {
+      const box = layer.current?.getBoundingClientRect();
+      if (!box) return;
+      x.set(e.clientX - box.left);
+      y.set(e.clientY - box.top);
     };
-
-    animationFrameId = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [prefersReducedMotion]);
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [x, y]);
 
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMove}
-      onTouchMove={handleMove}
-      className={cn("absolute inset-0 h-full w-full overflow-hidden", className)}
-      style={{ zIndex: 50 }}
-    >
-      {/* SVG Filter for Blob gooey effect */}
+    <div ref={layer} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <svg className="absolute h-0 w-0">
-        <filter id="gloop-trail-filter">
-          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="10" />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
-            result="goo"
-          />
-          <feBlend in="SourceGraphic" in2="goo" />
+        <filter id={filterId}>
+          <feGaussianBlur stdDeviation="10" />
+          <feColorMatrix values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
         </filter>
       </svg>
-
-      <div
-        className="pointer-events-none absolute inset-0 cursor-crosshair select-none overflow-hidden"
-        style={{ filter: "url(#gloop-trail-filter)" }}
-      >
-        {Array.from({ length: trailCount }).map((_, i) => {
-          // Calculate fading sizes and opacities
-          const size = 64 - i * 6;
-          const opacity = 1 - i * 0.1;
-
-          return (
-            <div
-              key={i}
-              ref={(el) => {
-                blobsRef.current[i] = el;
-              }}
-              className="absolute left-0 top-0 will-change-transform"
-              style={{
-                width: size,
-                height: size,
-                borderRadius:
-                  blobType === "circle" ? "50%" : blobType === "almond" ? "50% 0 50% 0" : "20%",
-                // Each step of the trail mixes the ink further toward the muted token.
-                backgroundColor: `color-mix(in oklab, ${fillColor} ${100 - i * 9}%, hsl(var(--muted-foreground)))`,
-                opacity: opacity,
-              }}
-            />
-          );
-        })}
+      <div className="absolute inset-0" style={{ filter: `url(#${filterId})` }}>
+        {Array.from({ length: reduce ? 1 : DROPS }, (_, i) => (
+          <Drop
+            key={i}
+            x={x}
+            y={y}
+            index={i}
+            blobType={blobType}
+            fillColor={fillColor}
+            still={!!reduce}
+          />
+        ))}
       </div>
     </div>
   );

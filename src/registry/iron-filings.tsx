@@ -1,7 +1,6 @@
 "use client";
-
-import { useRef, useEffect } from "react";
-import { useReducedMotion } from "framer-motion";
+// A grid of short strokes that swing to point at the cursor.
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface IronFilingsProps {
@@ -25,81 +24,59 @@ export function IronFilings({
   baseAngle = 45,
   className,
 }: IronFilingsProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current;
-    // Reduced motion: lines stay at baseAngle instead of tracking the pointer.
-    if (!container || prefersReducedMotion) return;
-
-    const items = container.querySelectorAll("span");
-
-    const onPointerMove = (pointer: { x: number; y: number }) => {
-      items.forEach((item) => {
-        const rect = item.getBoundingClientRect();
-        const centerX = rect.x + rect.width / 2;
-        const centerY = rect.y + rect.height / 2;
-
-        const b = pointer.x - centerX;
-        const a = pointer.y - centerY;
-        const c = Math.sqrt(a * a + b * b) || 1;
-        const r = ((Math.acos(b / c) * 180) / Math.PI) * (pointer.y > centerY ? 1 : -1);
-
-        item.style.setProperty("--rotate", `${r}deg`);
-      });
-    };
-
-    const handlePointerMove = (e: PointerEvent) => {
-      onPointerMove({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener("pointermove", handlePointerMove);
-
-    if (items.length) {
-      const middleIndex = Math.floor(items.length / 2);
-      const rect = items[middleIndex].getBoundingClientRect();
-      onPointerMove({ x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 });
-    }
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-    };
-  }, [rows, columns, prefersReducedMotion]);
-
-  const total = rows * columns;
-  const spans = Array.from({ length: total }, (_, i) => (
-    // Filings alternate between full ink and the theme accent at reduced weight.
-    <span
-      key={i}
-      className="block origin-center rounded-full will-change-transform"
-      style={
-        {
-          backgroundColor:
-            (Math.floor(i / columns) + i) % 2 === 0
-              ? lineColor
-              : `color-mix(in oklab, hsl(var(--primary)) 55%, transparent)`,
-          width: lineWidth,
-          height: lineHeight,
-          "--rotate": `${baseAngle}deg`,
-          transform: "rotate(var(--rotate))",
-        } as React.CSSProperties
+    let frame = 0;
+    let pointer: { x: number; y: number } | null = null;
+    const aim = () => {
+      frame = 0;
+      if (!pointer || !root.current) return;
+      for (const el of root.current.children as HTMLCollectionOf<HTMLElement>) {
+        const r = el.getBoundingClientRect();
+        const deg =
+          (Math.atan2(pointer.y - (r.top + r.height / 2), pointer.x - (r.left + r.width / 2)) *
+            180) /
+            Math.PI +
+          90;
+        el.style.setProperty("--aim", `${deg}deg`);
       }
-    />
-  ));
+    };
+    const onMove = (e: PointerEvent) => {
+      pointer = { x: e.clientX, y: e.clientY };
+      if (!frame) frame = requestAnimationFrame(aim);
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <div
-      ref={containerRef}
-      className={cn("z-10 grid place-items-center", className)}
+      ref={root}
+      aria-hidden
+      className={cn("grid place-items-center", className)}
       style={{
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gridTemplateRows: `repeat(${rows}, 1fr)`,
         width: containerSize,
         height: containerSize,
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
       }}
     >
-      {spans}
+      {Array.from({ length: rows * columns }, (_, i) => (
+        <span
+          key={i}
+          className="block rounded-full transition-transform duration-300 ease-out motion-reduce:transition-none"
+          style={{
+            width: lineWidth,
+            height: lineHeight,
+            background: i % 2 ? "hsl(var(--primary) / 0.55)" : lineColor,
+            transform: `rotate(var(--aim, ${baseAngle}deg))`,
+          }}
+        />
+      ))}
     </div>
   );
 }

@@ -1,32 +1,26 @@
 "use client";
-// Ported from React Bits' Flip Card (© David Haz).
-
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+// A two-sided sheet you turn by click, drag or key, with a pointer tilt and moving sheen.
+import {
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode,
+} from "react";
 import {
   animate,
   motion,
-  type MotionStyle,
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
   useSpring,
-  useTransform,
 } from "framer-motion";
-
-const SLOP = { fine: 4, coarse: 8 };
-const TILT_SPRING = { stiffness: 240, damping: 24, mass: 0.6 };
-const LIFT_SPRING = { stiffness: 320, damping: 26 };
-const FLING = 0.16;
-const HISTORY_MS = 90;
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-const snap = (deg: number) => Math.round(deg / 180) * 180;
-const isBack = (deg: number) => Math.abs(Math.round(deg / 180)) % 2 === 1;
+import { cn } from "@/lib/utils";
 
 interface TurnLeafProps {
-  front?: React.ReactNode;
-  back?: React.ReactNode;
+  front?: ReactNode;
+  back?: ReactNode;
   flipped?: boolean;
   defaultFlipped?: boolean;
   onFlipChange?: (flipped: boolean) => void;
@@ -53,16 +47,6 @@ interface TurnLeafProps {
   disabled?: boolean;
   ariaLabel?: string;
   className?: string;
-}
-
-interface Grip {
-  id: number;
-  x: number;
-  y: number;
-  base: number;
-  moved: boolean;
-  slop: number;
-  hist: { t: number; v: number }[];
 }
 
 export function TurnLeaf({
@@ -93,261 +77,157 @@ export function TurnLeaf({
   shadowOpacity = 0.3,
   disabled = false,
   ariaLabel = "Turn leaf",
-  className = "",
+  className,
 }: TurnLeafProps) {
   const reduce = useReducedMotion();
-  const controlled = flipped !== undefined;
-  const [inner, setInner] = useState(defaultFlipped);
-  const [dragging, setDragging] = useState(false);
-  const shown = controlled ? flipped : inner;
-  const shownRef = useRef(shown);
-  shownRef.current = shown;
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const grip = useRef<Grip | null>(null);
-  const spin = useRef<ReturnType<typeof animate> | null>(null);
-  const target = useRef(shown ? 180 : 0);
+  const [ownFlipped, setOwnFlipped] = useState(defaultFlipped);
+  const isFlipped = flipped ?? ownFlipped;
+  const turn = useMotionValue(isFlipped ? 180 : 0);
+  const tiltX = useSpring(0, { stiffness: 200, damping: 20 });
+  const tiltY = useSpring(0, { stiffness: 200, damping: 20 });
+  const scale = useSpring(1, { stiffness: 260, damping: 22 });
+  const glareX = useMotionValue(50);
+  const glareY = useMotionValue(50);
+  const glareAlpha = useSpring(0, { stiffness: 200, damping: 30 });
+  const sheen = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, hsl(var(--background) / ${glareAlpha}), transparent 60%)`;
+  const drag = useRef<{ start: number; moved: number } | null>(null);
+  const along = axis === "y" ? width : height;
+  const commitAt = dragDistance || along / 2;
 
-  const turn = useMotionValue(shown ? 180 : 0);
-  const tiltX = useSpring(0, TILT_SPRING);
-  const tiltY = useSpring(0, TILT_SPRING);
-  const lift = useSpring(1, LIFT_SPRING);
-  const sheen = useSpring(0, LIFT_SPRING);
-  const gx = useMotionValue(50);
-  const gy = useMotionValue(50);
+  useEffect(() => {
+    if (drag.current) return;
+    const controls = animate(turn, isFlipped ? 180 : 0, { type: "spring", stiffness, damping });
+    return () => controls.stop();
+  }, [isFlipped, stiffness, damping, turn]);
 
-  const sumX = useTransform([turn, tiltX], ([t, x]: number[]) => t + x);
-  const sumY = useTransform([turn, tiltY], ([t, y]: number[]) => t + y);
-  const turnY = useMotionTemplate`perspective(${perspective}px) scale(${lift}) rotateX(${tiltX}deg) rotateY(${sumY}deg)`;
-  const turnX = useMotionTemplate`perspective(${perspective}px) scale(${lift}) rotateY(${tiltY}deg) rotateX(${sumX}deg)`;
-  const facing = useTransform(turn, (t) => Math.abs(Math.cos((t * Math.PI) / 180)));
-  const spread = useTransform(facing, (f) => 0.08 + 0.92 * f);
-  const shade = useTransform(facing, (f) => 0.1 + 0.9 * f * f);
-  const gxPct = useMotionTemplate`${gx}%`;
-  const gyPct = useMotionTemplate`${gy}%`;
-
-  const settle = (to: number, velocity: number, instant: boolean) => {
-    spin.current?.stop();
-    target.current = to;
-    if (instant || reduce) turn.jump(to);
-    else
-      spin.current = animate(turn, to, {
-        type: "spring",
-        stiffness,
-        damping,
-        velocity,
-        restDelta: 0.05,
-      });
-    const next = isBack(to);
-    if (next === shownRef.current) return;
-    shownRef.current = next;
-    if (!controlled) setInner(next);
+  const set = (next: boolean) => {
+    if (flipped === undefined) setOwnFlipped(next);
     onFlipChange?.(next);
   };
-  const flip = (instant: boolean) => {
-    const base = snap(turn.get());
-    settle(isBack(base) ? base - 180 : base + 180, 0, instant);
+
+  const pos = (e: PointerEvent) => (axis === "y" ? e.clientX : -e.clientY);
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (disabled) return;
+    drag.current = { start: pos(e), moved: 0 };
+    e.currentTarget.setPointerCapture(e.pointerId);
   };
-  const rest = () => {
+
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (disabled) return;
+    const box = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - box.left) / box.width;
+    const py = (e.clientY - box.top) / box.height;
+    if (tilt && !reduce) {
+      tiltY.set((px - 0.5) * 2 * tiltMax);
+      tiltX.set((0.5 - py) * 2 * tiltMax);
+    }
+    glareX.set(px * 100);
+    glareY.set(py * 100);
+    const d = drag.current;
+    if (!d || !draggable || reduce) return;
+    d.moved = pos(e) - d.start;
+    const base = isFlipped ? 180 : 0;
+    turn.set(base + Math.max(-180, Math.min(180, (d.moved / along) * 180)));
+  };
+
+  const onPointerUp = () => {
+    const d = drag.current;
+    drag.current = null;
+    if (!d) return;
+    if (Math.abs(d.moved) < 4) {
+      if (flipOnClick) set(!isFlipped);
+      return;
+    }
+    if (draggable && Math.abs(d.moved) >= commitAt) set(!isFlipped);
+    else animate(turn, isFlipped ? 180 : 0, { type: "spring", stiffness, damping });
+  };
+
+  const onEnter = () => {
+    if (disabled) return;
+    if (!reduce) scale.set(hoverScale);
+    if (glare) glareAlpha.set(glareOpacity);
+  };
+
+  const onLeave = () => {
     tiltX.set(0);
     tiltY.set(0);
-    sheen.set(0);
-    lift.set(1);
+    scale.set(1);
+    glareAlpha.set(0);
   };
 
-  useEffect(() => {
-    if (!controlled || isBack(target.current) === flipped) return;
-    const base = target.current;
-    spin.current?.stop();
-    target.current = isBack(base) ? base - 180 : base + 180;
-    if (reduce) turn.jump(target.current);
-    else
-      spin.current = animate(turn, target.current, {
-        type: "spring",
-        stiffness,
-        damping,
-        restDelta: 0.05,
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flipped]);
-  useEffect(() => () => spin.current?.stop(), []);
-  useEffect(() => {
-    if (disabled) rest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disabled]);
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (disabled || e.button !== 0 || grip.current) return;
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
-    spin.current?.stop();
-    grip.current = {
-      id: e.pointerId,
-      x: e.clientX,
-      y: e.clientY,
-      base: turn.get(),
-      moved: false,
-      slop: e.pointerType === "touch" ? SLOP.coarse : SLOP.fine,
-      hist: [],
-    };
-    if (!reduce) lift.set(hoverScale);
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const g = grip.current;
-    if (g && g.id === e.pointerId) {
-      const d = axis === "x" ? e.clientY - g.y : e.clientX - g.x;
-      if (!g.moved) {
-        if (Math.abs(d) < g.slop || !draggable || reduce) return;
-        g.moved = true;
-        setDragging(true);
-        tiltX.set(0);
-        tiltY.set(0);
-        sheen.set(0);
-      }
-      const span = dragDistance > 0 ? dragDistance : axis === "x" ? height : width;
-      const deg = g.base + (axis === "x" ? -1 : 1) * (d / span) * 180;
-      turn.set(deg);
-      const now = performance.now();
-      g.hist.push({ t: now, v: deg });
-      while (g.hist.length > 2 && now - g.hist[0].t > HISTORY_MS) g.hist.shift();
-      return;
-    }
-    if (!tilt || reduce || disabled || e.pointerType === "touch") return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const px = clamp((e.clientX - r.left) / r.width, 0, 1);
-    const py = clamp((e.clientY - r.top) / r.height, 0, 1);
-    tiltX.set((0.5 - py) * 2 * tiltMax);
-    tiltY.set((px - 0.5) * 2 * tiltMax);
-    gx.set(px * 100);
-    gy.set(py * 100);
-    sheen.set(1);
-  };
-  const release = (e: React.PointerEvent<HTMLDivElement>, cancelled: boolean) => {
-    const g = grip.current;
-    if (!g || g.id !== e.pointerId) return;
-    grip.current = null;
-    try {
-      if (e.currentTarget.hasPointerCapture(e.pointerId))
-        e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
-    setDragging(false);
-    if (e.pointerType === "touch" || !rootRef.current?.matches(":hover")) rest();
-    if (!g.moved) {
-      if (!cancelled && flipOnClick) flip(false);
-      else settle(target.current, 0, false);
-      return;
-    }
-    const here = turn.get();
-    let velocity = 0;
-    const a = g.hist[0];
-    const b = g.hist[g.hist.length - 1];
-    if (!cancelled && a && b && b.t > a.t && performance.now() - b.t < 60)
-      velocity = ((b.v - a.v) / (b.t - a.t)) * 1000;
-    const to = cancelled
-      ? snap(g.base)
-      : clamp(snap(here + velocity * FLING), snap(here) - 180, snap(here) + 180);
-    settle(to, velocity, false);
-  };
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const onKeyDown = (e: KeyboardEvent) => {
     if (disabled || (e.key !== "Enter" && e.key !== " ")) return;
     e.preventDefault();
-    if (!e.repeat) flip(true);
-  };
-  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!disabled && e.detail === 0) flip(true);
+    set(!isFlipped);
   };
 
-  const rotorStyle = {
-    transform: axis === "x" ? turnX : turnY,
-    "--fc-gx": gxPct,
-    "--fc-gy": gyPct,
-    "--fc-sheen": sheen,
-  } as MotionStyle;
+  const rotateKey = axis === "y" ? "rotateY" : "rotateX";
+  const face = cn(
+    "absolute inset-0 overflow-hidden border border-border [backface-visibility:hidden]",
+  );
+  const faceStyle = { borderRadius: radius, background, color };
 
   return (
-    <div
-      ref={rootRef}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-pressed={shown}
-      aria-label={ariaLabel}
-      aria-disabled={disabled || undefined}
-      className={`group relative inline-block max-w-full cursor-pointer touch-pan-y select-none outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [border-radius:var(--fc-radius)] [height:var(--fc-h)] [width:var(--fc-w)] data-[disabled]:cursor-default data-[draggable]:cursor-grab data-[dragging]:cursor-grabbing data-[axis=x]:touch-pan-x data-[disabled]:opacity-60${className ? ` ${className}` : ""}`}
-      data-axis={axis}
-      data-draggable={draggable && !disabled && !reduce ? "" : undefined}
-      data-dragging={dragging ? "" : undefined}
-      data-disabled={disabled ? "" : undefined}
-      data-fade={reduce ? (shown ? "back" : "front") : undefined}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={(e) => release(e, false)}
-      onPointerCancel={(e) => release(e, true)}
-      onLostPointerCapture={(e) => release(e, true)}
-      onPointerEnter={(e) => {
-        if (!reduce && !disabled && e.pointerType !== "touch") lift.set(hoverScale);
-      }}
-      onPointerLeave={() => {
-        if (!grip.current) rest();
-      }}
-      onKeyDown={onKeyDown}
-      onClick={onClick}
-      onDragStart={(e) => e.preventDefault()}
-      style={
-        {
-          "--fc-w": `${width}px`,
-          "--fc-h": `${height}px`,
-          "--fc-radius": `${radius}px`,
-          "--fc-bg": background,
-          "--fc-ink": color,
-          "--fc-shadow": shadowColor,
-          "--fc-shadow-o": shadowOpacity,
-          "--fc-glare": glareOpacity,
-        } as React.CSSProperties
-      }
-    >
-      {shadow ? (
-        <motion.span
-          className="pointer-events-none absolute [background:color-mix(in_srgb,var(--fc-shadow)_calc(var(--fc-shadow-o)*100%),transparent)] [border-radius:var(--fc-radius)] [filter:blur(22px)] [inset:12%_9%_-5%]"
-          aria-hidden="true"
-          style={
-            axis === "x" ? { scaleY: spread, opacity: shade } : { scaleX: spread, opacity: shade }
-          }
-        />
-      ) : null}
+    <div className={cn("inline-block select-none", className)} style={{ perspective }}>
       <motion.div
-        className="absolute inset-0 [transform-style:preserve-3d]"
-        style={reduce ? undefined : rotorStyle}
+        role="button"
+        tabIndex={disabled ? -1 : 0}
+        aria-label={ariaLabel}
+        aria-pressed={isFlipped}
+        aria-disabled={disabled}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onPointerEnter={onEnter}
+        onPointerLeave={onLeave}
+        onKeyDown={onKeyDown}
+        className={cn(
+          "relative touch-none outline-none [transform-style:preserve-3d] focus-visible:ring-2 focus-visible:ring-ring",
+          disabled ? "cursor-not-allowed opacity-60" : "cursor-grab active:cursor-grabbing",
+        )}
+        style={{
+          width,
+          height,
+          borderRadius: radius,
+          rotateX: tiltX,
+          rotateY: tiltY,
+          scale,
+          boxShadow: shadow
+            ? `0 18px 40px -16px color-mix(in hsl, ${shadowColor} ${shadowOpacity * 100}%, transparent)`
+            : undefined,
+        }}
       >
-        <div
-          className="group-data-[fade=front]:opacity-100! absolute inset-0 overflow-hidden border border-border [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [background:var(--fc-bg)] [border-radius:var(--fc-radius)] [color:var(--fc-ink)] group-data-[fade]:opacity-0 group-data-[fade]:[-webkit-backface-visibility:visible] group-data-[fade]:[backface-visibility:visible] group-data-[fade]:[transition:opacity_200ms_ease] [&_img]:[-webkit-user-drag:none]"
-          aria-hidden={shown}
-          ref={(el) => {
-            if (el) el.inert = shown;
-          }}
-        >
-          {front}
-          {glare ? (
-            <span
-              className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_farthest-side_at_var(--fc-gx,50%)_var(--fc-gy,50%),rgba(255,255,255,var(--fc-glare))_0%,rgba(255,255,255,calc(var(--fc-glare)*0.76))_12%,rgba(255,255,255,calc(var(--fc-glare)*0.5))_26%,rgba(255,255,255,calc(var(--fc-glare)*0.28))_42%,rgba(255,255,255,calc(var(--fc-glare)*0.12))_60%,rgba(255,255,255,calc(var(--fc-glare)*0.04))_78%,rgba(255,255,255,0)_100%)] [opacity:var(--fc-sheen,0)]"
-              aria-hidden="true"
-            />
-          ) : null}
-        </div>
-        <div
-          className="group-data-[fade]:[transform:none]! group-data-[fade=back]:opacity-100! absolute inset-0 overflow-hidden border border-border [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [background:var(--fc-bg)] [border-radius:var(--fc-radius)] [color:var(--fc-ink)] [transform:rotateY(180deg)] group-data-[fade]:opacity-0 group-data-[fade]:[-webkit-backface-visibility:visible] group-data-[fade]:[backface-visibility:visible] group-data-[axis=x]:[transform:rotateX(180deg)] group-data-[fade]:[transition:opacity_200ms_ease] [&_img]:[-webkit-user-drag:none]"
-          aria-hidden={!shown}
-          ref={(el) => {
-            if (el) el.inert = !shown;
-          }}
-        >
-          {back}
-          {glare ? (
-            <span
-              className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_farthest-side_at_var(--fc-gx,50%)_var(--fc-gy,50%),rgba(255,255,255,var(--fc-glare))_0%,rgba(255,255,255,calc(var(--fc-glare)*0.76))_12%,rgba(255,255,255,calc(var(--fc-glare)*0.5))_26%,rgba(255,255,255,calc(var(--fc-glare)*0.28))_42%,rgba(255,255,255,calc(var(--fc-glare)*0.12))_60%,rgba(255,255,255,calc(var(--fc-glare)*0.04))_78%,rgba(255,255,255,0)_100%)] [opacity:var(--fc-sheen,0)]"
-              aria-hidden="true"
-            />
-          ) : null}
-        </div>
+        {reduce ? (
+          <>
+            <motion.div className={face} style={faceStyle} animate={{ opacity: isFlipped ? 0 : 1 }}>
+              {front}
+            </motion.div>
+            <motion.div className={face} style={faceStyle} animate={{ opacity: isFlipped ? 1 : 0 }}>
+              {back}
+            </motion.div>
+          </>
+        ) : (
+          <motion.div
+            className="absolute inset-0 [transform-style:preserve-3d]"
+            style={{ [rotateKey]: turn }}
+          >
+            <div className={face} style={faceStyle}>
+              {front}
+            </div>
+            <div className={face} style={{ ...faceStyle, transform: `${rotateKey}(180deg)` }}>
+              {back}
+            </div>
+          </motion.div>
+        )}
+        {glare && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 mix-blend-soft-light"
+            style={{ borderRadius: radius, background: sheen, transform: "translateZ(1px)" }}
+          />
+        )}
       </motion.div>
     </div>
   );

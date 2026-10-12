@@ -3,7 +3,7 @@ title: Cipher Reel
 description: A one-time code field of paper slots with serif numerals that drop in and seal on success.
 ---
 
-TODO 2-3 sentences on why this component is useful.
+Cipher Reel is a one-time code field. A single hidden input does the typing, pasting and autofill, while serif numerals drop into paper slots; set `status` to seal the slots on success or shake them on error.
 
 <ComponentPreview name="cipher-reel" />
 
@@ -33,28 +33,28 @@ export default function Example() {
 
 ## Props
 
-| Prop         | Type    | Default                     | Description |
-| :----------- | :------ | :-------------------------- | :---------- |
-| length       | number  | 6                           | -           |
-| value        | any     | -                           | -           |
-| defaultValue | string  | ""                          | -           |
-| onChange     | any     | -                           | -           |
-| onComplete   | any     | -                           | -           |
-| status       | string  | "idle"                      | -           |
-| mask         | boolean | false                       | -           |
-| caret        | boolean | true                        | -           |
-| disabled     | boolean | false                       | -           |
-| autoFocus    | boolean | false                       | -           |
-| accentColor  | string  | `"hsl(var(--primary))"`     | -           |
-| inkColor     | string  | `"hsl(var(--foreground))"`  | -           |
-| slotColor    | string  | `"hsl(var(--muted))"`       | -           |
-| digitColor   | string  | `"hsl(var(--foreground))"`  | -           |
-| dangerColor  | string  | `"hsl(var(--destructive))"` | -           |
-| slotSize     | number  | `48`                        | -           |
-| gap          | number  | `10`                        | -           |
-| radius       | number  | `6`                         | -           |
-| bounce       | number  | 0.2                         | -           |
-| settle       | number  | 0.3                         | -           |
-| rise         | number  | 8                           | -           |
-| cascade      | number  | 20                          | -           |
-| ariaLabel    | string  | "One-time code"             | -           |
+| Prop         | Type    | Default                     | Description                                               |
+| :----------- | :------ | :-------------------------- | :-------------------------------------------------------- |
+| length       | number  | 6                           | Number of slots.                                          |
+| value        | any     | -                           | Controlled code.                                          |
+| defaultValue | string  | ""                          | Initial code when uncontrolled.                           |
+| onChange     | any     | -                           | Called with the code on every edit.                       |
+| onComplete   | any     | -                           | Called once every slot is filled.                         |
+| status       | string  | "idle"                      | "idle", "success" (slots seal) or "error" (field shakes). |
+| mask         | boolean | false                       | Shows dots instead of digits.                             |
+| caret        | boolean | true                        | Blinks a caret in the active slot.                        |
+| disabled     | boolean | false                       | Disables input.                                           |
+| autoFocus    | boolean | false                       | Focuses on mount.                                         |
+| accentColor  | string  | `"hsl(var(--primary))"`     | Seal outline on success.                                  |
+| inkColor     | string  | `"hsl(var(--foreground))"`  | Active slot outline and caret.                            |
+| slotColor    | string  | `"hsl(var(--muted))"`       | Slot fill.                                                |
+| digitColor   | string  | `"hsl(var(--foreground))"`  | Numeral colour.                                           |
+| dangerColor  | string  | `"hsl(var(--destructive))"` | Outline on error.                                         |
+| slotSize     | number  | `48`                        | Slot width in pixels.                                     |
+| gap          | number  | `10`                        | Space between slots in pixels.                            |
+| radius       | number  | `6`                         | Slot corner radius in pixels.                             |
+| bounce       | number  | 0.2                         | Spring bounce as a digit lands.                           |
+| settle       | number  | 0.3                         | Seal pulse duration in seconds.                           |
+| rise         | number  | 8                           | Height digits drop from, in pixels.                       |
+| cascade      | number  | 20                          | Delay between slots sealing, in milliseconds.             |
+| ariaLabel    | string  | "One-time code"             | Accessible label.                                         |

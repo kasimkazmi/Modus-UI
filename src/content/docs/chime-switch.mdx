@@ -3,7 +3,7 @@ title: Chime Switch
 description: A square-shouldered subscribe switch whose bell chimes as it flips to the theme ink.
 ---
 
-TODO 2-3 sentences on why this component is useful.
+Chime Switch is a subscribe toggle: switching it on fills it with the theme's primary ink, swings the bell in a decaying chime and shows a count badge. It is a real switch with `aria-checked`, so keyboard and screen readers treat it as one.
 
 <ComponentPreview name="chime-switch" />
 
@@ -33,32 +33,32 @@ export default function Example() {
 
 ## Props
 
-| Prop           | Type    | Default                                | Description |
-| :------------- | :------ | :------------------------------------- | :---------- |
-| offLabel       | string  | `"Keep me posted"`                     | -           |
-| onLabel        | string  | `"On the list"`                        | -           |
-| icon           | any     | -                                      | -           |
-| label          | any     | -                                      | -           |
-| color          | string  | `"hsl(var(--foreground))"`             | -           |
-| background     | string  | `"hsl(var(--muted))"`                  | -           |
-| onColor        | string  | `"hsl(var(--primary-foreground))"`     | -           |
-| onBackground   | string  | `"hsl(var(--primary))"`                | -           |
-| size           | string  | "md"                                   | -           |
-| radius         | number  | `8`                                    | -           |
-| ringAmplitude  | number  | 17                                     | -           |
-| ringPasses     | number  | 5                                      | -           |
-| ringDecay      | number  | 1                                      | -           |
-| ringDuration   | number  | 820                                    | -           |
-| ringPivot      | number  | 16                                     | -           |
-| crossfadeMs    | number  | 200                                    | -           |
-| revealBounce   | number  | 0                                      | -           |
-| count          | number  | `3`                                    | -           |
-| badge          | boolean | true                                   | -           |
-| badgeColor     | string  | `"hsl(var(--destructive))"`            | -           |
-| badgeTextColor | string  | `"hsl(var(--destructive-foreground))"` | -           |
-| waves          | boolean | true                                   | -           |
-| clapper        | boolean | `true`                                 | -           |
-| pressed        | any     | -                                      | -           |
-| defaultPressed | boolean | false                                  | -           |
-| onChange       | any     | -                                      | -           |
-| disabled       | boolean | false                                  | -           |
+| Prop           | Type    | Default                                | Description                                     |
+| :------------- | :------ | :------------------------------------- | :---------------------------------------------- |
+| offLabel       | string  | `"Keep me posted"`                     | Label while off.                                |
+| onLabel        | string  | `"On the list"`                        | Label while on.                                 |
+| icon           | any     | -                                      | Replaces the bell.                              |
+| label          | any     | -                                      | Replaces both labels.                           |
+| color          | string  | `"hsl(var(--foreground))"`             | Text colour while off.                          |
+| background     | string  | `"hsl(var(--muted))"`                  | Background while off.                           |
+| onColor        | string  | `"hsl(var(--primary-foreground))"`     | Text colour while on.                           |
+| onBackground   | string  | `"hsl(var(--primary))"`                | Background while on.                            |
+| size           | string  | "md"                                   | Size: "sm", "md" or "lg".                       |
+| radius         | number  | `8`                                    | Corner radius in pixels.                        |
+| ringAmplitude  | number  | 17                                     | First swing angle in degrees.                   |
+| ringPasses     | number  | 5                                      | Number of swings.                               |
+| ringDecay      | number  | 1                                      | How quickly swings shrink.                      |
+| ringDuration   | number  | 820                                    | Chime duration in milliseconds.                 |
+| ringPivot      | number  | 16                                     | Swing pivot, as a percentage from the bell top. |
+| crossfadeMs    | number  | 200                                    | Label and colour crossfade in milliseconds.     |
+| revealBounce   | number  | 0                                      | Spring bounce of the label and badge.           |
+| count          | number  | `3`                                    | Number shown in the badge.                      |
+| badge          | boolean | true                                   | Shows the badge while on.                       |
+| badgeColor     | string  | `"hsl(var(--destructive))"`            | Badge background.                               |
+| badgeTextColor | string  | `"hsl(var(--destructive-foreground))"` | Badge text colour.                              |
+| waves          | boolean | true                                   | Shows sound waves while ringing.                |
+| clapper        | boolean | `true`                                 | Draws the swinging clapper.                     |
+| pressed        | any     | -                                      | Controlled state.                               |
+| defaultPressed | boolean | false                                  | Initial state when uncontrolled.                |
+| onChange       | any     | -                                      | Called with the new state.                      |
+| disabled       | boolean | false                                  | Disables the switch.                            |

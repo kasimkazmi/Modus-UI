@@ -1,36 +1,18 @@
 "use client";
-// Ported from React Bits' Wake Slider (© David Haz).
+// A range input drawn as bars that swell into a crest around the thumb.
 
-import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
-  frame,
+  motion,
   useMotionValue,
-  useMotionValueEvent,
   useReducedMotion,
   useSpring,
-  useVelocity,
+  useTransform,
+  type MotionValue,
 } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const SETTLE = 9.23;
-const FULL_SPEED = 320;
-const MIN_REACH = 1.5;
-const FLAT = 0.002;
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
-const smoothstep = (s: number) => s * s * (3 - 2 * s);
-const toPct = (v: number, min: number, max: number) =>
-  max > min ? ((v - min) / (max - min)) * 100 : 0;
-const snap = (v: number, min: number, max: number, step: number) => {
-  if (!(max > min)) return min;
-  if (!(step > 0)) return clamp(v, min, max);
-  const lastWhole = min + Math.floor(+((max - min) / step).toFixed(6)) * step;
-  const grid = clamp(Math.round((v - min) / step) * step + min, min, lastWhole);
-  return +(lastWhole < max && Math.abs(v - max) <= Math.abs(v - grid) ? max : grid).toFixed(6);
-};
-
-interface RouseTrackProps {
+export interface RouseTrackProps {
   value?: number;
   defaultValue?: number;
   onChange?: (value: number) => void;
@@ -50,14 +32,14 @@ interface RouseTrackProps {
   glide?: number;
   smoothing?: number;
   showValue?: boolean;
-  formatValue?: (value: number) => string;
+  formatValue?: (value: number) => ReactNode;
   disabled?: boolean;
   ariaLabel?: string;
   className?: string;
 }
 
 export function RouseTrack({
-  value: valueProp,
+  value,
   defaultValue = 50,
   onChange,
   min = 0,
@@ -79,202 +61,129 @@ export function RouseTrack({
   formatValue,
   disabled = false,
   ariaLabel = "Value",
-  className = "",
+  className,
 }: RouseTrackProps) {
-  const [inner, setInner] = useState(defaultValue);
-  const value = clamp(valueProp ?? inner, min, max);
-  const pct = toPct(value, min, max);
   const reduce = useReducedMotion();
-  const format: (value: number) => string = formatValue ?? String;
-  const rest = Math.min(restHeight, height - 1) / height;
+  const [inner, setInner] = useState(defaultValue);
+  const current = value ?? inner;
+  const ratio = (current - min) / (max - min || 1);
+  const filled = Math.round(ratio * bars);
 
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const handleRef = useRef<HTMLButtonElement | null>(null);
-  const barEls = useRef<(HTMLSpanElement | null)[]>([]);
-  const crestEls = useRef<(HTMLSpanElement | null)[]>([]);
-  const pointerId = useRef<number | null>(null);
-  const lastAmp = useRef(0);
-  const latest = useRef(value);
-  latest.current = value;
-
-  const target = useMotionValue(pct);
-  const w0 = SETTLE / glide;
-  const head = useSpring(target, { stiffness: w0 * w0, damping: 2 * w0, mass: 1 });
-  const rawSpeed = useVelocity(head);
-  const wv = 2000 / smoothing;
-  const speed = useSpring(rawSpeed, { stiffness: wv * wv, damping: 2.5 * wv, mass: 1 });
-
-  useEffect(() => {
-    target.set(pct);
-  }, [pct, target]);
-
-  const paint = (force = false) => {
-    const h = ((reduce ? target.get() : head.get()) / 100) * (bars - 1);
-    const v = reduce ? 0 : speed.get();
-    const amp = smoothstep(clamp((Math.abs(v) * sensitivity) / FULL_SPEED, 0, 1));
-    const dir = Math.sign(v) || 1;
-    const r = MIN_REACH + (reach - MIN_REACH) * amp;
-    const behind = r * (1 + skew);
-    const ahead = r * (1 - 0.5 * skew);
-    const lit = Math.round(h);
-    const flat = !force && amp < FLAT && lastAmp.current < FLAT;
-    for (let i = 0; i < bars; i++) {
-      const el = barEls.current[i];
-      if (!el) continue;
-      const on = i <= lit ? "true" : "false";
-      if (el.dataset.on !== on) el.dataset.on = on;
-      if (flat) continue;
-      const d = i - h;
-      const R = d * dir < 0 ? behind : ahead;
-      const lift = Math.abs(d) < R ? amp * Math.cos((Math.PI * d) / (2 * R)) ** 2 : 0;
-      el.style.transform = `scaleY(${rest + lift * (1 - rest)})`;
-      const crest = crestEls.current[i];
-      if (crest) crest.style.opacity = String(lift);
-    }
-    lastAmp.current = amp;
-  };
-  const paintRef = useRef(paint);
-  paintRef.current = paint;
-  const run = useCallback(() => paintRef.current(), []);
-  const schedule = useCallback(() => frame.render(run, false, true), [run]);
-  useMotionValueEvent(head, "change", schedule);
-  useMotionValueEvent(speed, "change", schedule);
-  useLayoutEffect(() => {
-    paintRef.current(true);
+  // Crest centre in bar units; it follows the pointer while hovered, else the value.
+  const target = useMotionValue(ratio * (bars - 1));
+  const [hover, setHover] = useState<number | null>(null);
+  const goal = hover ?? ratio * (bars - 1);
+  useEffect(() => target.set(goal), [target, goal]);
+  const crest = useSpring(target, {
+    stiffness: reduce ? 10000 : 400 * (1 - glide) + 40,
+    damping: reduce ? 200 : 30,
+  });
+  // The crest swells while engaged, and sinks back at rest.
+  const strength = useSpring(hover === null ? 0.45 : 1, {
+    duration: reduce ? 0 : smoothing / 1000,
+    bounce: 0,
   });
 
-  const commit = (next: number) => {
-    const clean = snap(next, min, max, step);
-    if (clean === latest.current) return;
-    latest.current = clean;
-    if (valueProp === undefined) setInner(clean);
-    onChange?.(clean);
+  const set = (v: number) => {
+    setInner(v);
+    onChange?.(v);
   };
-  const commitFromX = (x: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const rect = track.getBoundingClientRect();
-    if (!rect.width) return;
-    let ratio = clamp((x - rect.left) / rect.width, 0, 1);
-    if (getComputedStyle(track).direction === "rtl") ratio = 1 - ratio;
-    commit(min + ratio * (max - min));
-  };
-  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (disabled || pointerId.current !== null) return;
-    pointerId.current = e.pointerId;
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
-    rootRef.current?.removeAttribute("data-instant");
-    handleRef.current?.focus({ preventScroll: true });
-    commitFromX(e.clientX);
-  };
-  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerId === pointerId.current) commitFromX(e.clientX);
-  };
-  const endDrag = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerId !== pointerId.current) return;
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
-    pointerId.current = null;
-  };
-  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
-    if (disabled) return;
-    const jumps: Record<string, number> = {
-      ArrowRight: value + step,
-      ArrowUp: value + step,
-      ArrowLeft: value - step,
-      ArrowDown: value - step,
-      PageUp: value + step * 10,
-      PageDown: value - step * 10,
-      Home: min,
-      End: max,
-    };
-    if (!(e.key in jumps)) return;
-    e.preventDefault();
-    const clean = snap(jumps[e.key], min, max, step);
-    const p = toPct(clean, min, max);
-    rootRef.current?.setAttribute("data-instant", "true");
-    head.jump(p);
-    speed.jump(0);
-    target.jump(p);
-    commit(clean);
-  };
-
-  const barNodes = useMemo(() => {
-    barEls.current.length = bars;
-    crestEls.current.length = bars;
-    return Array.from({ length: bars }, (_, i) => (
-      <span
-        key={i}
-        ref={(el) => {
-          barEls.current[i] = el;
-        }}
-        className="group-data-[instant=true]:[transition-duration motion-reduce:transition-none:0ms] motion-reduce:[transform:scaleY(var(--ws-rest))]! relative h-[var(--ws-height)] min-w-0 flex-1 origin-center rounded-full bg-[var(--ws-track)] [transform:scaleY(var(--ws-rest))] [transition:background-color_120ms_ease] data-[on=true]:bg-[var(--ws-fill)]"
-      >
-        {crestColor ? (
-          <span
-            ref={(el) => {
-              crestEls.current[i] = el;
-            }}
-            className="absolute inset-0 rounded-[inherit] bg-[var(--ws-crest)] opacity-0"
-          />
-        ) : null}
-      </span>
-    ));
-  }, [bars, crestColor]);
 
   return (
-    <div
-      ref={rootRef}
-      className={`group inline-flex w-full items-center gap-3 [color:inherit] aria-disabled:pointer-events-none aria-disabled:opacity-50${className ? ` ${className}` : ""}`}
-      aria-disabled={disabled || undefined}
-      style={
-        {
-          "--ws-fill": fillColor,
-          "--ws-track": trackColor,
-          "--ws-crest": crestColor || fillColor,
-          "--ws-height": `${height}px`,
-          "--ws-gap": `${gap}px`,
-          "--ws-rest": rest,
-        } as CSSProperties
-      }
-    >
+    <div className={cn("flex items-center gap-4", disabled && "opacity-50", className)}>
       <div
-        ref={trackRef}
-        className="relative flex h-[var(--ws-height)] min-h-11 flex-1 touch-none select-none items-center gap-[var(--ws-gap)] [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [@media(hover:hover)_and_(pointer:fine)]:cursor-grab [@media(hover:hover)_and_(pointer:fine)]:active:cursor-grabbing"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onLostPointerCapture={endDrag}
+        className="relative flex flex-1 items-center"
+        style={{ height, gap }}
+        onPointerMove={(e) => {
+          const box = e.currentTarget.getBoundingClientRect();
+          setHover(((e.clientX - box.left) / box.width) * (bars - 1));
+        }}
+        onPointerLeave={() => setHover(null)}
       >
-        {barNodes}
-        <button
-          ref={handleRef}
-          type="button"
-          role="slider"
-          className="absolute inset-0 m-0 cursor-[inherit] touch-none rounded-xl border-0 bg-transparent p-0 outline-none [-webkit-tap-highlight-color:transparent]"
-          tabIndex={disabled ? -1 : 0}
+        {Array.from({ length: bars }, (_, i) => (
+          <Bar
+            key={i}
+            index={i}
+            crest={crest}
+            strength={strength}
+            color={i < filled ? fillColor : trackColor}
+            crestColor={crestColor}
+            rest={restHeight}
+            peak={height}
+            reach={reach}
+            skew={skew}
+            sensitivity={sensitivity}
+          />
+        ))}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={current}
+          disabled={disabled}
           aria-label={ariaLabel}
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-valuenow={value}
-          aria-valuetext={format(value)}
-          aria-disabled={disabled || undefined}
-          onKeyDown={onKeyDown}
+          onChange={(e) => set(Number(e.target.value))}
+          className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
         />
+        <span className="pointer-events-none absolute -inset-1 rounded-md ring-[hsl(var(--ring))] peer-focus-visible:ring-2" />
       </div>
-      {showValue ? (
-        <span
-          className="min-w-[3ch] text-right text-[13px] tabular-nums opacity-60"
-          aria-hidden="true"
-        >
-          {format(value)}
-        </span>
-      ) : null}
+      {showValue && (
+        <output className="min-w-[3ch] text-right font-mono text-xs tabular-nums text-muted-foreground">
+          {formatValue ? formatValue(current) : current}
+        </output>
+      )}
     </div>
+  );
+}
+
+function Bar({
+  index,
+  crest,
+  strength,
+  color,
+  crestColor,
+  rest,
+  peak,
+  reach,
+  skew,
+  sensitivity,
+}: {
+  index: number;
+  crest: MotionValue<number>;
+  strength: MotionValue<number>;
+  color: string;
+  crestColor: string;
+  rest: number;
+  peak: number;
+  reach: number;
+  skew: number;
+  sensitivity: number;
+}) {
+  // A bell around the crest; bars behind the crest fall off more slowly by `skew`.
+  const lift = useTransform([crest, strength], ([c, s]: number[]) => {
+    const d = index - c;
+    const width = Math.max(reach, 0.5) * (d < 0 ? 1 + skew * 0.5 : 1 - skew * 0.3);
+    return Math.exp(-(d * d) / (2 * width * width)) * s * Math.min(sensitivity, 2);
+  });
+  const h = useTransform(
+    lift,
+    (l) => Math.round(Math.min(peak, rest + (peak - rest) * l) * 10) / 10,
+  );
+  const glow = useTransform(lift, [0.4, 0.8], [0, 1]);
+
+  return (
+    <motion.span
+      aria-hidden
+      className="relative flex-1 overflow-hidden rounded-full"
+      style={{ height: h, background: color }}
+    >
+      {crestColor && (
+        <motion.span
+          className="absolute inset-0"
+          style={{ background: crestColor, opacity: glow }}
+        />
+      )}
+    </motion.span>
   );
 }

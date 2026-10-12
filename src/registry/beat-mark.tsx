@@ -1,33 +1,23 @@
 "use client";
-// Ported from React Bits' Pulse Heart (© David Haz).
+// Like pill: the mark pops with a ring of dots and the count rolls to its new value.
 
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FavouriteIcon, StarIcon, ThumbsUpIcon } from "@hugeicons/core-free-icons";
 
-const OUT = 0.4;
-const ICONS = { heart: FavouriteIcon, star: StarIcon, thumb: ThumbsUpIcon };
-
-type BeatMarkIcon = keyof typeof ICONS;
-
-const back = (k: number, c: number) => {
-  const u = k - 1;
-  return 1 + (c + 1) * u ** 3 + c * u ** 2;
+const MARKS = {
+  star: "M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.1l-5.62 2.97 1.07-6.27L2.9 9.4l6.3-.9z",
+  heart:
+    "M12 20.5s-7.5-4.6-9.2-9.3C1.7 8 3.6 4.5 7.1 4.5c2 0 3.4 1.1 4.9 2.9 1.5-1.8 2.9-2.9 4.9-2.9 3.5 0 5.4 3.5 4.3 6.7-1.7 4.7-9.2 9.3-9.2 9.3z",
 };
-const swellOf = (t: number, c: number) =>
-  t <= 0 ? 0 : t < OUT ? 1 - (1 - t / OUT) ** 3 : 1 - back((t - OUT) / (1 - OUT), c);
-const format = (n: number) => new Intl.NumberFormat().format(n);
-const reducedMotion = () =>
-  typeof window !== "undefined" &&
-  !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-interface BeatMarkProps {
+export interface BeatMarkProps {
   liked?: boolean;
   defaultLiked?: boolean;
   count?: number;
-  onChange?: (liked: boolean, count: number) => void;
+  onChange?: (liked: boolean) => void;
   showCount?: boolean;
-  icon?: BeatMarkIcon | React.ReactElement;
+  icon?: keyof typeof MARKS;
   idleOutline?: boolean;
   size?: number;
   corner?: number;
@@ -46,7 +36,7 @@ interface BeatMarkProps {
 }
 
 export function BeatMark({
-  liked: likedProp,
+  liked,
   defaultLiked = false,
   count = 128,
   onChange,
@@ -66,240 +56,109 @@ export function BeatMark({
   rollDuration = 350,
   disabled = false,
   label = "Like",
-  className = "",
+  className,
 }: BeatMarkProps) {
-  const controlled = likedProp !== undefined;
+  const reduce = useReducedMotion();
   const [inner, setInner] = useState(defaultLiked);
-  const [total, setTotal] = useState(count);
-  const liked = controlled ? likedProp : inner;
-  const [shown, setShown] = useState({ liked, count });
-  const [roll, setRoll] = useState<{ a: string; b: string; at: number; up: boolean } | null>(null);
+  const [pops, setPops] = useState(0);
+  const on = liked ?? inner;
+  const shown = count + (on ? 1 : 0);
+  const glyph = size * 0.6;
+  const dots = Math.max(1, Math.round(beat)) * 4;
+  const seconds = duration / 1000;
 
-  const rootRef = useRef<HTMLButtonElement | null>(null);
-  const pillRef = useRef<HTMLSpanElement | null>(null);
-  const heartRef = useRef<HTMLSpanElement | null>(null);
-  const glyphRef = useRef<SVGGElement | null>(null);
-  const rollRef = useRef<HTMLSpanElement | null>(null);
-  const raf = useRef(0);
-  const rollTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const viaPointer = useRef(false);
-  const shownRef = useRef(shown);
-  const logical = useRef({ liked, count: total });
-  logical.current = { liked, count: total };
-  const cfg = useRef({ duration, dotSize, overshoot, beat, rollDuration });
-  cfg.current = { duration, dotSize, overshoot, beat, rollDuration };
-
-  useEffect(() => {
-    setTotal(count);
-  }, [count]);
-
-  useEffect(() => {
-    if (raf.current) return;
-    if (shownRef.current.liked === liked && shownRef.current.count === total) return;
-    shownRef.current = { liked, count: total };
-    setShown(shownRef.current);
-  }, [liked, total]);
-
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root || root.dataset.instant === undefined) return;
-    root.getBoundingClientRect();
-    delete root.dataset.instant;
-  }, [shown]);
-
-  useLayoutEffect(() => {
-    const el = rollRef.current;
-    if (!el || !roll) return;
-    el.style.transition = "none";
-    el.style.transform = `translateY(${roll.up ? "0" : "-1em"})`;
-    el.getBoundingClientRect();
-    el.style.transition = "";
-    el.style.transform = `translateY(${roll.up ? "-1em" : "0"})`;
-  }, [roll]);
-
-  useEffect(
-    () => () => {
-      cancelAnimationFrame(raf.current);
-      clearTimeout(rollTimer.current);
-    },
-    [],
-  );
-
-  const startRoll = (from: number, to: number) => {
-    if (from === to) return;
-    const a = format(from);
-    const b = format(to);
-    const changed =
-      a.length === b.length ? [...b].flatMap((ch, i) => (ch !== a[i] ? [i] : [])) : [];
-    setRoll({ a, b, at: changed.length === 1 ? changed[0] : -1, up: to > from });
-    clearTimeout(rollTimer.current);
-    rollTimer.current = setTimeout(() => setRoll(null), cfg.current.rollDuration);
+  const toggle = () => {
+    const next = !on;
+    if (liked === undefined) setInner(next);
+    if (next) setPops((n) => n + 1);
+    onChange?.(next);
   };
-
-  const run = (nextLiked: boolean, nextCount: number) => {
-    const root = rootRef.current;
-    const heart = heartRef.current;
-    const pill = pillRef.current;
-    if (!root || !heart || !pill) return;
-    const glyph = glyphRef.current;
-    root.dataset.running = "";
-    let swapped = false;
-    let prev = 0;
-    const t0 = performance.now();
-    const tick = (now: number) => {
-      const { duration: D, dotSize: dot, overshoot: c, beat: B } = cfg.current;
-      const t = Math.min(1, (now - t0) / D);
-      const step = prev ? now - prev : 1000 / 60;
-      prev = now;
-      const s = swellOf(t, c);
-      const k = 1 - (1 - dot) * s;
-      if (glyph) glyph.setAttribute("transform", `translate(12 12) scale(${k}) translate(-12 -12)`);
-      else heart.style.transform = `scale(${k})`;
-      pill.style.transform = `scale(${1 - (B / 100) * s})`;
-      if (!swapped && t + step / 2 / D >= OUT) {
-        swapped = true;
-        root.dataset.liked = String(nextLiked);
-        startRoll(shownRef.current.count, nextCount);
-        shownRef.current = { liked: nextLiked, count: nextCount };
-        setShown(shownRef.current);
-      }
-      if (t < 1) {
-        raf.current = requestAnimationFrame(tick);
-        return;
-      }
-      raf.current = 0;
-      if (glyph) glyph.removeAttribute("transform");
-      heart.style.transform = "";
-      pill.style.transform = "";
-      delete root.dataset.running;
-      const l = logical.current;
-      if (l.liked !== shownRef.current.liked || l.count !== shownRef.current.count) {
-        shownRef.current = { liked: l.liked, count: l.count };
-        setShown(shownRef.current);
-      }
-    };
-    raf.current = requestAnimationFrame(tick);
-  };
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (e.button !== 0 || disabled) return;
-    viaPointer.current = true;
-    if (!reducedMotion() && rootRef.current) rootRef.current.dataset.pressed = "";
-  };
-  const handlePointerUp = () => {
-    if (rootRef.current) delete rootRef.current.dataset.pressed;
-  };
-  const handlePointerCancel = () => {
-    viaPointer.current = false;
-    handlePointerUp();
-  };
-  const handleKeyDown = () => {
-    viaPointer.current = false;
-  };
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (disabled || raf.current) return;
-    const pointer = viaPointer.current && e.detail !== 0;
-    viaPointer.current = false;
-    const nextLiked = !liked;
-    const nextCount = total + (nextLiked ? 1 : -1);
-    if (!controlled) setInner(nextLiked);
-    setTotal(nextCount);
-    onChange?.(nextLiked, nextCount);
-    if (pointer && !reducedMotion()) run(nextLiked, nextCount);
-    else if (rootRef.current) rootRef.current.dataset.instant = "";
-  };
-
-  const paths = typeof icon === "string" ? ICONS[icon] || ICONS.heart : null;
-  const text = format(shown.count);
-  const cells = roll
-    ? roll.at === -1
-      ? [{ top: roll.up ? roll.a : roll.b, bottom: roll.up ? roll.b : roll.a }]
-      : [...roll.b].map((ch, i) =>
-          i === roll.at
-            ? { top: roll.up ? roll.a[i] : ch, bottom: roll.up ? ch : roll.a[i] }
-            : { ch },
-        )
-    : [...text].map((ch) => ({ ch }));
 
   return (
     <button
-      ref={rootRef}
       type="button"
-      aria-pressed={liked}
+      aria-pressed={on}
+      aria-label={label}
       disabled={disabled}
-      data-liked={String(shown.liked)}
-      data-solid={idleOutline ? undefined : ""}
-      data-no-count={showCount ? undefined : ""}
-      className={`group relative m-0 inline-flex cursor-pointer touch-manipulation select-none items-center justify-center rounded-[var(--ph-corner)] border-0 bg-transparent p-0 font-mono outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [color:var(--ph-text)] [transition:transform_160ms_var(--ph-ease-out)] focus-visible:outline-offset-[3px] focus-visible:[outline:2px_solid_color-mix(in_srgb,var(--ph-liked)_60%,transparent)] disabled:cursor-default disabled:opacity-[0.55] data-[pressed]:[transform:scale(0.97)] motion-reduce:transition-none [@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11${className ? ` ${className}` : ""}`}
-      style={
-        {
-          "--ph-size": `${size}px`,
-          "--ph-corner": `${corner}px`,
-          "--ph-pill": pillColor,
-          "--ph-idle": idleColor,
-          "--ph-liked": likedColor,
-          "--ph-text": textColor,
-          "--ph-roll": `${rollDuration}ms`,
-          "--ph-stroke": `${(1.5 * size) / 24}px`,
-          "--ph-ease-out": "cubic-bezier(0.23, 1, 0.32, 1)",
-        } as React.CSSProperties
-      }
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
-      onKeyDown={handleKeyDown}
-      onClick={handleClick}
+      onClick={toggle}
+      className={cn(
+        "inline-flex select-none items-center gap-2 pr-3 font-mono text-sm font-medium tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] disabled:opacity-50",
+        className,
+      )}
+      style={{
+        height: size + 10,
+        paddingLeft: 5,
+        borderRadius: corner,
+        background: pillColor,
+        color: textColor,
+      }}
     >
-      <span
-        ref={pillRef}
-        className="inline-flex origin-center items-center rounded-[var(--ph-corner)] [background:var(--ph-pill)] [gap:calc(var(--ph-size)*0.25)] [padding-inline-end:calc(var(--ph-size)*0.4)] [padding:calc(var(--ph-size)*0.3)] group-data-[no-count]:[padding-inline-end:calc(var(--ph-size)*0.3)] [@media(prefers-contrast:more)]:[box-shadow:inset_0_0_0_1px_color-mix(in_srgb,var(--ph-text)_25%,transparent)]"
-      >
-        <span
-          ref={heartRef}
-          className="block h-[var(--ph-size)] w-[var(--ph-size)] origin-center [color:var(--ph-idle)] [transition:color_160ms_ease] group-data-[instant]:transition-none group-data-[running]:transition-none group-data-[liked=true]:[color:var(--ph-liked)] motion-reduce:transition-none motion-reduce:[transition:color_200ms_ease] [&_svg]:block [&_svg]:h-full [&_svg]:w-full [&_svg]:overflow-visible [&_svg]:fill-none [&_svg]:stroke-current [&_svg]:[stroke-linecap:round] [&_svg]:[stroke-linejoin:round] [&_svg]:[stroke-width:var(--ph-stroke)] group-data-[liked=true]:[&_svg]:fill-current group-data-[solid]:[&_svg]:fill-current [@media(hover:hover)_and_(pointer:fine)]:group-enabled:group-hover:group-data-[liked=false]:[color:color-mix(in_srgb,var(--ph-idle)_45%,var(--ph-liked))]"
-          aria-hidden="true"
-        >
-          {paths ? (
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <g ref={glyphRef}>
-                {paths.map(([, attrs]) => (
-                  <path
-                    key={String(attrs.key)}
-                    d={String(attrs.d)}
-                    vectorEffect="non-scaling-stroke"
+      <span className="relative grid place-items-center" style={{ width: size, height: size }}>
+        <AnimatePresence>
+          {on && !reduce && (
+            <span key={pops} className="pointer-events-none absolute inset-0">
+              {Array.from({ length: dots }, (_, i) => {
+                const a = (i / dots) * Math.PI * 2;
+                const r = size * (i % 2 ? 0.62 : 0.78);
+                return (
+                  <motion.span
+                    key={i}
+                    className="absolute left-1/2 top-1/2 rounded-full"
+                    style={{
+                      width: glyph * dotSize,
+                      height: glyph * dotSize,
+                      marginLeft: (-glyph * dotSize) / 2,
+                      marginTop: (-glyph * dotSize) / 2,
+                      background: likedColor,
+                    }}
+                    initial={{ x: 0, y: 0, scale: 0.4, opacity: 1 }}
+                    animate={{ x: Math.cos(a) * r, y: Math.sin(a) * r, scale: 0, opacity: 0 }}
+                    transition={{ duration: seconds, ease: [0.2, 0.7, 0.3, 1] }}
                   />
-                ))}
-              </g>
-            </svg>
-          ) : (
-            icon
+                );
+              })}
+            </span>
           )}
-        </span>
-        {showCount ? (
-          <span
-            className="inline-flex font-semibold tabular-nums leading-none tracking-[-0.1px] [color:var(--ph-text)] [font-size:calc(var(--ph-size)*0.5)] [&>span]:block [&>span]:h-[1em]"
-            aria-hidden="true"
-          >
-            {cells.map((cell, i) =>
-              "ch" in cell ? (
-                <span key={`c${i}`}>{cell.ch}</span>
-              ) : (
-                <span key={`r${i}`} className="relative overflow-hidden">
-                  <span
-                    ref={rollRef}
-                    className="flex flex-col [transition:transform_var(--ph-roll)_var(--ph-ease-out)] motion-reduce:transition-none [&>span]:block [&>span]:h-[1em] [&>span]:leading-none"
-                  >
-                    <span>{cell.top}</span>
-                    <span>{cell.bottom}</span>
-                  </span>
-                </span>
-              ),
-            )}
-          </span>
-        ) : null}
-        <span className="sr-only">{showCount ? `${label}, ${format(total)}` : label}</span>
+        </AnimatePresence>
+        <motion.svg
+          key={on ? `on-${pops}` : "off"}
+          viewBox="0 0 24 24"
+          width={glyph}
+          height={glyph}
+          initial={on && !reduce ? { scale: 0.4 } : false}
+          animate={{ scale: [0.4, 1 + (overshoot - 1) * 0.35, 1] }}
+          transition={{ duration: reduce ? 0 : seconds * 0.8, times: [0, 0.45, 1] }}
+        >
+          <path
+            d={MARKS[icon]}
+            fill={on ? likedColor : idleOutline ? "none" : idleColor}
+            stroke={on ? likedColor : idleColor}
+            strokeWidth={1.6}
+            strokeLinejoin="round"
+          />
+        </motion.svg>
       </span>
+      {showCount && (
+        <span className="relative inline-flex overflow-hidden" aria-live="polite">
+          <AnimatePresence initial={false} mode="popLayout" custom={on}>
+            <motion.span
+              key={shown}
+              custom={on}
+              variants={{
+                in: (up: boolean) => ({ y: up ? "100%" : "-100%", opacity: 0 }),
+                rest: { y: 0, opacity: 1 },
+                out: (up: boolean) => ({ y: up ? "-100%" : "100%", opacity: 0 }),
+              }}
+              initial="in"
+              animate="rest"
+              exit="out"
+              transition={{ duration: reduce ? 0 : rollDuration / 1000, ease: [0.3, 0, 0.2, 1] }}
+            >
+              {shown}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      )}
     </button>
   );
 }

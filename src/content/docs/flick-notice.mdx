@@ -33,26 +33,26 @@ export default function Example() {
 
 ## Props
 
-| Prop          | Type    | Default                    | Description |
-| :------------ | :------ | :------------------------- | :---------- |
-| title         | string  | "Draft filed to the folio" | -           |
-| description   | string  | ""                         | -           |
-| icon          | any     | -                          | -           |
-| actionLabel   | string  | ""                         | -           |
-| onAction      | any     | -                          | -           |
-| open          | boolean | true                       | -           |
-| onClose       | any     | -                          | -           |
-| background    | string  | "hsl(var(--card))"         | -           |
-| color         | string  | "hsl(var(--foreground))"   | -           |
-| fuseColor     | string  | "hsl(var(--primary))"      | -           |
-| width         | number  | 356                        | -           |
-| radius        | number  | 12                         | -           |
-| slideMs       | number  | 400                        | -           |
-| settleBounce  | number  | 0.2                        | -           |
-| swipeDistance | number  | 40                         | -           |
-| duration      | number  | 4000                       | -           |
-| fuse          | string  | "bottom"                   | -           |
-| pauseOnHover  | boolean | true                       | -           |
-| closeButton   | boolean | false                      | -           |
-| inline        | boolean | false                      | -           |
-| dismissible   | boolean | true                       | -           |
+| Prop          | Type    | Default                    | Description                                      |
+| :------------ | :------ | :------------------------- | :----------------------------------------------- |
+| title         | string  | "Draft filed to the folio" | Serif headline.                                  |
+| description   | string  | ""                         | Supporting line.                                 |
+| icon          | any     | -                          | Optional leading icon.                           |
+| actionLabel   | string  | ""                         | Label of the action button; empty hides it.      |
+| onAction      | any     | -                          | Called when the action is pressed.               |
+| open          | boolean | true                       | Whether the notice is shown.                     |
+| onClose       | any     | -                          | Called when the notice leaves.                   |
+| background    | string  | "hsl(var(--card))"         | Card colour.                                     |
+| color         | string  | "hsl(var(--foreground))"   | Text colour.                                     |
+| fuseColor     | string  | "hsl(var(--primary))"      | Fuse colour.                                     |
+| width         | number  | 356                        | Width in pixels.                                 |
+| radius        | number  | 12                         | Corner radius in pixels.                         |
+| slideMs       | number  | 400                        | Entrance duration in milliseconds.               |
+| settleBounce  | number  | 0.2                        | Entrance spring bounce.                          |
+| swipeDistance | number  | 40                         | Drag distance that dismisses, in pixels.         |
+| duration      | number  | 4000                       | Time before it leaves, in milliseconds; 0 stays. |
+| fuse          | string  | "bottom"                   | Fuse edge: "top", "bottom" or "none".            |
+| pauseOnHover  | boolean | true                       | Pauses the fuse while hovered.                   |
+| closeButton   | boolean | false                      | Shows a close button.                            |
+| inline        | boolean | false                      | Renders in flow instead of fixed to the corner.  |
+| dismissible   | boolean | true                       | Allows swiping away.                             |

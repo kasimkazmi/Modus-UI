@@ -1,40 +1,11 @@
 "use client";
-// Ported from React Bits' Squish Switch (© David Haz).
+// A switch whose thumb squashes on press and stretches as it travels.
 
-import { cn } from "@/lib/utils";
 import { useEffect, useId, useRef, useState } from "react";
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-  useVelocity,
-} from "framer-motion";
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const FLOW_SPRING = { stiffness: 320, damping: 40, mass: 0.6 };
-const SWELL_SPRING = { stiffness: 520, damping: 34, mass: 0.6 };
-const MAX_STRETCH = 0.4;
-const STRETCH_SPEED = 600;
-const TAP_SLOP = { fine: 4, coarse: 8 };
-
-interface Grip {
-  id: number;
-  grab: number | null;
-  moved: boolean;
-  startX: number;
-  onAtPress: boolean;
-  slop: number;
-}
-
-interface PointerRelease {
-  pointerId: number;
-  currentTarget: Element;
-}
-
-interface PressToggleProps {
+export interface PressToggleProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
@@ -52,8 +23,8 @@ interface PressToggleProps {
   hoverScale?: number;
   colorDuration?: number;
   ariaLabel?: string;
-  className?: string;
   id?: string;
+  className?: string;
 }
 
 export function PressToggle({
@@ -74,182 +45,111 @@ export function PressToggle({
   hoverScale = 1.035,
   colorDuration = 320,
   ariaLabel,
-  className = "",
   id,
+  className,
 }: PressToggleProps) {
   const reduce = useReducedMotion();
-  const inset = Math.max(3, Math.round(height * 0.11));
-  const thumb = height - inset * 2;
-  const min = inset;
-  const max = width - inset - thumb;
-  const mid = (min + max) / 2;
-  const trackRadius = Math.min(radius, height / 2);
-  const thumbRadius = Math.max(2, trackRadius - inset);
-
-  const isControlled = checked !== undefined;
-  const [inner, setInner] = useState(defaultChecked);
-  const on = isControlled ? checked : inner;
-  const [dragging, setDragging] = useState(false);
-  const trackRef = useRef<HTMLSpanElement | null>(null);
-  const grip = useRef<Grip | null>(null);
-  const onRef = useRef(on);
-  onRef.current = on;
-  const skipClick = useRef(false);
   const autoId = useId();
-  const buttonId = id ?? autoId;
+  const [inner, setInner] = useState(defaultChecked);
+  const on = checked ?? inner;
 
-  const x = useMotionValue(on ? max : min);
-  const flow = useSpring(useVelocity(x), FLOW_SPRING);
-  const swell = useSpring(1, SWELL_SPRING);
-  const gain = reduce ? 0 : clamp(stretch, 0, 100) / 100;
-  const stretchOf = (v: number) => 1 + Math.min(MAX_STRETCH, Math.abs(v) / STRETCH_SPEED) * gain;
-  const scaleX = useTransform([flow, swell], ([v, h]: number[]) => stretchOf(v) * h);
-  const scaleY = useTransform([flow, swell], ([v, h]: number[]) => h / stretchOf(v));
+  const pad = 4;
+  const thumb = height - pad * 2;
+  const travel = width - thumb - pad * 2;
 
-  const commit = (next: boolean) => {
-    if (next === onRef.current) return;
-    onRef.current = next;
-    if (!isControlled) setInner(next);
-    onChange?.(next);
+  const x = useMotionValue(on ? travel : 0);
+  const press = useMotionValue(0); // 0 rest, 1 held
+  // Stretch with distance from either end, squash while held.
+  const scaleX = useTransform([x, press], ([v, p]: number[]) => {
+    const mid = 1 - Math.abs((v / travel) * 2 - 1);
+    return 1 + (mid * stretch) / 100 + p * 0.12;
+  });
+  const scaleY = useTransform(scaleX, (s) => 1 / Math.sqrt(s));
+  const dragged = useRef(false);
+
+  const settle = (next: boolean) => {
+    const spring = { type: "spring" as const, stiffness: speed * 8, damping: 22 };
+    animate(x, next ? travel : 0, reduce ? { duration: 0 } : spring);
+    animate(press, 0, { duration: 0.15 });
   };
 
   useEffect(() => {
-    if (dragging) return undefined;
-    const target = on ? max : min;
-    if (reduce) {
-      x.jump(target);
-      return undefined;
-    }
-    const controls = animate(x, target, {
-      type: "spring",
-      stiffness: 170 - (50 - clamp(speed, 0, 100)) * 1.1,
-      damping: 21.5,
-      mass: 0.9,
-      restDelta: 0.001,
-      restSpeed: 0.01,
-    });
-    return () => controls.stop();
-  }, [on, dragging, min, max, speed, reduce, x]);
+    settle(on);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [on, travel]);
 
-  const localX = (clientX: number) => {
-    const el = trackRef.current;
-    if (!el) return 0;
-    const rect = el.getBoundingClientRect();
-    const scale = rect.width / (el.offsetWidth || rect.width) || 1;
-    return (clientX - rect.left) / scale;
+  const commit = (next: boolean) => {
+    settle(next);
+    if (next === on) return;
+    setInner(next);
+    onChange?.(next);
   };
-  const down = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (disabled || grip.current || e.button !== 0) return;
-    grip.current = {
-      id: e.pointerId,
-      grab: null,
-      moved: false,
-      startX: e.clientX,
-      onAtPress: onRef.current,
-      slop: e.pointerType === "touch" ? TAP_SLOP.coarse : TAP_SLOP.fine,
-    };
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
-    setDragging(true);
-  };
-  const move = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const g = grip.current;
-    if (!g || g.id !== e.pointerId) return;
-    const lx = localX(e.clientX);
-    if (g.grab === null) {
-      g.grab = lx - x.get();
-      return;
-    }
-    if (!g.moved && Math.abs(e.clientX - g.startX) > g.slop) g.moved = true;
-    if (!g.moved) return;
-    const nx = clamp(lx - g.grab, min, max);
-    x.set(nx);
-    commit(nx > mid);
-  };
-  const up = (e: PointerRelease, cancelled: boolean) => {
-    const g = grip.current;
-    if (!g || g.id !== e.pointerId) return;
-    grip.current = null;
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
-    if (cancelled) commit(g.onAtPress);
-    else if (!g.moved) commit(!onRef.current);
-    skipClick.current = true;
-    setTimeout(() => {
-      skipClick.current = false;
-    }, 0);
-    setDragging(false);
-  };
-  const click = () => {
-    if (skipClick.current) {
-      skipClick.current = false;
-      return;
-    }
-    if (!disabled) commit(!onRef.current);
-  };
+
+  const fill = on ? trackOnColor : trackColor;
+  const knob = on
+    ? thumbOnColor || "hsl(var(--primary-foreground))"
+    : thumbColor || "hsl(var(--foreground))";
+  const fade = { duration: reduce ? 0 : colorDuration / 1000 };
 
   return (
-    <span className={`inline-flex items-center gap-2.5${className ? ` ${className}` : ""}`}>
-      <button
-        id={buttonId}
+    <label
+      htmlFor={id ?? autoId}
+      className={cn(
+        "inline-flex items-center gap-3",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+        className,
+      )}
+    >
+      <motion.button
+        id={id ?? autoId}
         type="button"
         role="switch"
         aria-checked={on}
-        aria-disabled={disabled || undefined}
         aria-label={ariaLabel}
-        className="group relative m-0 inline-block cursor-pointer touch-pan-y select-none border-0 bg-transparent p-0 outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] after:absolute after:-inset-2 after:content-[''] aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-[held]:cursor-grabbing"
-        data-on={on ? "" : undefined}
-        data-held={dragging ? "" : undefined}
-        style={
-          {
-            "--ss-w": `${width}px`,
-            "--ss-h": `${height}px`,
-            "--ss-inset": `${inset}px`,
-            "--ss-thumb": `${thumb}px`,
-            "--ss-r": `${trackRadius}px`,
-            "--ss-thumb-r": `${thumbRadius}px`,
-            "--ss-track": trackColor,
-            "--ss-track-on": trackOnColor,
-            "--ss-thumb-color": thumbColor || "hsl(var(--muted-foreground))",
-            "--ss-thumb-on": thumbOnColor || "hsl(var(--primary-foreground))",
-            "--ss-fade": `${colorDuration}ms`,
-          } as React.CSSProperties
-        }
-        onPointerDown={down}
-        onPointerMove={move}
-        onPointerUp={(e) => up(e, false)}
-        onPointerCancel={(e) => up(e, true)}
-        onPointerEnter={(e) => {
-          if (e.pointerType === "mouse" && !disabled) swell.set(hoverScale);
+        disabled={disabled}
+        onClick={() => {
+          if (dragged.current) return;
+          commit(!on);
         }}
-        onPointerLeave={() => swell.set(1)}
-        onKeyDown={(e) => {
-          if (e.key === "Escape" && grip.current)
-            up({ pointerId: grip.current.id, currentTarget: e.currentTarget }, true);
+        onPointerDown={() => {
+          dragged.current = false;
+          if (!disabled) animate(press, 1, { duration: reduce ? 0 : 0.12 });
         }}
-        onClick={click}
+        onPointerUp={() => !dragged.current && animate(press, 0, { duration: 0.15 })}
+        whileHover={disabled || reduce ? undefined : { scale: hoverScale }}
+        initial={false}
+        animate={{ backgroundColor: fill }}
+        transition={fade}
+        className="relative shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--background))]"
+        style={{ width, height, borderRadius: radius, padding: pad }}
       >
-        <span
-          ref={trackRef}
-          className="motion-reduce:[transition-duration motion-reduce:transition-none:1ms] relative block [background:var(--ss-track)] [border-radius:var(--ss-r)] [box-shadow:inset_0_0_0_1px_hsl(var(--border))] [height:var(--ss-h)] [transition:background-color_var(--ss-fade)_ease] [width:var(--ss-w)] group-data-[on]:[background:var(--ss-track-on)]"
-        >
-          <motion.span
-            className="motion-reduce:[transition-duration motion-reduce:transition-none:1ms] absolute left-0 [background:var(--ss-thumb-color)] [border-radius:var(--ss-thumb-r)] [height:var(--ss-thumb)] [top:var(--ss-inset)] [transition:background-color_var(--ss-fade)_ease] [width:var(--ss-thumb)] group-data-[on]:[background:var(--ss-thumb-on)]"
-            aria-hidden="true"
-            style={{ x, scaleX, scaleY }}
-          />
-        </span>
-      </button>
-      {label ? (
-        <label
-          htmlFor={buttonId}
-          className="cursor-pointer select-none font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground"
-        >
+        <motion.span
+          drag={disabled ? false : "x"}
+          dragConstraints={{ left: 0, right: travel }}
+          dragElastic={0.08}
+          dragMomentum={false}
+          onDragStart={() => (dragged.current = true)}
+          onDragEnd={() => commit(x.get() > travel / 2)}
+          initial={false}
+          animate={{ backgroundColor: knob }}
+          transition={fade}
+          className="block touch-none shadow-sm"
+          style={{
+            x,
+            scaleX,
+            scaleY,
+            width: thumb,
+            height: thumb,
+            borderRadius: Math.max(radius - pad, 2),
+            originX: on ? 1 : 0,
+          }}
+        />
+      </motion.button>
+      {label && (
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground">
           {label}
-        </label>
-      ) : null}
-    </span>
+        </span>
+      )}
+    </label>
   );
 }

@@ -1,192 +1,91 @@
 "use client";
-// Ported from React Bits' Voice Pill (© David Haz).
+// Dictation button that widens into a capsule with a scrolling level meter and a running clock.
 
-import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft01Icon, Mic01Icon } from "@hugeicons/core-free-icons";
-const LOOP = 4.8;
-const SYLLABLES: ReadonlyArray<readonly [number, number, number]> = [
-  [0.1, 0.16, 0.9],
-  [0.3, 0.12, 0.7],
-  [0.5, 0.2, 1],
-  [0.95, 0.14, 0.8],
-  [1.15, 0.1, 0.6],
-  [1.3, 0.22, 0.95],
-  [1.9, 0.16, 0.85],
-  [2.12, 0.12, 0.7],
-  [2.3, 0.18, 0.9],
-  [2.55, 0.1, 0.5],
-  [3.05, 0.24, 1],
-  [3.4, 0.12, 0.75],
-  [3.6, 0.16, 0.9],
-];
-const MIC_BINS: ReadonlyArray<readonly [number, number]> = [
-  [1, 4],
-  [4, 11],
-  [11, 33],
-];
-const MIC_GAIN = 2.2;
-const DT_MAX = 0.05;
-const SLIDE_MIN = 4;
-const WAVE_EVERY = 4;
-const WAVE_MAX = 80;
-
-const simulatedLevel = (t: number) => {
-  const u = t % LOOP;
-  let a = 0.06;
-  for (const [s, d, p] of SYLLABLES) {
-    const x = (u - s) / d;
-    if (x >= 0 && x <= 1) a = Math.max(a, p * 0.5 * (1 - Math.cos(2 * Math.PI * x)));
-  }
-  return a * (0.7 + 0.3 * Math.abs(Math.sin(2 * Math.PI * 7.1 * u)));
-};
-const micLevel = (analyser: AnalyserNode, buf: Uint8Array<ArrayBuffer>) => {
-  analyser.getByteFrequencyData(buf);
-  let total = 0;
-  for (const [lo, hi] of MIC_BINS) {
-    let s = 0;
-    for (let i = lo; i < hi; i += 1) s += buf[i];
-    total += s / ((hi - lo) * 255);
-  }
-  return (total / MIC_BINS.length) * MIC_GAIN;
-};
-type WaveState = { hist: number[]; tick: number; acc: number };
-
-interface MicAudio {
-  ctx: AudioContext;
-  stream?: MediaStream | null;
-  src?: MediaStreamAudioSourceNode | null;
-  analyser?: AnalyserNode | null;
-  buf?: Uint8Array<ArrayBuffer> | null;
-}
-
-interface PillState extends WaveState {
-  listening: boolean;
-  pointerId: number | null;
-  ownPress: boolean;
-  downX: number;
-  sliding: boolean;
-  downAt: number;
-  startedAt: number;
-  raf: number;
-  last: number;
-  env: number;
-  t0: number;
-  audio: MicAudio | null;
-}
-
-const drawWave = (
-  s: WaveState,
-  canvas: HTMLCanvasElement,
-  level: number,
-  color: string,
-  floor: number,
-) => {
-  const dpr = Math.min(2, window.devicePixelRatio || 1);
-  const rect = canvas.getBoundingClientRect();
-  const W = Math.max(1, Math.round(rect.width * dpr));
-  const H = Math.max(1, Math.round(rect.height * dpr));
-  if (canvas.width !== W || canvas.height !== H) {
-    canvas.width = W;
-    canvas.height = H;
-  }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  s.acc = Math.max(s.acc, level);
-  s.tick = (s.tick + 1) % WAVE_EVERY;
-  if (s.tick === 0) {
-    s.hist.push(s.acc);
-    s.acc = 0;
-    if (s.hist.length > WAVE_MAX) s.hist.shift();
-  }
-  const bw = 2 * dpr;
-  const step = 3 * dpr;
-  const shift = (s.tick / WAVE_EVERY) * step;
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = color;
-  for (let i = 0; i < s.hist.length; i += 1) {
-    const v = s.hist[s.hist.length - 1 - i];
-    const x = W - (i + 1) * step - shift;
-    if (x + bw < 0) break;
-    const h = Math.max(bw, (floor + (1 - floor) * v) * H);
-    const t = Math.min(1, Math.max(0, (x + bw / 2) / (W * 0.55)));
-    const fade = t * t * (3 - 2 * t);
-    ctx.globalAlpha = (0.35 + 0.65 * v) * fade;
-    ctx.beginPath();
-    ctx.roundRect(x, (H - h) / 2, bw, h, bw / 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-};
-const clock = (ms: number) => {
-  const s = Math.floor(ms / 1000);
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-};
-
-const openMic = async (s: PillState) => {
-  const Ctx =
-    window.AudioContext ||
-    (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-  if (!Ctx || !navigator.mediaDevices?.getUserMedia) throw new Error("unsupported");
-  s.audio ??= { ctx: new Ctx() };
-  const a = s.audio;
-  if (a.ctx.state === "suspended") a.ctx.resume();
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  if (!s.listening) {
-    stream.getTracks().forEach((t) => t.stop());
-    return;
-  }
-  a.stream = stream;
-  a.src = a.ctx.createMediaStreamSource(stream);
-  a.analyser = a.ctx.createAnalyser();
-  a.analyser.fftSize = 256;
-  a.analyser.smoothingTimeConstant = 0;
-  a.src.connect(a.analyser);
-  a.buf = new Uint8Array(a.analyser.frequencyBinCount);
-};
-const closeMic = (s: PillState) => {
-  const a = s.audio;
-  if (!a?.stream) return;
-  a.stream.getTracks().forEach((t) => t.stop());
-  a.src?.disconnect();
-  a.stream = null;
-  a.src = null;
-  a.analyser = null;
-  a.buf = null;
-};
-
-type HumCapsuleMode = "auto" | "hold" | "toggle";
-type HumCapsuleSource = "simulated" | "mic";
-type HumCapsuleInput = "pointer" | "key";
-type HumCapsuleStopReason =
-  "mic-denied" | "cancel" | "release" | "tap" | "key" | "escape" | "blur" | "disabled" | "unmount";
+import { motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface HumCapsuleProps {
   accentColor?: string;
   iconColor?: string;
   background?: string;
+  /** Height of the button, and its width at rest, in px. */
   size?: number;
-  shape?: "pill" | "rounded";
+  shape?: "rounded" | "circle";
+  /** Number of bars in the scrolling meter. */
   reach?: number;
   showTime?: boolean;
+  /** Scrolling bars; off shows a single pulsing dot. */
   waveform?: boolean;
   slideToCancel?: boolean;
+  /** Pixels to slide left before a held press cancels. */
   cancelDistance?: number;
+  /** Meter rise time in ms. */
   attack?: number;
+  /** Meter fall time in ms. */
   release?: number;
   sensitivity?: number;
+  /** Lowest bar height, as a fraction of the meter. */
   floor?: number;
   openDuration?: number;
   pressScale?: number;
-  mode?: HumCapsuleMode;
+  /** "toggle" taps on and off, "hold" is push-to-talk, "auto" does both. */
+  mode?: "auto" | "toggle" | "hold";
+  /** In auto mode, a press longer than this (ms) becomes push-to-talk. */
   holdAfter?: number;
-  reactive?: HumCapsuleSource;
+  /** "microphone" meters the real input; "simulated" fakes a voice. */
+  reactive?: "simulated" | "microphone";
   disabled?: boolean;
   ariaLabel?: string;
-  onStart?: (detail: { source: HumCapsuleSource }) => void;
-  onStop?: (detail: { reason: HumCapsuleStopReason; duration: number }) => void;
+  onStart?: () => void;
+  onStop?: (seconds: number, cancelled: boolean) => void;
   className?: string;
+}
+
+function MicGlyph() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-[55%] w-[55%]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+    >
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" />
+    </svg>
+  );
+}
+
+/** Returns a 0–1 loudness sampler: the real microphone or a voice-like fake. */
+async function openSource(kind: "simulated" | "microphone") {
+  if (kind === "microphone") {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new AudioContext();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    ctx.createMediaStreamSource(stream).connect(analyser);
+    const buf = new Float32Array(analyser.fftSize);
+    return {
+      read() {
+        analyser.getFloatTimeDomainData(buf);
+        return Math.min(1, Math.sqrt(buf.reduce((s, v) => s + v * v, 0) / buf.length) * 4);
+      },
+      close() {
+        stream.getTracks().forEach((t) => t.stop());
+        void ctx.close();
+      },
+    };
+  }
+  return {
+    read() {
+      const t = performance.now() / 1000;
+      const syllable = Math.max(0, Math.sin(t * 7.3) * Math.sin(t * 2.1 + 1));
+      return Math.min(1, syllable * 0.8 + Math.random() * 0.25);
+    },
+    close() {},
+  };
 }
 
 export function HumCapsule({
@@ -213,300 +112,163 @@ export function HumCapsule({
   ariaLabel = "Dictate",
   onStart,
   onStop,
-  className = "",
+  className,
 }: HumCapsuleProps) {
-  const [listening, setListening] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [input, setInput] = useState<HumCapsuleInput>("pointer");
-  const timeRef = useRef<HTMLSpanElement | null>(null);
-  const rootRef = useRef<HTMLButtonElement | null>(null);
-  const waveRef = useRef<HTMLCanvasElement | null>(null);
-  const st = useRef<PillState>({
-    listening: false,
-    pointerId: null,
-    ownPress: false,
-    downX: 0,
-    sliding: false,
-    hist: [],
-    tick: 0,
-    acc: 0,
-    downAt: 0,
-    startedAt: 0,
-    raf: 0,
-    last: 0,
-    env: 0,
-    t0: 0,
-    audio: null,
-  });
-  const config = {
-    attack,
-    release,
-    sensitivity,
-    floor,
-    mode,
-    holdAfter,
-    reactive,
-    showTime,
-    waveform,
-    slideToCancel,
-    cancelDistance,
-    accentColor,
-    onStart,
-    onStop,
-  };
-  const cfg = useRef(config);
-  cfg.current = config;
-
-  const frame = (now: number) => {
-    const s = st.current;
-    const c = cfg.current;
-    const dt = Math.min((now - s.last) / 1000, DT_MAX);
-    s.last = now;
-    let target = 0;
-    if (s.listening) {
-      if (s.audio?.analyser) target = micLevel(s.audio.analyser, s.audio.buf!);
-      else if (c.reactive !== "mic") target = simulatedLevel((now - s.t0) / 1000);
-    }
-    target = Math.min(1, target * c.sensitivity);
-    const tau = Math.max(1, target > s.env ? c.attack : c.release) / 1000;
-    s.env += (target - s.env) * (1 - Math.exp(-dt / tau));
-    if (s.listening && c.showTime && timeRef.current) {
-      const text = clock(now - s.startedAt);
-      if (timeRef.current.textContent !== text) timeRef.current.textContent = text;
-    }
-    if (s.listening && c.waveform && waveRef.current)
-      drawWave(s, waveRef.current, s.env, c.accentColor, c.floor);
-    s.raf = s.listening ? requestAnimationFrame(frame) : 0;
-  };
-
-  const begin = (kind: HumCapsuleInput) => {
-    const s = st.current;
-    const c = cfg.current;
-    if (s.listening || disabled) return;
-    s.listening = true;
-    s.hist = [];
-    s.tick = 0;
-    s.acc = 0;
-    s.env = 0;
-    s.startedAt = performance.now();
-    s.t0 = s.startedAt;
-    s.last = s.startedAt;
-    if (timeRef.current) timeRef.current.textContent = "0:00";
-    setListening(true);
-    setInput(kind);
-    if (!s.raf) s.raf = requestAnimationFrame(frame);
-    c.onStart?.({ source: c.reactive });
-    if (c.reactive === "mic") openMic(s).catch(() => end("mic-denied"));
-  };
-  const end = (reason: HumCapsuleStopReason) => {
-    const s = st.current;
-    const c = cfg.current;
-    if (!s.listening) return;
-    s.listening = false;
-    closeMic(s);
-    setListening(false);
-    setInput(reason === "key" || reason === "escape" ? "key" : "pointer");
-    c.onStop?.({ reason, duration: Math.round(performance.now() - s.startedAt) });
-  };
-
-  const settleSlide = () => {
-    const s = st.current;
-    const root = rootRef.current;
-    s.sliding = false;
-    if (!root) return;
-    delete root.dataset.sliding;
-    root.style.setProperty("--vp-slide", "0px");
-    root.style.setProperty("--vp-cancel", "0");
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const s = st.current;
-    const c = cfg.current;
-    const root = rootRef.current;
-    if (!root || s.pointerId !== e.pointerId || !c.slideToCancel || !s.listening || !s.ownPress)
-      return;
-    const dx = e.clientX - s.downX;
-    if (!s.sliding && dx > -SLIDE_MIN) return;
-    s.sliding = true;
-    root.dataset.sliding = "";
-    const pull = Math.min(c.cancelDistance + 24, Math.max(0, -dx));
-    root.style.setProperty("--vp-slide", `${-pull}px`);
-    const progress = Math.min(1, pull / c.cancelDistance);
-    root.style.setProperty("--vp-cancel", progress.toFixed(3));
-    if (progress >= 1) {
-      settleSlide();
-      end("cancel");
-    }
-  };
-  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const s = st.current;
-    if (disabled || e.button !== 0 || !e.isPrimary || s.pointerId !== null) return;
-    s.pointerId = e.pointerId;
-    s.downX = e.clientX;
-    s.downAt = performance.now();
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
-    setPressed(true);
-    s.ownPress = !s.listening;
-    if (!s.listening) begin("pointer");
-  };
-  const onPointerUp = (e: React.PointerEvent<HTMLButtonElement>) => {
-    const s = st.current;
-    const c = cfg.current;
-    if (e.pointerId !== s.pointerId) return;
-    s.pointerId = null;
-    setPressed(false);
-    if (s.sliding) settleSlide();
-    try {
-      if (e.currentTarget.hasPointerCapture(e.pointerId))
-        e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
-    if (!s.listening) return;
-    const held = performance.now() - s.downAt;
-    const isHold = c.mode === "hold" || (c.mode === "auto" && held >= c.holdAfter);
-    if (s.ownPress) {
-      if (isHold) end("release");
-    } else {
-      end(held < c.holdAfter ? "tap" : "release");
-    }
-  };
-  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Escape") {
-      end("escape");
-      return;
-    }
-    if ((e.key === " " || e.key === "Enter") && !e.repeat) {
-      e.preventDefault();
-      if (st.current.listening) end("key");
-      else begin("key");
-    }
-  };
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (
-      e.detail === 0 &&
-      st.current.pointerId === null &&
-      !(e.nativeEvent as PointerEvent).pointerType
-    ) {
-      if (st.current.listening) end("key");
-      else begin("key");
-    }
-  };
+  const reduce = useReducedMotion();
+  const [live, setLive] = useState(false);
+  const [bars, setBars] = useState<number[]>(() => Array(reach).fill(floor));
+  const [elapsed, setElapsed] = useState(0);
+  const [slide, setSlide] = useState(0);
+  const press = useRef<{ x: number; at: number; wasLive: boolean } | null>(null);
+  const began = useRef(0);
 
   useEffect(() => {
-    if (!pressed) return undefined;
-    const stop = () => end("blur");
-    const onVis = () => {
-      if (document.hidden) stop();
+    if (!live) return;
+    let raf = 0;
+    let level = 0;
+    let last = performance.now();
+    let lastPush = 0;
+    let source: Awaited<ReturnType<typeof openSource>> | null = null;
+    let stopped = false;
+    openSource(reactive)
+      .then((s) => (stopped ? s.close() : (source = s)))
+      .catch(() => setLive(false));
+    const tick = (now: number) => {
+      const dt = now - last;
+      last = now;
+      const target = Math.min(1, (source?.read() ?? 0) * sensitivity);
+      const tau = target > level ? attack : release;
+      level += (target - level) * (1 - Math.exp(-dt / Math.max(1, tau)));
+      setElapsed((now - began.current) / 1000);
+      if (now - lastPush > 70) {
+        lastPush = now;
+        setBars((prev) => [...prev.slice(1 - reach), Math.max(floor, level)]);
+      }
+      raf = requestAnimationFrame(tick);
     };
-    window.addEventListener("blur", stop);
-    document.addEventListener("visibilitychange", onVis);
+    raf = requestAnimationFrame(tick);
     return () => {
-      window.removeEventListener("blur", stop);
-      document.removeEventListener("visibilitychange", onVis);
+      stopped = true;
+      cancelAnimationFrame(raf);
+      source?.close();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pressed]);
-  useEffect(() => {
-    if (disabled) end("disabled");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [disabled]);
-  useEffect(() => {
-    const s = st.current;
-    return () => {
-      end("unmount");
-      cancelAnimationFrame(s.raf);
-      s.audio?.ctx.close();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [live, reactive, sensitivity, attack, release, floor, reach]);
 
-  const radius = shape === "rounded" ? Math.round(size * 0.29) : size / 2;
-  const hit = Math.max(0, Math.min(10, (44 - size) / 2));
-  const timeSize = Math.max(10, Math.round(size * 0.36));
-  const clockW = showTime ? Math.round(timeSize * 2.5) + 4 : 0;
-  const waveW = waveform ? Math.round(size * 1.9) : 0;
-  const extra = clockW + waveW;
+  const start = () => {
+    began.current = performance.now();
+    setElapsed(0);
+    setBars(Array(reach).fill(floor));
+    setLive(true);
+    onStart?.();
+  };
+  const stop = (cancelled: boolean) => {
+    setLive(false);
+    setSlide(0);
+    onStop?.((performance.now() - began.current) / 1000, cancelled);
+  };
+
+  const radius = shape === "circle" ? size / 2 : size * 0.3;
+  const clock = `${Math.floor(elapsed / 60)}:${String(Math.floor(elapsed % 60)).padStart(2, "0")}`;
+  const cancelling = slideToCancel && slide > cancelDistance;
 
   return (
-    <button
+    <motion.button
       type="button"
+      layout
       disabled={disabled}
       aria-label={ariaLabel}
-      aria-pressed={listening}
-      className={`motion-reduce:[transform:none]! group relative isolate m-0 inline-grid cursor-pointer touch-none select-none place-items-center border-0 bg-transparent p-0 outline-none [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [border-radius:var(--vp-radius)] [color:var(--vp-icon)] [font-family:inherit] [height:var(--vp-size)] [transition:transform_160ms_cubic-bezier(0.23,1,0.32,1),color_150ms_ease] [width:var(--vp-size)] before:absolute before:content-[''] before:[inset:calc(-1*var(--vp-hit))] disabled:pointer-events-none disabled:cursor-default disabled:opacity-55 data-[state=listening]:z-[1] data-[state=listening]:[color:var(--vp-accent)] data-[pressed]:[transform:scale(var(--vp-press))] motion-reduce:[transition:color_150ms_ease]${className ? ` ${className}` : ""}`}
-      data-state={listening ? "listening" : "idle"}
-      data-pressed={pressed ? "" : undefined}
-      data-input={input}
-      data-time={showTime ? "" : undefined}
-      ref={rootRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onLostPointerCapture={onPointerUp}
-      onKeyDown={onKeyDown}
-      onClick={onClick}
-      onContextMenu={(e) => e.preventDefault()}
-      style={
-        {
-          "--vp-accent": accentColor,
-          "--vp-cancel": 0,
-          "--vp-slide": "0px",
-          "--vp-icon": iconColor,
-          "--vp-bg": background,
-          "--vp-size": `${size}px`,
-          "--vp-radius": `${radius}px`,
-          "--vp-reach": `${reach}px`,
-          "--vp-extra": `${extra}px`,
-          "--vp-clock-w": `${clockW}px`,
-          "--vp-wave-w": `${waveW}px`,
-          "--vp-stop": `${Math.round(size * 0.32)}px`,
-          "--vp-icon-size": `${Math.round(size * 0.54)}px`,
-          "--vp-time-size": `${timeSize}px`,
-          "--vp-open": `${openDuration}ms`,
-          "--vp-press": pressScale,
-          "--vp-hit": `${hit}px`,
-        } as React.CSSProperties
-      }
+      aria-pressed={live}
+      onPointerDown={(e) => {
+        if (disabled || e.button !== 0) return;
+        e.currentTarget.setPointerCapture(e.pointerId);
+        press.current = { x: e.clientX, at: performance.now(), wasLive: live };
+        if (!live && mode !== "toggle") start();
+      }}
+      onPointerMove={(e) => {
+        if (press.current && live && slideToCancel)
+          setSlide(Math.max(0, press.current.x - e.clientX));
+      }}
+      onPointerUp={() => {
+        const p = press.current;
+        press.current = null;
+        if (!p) return;
+        const held = performance.now() - p.at > holdAfter;
+        if (cancelling) return stop(true);
+        setSlide(0);
+        if (mode === "hold" || (mode === "auto" && held && !p.wasLive)) return live && stop(false);
+        if (p.wasLive) return stop(false);
+        if (mode === "toggle") start();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && live) stop(true);
+      }}
+      onClick={(e) => {
+        // Keyboard activation (pointer presses are handled above).
+        if (e.detail === 0) live ? stop(false) : start();
+      }}
+      whileTap={reduce ? undefined : { scale: pressScale }}
+      transition={{ duration: reduce ? 0 : openDuration / 1000, ease: [0.2, 0.8, 0.2, 1] }}
+      className={cn(
+        "inline-flex touch-none select-none items-center overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50",
+        className,
+      )}
+      style={{
+        height: size,
+        minWidth: size,
+        borderRadius: radius,
+        background,
+        color: iconColor,
+        x: live ? -Math.min(slide, cancelDistance) / 3 : 0,
+        opacity: cancelling ? 0.6 : 1,
+      }}
     >
-      <span
-        className="group-data-[input=key]:[transition-duration motion-reduce:transition-none:0ms] pointer-events-none absolute [background:var(--vp-bg)] [border-radius:var(--vp-radius)] [clip-path:inset(0_0_0_calc(var(--vp-reach)+var(--vp-extra))_round_var(--vp-radius))] [inset:0_0_0_calc(-1*(var(--vp-reach)+var(--vp-extra)))] [transition:clip-path_var(--vp-open)_cubic-bezier(0.23,1,0.32,1),background-color_150ms_ease] group-data-[state=listening]:[clip-path:inset(0_0_round_var(--vp-radius))] motion-reduce:[transition:background-color_150ms_ease] [@media(hover:hover)_and_(pointer:fine)]:group-enabled:group-data-[state=idle]:group-hover:[background:color-mix(in_srgb,var(--vp-icon)_10%,var(--vp-bg))]"
-        aria-hidden="true"
-      />
-      {waveform ? (
-        <canvas
-          ref={waveRef}
-          className="group-data-[sliding]:[transition-property motion-reduce:transition-none:opacity,filter] motion-reduce:[filter:none]! motion-reduce:[transition-property motion-reduce:transition-none:opacity] pointer-events-none absolute top-[18%] h-[64%] opacity-0 [filter:blur(2px)] [right:calc(100%+var(--vp-clock-w))] [transform:translateX(var(--vp-slide))] [transition:opacity_200ms_ease,filter_200ms_ease,transform_240ms_cubic-bezier(0.23,1,0.32,1)] [width:var(--vp-wave-w)] group-data-[state=listening]:[filter:blur(0)] group-data-[state=listening]:[opacity:calc(1-var(--vp-cancel))]"
-          aria-hidden="true"
-        />
-      ) : null}
-      {slideToCancel ? (
-        <span
-          className="pointer-events-none absolute inset-y-0 right-full inline-flex items-center justify-center gap-[3px] font-medium leading-none [color:var(--vp-accent)] [font-size:var(--vp-time-size)] [opacity:var(--vp-cancel)] [width:var(--vp-extra)]"
-          aria-hidden="true"
+      <motion.span
+        layout
+        className="grid shrink-0 place-items-center"
+        style={{ width: size, height: size }}
+      >
+        <MicGlyph />
+      </motion.span>
+      {live && (
+        <motion.span
+          layout
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center gap-2 pr-3"
+          style={{ height: size, color: accentColor }}
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon} size={12} strokeWidth={2.2} />
-          <span>Cancel</span>
-        </span>
-      ) : null}
-      {showTime ? (
-        <span
-          ref={timeRef}
-          className="group-data-[sliding]:[transition-property motion-reduce:transition-none:opacity,filter] group-data-[input=key]:[transition-duration motion-reduce:transition-none:0ms] motion-reduce:[filter:none]! motion-reduce:[transition-property motion-reduce:transition-none:opacity] pointer-events-none absolute inset-y-0 right-full box-border grid place-items-center font-medium tabular-nums leading-none opacity-0 [color:var(--vp-accent)] [filter:blur(2px)] [font-size:var(--vp-time-size)] [transform:translateX(var(--vp-slide))] [transition:opacity_200ms_ease,filter_200ms_ease,transform_240ms_cubic-bezier(0.23,1,0.32,1)] [width:var(--vp-clock-w)] group-data-[state=listening]:[filter:blur(0)] group-data-[state=listening]:[opacity:calc(1-var(--vp-cancel))]"
-          aria-hidden="true"
-        >
-          0:00
-        </span>
-      ) : null}
-      <span className="group-data-[sliding]:[transition-property motion-reduce:transition-none:opacity,filter] motion-reduce:[filter:none]! motion-reduce:[transition-property motion-reduce:transition-none:opacity] relative grid place-items-center [height:var(--vp-size)] [transform:translateX(var(--vp-slide))] [transition:transform_240ms_cubic-bezier(0.23,1,0.32,1)] [width:var(--vp-size)]">
-        <span className="group-data-[input=key]:[transition-duration motion-reduce:transition-none:0ms] motion-reduce:[filter:none]! motion-reduce:[transform:none]! inline-flex [grid-area:1/1] [transition:opacity_200ms_ease,filter_200ms_ease,transform_200ms_cubic-bezier(0.23,1,0.32,1)] group-data-[state=listening]:opacity-0 group-data-[state=listening]:[filter:blur(2px)] group-data-[state=listening]:[transform:scale(0.7)] motion-reduce:[transition:opacity_200ms_ease]">
-          <HugeiconsIcon icon={Mic01Icon} size={Math.round(size * 0.54)} strokeWidth={2} />
-        </span>
-        <span
-          className="group-data-[input=key]:[transition-duration motion-reduce:transition-none:0ms] motion-reduce:[filter:none]! motion-reduce:[transform:none]! bg-current opacity-0 [border-radius:22%] [filter:blur(2px)] [grid-area:1/1] [height:var(--vp-stop)] [transform:scale(0.6)] [transition:opacity_200ms_ease,filter_200ms_ease,transform_200ms_cubic-bezier(0.23,1,0.32,1)] [width:var(--vp-stop)] group-data-[state=listening]:opacity-100 group-data-[state=listening]:[filter:blur(0)] group-data-[state=listening]:[transform:scale(1)] motion-reduce:[transition:opacity_200ms_ease]"
-          aria-hidden="true"
-        />
-      </span>
-    </button>
+          {waveform ? (
+            <span className="flex items-center gap-[2px]" style={{ height: size * 0.5 }}>
+              {bars.map((b, i) => (
+                <span
+                  key={i}
+                  className="w-[2px] rounded-full"
+                  style={{
+                    height: `${b * 100}%`,
+                    background: accentColor,
+                    transition: reduce ? undefined : "height 70ms linear",
+                  }}
+                />
+              ))}
+            </span>
+          ) : (
+            <span
+              className="rounded-full"
+              style={{
+                width: size * 0.25,
+                height: size * 0.25,
+                background: accentColor,
+                transform: reduce ? undefined : `scale(${0.6 + bars[bars.length - 1]})`,
+              }}
+            />
+          )}
+          {showTime && (
+            <span className="font-mono text-[11px] tabular-nums">
+              {cancelling ? "Release" : clock}
+            </span>
+          )}
+        </motion.span>
+      )}
+    </motion.button>
   );
 }
