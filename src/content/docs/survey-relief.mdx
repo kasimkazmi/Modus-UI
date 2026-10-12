@@ -1,0 +1,46 @@
+---
+title: Survey Relief
+description: A procedural topographic relief model turning on a survey table, with contour bands in your theme colours.
+---
+
+A Three.js relief model, carved from a seeded ridged-noise height field and cut into a slab whose walls show the strata. Contour lines are drawn in the shader every few metres, with a heavier index line every fifth band, and the model turns slowly under a low raking light. In light mode it is a paper model in studio daylight, inked in `--foreground`; in dark mode the contours glow in `--primary` over a night table. All colours come from the theme tokens and follow palette and mode changes. Drag to turn the model. The scene fills its positioned parent, pauses when off screen and shows a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="survey-relief" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add survey-relief
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/survey-relief.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { SurveyRelief } from "@/components/ui/survey-relief";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SurveyRelief variant="nocturne" seed={12} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                               | Default                      | Description                                                   |
+| :---------- | :--------------------------------- | :--------------------------- | :------------------------------------------------------------ |
+| `variant`   | `"auto" \| "studio" \| "nocturne"` | `"auto"`                     | Lighting state; `auto` follows the site's light or dark mode. |
+| `seed`      | `number`                           | `7`                          | Seed of the procedural terrain.                               |
+| `label`     | `string`                           | `"Topographic relief model"` | Accessible label for the scene.                               |
+| `className` | `string`                           | -                            | Extra classes for the host element.                           |

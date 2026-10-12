@@ -156,11 +156,11 @@ import CrystalCellsDemo from "./crystal-cells-demo";
 import FlutedGradientDemo from "./fluted-gradient-demo";
 import RipplePoolDemo from "./ripple-pool-demo";
 import AsciiFlowDemo from "./ascii-flow-demo";
-import SylvaWorldDemo from "./sylva-world-demo";
-import TempleNightDemo from "./temple-night-demo";
-import ProceduralLandscapeDemo from "./procedural-landscape-demo";
-import TowerLandscapeDemo from "./tower-landscape-demo";
-import BookshelfSceneDemo from "./bookshelf-scene-demo";
+import HerbariumStudyDemo from "./herbarium-study-demo";
+import WinterPagodaDemo from "./winter-pagoda-demo";
+import SurveyReliefDemo from "./survey-relief-demo";
+import FormFoundryDemo from "./form-foundry-demo";
+import SpecimenDeskDemo from "./specimen-desk-demo";
 import DotScreenDemo from "./dot-screen-demo";
 import TubelightDemo from "./tubelight-demo";
 import SalonBannerDemo from "./salon-banner-demo";
@@ -370,11 +370,11 @@ export const demos: Record<ComponentName, ComponentType> = {
   "fluted-gradient": FlutedGradientDemo,
   "ripple-pool": RipplePoolDemo,
   "ascii-flow": AsciiFlowDemo,
-  "sylva-world": SylvaWorldDemo,
-  "temple-night": TempleNightDemo,
-  "procedural-landscape": ProceduralLandscapeDemo,
-  "tower-landscape": TowerLandscapeDemo,
-  "bookshelf-scene": BookshelfSceneDemo,
+  "herbarium-study": HerbariumStudyDemo,
+  "winter-pagoda": WinterPagodaDemo,
+  "survey-relief": SurveyReliefDemo,
+  "form-foundry": FormFoundryDemo,
+  "specimen-desk": SpecimenDeskDemo,
   "dot-screen": DotScreenDemo,
   tubelight: TubelightDemo,
   "salon-banner": SalonBannerDemo,

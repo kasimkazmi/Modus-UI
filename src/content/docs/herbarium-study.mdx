@@ -1,0 +1,45 @@
+---
+title: Herbarium Study
+description: An ink-and-paper botanical plate in Three.js where line-drawn ferns and seed heads grow while seed fluff drifts past.
+---
+
+A Three.js scene drawn like a botanical study: ferns unfurl stroke by stroke from three clumps on a plate of contour rings, seed heads open on tall stalks and seed fluff drifts across on the wind. It enters with a slow ink-bleed reveal and a calm orbiting camera that leans toward the pointer. Every line takes its colour from the theme — ink on paper in light mode, pale strokes under a dusk glow in dark mode — and follows palette changes live. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still, fully grown frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="herbarium-study" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add herbarium-study
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/herbarium-study.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { HerbariumStudy } from "@/components/ui/herbarium-study";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <HerbariumStudy />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop     | Type     | Default                                                                                  | Description                                      |
+| :------- | :------- | :--------------------------------------------------------------------------------------- | :----------------------------------------------- |
+| `fronds` | `number` | `18`                                                                                     | Number of fern fronds drawn around the plate.    |
+| `speed`  | `number` | `1`                                                                                      | Multiplier for the orbit, growth and seed drift. |
+| `label`  | `string` | `"Ink-drawn ferns and seed heads growing on a paper plate while seed fluff drifts past"` | Accessible label for the scene.                  |

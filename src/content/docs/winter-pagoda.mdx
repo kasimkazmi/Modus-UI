@@ -1,0 +1,45 @@
+---
+title: Winter Pagoda
+description: A five-tier pagoda on a snowy hillside among pines, in paper-white daylight or under a pale winter moon, coloured from your theme.
+---
+
+A Three.js scene with a five-tier pagoda whose flared roofs carry snow, stone lanterns along a stepping-stone path, stands of snow-laden pines, faceted ridges fading into haze and steady snowfall. Every colour comes from the theme tokens: in light mode it is a daylight snowfield on the paper background with ink-toned pines, in dark mode a night under a pale moon with the windows and lanterns lit in the primary hue. It re-reads the tokens when the theme or palette changes. The camera drifts along a slow arc across the path and leans with the pointer. It fills its positioned parent, caps the pixel ratio, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="winter-pagoda" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add winter-pagoda
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/winter-pagoda.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { WinterPagoda } from "@/components/ui/winter-pagoda";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <WinterPagoda />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default | Description                                                                     |
+| :---------------- | :------- | :------ | :------------------------------------------------------------------------------ |
+| `snow`            | `number` | `0.6`   | Snowfall density, from `0` (light flurries) to `1` (heavy).                     |
+| `backgroundColor` | `string` | —       | Colour shown behind the canvas while loading. Defaults to the theme background. |
+| `className`       | `string` | —       | Additional CSS classes.                                                         |

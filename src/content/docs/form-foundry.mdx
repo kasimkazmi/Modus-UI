@@ -1,0 +1,44 @@
+---
+title: Form Foundry
+description: An abstract architectural form assembles itself block by block on a studio plinth, in daylight or at dusk.
+---
+
+A Three.js construction study. Choose a stepped ziggurat, three stacked monoliths, a lattice spire, an arch, a ring tower or a field of columns: blocks drop course by course onto a two-step plinth, settle, hold, then clear and rebuild. Every colour comes from the theme tokens: in light mode the form sits in paper-white haze under a pale sun, in dark mode it is a dusk scene with a moon and a primary-tinted rim light, and it re-colours when the theme or palette changes. Drag to turn the view. When focused, `Space` pauses, `R` rebuilds and `S` changes the form. The scene pauses when off screen or in a hidden tab. When the user prefers reduced motion it shows the finished form as a still frame. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="form-foundry" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add form-foundry
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/form-foundry.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { FormFoundry } from "@/components/ui/form-foundry";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <FormFoundry variant="lattice" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                                                                      | Default      | Description                               |
+| :---------- | :------------------------------------------------------------------------ | :----------- | :---------------------------------------- |
+| `variant`   | `"ziggurat" \| "monoliths" \| "lattice" \| "arch" \| "ring" \| "columns"` | `"ziggurat"` | Which form assembles on the plinth.       |
+| `className` | `string`                                                                  | None         | Extra classes for the absolute container. |

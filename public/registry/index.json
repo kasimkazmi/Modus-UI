@@ -2130,10 +2130,10 @@
       ]
     },
     {
-      "name": "sylva-world",
-      "title": "Sylva World",
+      "name": "herbarium-study",
+      "title": "Herbarium Study",
       "category": "Three.js",
-      "description": "A procedural moss-root world with pale flowers, ferns, drifting pollen, a scan-light entrance and a landing butterfly.",
+      "description": "An ink-and-paper botanical plate in Three.js where line-drawn ferns and seed heads grow while seed fluff drifts past.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2142,10 +2142,10 @@
       ]
     },
     {
-      "name": "temple-night",
-      "title": "Temple Night",
+      "name": "winter-pagoda",
+      "title": "Winter Pagoda",
       "category": "Three.js",
-      "description": "A mountain temple at the edge of night, graded into your theme's palette, with rain, mist and falling maple leaves.",
+      "description": "A five-tier pagoda on a snowy hillside among pines, in paper-white daylight or under a pale winter moon, coloured from your theme.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2154,10 +2154,10 @@
       ]
     },
     {
-      "name": "procedural-landscape",
-      "title": "Procedural Landscape",
+      "name": "survey-relief",
+      "title": "Survey Relief",
       "category": "Three.js",
-      "description": "A procedural terrain with sky, fog, stars, grass and stones, moving through seven time-of-day and weather states.",
+      "description": "A procedural topographic relief model turning on a survey table, with contour bands in your theme colours.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2166,10 +2166,10 @@
       ]
     },
     {
-      "name": "tower-landscape",
-      "title": "Tower Landscape",
+      "name": "form-foundry",
+      "title": "Form Foundry",
       "category": "Three.js",
-      "description": "A procedurally generated tower assembles itself bottom-up behind a rising cut plane above a living landscape.",
+      "description": "An abstract architectural form assembles itself block by block on a studio plinth, in daylight or at dusk.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2178,10 +2178,10 @@
       ]
     },
     {
-      "name": "bookshelf-scene",
-      "title": "Bookshelf Scene",
+      "name": "specimen-desk",
+      "title": "Specimen Desk",
       "category": "Three.js",
-      "description": "A Three.js room with a carousel shelf of seven cloth-bound volumes that retints the room to each book.",
+      "description": "A Three.js desk study with a pinned fan of Modus type specimen cards, paper-white by day and lamplit by night.",
       "dependencies": [
         "three",
         "framer-motion",
