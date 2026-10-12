@@ -1,0 +1,80 @@
+{
+  "name": "editorial-heading",
+  "title": "Editorial Heading",
+  "category": "Typography",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/editorial-heading.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Article Headings (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface EditorialHeadingEntry {\n  title: string;\n  meta: string;\n}\n\ninterface EditorialHeadingProps {\n  mode?: \"dark\" | \"light\";\n  duration?: number;\n  stagger?: number;\n  scrambleLength?: number;\n  preserveChance?: number;\n  tailChance?: number;\n  label?: string;\n  entries?: EditorialHeadingEntry[];\n  className?: string;\n}\n\nconst DEFAULT_ENTRIES: EditorialHeadingEntry[] = [\n  { title: \"Context Is Infrastructure, Not a Prompt\", meta: \"SYSTEMS NOTE · 8 MIN\" },\n  { title: \"The Last Mile Is Verification\", meta: \"FIELD GUIDE · 11 MIN\" },\n];\n\nconst DECODE_POOL = \"#%&@$/\\\\<>*+=~ABCDEFGHKMNPRSTUVWXYZ0123456789\";\nconst MONO = \"'ThreeUI Fragment Mono','Fragment Mono',ui-monospace,monospace\";\nconst NOISE =\n  \"url(\\\"data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E\\\")\";\n\nconst PALETTES = {\n  dark: {\n    surface: \"#0b0b0b\",\n    text: \"#ecece8\",\n    heading: \"#e9e9e5\",\n    muted: \"#62625e\",\n    label: \"#60605c\",\n    rule: \"#2a2a28\",\n  },\n  light: {\n    surface: \"#f3f5f8\",\n    text: \"#202128\",\n    heading: \"#1d1f26\",\n    muted: \"#71737b\",\n    label: \"#71737b\",\n    rule: \"#d9dce3\",\n  },\n};\n\nconst clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));\nconst easeOut = (value: number) => 1 - Math.pow(1 - value, 2);\nconst randomGlyph = () => DECODE_POOL[(Math.random() * DECODE_POOL.length) | 0];\n\nexport function EditorialHeading({\n  mode = \"dark\",\n  duration = 560,\n  stagger = 140,\n  scrambleLength = 10,\n  preserveChance = 0.3,\n  tailChance = 0.18,\n  label = \"FIELD NOTES\",\n  entries = DEFAULT_ENTRIES,\n  className,\n}: EditorialHeadingProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const rootRef = useRef<HTMLDivElement>(null);\n  const palette = mode === \"light\" ? PALETTES.light : PALETTES.dark;\n  const titles = entries.map((entry) => entry.title).join(\"\\n\");\n\n  useEffect(() => {\n    const root = rootRef.current;\n    if (!root || prefersReducedMotion) return;\n    const frames = new Set<number>();\n    const originals = new Map<Text, string>();\n\n    const decodeElement = (element: HTMLElement, delay: number) => {\n      const nodes: Array<{ node: Text; original: string }> = [];\n      const walk = (node: Node) => {\n        node.childNodes.forEach((child) => {\n          if (child.nodeType === Node.TEXT_NODE && child.textContent?.trim()) {\n            const text = child as Text;\n            const original = text.textContent ?? \"\";\n            originals.set(text, original);\n            nodes.push({ node: text, original });\n          } else if (child.nodeType === Node.ELEMENT_NODE) {\n            walk(child);\n          }\n        });\n      };\n      walk(element);\n\n      const total = nodes.reduce((sum, node) => sum + node.original.length, 0);\n      const start = performance.now() + delay;\n      const frame = (now: number) => {\n        const progress = clamp((now - start) / Math.max(1, duration), 0, 1);\n        if (now < start) {\n          frames.add(requestAnimationFrame(frame));\n          return;\n        }\n\n        let budget = Math.floor(easeOut(progress) * total);\n        for (const textNode of nodes) {\n          const length = textNode.original.length;\n          const revealed = clamp(budget, 0, length);\n          budget -= revealed;\n          if (revealed >= length) {\n            textNode.node.textContent = textNode.original;\n            continue;\n          }\n\n          let output = textNode.original.slice(0, revealed);\n          const scramble = Math.min(length - revealed, Math.round(scrambleLength));\n          for (let index = 0; index < scramble; index += 1) {\n            const original = textNode.original[revealed + index];\n            output += original === \" \" || Math.random() < preserveChance ? original : randomGlyph();\n          }\n          output += textNode.original\n            .slice(revealed + scramble)\n            .replace(/\\S/g, (character) =>\n              Math.random() < tailChance ? randomGlyph() : character,\n            );\n          textNode.node.textContent = output;\n        }\n\n        if (progress < 1) frames.add(requestAnimationFrame(frame));\n      };\n      frames.add(requestAnimationFrame(frame));\n    };\n\n    root.querySelectorAll<HTMLElement>(\"[data-article-heading]\").forEach((element, index) => {\n      decodeElement(element, index * stagger);\n    });\n\n    return () => {\n      frames.forEach(cancelAnimationFrame);\n      originals.forEach((original, node) => {\n        node.textContent = original;\n      });\n    };\n  }, [duration, stagger, scrambleLength, preserveChance, tailChance, titles, prefersReducedMotion]);\n\n  const small = \"text-[clamp(8px,0.85cqw,10px)] font-normal\";\n\n  return (\n    <div\n      ref={rootRef}\n      className={cn(\n        \"relative isolate grid h-full min-h-0 w-full min-w-0 overflow-hidden [container-type:inline-size]\",\n        \"px-[clamp(20px,6.2cqw,86px)] py-[clamp(20px,5.4cqw,74px)] max-[600px]:p-[18px]\",\n        \"[font-family:Geist,'Helvetica_Neue',Helvetica,Arial,sans-serif]\",\n        className,\n      )}\n      style={{\n        color: palette.text,\n        background: palette.surface,\n        gridTemplateRows: `auto${\" 1fr\".repeat(entries.length)}`,\n      }}\n    >\n      <div\n        className={cn(\n          small,\n          \"flex justify-between pb-[clamp(14px,2.6cqw,30px)] leading-none tracking-[0.12em]\",\n        )}\n        style={{ color: palette.muted, fontFamily: MONO }}\n      >\n        <span>{label}</span>\n        <span>{String(entries.length).padStart(2, \"0\")} ENTRIES</span>\n      </div>\n      {entries.map((entry, index) => (\n        <article\n          key={`${index}-${entry.title}`}\n          className=\"grid grid-cols-[clamp(28px,4cqw,56px)_minmax(0,1fr)_auto] items-center gap-[clamp(10px,2.2cqw,30px)] border-t border-solid max-[600px]:grid-cols-[24px_minmax(0,1fr)]\"\n          style={{ borderColor: palette.rule }}\n        >\n          <span\n            className={cn(small, \"leading-[1.3] tracking-[0.06em]\")}\n            style={{ color: palette.label, fontFamily: MONO }}\n          >\n            {String(index + 1).padStart(2, \"0\")}\n          </span>\n          <h2\n            data-article-heading\n            className=\"m-0 text-[clamp(18px,3.2cqw,44px)] font-semibold leading-[1.08] tracking-[-0.02em] max-[600px]:text-[clamp(17px,5.5vw,26px)]\"\n            style={{ color: palette.heading }}\n          >\n            {entry.title}\n          </h2>\n          <span\n            className={cn(small, \"text-right leading-[1.3] tracking-[0.06em] max-[600px]:hidden\")}\n            style={{ color: palette.label, fontFamily: MONO }}\n          >\n            {entry.meta}\n          </span>\n        </article>\n      ))}\n      <div\n        aria-hidden=\"true\"\n        className=\"pointer-events-none absolute inset-0 z-[5] opacity-[0.12] mix-blend-soft-light\"\n        style={{ backgroundImage: NOISE }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ]
+    },
+    {
+      "kind": "range",
+      "key": "duration",
+      "label": "Duration",
+      "min": 150,
+      "max": 1600,
+      "step": 10,
+      "default": 560
+    },
+    {
+      "kind": "range",
+      "key": "stagger",
+      "label": "Stagger",
+      "min": 0,
+      "max": 500,
+      "step": 10,
+      "default": 140
+    },
+    {
+      "kind": "range",
+      "key": "scrambleLength",
+      "label": "Scramble length",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "kind": "range",
+      "key": "preserveChance",
+      "label": "Preserve",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.3
+    },
+    {
+      "kind": "range",
+      "key": "tailChance",
+      "label": "Tail noise",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.18
+    }
+  ]
+}

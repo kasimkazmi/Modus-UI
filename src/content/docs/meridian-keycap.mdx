@@ -1,0 +1,45 @@
+---
+title: Meridian Keycap
+description: A mechanical keycap button that travels down and lights its LED on hover.
+---
+
+A keycap in its housing: on hover the cap travels into the base, its hard edge collapses and a small LED lights up. Comes as a blue primary or graphite secondary cap. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="meridian-keycap" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add meridian-keycap
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/meridian-keycap.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MeridianKeycap } from "@/components/ui/meridian-keycap";
+
+export default function Example() {
+  return (
+    <div className="h-[400px] w-full">
+      <MeridianKeycap variant="secondary" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default                                                    | Description                                                      |
+| :-------- | :------------------------------------- | :--------------------------------------------------------- | :--------------------------------------------------------------- |
+| `variant` | `"primary" \| "secondary"`             | `"primary"`                                                | Blue primary cap or graphite secondary cap.                      |
+| `label`   | `string`                               | "Start free" (primary) or "Book a walkthrough" (secondary) | Button text.                                                     |
+| `mode`    | `"dark" \| "light"`                    | `"dark"`                                                   | Ground the button is toned for; the stage background follows it. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | —                                                          | Click handler for the button.                                    |

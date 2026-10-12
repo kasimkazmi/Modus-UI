@@ -1,0 +1,47 @@
+{
+  "name": "logic-core",
+  "title": "Logic Core",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/logic-core.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Logic Core (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface LogicCoreProps {\n  mode?: \"dark\" | \"light\";\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  /** Glow colour of the core, accent nodes and point light. */\n  accentColor?: string;\n  /** Colour of the base platform. */\n  platformColor?: string;\n  /** Colour of the non-accent orbiting nodes. */\n  nodeColor?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\n// The original ran on three r136 without colour management: hex values are used as-is.\nconst raw = (value: string | number) => new THREE.Color(value).convertLinearToSRGB();\n\nexport function LogicCore({\n  mode = \"dark\",\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  accentColor = \"#00E5FF\",\n  platformColor = \"#111111\",\n  nodeColor = \"#222222\",\n  backgroundColor = \"#050505\",\n  className,\n}: LogicCoreProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    const container = hostRef.current;\n    if (!container) return;\n\n    const scene = new THREE.Scene();\n    const d = 12; // Camera frustum size\n    const aspect = Math.max(1, container.clientWidth) / Math.max(1, container.clientHeight);\n    const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);\n    camera.position.set(20, 20, 20); // Isometric angle\n    camera.lookAt(0, 0, 0);\n\n    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });\n    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    renderer.domElement.style.cssText =\n      \"position:absolute;inset:0;width:100%;height:100%;display:block\";\n    container.appendChild(renderer.domElement);\n\n    const group = new THREE.Group();\n    scene.add(group);\n\n    const disposables: { dispose: () => void }[] = [];\n    const track = <T extends { dispose: () => void }>(item: T) => {\n      disposables.push(item);\n      return item;\n    };\n\n    const basePlatformMat = track(\n      new THREE.MeshStandardMaterial({ color: raw(platformColor), roughness: 0.9, metalness: 0.1 }),\n    );\n    const coreEmissiveMat = track(\n      new THREE.MeshStandardMaterial({\n        color: raw(accentColor),\n        emissive: raw(accentColor),\n        emissiveIntensity: 0.5,\n        roughness: 0.2,\n      }),\n    );\n    const wireframeMat = track(\n      new THREE.LineBasicMaterial({ color: raw(0x333333), transparent: true, opacity: 0.4 }),\n    );\n\n    const platformGeo = track(new THREE.BoxGeometry(16, 0.5, 16));\n    const platform = new THREE.Mesh(platformGeo, basePlatformMat);\n    platform.position.y = -2;\n    group.add(platform);\n    platform.add(new THREE.LineSegments(track(new THREE.EdgesGeometry(platformGeo)), wireframeMat));\n\n    const coreGeo = track(new THREE.BoxGeometry(2, 4, 2));\n    const core = new THREE.Mesh(coreGeo, coreEmissiveMat);\n    core.position.y = 0.25;\n    group.add(core);\n\n    type NodeData = {\n      angle: number;\n      radius: number;\n      speed: number;\n      yBase: number;\n      yOffset: number;\n    };\n    const nodes: { mesh: THREE.Mesh; data: NodeData }[] = [];\n    const nodeCount = 12;\n    const nodeEdgeMat = track(\n      new THREE.LineBasicMaterial({ color: raw(0x555555), transparent: true, opacity: 0.3 }),\n    );\n    for (let i = 0; i < nodeCount; i++) {\n      const isAccent = Math.random() > 0.7;\n      const nodeMat = isAccent\n        ? coreEmissiveMat\n        : track(new THREE.MeshStandardMaterial({ color: raw(nodeColor), roughness: 0.8 }));\n      const size = 0.4 + Math.random() * 0.4;\n      const nodeGeo = track(new THREE.BoxGeometry(size, size, size));\n      const node = new THREE.Mesh(nodeGeo, nodeMat);\n\n      const angle = (i / nodeCount) * Math.PI * 2;\n      const radius = 4 + Math.random() * 4;\n      node.position.set(Math.cos(angle) * radius, -1 + Math.random() * 4, Math.sin(angle) * radius);\n      node.add(new THREE.LineSegments(track(new THREE.EdgesGeometry(nodeGeo)), nodeEdgeMat));\n\n      nodes.push({\n        mesh: node,\n        data: {\n          angle,\n          radius,\n          speed: 0.005 + Math.random() * 0.015,\n          yBase: node.position.y,\n          yOffset: Math.random() * Math.PI * 2,\n        },\n      });\n      group.add(node);\n    }\n\n    // Legacy (pre-r155) light intensities scaled by PI to keep the original look.\n    scene.add(new THREE.AmbientLight(raw(0xffffff), 0.3 * Math.PI));\n    const dirLight = new THREE.DirectionalLight(raw(0xffffff), 0.6 * Math.PI);\n    dirLight.position.set(10, 20, 5);\n    scene.add(dirLight);\n    const pointLight = new THREE.PointLight(raw(accentColor), 1.5 * Math.PI, 25, 0);\n    pointLight.position.set(0, 1, 0);\n    scene.add(pointLight);\n\n    let time = 0;\n    const step = () => {\n      time += 0.016;\n      group.rotation.y = Math.sin(time * 0.1) * 0.15;\n      group.position.y = Math.sin(time * 0.5) * 0.2;\n\n      const pulse = (Math.sin(time * 2.5) + 1) * 0.5;\n      coreEmissiveMat.emissiveIntensity = 0.4 + pulse * 0.6;\n      pointLight.intensity = (1.0 + pulse * 1.5) * Math.PI;\n\n      nodes.forEach(({ mesh, data }) => {\n        data.angle += data.speed;\n        mesh.position.x = Math.cos(data.angle) * data.radius;\n        mesh.position.z = Math.sin(data.angle) * data.radius;\n        mesh.position.y = data.yBase + Math.sin(time * 1.5 + data.yOffset) * 0.5;\n        mesh.rotation.x += 0.01;\n        mesh.rotation.y += 0.02;\n      });\n      renderer.render(scene, camera);\n    };\n\n    const resize = () => {\n      const width = Math.max(1, container.clientWidth);\n      const height = Math.max(1, container.clientHeight);\n      const newAspect = width / height;\n      camera.left = -d * newAspect;\n      camera.right = d * newAspect;\n      camera.top = d;\n      camera.bottom = -d;\n      camera.updateProjectionMatrix();\n      renderer.setSize(width, height, false);\n      if (prefersReducedMotion) renderer.render(scene, camera);\n    };\n    resize();\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(container);\n\n    let frame = 0;\n    let visible = true;\n    const loop = () => {\n      step();\n      frame = requestAnimationFrame(loop);\n    };\n    const start = () => {\n      cancelAnimationFrame(frame);\n      if (prefersReducedMotion) step();\n      else if (visible && !document.hidden) frame = requestAnimationFrame(loop);\n    };\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      start();\n    });\n    intersection.observe(container);\n    document.addEventListener(\"visibilitychange\", start);\n    start();\n\n    return () => {\n      cancelAnimationFrame(frame);\n      intersection.disconnect();\n      resizeObserver.disconnect();\n      document.removeEventListener(\"visibilitychange\", start);\n      disposables.forEach((item) => item.dispose());\n      renderer.dispose();\n      renderer.domElement.remove();\n    };\n  }, [prefersReducedMotion, accentColor, platformColor, nodeColor]);\n\n  const safeHue = clamp(hue, -180, 180);\n  const safeSaturation = clamp(saturation, 0, 2);\n  const safeBrightness = clamp(brightness, 0.35, 1.65);\n  const filter =\n    safeHue === 0 && safeSaturation === 1 && safeBrightness === 1\n      ? undefined\n      : `hue-rotate(${safeHue}deg) saturate(${safeSaturation}) brightness(${safeBrightness})`;\n\n  return (\n    <div\n      ref={hostRef}\n      data-mode={mode}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{ background: backgroundColor, filter, colorScheme: mode }}\n    />\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

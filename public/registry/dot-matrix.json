@@ -1,0 +1,83 @@
+{
+  "name": "dot-matrix",
+  "title": "Dot Matrix",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/dot-matrix.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Dot Matrix (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface DotMatrixProps {\n  speed?: number;\n  gridScale?: number;\n  mouseAmount?: number;\n  pulseSpeed?: number;\n  radius?: number;\n  opacity?: number;\n  hue?: number;\n  color?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst VERTEX_SHADER = `\nvarying vec2 vUv;\nvoid main() {\n  vUv = uv;\n  gl_Position = vec4(position, 1.0);\n}\n`;\n\nconst FRAGMENT_SHADER = `\nuniform float uTime;\nuniform vec2 uResolution;\nuniform vec2 uMouse;\nuniform float uGridScale;\nuniform float uMouseAmount;\nuniform float uPulseSpeed;\nuniform float uRadius;\nuniform float uOpacity;\nuniform vec3 uColor;\nvarying vec2 vUv;\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / uResolution.xy;\n  float aspect = uResolution.x / uResolution.y;\n  uv.x *= aspect;\n  uv += uMouse * uMouseAmount;\n  vec2 grid = fract(uv * uGridScale);\n  vec2 id = floor(uv * uGridScale);\n  float dist = length(grid - vec2(0.5));\n  float pulse = sin(uTime * uPulseSpeed + id.x * 0.05 + id.y * 0.05) * 0.5 + 0.5;\n  float radius = 0.08 + pulse * uRadius;\n  float alpha = smoothstep(radius, radius - 0.05, dist);\n  vec2 center = vec2(0.5 * aspect, 0.5);\n  float depthFade = smoothstep(1.2, 0.1, length(uv - center));\n  vec3 color = uColor * pulse;\n  gl_FragColor = vec4(color, alpha * depthFade * uOpacity);\n}\n`;\n\nexport function DotMatrix({\n  speed = 1,\n  gridScale = 60,\n  mouseAmount = 0.04,\n  pulseSpeed = 0.4,\n  radius = 0.15,\n  opacity = 0.35,\n  hue = 0,\n  color = \"#00e6ff\",\n  backgroundColor = \"#030304\",\n  className,\n}: DotMatrixProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const options = useRef({ speed, gridScale, mouseAmount, pulseSpeed, radius, opacity, color });\n  options.current = { speed, gridScale, mouseAmount, pulseSpeed, radius, opacity, color };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas) return;\n\n    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    const scene = new THREE.Scene();\n    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);\n    camera.position.z = 1;\n    const uniforms = {\n      uTime: { value: 0 },\n      uResolution: { value: new THREE.Vector2() },\n      uMouse: { value: new THREE.Vector2() },\n      uGridScale: { value: 60 },\n      uMouseAmount: { value: 0.04 },\n      uPulseSpeed: { value: 0.4 },\n      uRadius: { value: 0.15 },\n      uOpacity: { value: 0.35 },\n      uColor: { value: new THREE.Color() },\n    };\n    const geometry = new THREE.PlaneGeometry(2, 2);\n    const material = new THREE.ShaderMaterial({\n      uniforms,\n      vertexShader: VERTEX_SHADER,\n      fragmentShader: FRAGMENT_SHADER,\n      transparent: true,\n      depthWrite: false,\n    });\n    scene.add(new THREE.Mesh(geometry, material));\n\n    const mouse = new THREE.Vector2();\n    const target = new THREE.Vector2();\n    const startedAt = performance.now();\n    let frame = 0;\n    let visible = true;\n\n    // Listen on window so overlaid content does not block the pointer drift.\n    const onPointer = (event: PointerEvent) => {\n      const bounds = canvas.getBoundingClientRect();\n      target.x = ((event.clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1;\n      target.y = -(((event.clientY - bounds.top) / Math.max(1, bounds.height)) * 2 - 1);\n    };\n    const draw = (now: number) => {\n      const o = options.current;\n      mouse.lerp(target, 0.05);\n      uniforms.uTime.value = (now - startedAt) * 0.001 * o.speed;\n      uniforms.uMouse.value = mouse;\n      uniforms.uGridScale.value = o.gridScale;\n      uniforms.uMouseAmount.value = o.mouseAmount;\n      uniforms.uPulseSpeed.value = o.pulseSpeed;\n      uniforms.uRadius.value = o.radius;\n      uniforms.uOpacity.value = o.opacity;\n      // The colour is written straight into the shader, as the original's literal was.\n      uniforms.uColor.value.setStyle(o.color, THREE.LinearSRGBColorSpace);\n      renderer.render(scene, camera);\n    };\n    const tick = (now: number) => {\n      draw(now);\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (!prefersReducedMotion && visible && !frame) frame = requestAnimationFrame(tick);\n    };\n    const resize = () => {\n      const { width, height } = host.getBoundingClientRect();\n      renderer.setSize(width, height, false);\n      uniforms.uResolution.value.set(width, height);\n      if (prefersReducedMotion) draw(startedAt);\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else if (frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    const onVisibility = () => !document.hidden && start();\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    if (!prefersReducedMotion) window.addEventListener(\"pointermove\", onPointer, { passive: true });\n    resize();\n    start();\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n      window.removeEventListener(\"pointermove\", onPointer);\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n    };\n  }, [prefersReducedMotion]);\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ filter: `hue-rotate(${hue}deg)` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "gridScale",
+      "label": "Grid scale",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 60
+    },
+    {
+      "kind": "range",
+      "key": "mouseAmount",
+      "label": "Pointer",
+      "min": 0,
+      "max": 0.12,
+      "step": 0.005,
+      "default": 0.04
+    },
+    {
+      "kind": "range",
+      "key": "pulseSpeed",
+      "label": "Pulse",
+      "min": 0,
+      "max": 1.2,
+      "step": 0.01,
+      "default": 0.4
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "radius",
+      "label": "Radius",
+      "min": 0.03,
+      "max": 0.3,
+      "step": 0.005,
+      "default": 0.15
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.35
+    }
+  ]
+}

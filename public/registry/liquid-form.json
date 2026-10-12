@@ -1,0 +1,91 @@
+{
+  "name": "liquid-form",
+  "title": "Liquid Form",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/liquid-form.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Liquid Form (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface LiquidFormProps {\n  speed?: number;\n  morph?: number;\n  noiseScale?: number;\n  mouseAmount?: number;\n  metal?: number;\n  camera?: number;\n  tintHue?: number;\n  tintAmount?: number;\n  className?: string;\n}\n\nconst VERTEX_SHADER = `\nattribute vec2 a_pos;\nvoid main(){ gl_Position = vec4(a_pos, 0.0, 1.0); }\n`;\n\nconst FRAGMENT_SHADER = `\nprecision highp float;\nuniform vec2 u_res;\nuniform float u_time;\nuniform vec2 u_mouse;\nuniform float u_morph;\nuniform float u_noise_scale;\nuniform float u_mouse_amount;\nuniform float u_metal;\nuniform float u_camera;\n\n#define MAX_STEPS 70\n#define MAX_DIST 20.0\n#define SURF_DIST 0.002\n\nvec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}\nvec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}\nvec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}\nvec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}\nfloat snoise(vec3 v){\n  const vec2 C=vec2(1.0/6.0,1.0/3.0);\n  const vec4 D=vec4(0.0,0.5,1.0,2.0);\n  vec3 i=floor(v+dot(v,C.yyy));\n  vec3 x0=v-i+dot(i,C.xxx);\n  vec3 g=step(x0.yzx,x0.xyz);\n  vec3 l=1.0-g;\n  vec3 i1=min(g.xyz,l.zxy);\n  vec3 i2=max(g.xyz,l.zxy);\n  vec3 x1=x0-i1+C.xxx;\n  vec3 x2=x0-i2+C.yyy;\n  vec3 x3=x0-D.yyy;\n  i=mod289(i);\n  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));\n  float n_=0.142857142857;\n  vec3 ns=n_*D.wyz-D.xzx;\n  vec4 j=p-49.0*floor(p*ns.z*ns.z);\n  vec4 x_=floor(j*ns.z);\n  vec4 y_=floor(j-7.0*x_);\n  vec4 x=x_*ns.x+ns.yyyy;\n  vec4 y=y_*ns.x+ns.yyyy;\n  vec4 h=1.0-abs(x)-abs(y);\n  vec4 b0=vec4(x.xy,y.xy);\n  vec4 b1=vec4(x.zw,y.zw);\n  vec4 s0=floor(b0)*2.0+1.0;\n  vec4 s1=floor(b1)*2.0+1.0;\n  vec4 sh=-step(h,vec4(0.0));\n  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;\n  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;\n  vec3 p0=vec3(a0.xy,h.x);\n  vec3 p1=vec3(a0.zw,h.y);\n  vec3 p2=vec3(a1.xy,h.z);\n  vec3 p3=vec3(a1.zw,h.w);\n  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));\n  p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;\n  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);\n  m=m*m;\n  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));\n}\n\nfloat map(vec3 p, float t) {\n  float radius = 1.8;\n  float morph = snoise(p * (0.8 * u_noise_scale) + t * 0.1) * 0.2;\n  morph += snoise(p * (1.5 * u_noise_scale) - t * 0.05 + 10.0) * 0.08;\n  morph += snoise(p * (3.0 * u_noise_scale) + t * 0.02) * 0.02;\n  return length(p) - radius + morph * u_morph;\n}\n\nvec3 calcNormal(vec3 p, float t) {\n  vec2 e = vec2(0.002, 0.0);\n  return normalize(vec3(\n    map(p+e.xyy, t) - map(p-e.xyy, t),\n    map(p+e.yxy, t) - map(p-e.yxy, t),\n    map(p+e.yyx, t) - map(p-e.yyx, t)\n  ));\n}\n\nvec3 envLighting(vec3 rd, vec2 mouse) {\n  vec3 col = vec3(0.03, 0.03, 0.03);\n  vec3 keyDir = normalize(vec3(0.5 + mouse.x, 1.0 + mouse.y * 0.5, 1.2));\n  float key = pow(max(dot(rd, keyDir), 0.0), 12.0);\n  col += vec3(0.95, 0.93, 0.9) * key * 1.5;\n  vec3 rimDir = normalize(vec3(-0.8, -0.2, -1.0));\n  float rim = pow(max(dot(rd, rimDir), 0.0), 6.0);\n  col += vec3(0.4, 0.42, 0.45) * rim * 0.8;\n  vec3 fillDir = normalize(vec3(-1.0, 0.5, 0.5));\n  float fill = pow(max(dot(rd, fillDir), 0.0), 3.0);\n  col += vec3(0.2, 0.2, 0.2) * fill * 0.6;\n  float panel = exp(-pow((rd.y - 0.2) * 4.0, 2.0)) * smoothstep(-0.5, 0.5, rd.z);\n  col += vec3(0.15) * panel;\n  return col;\n}\n\nvoid main() {\n  vec2 uv = (gl_FragCoord.xy - u_res * 0.5) / min(u_res.x, u_res.y);\n  float t = u_time * 0.8;\n  vec2 m = u_mouse * u_mouse_amount;\n  vec3 ro = vec3(0.0, 0.0, u_camera);\n  vec3 lookAt = vec3(m.x, m.y, 0.0);\n  vec3 fwd = normalize(lookAt - ro);\n  vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), fwd));\n  vec3 up = cross(fwd, right);\n  vec3 rd = normalize(fwd + uv.x * right + uv.y * up);\n  vec3 bgCol = mix(vec3(0.02), vec3(0.05), length(uv) * 0.5);\n  vec3 col = bgCol;\n  float d = 0.0;\n  for(int i=0; i<MAX_STEPS; i++) {\n    vec3 p = ro + rd * d;\n    float ds = map(p, t);\n    d += ds;\n    if(d > MAX_DIST || abs(ds) < SURF_DIST) break;\n  }\n  if(d < MAX_DIST) {\n    vec3 p = ro + rd * d;\n    vec3 n = calcNormal(p, t);\n    vec3 ref = reflect(rd, n);\n    float fresnel = pow(1.0 - max(dot(n, -rd), 0.0), 4.0);\n    fresnel = mix(0.4, 1.0, fresnel);\n    vec3 env = envLighting(ref, u_mouse);\n    col = env * fresnel * 1.8 * u_metal;\n    vec3 lightPos = normalize(vec3(0.5 + u_mouse.x, 1.0, 1.0));\n    float spec = pow(max(dot(ref, lightPos), 0.0), 60.0);\n    col += vec3(1.0) * spec * 2.0 * u_metal;\n    float disp = map(p, t) - (length(p) - 1.8);\n    col *= mix(0.7, 1.0, smoothstep(-0.1, 0.1, disp));\n  }\n  float bloom = exp(-length(uv) * 2.5);\n  col += vec3(0.02, 0.02, 0.02) * bloom;\n  col = col / (col + 0.5);\n  col = pow(col, vec3(1.0/2.2));\n  gl_FragColor = vec4(col, 1.0);\n}\n`;\n\nfunction compile(gl: WebGLRenderingContext, type: number, source: string) {\n  const shader = gl.createShader(type);\n  if (!shader) throw new Error(\"Unable to create Liquid Form shader\");\n  gl.shaderSource(shader, source);\n  gl.compileShader(shader);\n  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {\n    throw new Error(gl.getShaderInfoLog(shader) ?? \"Liquid Form shader compilation failed\");\n  }\n  return shader;\n}\n\nexport function LiquidForm({\n  speed = 1,\n  morph = 1,\n  noiseScale = 1,\n  mouseAmount = 0.15,\n  metal = 1,\n  camera = 5.5,\n  tintHue = 220,\n  tintAmount = 0,\n  className,\n}: LiquidFormProps) {\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const prefersReducedMotion = useReducedMotion();\n  const optionsRef = useRef({ speed, morph, noiseScale, mouseAmount, metal, camera });\n  optionsRef.current = { speed, morph, noiseScale, mouseAmount, metal, camera };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas) return;\n    const gl = canvas.getContext(\"webgl\", {\n      alpha: false,\n      antialias: false,\n      powerPreference: \"high-performance\",\n    });\n    if (!gl) return;\n\n    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX_SHADER);\n    const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);\n    const program = gl.createProgram();\n    if (!program) return;\n    gl.attachShader(program, vertex);\n    gl.attachShader(program, fragment);\n    gl.linkProgram(program);\n    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {\n      throw new Error(gl.getProgramInfoLog(program) ?? \"Liquid Form program link failed\");\n    }\n    gl.useProgram(program);\n\n    const buffer = gl.createBuffer();\n    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);\n    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);\n    const position = gl.getAttribLocation(program, \"a_pos\");\n    gl.enableVertexAttribArray(position);\n    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);\n\n    const uniforms = {\n      resolution: gl.getUniformLocation(program, \"u_res\"),\n      time: gl.getUniformLocation(program, \"u_time\"),\n      mouse: gl.getUniformLocation(program, \"u_mouse\"),\n      morph: gl.getUniformLocation(program, \"u_morph\"),\n      noiseScale: gl.getUniformLocation(program, \"u_noise_scale\"),\n      mouseAmount: gl.getUniformLocation(program, \"u_mouse_amount\"),\n      metal: gl.getUniformLocation(program, \"u_metal\"),\n      camera: gl.getUniformLocation(program, \"u_camera\"),\n    };\n    let targetX = 0;\n    let targetY = 0;\n    let mouseX = 0;\n    let mouseY = 0;\n    let frame = 0;\n    let visible = true;\n    const startedAt = performance.now();\n\n    const draw = (elapsed: number) => {\n      const options = optionsRef.current;\n      mouseX += (targetX - mouseX) * 0.05;\n      mouseY += (targetY - mouseY) * 0.05;\n      gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);\n      gl.uniform1f(uniforms.time, elapsed * options.speed);\n      gl.uniform2f(uniforms.mouse, mouseX, mouseY);\n      gl.uniform1f(uniforms.morph, options.morph);\n      gl.uniform1f(uniforms.noiseScale, options.noiseScale);\n      gl.uniform1f(uniforms.mouseAmount, options.mouseAmount);\n      gl.uniform1f(uniforms.metal, options.metal);\n      gl.uniform1f(uniforms.camera, options.camera);\n      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);\n    };\n\n    const render = (now: number) => {\n      draw((now - startedAt) * 0.001);\n      frame = visible && !document.hidden ? requestAnimationFrame(render) : 0;\n    };\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);\n      canvas.width = Math.max(1, Math.round(bounds.width * pixelRatio));\n      canvas.height = Math.max(1, Math.round(bounds.height * pixelRatio));\n      gl.viewport(0, 0, canvas.width, canvas.height);\n      if (prefersReducedMotion) draw(6);\n    };\n\n    const pointer = (event: PointerEvent) => {\n      const bounds = canvas.getBoundingClientRect();\n      if (\n        event.clientX < bounds.left ||\n        event.clientX > bounds.right ||\n        event.clientY < bounds.top ||\n        event.clientY > bounds.bottom\n      ) {\n        return;\n      }\n      targetX = ((event.clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1;\n      targetY = -(((event.clientY - bounds.top) / Math.max(1, bounds.height)) * 2 - 1);\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(host);\n    resize();\n\n    let intersection: IntersectionObserver | undefined;\n    if (!prefersReducedMotion) {\n      intersection = new IntersectionObserver(([entry]) => {\n        visible = entry?.isIntersecting ?? true;\n        if (visible && !frame) frame = requestAnimationFrame(render);\n        if (!visible && frame) {\n          cancelAnimationFrame(frame);\n          frame = 0;\n        }\n      });\n      intersection.observe(host);\n      window.addEventListener(\"pointermove\", pointer, { passive: true });\n      frame = requestAnimationFrame(render);\n    }\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection?.disconnect();\n      window.removeEventListener(\"pointermove\", pointer);\n      gl.deleteBuffer(buffer);\n      gl.deleteShader(vertex);\n      gl.deleteShader(fragment);\n      gl.deleteProgram(program);\n    };\n  }, [prefersReducedMotion]);\n\n  const tintFilter =\n    tintAmount > 0\n      ? `sepia(${tintAmount}) saturate(${1 + tintAmount * 5}) hue-rotate(${tintHue - 35}deg)`\n      : undefined;\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 isolate overflow-hidden bg-black\", className)}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"absolute inset-0 block h-full w-full\"\n        style={{ filter: tintFilter }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "morph",
+      "label": "Morph",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "noiseScale",
+      "label": "Noise scale",
+      "min": 0.4,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "mouseAmount",
+      "label": "Pointer",
+      "min": 0,
+      "max": 0.4,
+      "step": 0.01,
+      "default": 0.15
+    },
+    {
+      "kind": "range",
+      "key": "metal",
+      "label": "Metal",
+      "min": 0.3,
+      "max": 1.8,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "camera",
+      "label": "Camera",
+      "min": 4,
+      "max": 7,
+      "step": 0.1,
+      "default": 5.5
+    },
+    {
+      "kind": "range",
+      "key": "tintHue",
+      "label": "Tint hue",
+      "min": 0,
+      "max": 360,
+      "step": 1,
+      "default": 220
+    },
+    {
+      "kind": "range",
+      "key": "tintAmount",
+      "label": "Tint",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 0
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+---
+title: Globe Study
+description: A canvas globe whose land is drawn as type along the latitude lines, with a halftone ocean.
+---
+
+Land drawn as type along the latitude lines over a halftone sea. Drag to spin and tilt, scroll to zoom and click to drop a pin. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="globe-study" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add globe-study
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/globe-study.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlobeStudy } from "@/components/ui/globe-study";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GlobeStudy />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default                                         | Description                                 |
+| :---------------- | :------------------ | :---------------------------------------------- | :------------------------------------------ |
+| `text`            | `string`            | `"everypointonthisballisapathbacktoanotherone"` | Phrase written across the land.             |
+| `mode`            | `"dark" \| "light"` | `"dark"`                                        | Colour scheme of the ground and ink.        |
+| `scale`           | `number`            | `1`                                             | Scales the drawing (clamped 0.65–1.5).      |
+| `opacity`         | `number`            | `1`                                             | Overall opacity (clamped 0.1–1).            |
+| `hue`             | `number`            | `0`                                             | Hue rotation in degrees (clamped -180–180). |
+| `saturation`      | `number`            | `1`                                             | Saturation multiplier (clamped 0–2).        |
+| `brightness`      | `number`            | `1`                                             | Brightness multiplier (clamped 0.4–1.8).    |
+| `inkColor`        | `string`            | Mode ink (`#e2e4e9` dark, `#262830` light)      | Colour of the type, as hex.                 |
+| `backgroundColor` | `string`            | Mode ground (`#08090a` dark, `#f3f5f8` light)   | Background colour.                          |

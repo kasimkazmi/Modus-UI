@@ -5,7 +5,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, GraduationCap, Sparkles } from "lucide-react";
 
+import { registry, type RegistryItem } from "@/registry";
+import { ControlledPreview } from "@/components/preview-controls";
 import { getDemo } from "@/registry/demos";
+import { cn } from "@/lib/utils";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -22,10 +25,7 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
   // Custom Full-Page scroll template for Navbar
   if (name === "morphing-navbar") {
     return (
-      <div
-        data-palette="modus"
-        className="relative min-h-screen bg-background font-sans text-foreground"
-      >
+      <div className="relative min-h-screen bg-background font-sans text-foreground">
         {/* Real page-level sticky Navbar */}
         <div className="sticky top-0 z-50" data-preview-stage>
           <MorphingNavbar
@@ -38,7 +38,7 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
         {/* Back Link Floating Badge */}
         <div className="fixed bottom-6 left-6 z-50">
           <Link
-            href="/docs/morphing-navbar"
+            href="/components/morphing-navbar"
             className="flex items-center gap-2 rounded-full border border-border bg-card/95 px-4 py-2.5 text-xs font-medium text-muted-foreground shadow-md transition-all hover:scale-105 hover:bg-card hover:text-foreground active:scale-95"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -115,15 +115,22 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
     notFound();
   }
 
+  // Backgrounds fill the viewport: the demo's card sizing and border are for the docs frame.
+  const item = (registry as readonly RegistryItem[]).find((entry) => entry.name === name);
+  const fullBleed = item?.category === "Backgrounds";
+  const stageClassName = cn(
+    "w-full",
+    fullBleed
+      ? "h-screen [&>*]:!h-full [&>*]:!min-h-0 [&>*]:!rounded-none [&>*]:!border-0"
+      : "flex min-h-screen flex-1 items-center justify-center",
+  );
+
   return (
-    <div
-      data-palette="modus"
-      className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background font-sans text-foreground"
-    >
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-background font-sans text-foreground">
       {/* Floating Back Link Badge */}
       <div className="fixed left-6 top-6 z-50">
         <Link
-          href={`/docs/${name}`}
+          href={`/components/${name}`}
           className="flex items-center gap-2 rounded-full border border-border bg-background/90 px-4 py-2.5 text-xs font-medium text-muted-foreground shadow-sm transition-all hover:scale-105 hover:bg-background hover:text-foreground active:scale-95"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
@@ -131,13 +138,18 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
         </Link>
       </div>
 
-      {/* Completely full screen rendering of the demo component */}
-      <div
-        className="flex min-h-screen w-full flex-1 items-center justify-center"
-        data-preview-stage
-      >
-        <DemoComponent />
-      </div>
+      {/* Full screen rendering of the demo component, with live controls when it has any */}
+      {item?.controls ? (
+        <ControlledPreview
+          Demo={DemoComponent}
+          controls={item.controls}
+          stageClassName={stageClassName}
+        />
+      ) : (
+        <div className={stageClassName} data-preview-stage>
+          <DemoComponent />
+        </div>
+      )}
     </div>
   );
 }

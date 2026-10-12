@@ -62,10 +62,18 @@ const anchorOf = (rect, side, gap) => {
 
 const layoutOf = (x, y, width, height, side) => {
   if (horizontal(side)) {
-    const X = clamp(x - width / 2, MARGIN, Math.max(MARGIN, window.innerWidth - MARGIN - width));
+    const X = clamp(
+      x - width / 2,
+      MARGIN,
+      Math.max(MARGIN, (typeof window === "undefined" ? 0 : window.innerWidth) - MARGIN - width),
+    );
     return { X, Y: side === "top" ? y - height : y };
   }
-  const Y = clamp(y - height / 2, MARGIN, Math.max(MARGIN, window.innerHeight - MARGIN - height));
+  const Y = clamp(
+    y - height / 2,
+    MARGIN,
+    Math.max(MARGIN, (typeof window === "undefined" ? 0 : window.innerHeight) - MARGIN - height),
+  );
   return { X: side === "left" ? x - width : x, Y };
 };
 

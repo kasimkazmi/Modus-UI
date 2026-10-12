@@ -1,0 +1,47 @@
+{
+  "name": "data-field",
+  "title": "Data Field",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/data-field.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Data Field (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface DataFieldProps {\n  mode?: \"dark\" | \"light\";\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  /** Colour of the first line in the field. */\n  startColor?: string;\n  /** Colour of the last line in the field. */\n  endColor?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\n// The original ran on three r128 without colour management: hex values are used as-is.\nconst raw = (value: string) => new THREE.Color(value).convertLinearToSRGB();\n\nexport function DataField({\n  mode = \"dark\",\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  startColor = \"#D1C5B4\",\n  endColor = \"#7A7B76\",\n  backgroundColor = \"#050505\",\n  className,\n}: DataFieldProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    const container = hostRef.current;\n    if (!container) return;\n\n    const scene = new THREE.Scene();\n    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);\n    camera.position.set(0, -2, 9);\n\n    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });\n    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    renderer.domElement.style.cssText =\n      \"position:absolute;inset:0;width:100%;height:100%;display:block\";\n    container.appendChild(renderer.domElement);\n\n    const group = new THREE.Group();\n    scene.add(group);\n\n    const numLines = 60;\n    const pointsPerLine = 100;\n    const colorStart = raw(startColor);\n    const colorEnd = raw(endColor);\n    const lines: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>[] = [];\n\n    for (let i = 0; i < numLines; i++) {\n      const points: THREE.Vector3[] = [];\n      const xPos = (i - numLines / 2) * 0.22;\n      for (let j = 0; j < pointsPerLine; j++) {\n        const yPos = (j - pointsPerLine / 2) * 0.2;\n        points.push(new THREE.Vector3(xPos, yPos, 0));\n      }\n      const geometry = new THREE.BufferGeometry().setFromPoints(points);\n      const color = new THREE.Color().lerpColors(colorStart, colorEnd, i / numLines);\n      const material = new THREE.LineBasicMaterial({\n        color,\n        transparent: true,\n        opacity: 0.1 + Math.random() * 0.25,\n        blending: THREE.AdditiveBlending,\n      });\n      const line = new THREE.Line(geometry, material);\n      group.add(line);\n      lines.push(line);\n    }\n\n    // Tilt to create a flowing plane\n    group.rotation.x = Math.PI / 3;\n    group.rotation.z = -Math.PI / 8;\n\n    const render = (seconds: number) => {\n      const time = seconds * 0.4; // Slower, more relaxed pace\n      lines.forEach((line) => {\n        const attribute = line.geometry.attributes.position as THREE.BufferAttribute;\n        const positions = attribute.array as Float32Array;\n        for (let j = 0; j < pointsPerLine; j++) {\n          const idx = j * 3;\n          const x = positions[idx];\n          const y = positions[idx + 1];\n          // Smooth, rolling, gentle waves reminiscent of water or silk\n          const wave1 = Math.sin(y * 1.2 + time + x * 0.8) * 0.8;\n          const wave2 = Math.cos(x * 1.5 - time * 0.8 + y * 0.5) * 0.6;\n          positions[idx + 2] = wave1 + wave2;\n        }\n        attribute.needsUpdate = true;\n      });\n      renderer.render(scene, camera);\n    };\n\n    let elapsed = 0;\n    let last = performance.now();\n    let frame = 0;\n    let visible = true;\n\n    const resize = () => {\n      const width = Math.max(1, container.clientWidth);\n      const height = Math.max(1, container.clientHeight);\n      camera.aspect = width / height;\n      camera.updateProjectionMatrix();\n      renderer.setSize(width, height, false);\n      if (prefersReducedMotion) render(elapsed);\n    };\n\n    const loop = (now: number) => {\n      elapsed += (now - last) / 1000;\n      last = now;\n      render(elapsed);\n      frame = requestAnimationFrame(loop);\n    };\n    const start = () => {\n      cancelAnimationFrame(frame);\n      if (prefersReducedMotion) render(elapsed);\n      else if (visible && !document.hidden) {\n        last = performance.now();\n        frame = requestAnimationFrame(loop);\n      }\n    };\n\n    resize();\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(container);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      start();\n    });\n    intersection.observe(container);\n    document.addEventListener(\"visibilitychange\", start);\n    start();\n\n    return () => {\n      cancelAnimationFrame(frame);\n      intersection.disconnect();\n      resizeObserver.disconnect();\n      document.removeEventListener(\"visibilitychange\", start);\n      lines.forEach((line) => {\n        line.geometry.dispose();\n        line.material.dispose();\n      });\n      renderer.dispose();\n      renderer.domElement.remove();\n    };\n  }, [prefersReducedMotion, startColor, endColor]);\n\n  const safeHue = clamp(hue, -180, 180);\n  const safeSaturation = clamp(saturation, 0, 2);\n  const safeBrightness = clamp(brightness, 0.35, 1.65);\n  const filter =\n    safeHue === 0 && safeSaturation === 1 && safeBrightness === 1\n      ? undefined\n      : `hue-rotate(${safeHue}deg) saturate(${safeSaturation}) brightness(${safeBrightness})`;\n\n  return (\n    <div\n      ref={hostRef}\n      data-mode={mode}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{ background: backgroundColor, filter, colorScheme: mode }}\n    />\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

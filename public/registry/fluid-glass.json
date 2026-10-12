@@ -1,0 +1,17 @@
+{
+  "name": "fluid-glass",
+  "title": "Fluid Glass",
+  "category": "Components",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/fluid-glass.tsx",
+      "content": "\"use client\";\n\nimport { motion, useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface FluidGlassProps {\n  text?: string;\n  className?: string;\n}\n\n// TODO: Replace this stub with the real component.\nexport function FluidGlass({ text = \"Fluid Glass\", className }: FluidGlassProps) {\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <motion.div\n      initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}\n      animate={{ opacity: 1, y: 0 }}\n      transition={{ duration: 0.4, ease: \"easeOut\" }}\n      className={cn(\"font-serif text-4xl text-foreground\", className)}\n    >\n      {text}\n    </motion.div>\n  );\n}\n"
+    }
+  ]
+}

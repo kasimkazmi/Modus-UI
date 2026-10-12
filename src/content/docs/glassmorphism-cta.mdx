@@ -1,0 +1,46 @@
+---
+title: Glassmorphism CTA
+description: A frosted-glass pill link with an avatar, a label and a wand icon.
+---
+
+A frosted-glass pill link with an avatar, a label and a wand icon. A soft beam spins around the pill continuously, and hovering scales the pill up and brightens its indigo glow. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="glassmorphism-cta" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glassmorphism-cta
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/glassmorphism-cta.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GlassmorphismCta } from "@/components/ui/glassmorphism-cta";
+
+export default function Example() {
+  return <GlassmorphismCta />;
+}
+```
+
+## Props
+
+| Prop           | Type                                   | Default                                                                               | Description                         |
+| :------------- | :------------------------------------- | :------------------------------------------------------------------------------------ | :---------------------------------- |
+| `label`        | `string`                               | `"Generate My Site"`                                                                  | Link text.                          |
+| `href`         | `string`                               | `"#"`                                                                                 | Link target.                        |
+| `avatarSrc`    | `string`                               | `"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop"` | Avatar image URL.                   |
+| `avatarAlt`    | `string`                               | `"Advisor headshot"`                                                                  | Avatar alt text.                    |
+| `glowColor`    | `string`                               | `"rgba(129,140,248,0.25)"`                                                            | Resting outer glow colour.          |
+| `shimmerColor` | `string`                               | `"rgba(255,255,255,0.6)"`                                                             | Conic shimmer colour on the border. |
+| `speed`        | `number`                               | `4`                                                                                   | Seconds per rotation of the beam.   |
+| `onClick`      | `MouseEventHandler<HTMLAnchorElement>` | `undefined`                                                                           | Click handler.                      |

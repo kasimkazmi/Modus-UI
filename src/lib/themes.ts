@@ -1,8 +1,8 @@
 /**
  * Site palettes. Each id has a light `[data-palette="<id>"]` block and a
  * `.dark[data-palette="<id>"]` block of tokens in `src/app/globals.css`;
- * `swatch` only colours the picker. Palettes restyle the Modus UI site, never
- * the component previews, which stay pinned to light `modus`.
+ * `swatch` only colours the picker. Palettes restyle the whole site, component
+ * previews included.
  */
 export const PALETTES = [
   {

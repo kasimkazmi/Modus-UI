@@ -44,7 +44,7 @@ function stripJsx(mdx: string): string {
     .trim();
 }
 
-export const docUrl = (name: string) => `${SITE.url}/docs/${name}.md`;
+export const docUrl = (name: string) => `${SITE.url}/components/${name}.md`;
 
 /** One component as markdown: title, description, install command, docs body and full source. Null for unknown names. */
 export function componentMarkdown(name: string): string | null {

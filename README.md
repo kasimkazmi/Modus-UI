@@ -58,7 +58,7 @@ For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The d
 
 - [`/llms.txt`](https://modusui.kasimkazmi.com/llms.txt): index of every component with a one-line description
 - [`/llms-full.txt`](https://modusui.kasimkazmi.com/llms-full.txt): every component's docs and full source in one file
-- `/docs/<name>.md`, e.g. [`/docs/blur-text.md`](https://modusui.kasimkazmi.com/docs/blur-text.md): one component's install command, usage and source
+- `/components/<name>.md`, e.g. [`/components/blur-text.md`](https://modusui.kasimkazmi.com/components/blur-text.md): one component's install command, usage and source
 
 ## Components
 
@@ -73,7 +73,7 @@ For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The d
 
 ## Documentation
 
-Run the site locally and open [`/docs`](http://localhost:3000/docs). Each component page has:
+Run the site locally and open [`/components`](http://localhost:3000/components). Each component page has:
 
 - A live preview with a restart button, plus a full-screen standalone preview at `/preview/<name>`
 - The full source, with syntax highlighting and copy to clipboard

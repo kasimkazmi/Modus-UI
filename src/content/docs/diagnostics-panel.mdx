@@ -1,0 +1,51 @@
+---
+title: Diagnostics Panel
+description: An isometric emerald wireframe readout with layered planes, node cubes or a flowing mesh.
+---
+
+A square canvas panel drawn in isometric projection: five stacked scan planes, a cluster of floating wireframe cubes, or a breathing height-field mesh. It pauses when off screen and draws a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="diagnostics-panel" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add diagnostics-panel
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/diagnostics-panel.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DiagnosticsPanel } from "@/components/ui/diagnostics-panel";
+
+export default function Example() {
+  return (
+    <div className="flex min-h-[400px] items-center justify-center bg-[#020804]">
+      <DiagnosticsPanel variant="nodes" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                            | Default    | Description                                                                  |
+| :---------------- | :------------------------------ | :--------- | :--------------------------------------------------------------------------- |
+| `variant`         | `"layers" \| "nodes" \| "flow"` | `"layers"` | Which diagnostic figure to draw.                                             |
+| `mode`            | `"dark" \| "light"`             | `"dark"`   | Picks the default stroke and panel colours.                                  |
+| `speed`           | `number`                        | `1`        | Animation speed multiplier (0 to 3).                                         |
+| `size`            | `number`                        | `1`        | Scale of the panel.                                                          |
+| `opacity`         | `number`                        | `1`        | Opacity of the panel.                                                        |
+| `hue`             | `number`                        | `0`        | Hue rotation in degrees.                                                     |
+| `saturation`      | `number`                        | `1`        | Saturation multiplier.                                                       |
+| `brightness`      | `number`                        | `1`        | Brightness multiplier.                                                       |
+| `color`           | `string`                        | none       | Stroke colour as hex; emerald for dark mode, deep green for light mode.      |
+| `backgroundColor` | `string`                        | none       | Fill used to occlude hidden lines; match it to the surface behind the panel. |

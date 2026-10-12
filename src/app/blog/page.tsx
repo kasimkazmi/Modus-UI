@@ -34,7 +34,7 @@ export default function BlogComingSoonPage() {
         </Link>
 
         <Link
-          href="/docs"
+          href="/components"
           className="flex items-center gap-2 font-serif text-sm italic text-foreground transition-colors hover:text-foreground/80"
         >
           <span>Modus Library</span>

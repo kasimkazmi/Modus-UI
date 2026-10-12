@@ -1,0 +1,54 @@
+---
+title: Particle Drift
+description: A drifting field of ASCII glyphs and rising light beams that link up to your pointer.
+---
+
+Ninety ASCII glyphs drift down a dark field, trading characters and linking to nearby glyphs, while blue beams streak upward. Glyphs near the pointer light up and connect to it. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="particle-drift" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add particle-drift
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/particle-drift.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ParticleDrift } from "@/components/ui/particle-drift";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ParticleDrift />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default         | Description                                                                      |
+| :---------------- | :------------------ | :-------------- | :------------------------------------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`        | Colour scheme of the original dark and light versions.                           |
+| `speed`           | `number`            | `1`             | Animation speed multiplier (0–3).                                                |
+| `size`            | `number`            | `1`             | Stroke / scale multiplier.                                                       |
+| `length`          | `number`            | `1`             | Length / reach multiplier (0.35–2.5).                                            |
+| `density`         | `number`            | `1`             | Glyph and beam count multiplier. (0.25–2.5).                                     |
+| `opacity`         | `number`            | `1`             | Opacity of the effect layer (0.05–1).                                            |
+| `hue`             | `number`            | `0`             | Hue rotation in degrees applied to the final frame.                              |
+| `saturation`      | `number`            | `1`             | Saturation multiplier applied to the final frame.                                |
+| `brightness`      | `number`            | `1`             | Brightness multiplier applied to the final frame.                                |
+| `backgroundColor` | `string`            | mode background | Background colour behind the canvas (defaults to `#030509` in its default mode). |

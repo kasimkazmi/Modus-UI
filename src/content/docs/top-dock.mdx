@@ -1,0 +1,60 @@
+---
+title: Top Dock
+description: A proximity-spring navigation dock in four fits — a centred dock, a command bar, a dithered pixel terminal and a refracting glass rail.
+---
+
+A navigation dock whose items swell, drop and settle on a damped spring as the pointer moves across them, with keyboard focus driving the same motion. The `sable` variant is a centred top dock, `modern` a command bar with brand and actions, `retro` a fitted strip over an ordered-dither WebGL field, and `glass` a vertical rail over a Three.js field of refracting glass beads. The spring is disabled for reduced motion, coarse pointers and narrow viewports, and the shader fields pause off screen. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="top-dock" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add top-dock
+```
+
+### Manual
+
+1. Install `three` and `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/top-dock.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TopDock } from "@/components/ui/top-dock";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <TopDock variant="glass" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                        | Default   | Description                                                   |
+| :------------- | :------------------------------------------ | :-------- | :------------------------------------------------------------ |
+| `variant`      | `"sable" \| "modern" \| "retro" \| "glass"` | `"sable"` | Which dock fit to render.                                     |
+| `proximity`    | `number`                                    | `122`     | Distance in pixels over which the pointer influences an item. |
+| `spring`       | `number`                                    | `0.19`    | Spring stiffness of the item motion.                          |
+| `damping`      | `number`                                    | `0.7`     | Velocity damping per frame.                                   |
+| `widthGrowth`  | `number`                                    | `17`      | Extra width in pixels an item gains at full influence.        |
+| `heightGrowth` | `number`                                    | `16`      | Extra height in pixels an item gains at full influence.       |
+| `drop`         | `number`                                    | `3.5`     | How far an active item drops (or leans out on the rail).      |
+| `pixelSize`    | `number`                                    | `4`       | Retro: screen pixels per field pixel.                         |
+| `speed`        | `number`                                    | `1`       | Retro: field animation speed.                                 |
+| `noise`        | `number`                                    | `1`       | Retro: weather noise and grain strength.                      |
+| `levels`       | `number`                                    | `7`       | Retro: number of palette steps.                               |
+| `scanlines`    | `number`                                    | `0.32`    | Retro: scanline overlay strength.                             |
+| `particles`    | `number`                                    | `22`      | Glass: number of visible beads (4–34).                        |
+| `thickness`    | `number`                                    | `0.115`   | Glass: refraction offset strength.                            |
+| `dispersion`   | `number`                                    | `0.05`    | Glass: chromatic split between colour channels.               |
+| `specular`     | `number`                                    | `0.85`    | Glass: highlight intensity.                                   |
+| `rim`          | `number`                                    | `0.5`     | Glass: fresnel rim intensity.                                 |
+| `drift`        | `number`                                    | `1`       | Glass: bead drift and spin speed.                             |

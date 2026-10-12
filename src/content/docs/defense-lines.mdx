@@ -1,0 +1,54 @@
+---
+title: Defense Lines
+description: Crimson rain lines rise and glow brighter toward the centre of the frame.
+---
+
+Thin crimson streaks rise through the frame, stretching and glowing hotter as they near its centre. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="defense-lines" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add defense-lines
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/defense-lines.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DefenseLines } from "@/components/ui/defense-lines";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DefenseLines />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default         | Description                                                                      |
+| :---------------- | :------------------ | :-------------- | :------------------------------------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`        | Colour scheme of the original dark and light versions.                           |
+| `speed`           | `number`            | `1`             | Animation speed multiplier (0–3).                                                |
+| `size`            | `number`            | `1`             | Stroke / scale multiplier.                                                       |
+| `length`          | `number`            | `1`             | Length / reach multiplier (0.35–2.5).                                            |
+| `density`         | `number`            | `1`             | Streak count multiplier. (0.25–2.5).                                             |
+| `opacity`         | `number`            | `1`             | Opacity of the effect layer (0.05–1).                                            |
+| `hue`             | `number`            | `0`             | Hue rotation in degrees applied to the final frame.                              |
+| `saturation`      | `number`            | `1`             | Saturation multiplier applied to the final frame.                                |
+| `brightness`      | `number`            | `1`             | Brightness multiplier applied to the final frame.                                |
+| `backgroundColor` | `string`            | mode background | Background colour behind the canvas (defaults to `#120303` in its default mode). |

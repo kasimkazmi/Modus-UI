@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { registry } from "@/registry";
+import { registry, type RegistryItem } from "@/registry";
 
 const SRC = path.join(process.cwd(), "src");
 const read = (file: string) => fs.readFileSync(path.join(SRC, file), "utf8");
@@ -68,5 +68,37 @@ describe("docs and registry agree", () => {
       .filter((file) => file.endsWith("-demo.tsx"))
       .map((file) => file.replace(/-demo\.tsx$/, ""));
     expect(demos.filter((name) => !names.includes(name as (typeof names)[number]))).toEqual([]);
+  });
+});
+
+describe("docs frontmatter", () => {
+  // Parsed the same way the docs page parses it (src/lib/mdx.ts), so a bad
+  // YAML value fails here instead of crashing the page.
+  it.each(registry)("$name doc has a title and description that parse", async (item) => {
+    const { compileMDX } = await import("next-mdx-remote/rsc");
+    const { frontmatter } = await compileMDX<{ title: string; description: string }>({
+      source: read(`content/docs/${item.name}.mdx`),
+      options: { parseFrontmatter: true },
+    });
+    expect(typeof frontmatter.title).toBe("string");
+    expect(typeof frontmatter.description).toBe("string");
+  });
+});
+
+describe("preview controls", () => {
+  const withControls = (registry as readonly RegistryItem[]).filter((item) => item.controls);
+
+  it.each(withControls)("$name controls only drive documented props", (item) => {
+    // The `## Props` table lists every prop (prop-docs.test.ts keeps it honest),
+    // so a control whose key is not in it would be silently ignored.
+    const table = read(`content/docs/${item.name}.mdx`).split(/^## Props/m)[1] ?? "";
+    for (const control of item.controls ?? []) {
+      expect(table, control.key).toContain(`\`${control.key}\``);
+      if (control.kind === "choice") {
+        for (const option of control.options) {
+          expect(table, `${control.key}=${option.value}`).toContain(`"${option.value}"`);
+        }
+      }
+    }
   });
 });

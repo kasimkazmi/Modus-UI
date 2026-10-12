@@ -1,0 +1,53 @@
+---
+title: Nebula
+description: An indigo fbm nebula that drifts toward the pointer.
+---
+
+A full-bleed fragment shader of warped fbm noise forming an indigo nebula with a sweeping tongue of violet light. It breathes slowly and drifts toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="nebula" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add nebula
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/nebula.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { Nebula } from "@/components/ui/nebula";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <Nebula />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                             |
+| :---------------- | :------------------ | :---------- | :-------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.      |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).  |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).         |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).   |
+| `deepColor`       | `string`            | `"#0d0526"` | Colour of the outer nebula mass.        |
+| `coreColor`       | `string`            | `"#331a99"` | Colour of the dense nebula core.        |
+| `glowColor`       | `string`            | `"#804dff"` | Colour of the vertical tongue of light. |
+| `backgroundColor` | `string`            | `"#09090b"` | Colour behind the effect.               |

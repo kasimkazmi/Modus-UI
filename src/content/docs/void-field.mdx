@@ -1,0 +1,50 @@
+---
+title: Void Field
+description: A curved CRT-style dot matrix that breathes outward from the centre and drifts with the pointer.
+---
+
+A curved CRT-style dot matrix that breathes outward from the centre and drifts with the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="void-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add void-field
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/void-field.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { VoidField } from "@/components/ui/void-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <VoidField />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                 |
+| :---------------- | :------- | :---------- | :-------------------------- |
+| `speed`           | `number` | `1`         | Animation speed multiplier. |
+| `hue`             | `number` | `0`         | Hue rotation in degrees.    |
+| `saturation`      | `number` | `1`         | Saturation multiplier.      |
+| `brightness`      | `number` | `1`         | Brightness multiplier.      |
+| `color`           | `string` | `"#b34dff"` | Tint of the dot matrix.     |
+| `backgroundColor` | `string` | `"#030305"` | Background colour.          |

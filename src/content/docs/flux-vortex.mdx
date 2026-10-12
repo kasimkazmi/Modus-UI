@@ -1,0 +1,56 @@
+---
+title: Flux Vortex
+description: A monochrome particle funnel with spiral guides and bloom that tilts with the pointer.
+---
+
+A Three.js funnel of thousands of tiny dots with two spiral guide lines, ambient dust and Unreal bloom. It grows in on mount and tilts toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="flux-vortex" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add flux-vortex
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/flux-vortex.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { FluxVortex } from "@/components/ui/flux-vortex";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <FluxVortex />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                                            |
+| :---------------- | :------------------ | :---------- | :----------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.                     |
+| `speed`           | `number`            | `1`         | Animation speed multiplier (0 to 3).                   |
+| `size`            | `number`            | `1`         | Point size multiplier.                                 |
+| `density`         | `number`            | `1`         | Particle count multiplier (0.25 to 2.5).               |
+| `opacity`         | `number`            | `1`         | Opacity of the effect (0.05 to 1).                     |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).                 |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).                        |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).                  |
+| `primaryColor`    | `string`            | `"#dddddd"` | Colour of the vortex dots and the bright spiral guide. |
+| `secondaryColor`  | `string`            | `"#555555"` | Colour of the dim spiral guide and ambient dust.       |
+| `backgroundColor` | `string`            | `"#050505"` | Colour behind the effect.                              |

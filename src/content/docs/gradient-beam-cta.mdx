@@ -1,0 +1,49 @@
+---
+title: Gradient Beam CTA
+description: A black pill with an orange beam circling its border and a drifting dot texture inside.
+---
+
+A black pill with a single orange beam that circles its border, a drifting dot texture inside, and an orange glow that rises on hover while the arrow slides right. Hue, saturation and brightness grade the button with a CSS filter, and the motion is switched off when the user prefers reduced motion. The component fills its parent and paints its own stage, so give it a sized container. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="gradient-beam-cta" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add gradient-beam-cta
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/gradient-beam-cta.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GradientBeamCta } from "@/components/ui/gradient-beam-cta";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <GradientBeamCta onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                   | Default            | Description                                                                         |
+| :----------- | :------------------------------------- | :----------------- | :---------------------------------------------------------------------------------- |
+| `mode`       | `"light" \| "dark"`                    | `"dark"`           | Stage background and ink.                                                           |
+| `label`      | `string`                               | `"Start Building"` | Button text.                                                                        |
+| `hue`        | `number`                               | `0`                | Hue rotation in degrees, clamped to -180 to 180.                                    |
+| `saturation` | `number`                               | `1`                | Saturation multiplier, clamped to 0 to 2.                                           |
+| `brightness` | `number`                               | `1`                | Brightness multiplier, clamped to 0.35 to 1.65.                                     |
+| `background` | `string`                               | `undefined`        | Stage background; falls back to `#111318` in dark mode and `#f4f7fb` in light mode. |
+| `onClick`    | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler.                                                                      |

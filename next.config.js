@@ -9,8 +9,8 @@ const nextConfig = {
     ],
   },
   async rewrites() {
-    // Markdown docs for coding agents: /docs/<name>.md is served by src/app/md/[name]/route.ts.
-    return [{ source: "/docs/:name.md", destination: "/md/:name" }];
+    // Markdown docs for coding agents: /components/<name>.md is served by src/app/md/[name]/route.ts.
+    return [{ source: "/components/:name.md", destination: "/md/:name" }];
   },
 };
 

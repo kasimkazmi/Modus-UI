@@ -1,0 +1,80 @@
+{
+  "name": "morphing-glyph-cloud",
+  "title": "Morphing Glyph Cloud",
+  "category": "Typography",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/morphing-glyph-cloud.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Morphing Glyph Cloud (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface MorphingGlyphCloudProps {\n  mode?: \"dark\" | \"light\";\n  scale?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  fromPath?: string;\n  toPath?: string;\n  inkColor?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst FACE = '\"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif';\n/* on black the eye needs far less ink, so every alpha runs through SOFT first */\nconst SOFT = 0.88;\n/* Snapping every angle to one of 64 steps keeps the glyph raster cache warm. */\nconst QA = (Math.PI * 2) / 64;\nfunction qang(a: number) {\n  return Math.round(a / QA) * QA;\n}\n\nfunction clamp(value: number, min: number, max: number) {\n  return Math.min(max, Math.max(min, value));\n}\n\nfunction hexToRgb(hex: string) {\n  const h = hex.replace(\"#\", \"\");\n  const full =\n    h.length === 3\n      ? h\n          .split(\"\")\n          .map((c) => c + c)\n          .join(\"\")\n      : h;\n  const n = parseInt(full, 16);\n  return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;\n}\n\ninterface Surface {\n  w: number;\n  h: number;\n  dpr: number;\n  /* panels are not square, so scale off the short side */\n  u: number;\n}\n\ninterface StudyEnv {\n  cv: HTMLCanvasElement;\n  ctx: CanvasRenderingContext2D;\n  s: Surface;\n  ink: (a: number) => string;\n  local: (e: PointerEvent) => { x: number; y: number };\n  signal: AbortSignal;\n}\n\n/* the two default marks (24x24 viewBox) */\nconst DEFAULT_FROM_PATH =\n  \"M12 0C12.9 7 17 11.1 24 12C17 12.9 12.9 17 12 24C11.1 17 7 12.9 0 12C7 11.1 11.1 7 12 0Z\";\nconst DEFAULT_TO_PATH =\n  \"M12 2a10 10 0 1 1 0 20a10 10 0 1 1 0-20Zm0 5a5 5 0 1 0 0 10a5 5 0 1 0 0-10Z\";\n\nfunction rng(seed: number) {\n  let s = seed >>> 0;\n  return () => {\n    s ^= s << 13;\n    s >>>= 0;\n    s ^= s >> 17;\n    s ^= s << 5;\n    s >>>= 0;\n    return s / 4294967296;\n  };\n}\n\n/* points scattered evenly inside a filled path, centred and normalised to its own\n   bounding box so a short wide mark and a tall one both fill the same frame */\nfunction fitPoints(d: string, spacing: number, rand: () => number, rule: CanvasFillRule) {\n  const S = 320;\n  const c = document.createElement(\"canvas\");\n  c.width = c.height = S;\n  const x = c.getContext(\"2d\", { willReadFrequently: true });\n  const out: { x: number; y: number }[] = [];\n  if (!x) return out;\n  x.setTransform(S / 24, 0, 0, S / 24, 0, 0);\n  x.fillStyle = \"#000\";\n  x.fill(new Path2D(d), rule || \"evenodd\");\n  const data = x.getImageData(0, 0, S, S).data;\n  const inside: number[] = [];\n  for (let i = 0; i < S * S; i++) if (data[i * 4 + 3] > 128) inside.push(i);\n  if (!inside.length) return out;\n  const hit = new Uint8Array(S * S);\n  let x0 = 1e9;\n  let x1 = -1e9;\n  let y0 = 1e9;\n  let y1 = -1e9;\n  for (let m = 0; m < inside.length; m++) {\n    const gx = inside[m] % S;\n    const gy = (inside[m] / S) | 0;\n    hit[inside[m]] = 1;\n    if (gx < x0) x0 = gx;\n    if (gx > x1) x1 = gx;\n    if (gy < y0) y0 = gy;\n    if (gy > y1) y1 = gy;\n  }\n  const span = Math.max(x1 - x0, y1 - y0) || 1;\n  const mx = (x0 + x1) / 2;\n  const my = (y0 + y1) / 2;\n\n  /* jittered grid at the glyph's own advance, so letters sit shoulder to shoulder\n     without stacking into an unreadable smear */\n  const cell = Math.max(1.6, spacing * span);\n  for (let gy2 = y0; gy2 < y1; gy2 += cell) {\n    for (let gx2 = x0; gx2 < x1; gx2 += cell) {\n      const jx = gx2 + rand() * cell;\n      const jy = gy2 + rand() * cell;\n      const ix = jx | 0;\n      const iy = jy | 0;\n      if (ix < 0 || ix >= S || iy < 0 || iy >= S || !hit[iy * S + ix]) continue;\n      out.push({ x: (jx - mx) / span, y: (jy - my) / span });\n    }\n  }\n  return out;\n}\n\nconst SPAN = 0.6; // fractions of the card\nconst FS = 0.018;\nconst GAP = (FS * 0.6 * 1.06) / SPAN; // one glyph advance, in shape units\nconst CHARS =\n  \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>/\\\\{}[]()=+-*#$%&@?!\";\n\nfunction createMark(\n  { cv, ctx, s, ink, local, signal }: StudyEnv,\n  fromPath: string,\n  toPath: string,\n) {\n  const rand = rng(9152026);\n  const A = fitPoints(fromPath, GAP, rand, \"evenodd\"); // the resting mark\n  const B = fitPoints(toPath, GAP, rand, \"evenodd\");\n  const glyphs: { c: string; ph: number; sp: number; wob: number }[] = [];\n  for (let i = 0; i < Math.max(A.length, B.length); i++) {\n    glyphs.push({\n      c: CHARS.charAt((rand() * CHARS.length) | 0),\n      ph: rand() * Math.PI * 2,\n      sp: 0.55 + rand() * 0.9,\n      wob: 0.4 + rand() * 0.8,\n    });\n  }\n  /* keep the two clouds paired by angle so the morph reads as a rotation, not a shuffle */\n  function order(set: { x: number; y: number }[]) {\n    return set\n      .map((p, i) => ({ i, a: Math.atan2(p.y, p.x), r: Math.hypot(p.x, p.y) }))\n      .sort((u, v) => u.a - v.a || u.r - v.r)\n      .map((o) => o.i);\n  }\n  const oa = order(A);\n  const ob = order(B);\n  const M = Math.min(A.length, B.length);\n  const pair: [{ x: number; y: number }, { x: number; y: number }][] = [];\n  for (let j = 0; j < M; j++)\n    pair.push([A[oa[((j * A.length) / M) | 0]], B[ob[((j * B.length) / M) | 0]]]);\n\n  let m = 0;\n  let target = 0;\n  let hover: { x: number; y: number } | null = null;\n  let live = true;\n\n  const opts = { signal };\n  cv.addEventListener(\n    \"pointerdown\",\n    () => {\n      target = 1 - target;\n      live = true;\n    },\n    opts,\n  );\n  cv.addEventListener(\n    \"pointermove\",\n    (e) => {\n      hover = local(e);\n      live = true;\n    },\n    opts,\n  );\n  cv.addEventListener(\n    \"pointerleave\",\n    () => {\n      hover = null;\n      live = true;\n    },\n    opts,\n  );\n\n  function draw(now: number, dt: number) {\n    const moving = hover || Math.abs(target - m) > 1e-4;\n    if (!moving && !live) return; // settled: the last frame stays on screen\n    live = !!moving;\n    ctx.clearRect(0, 0, s.w, s.h);\n\n    m += (target - m) * Math.min(1, dt / 460);\n    const e = m < 0.5 ? 4 * m * m * m : 1 - Math.pow(-2 * m + 2, 3) / 2; // easeInOutCubic\n\n    const span = s.u * SPAN;\n    const cx = s.w / 2;\n    const cy = s.h / 2 + s.u * 0.02;\n    const fs = s.u * FS;\n    const t = now / 1000;\n    const travel = 4 * e * (1 - e); // biggest scatter mid-flight\n\n    ctx.textAlign = \"center\";\n    ctx.textBaseline = \"middle\";\n    ctx.font = \"bold \" + fs.toFixed(2) + \"px \" + FACE;\n    ctx.fillStyle = ink(0.88);\n    let dirty = false;\n\n    for (let i = 0; i < pair.length; i++) {\n      const g = glyphs[i];\n      const p = pair[i];\n      const ux = p[0].x + (p[1].x - p[0].x) * e;\n      const uy = p[0].y + (p[1].y - p[0].y) * e;\n      let px = cx + ux * span;\n      let py = cy + uy * span;\n\n      /* a slow breath at rest, an arc while morphing */\n      px += Math.sin(t * g.sp + g.ph) * s.u * 0.0035 * g.wob;\n      py += Math.cos(t * g.sp * 0.9 + g.ph) * s.u * 0.0035 * g.wob;\n      py -= travel * Math.sin(g.ph) * s.u * 0.05;\n\n      let a = 0.88;\n      if (hover) {\n        const dx = px - hover.x;\n        const dy = py - hover.y;\n        const d2 = dx * dx + dy * dy;\n        const rr = s.u * 0.1;\n        if (d2 < rr * rr) {\n          const d = Math.sqrt(d2) || 1;\n          const push = 1 - d / rr;\n          px += (dx / d) * push * push * s.u * 0.055;\n          py += (dy / d) * push * push * s.u * 0.055;\n          a = 0.88 - 0.35 * push;\n        }\n      }\n      if (a !== 0.88) {\n        ctx.fillStyle = ink(a);\n        dirty = true;\n      } else if (dirty) {\n        ctx.fillStyle = ink(0.88);\n        dirty = false;\n      }\n      ctx.fillText(g.c, px, py);\n    }\n  }\n  return {\n    draw,\n    reset: () => {\n      live = true;\n    },\n  };\n}\n\nexport function MorphingGlyphCloud({\n  mode = \"dark\",\n  scale = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  fromPath = DEFAULT_FROM_PATH,\n  toPath = DEFAULT_TO_PATH,\n  inkColor,\n  backgroundColor,\n  className,\n}: MorphingGlyphCloudProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const light = mode === \"light\";\n  const surface = backgroundColor ?? (light ? \"#f3f5f8\" : \"#08090a\");\n  const INK = inkColor ? hexToRgb(inkColor) : light ? \"38,40,48\" : \"226,228,233\";\n\n  useEffect(() => {\n    const cv = canvasRef.current;\n    if (!cv) return;\n    const ctx = cv.getContext(\"2d\");\n    if (!ctx) return;\n    const ac = new AbortController();\n    const s: Surface = { w: 0, h: 0, dpr: 1, u: 0 };\n\n    const resize = () => {\n      const width = cv.clientWidth;\n      const height = cv.clientHeight;\n      if (!width || !height) return false;\n      const dpr = 2;\n      const w = Math.round(width * dpr);\n      const h = Math.round(height * dpr);\n      if (w === cv.width && h === cv.height && s.w === width) return false;\n      cv.width = w;\n      cv.height = h;\n      s.w = width;\n      s.h = height;\n      s.u = Math.min(width, height);\n      s.dpr = dpr;\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n      return true;\n    };\n\n    const INK64: string[] = [];\n    for (let q0 = 0; q0 < 64; q0++)\n      INK64.push(\"rgba(\" + INK + \",\" + ((q0 / 63) * SOFT).toFixed(4) + \")\");\n    const ink = (a: number) => INK64[a <= 0 ? 0 : a >= 1 ? 63 : (a * 63) | 0];\n    const local = (e: PointerEvent) => {\n      const r = cv.getBoundingClientRect();\n      const k = cv.clientWidth / (r.width || 1);\n      return { x: (e.clientX - r.left) * k, y: (e.clientY - r.top) * k };\n    };\n\n    resize();\n    const study = createMark(\n      {\n        cv,\n        ctx,\n        s,\n        ink,\n        local,\n        signal: ac.signal,\n      },\n      fromPath,\n      toPath,\n    );\n\n    const paint = (now: number, dt: number) => {\n      if (!s.w) return;\n      ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);\n      study.draw(now, dt);\n    };\n\n    let raf = 0;\n    let onScreen = true;\n    let prev = performance.now();\n    const frame = (now: number) => {\n      const dt = Math.min(64, now - prev);\n      prev = now;\n      paint(now, dt);\n      raf = requestAnimationFrame(frame);\n    };\n    const update = () => {\n      const run = onScreen && !document.hidden && !prefersReducedMotion;\n      if (run && !raf) {\n        prev = performance.now();\n        raf = requestAnimationFrame(frame);\n      } else if (!run && raf) {\n        cancelAnimationFrame(raf);\n        raf = 0;\n      }\n    };\n\n    const onResize = () => {\n      resize();\n      study.reset?.();\n      paint(performance.now(), 16);\n    };\n    const ro = new ResizeObserver(onResize);\n    ro.observe(cv);\n    const io = new IntersectionObserver(([entry]) => {\n      onScreen = entry?.isIntersecting ?? true;\n      update();\n    });\n    io.observe(cv);\n    document.addEventListener(\"visibilitychange\", update, {\n      signal: ac.signal,\n    });\n    onResize();\n    update();\n\n    return () => {\n      cancelAnimationFrame(raf);\n      ro.disconnect();\n      io.disconnect();\n      ac.abort();\n    };\n  }, [INK, prefersReducedMotion, fromPath, toPath]);\n\n  const boundedHue = clamp(hue, -180, 180);\n  const boundedSaturation = clamp(saturation, 0, 2);\n  const boundedBrightness = clamp(brightness, 0.4, 1.8);\n  const boundedScale = clamp(scale, 0.65, 1.5);\n  const filter =\n    boundedHue === 0 && boundedSaturation === 1 && boundedBrightness === 1\n      ? undefined\n      : `hue-rotate(${boundedHue}deg) saturate(${boundedSaturation}) brightness(${boundedBrightness})`;\n\n  return (\n    <div\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{\n        background: surface,\n        opacity: clamp(opacity, 0.1, 1),\n        filter,\n      }}\n    >\n      <div\n        className=\"absolute inset-0 flex items-center justify-center [container-type:size]\"\n        style={{\n          transform: boundedScale === 1 ? undefined : `scale(${boundedScale})`,\n        }}\n      >\n        <div\n          className=\"relative h-[min(100cqw,100cqh)] w-[min(100cqw,100cqh)] cursor-crosshair touch-none\"\n          style={{\n            background:\n              \"radial-gradient(ellipse 60% 58% at 50% 48%, rgba(255,255,255,.038), rgba(255,255,255,0) 70%)\",\n          }}\n        >\n          <canvas\n            ref={canvasRef}\n            aria-label=\"Morphing Glyph Cloud: click to morph between the two marks\"\n            className=\"absolute inset-0 block h-full w-full\"\n          />\n        </div>\n      </div>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ]
+    },
+    {
+      "kind": "range",
+      "key": "scale",
+      "label": "Scale",
+      "min": 0.65,
+      "max": 1.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.8,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

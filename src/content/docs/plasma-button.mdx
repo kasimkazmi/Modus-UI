@@ -1,0 +1,56 @@
+---
+title: Plasma Button
+description: A WebGL button filled with churning blue plasma that heats up on hover and erupts on press.
+---
+
+A raw-WebGL button filled with domain-warped plasma over a cosmic nebula backdrop. Hover heats the plasma and pressing the button makes it erupt. It fills its positioned parent, pauses when off screen or when the tab is hidden, and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="plasma-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add plasma-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/plasma-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PlasmaButton } from "@/components/ui/plasma-button";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <PlasmaButton />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                   | Default         | Description                                                                                  |
+| :---------------- | :------------------------------------- | :-------------- | :------------------------------------------------------------------------------------------- |
+| `label`           | `string`                               | `"MODUS DRIVE"` | Button text.                                                                                 |
+| `mode`            | `"dark" \| "light"`                    | `"dark"`        | Scene theme. The backdrop shader is colour-inverted when the mode differs from the original. |
+| `hue`             | `number`                               | `0`             | Hue rotation in degrees (-180 to 180).                                                       |
+| `saturation`      | `number`                               | `1`             | Saturation multiplier (0 to 2).                                                              |
+| `brightness`      | `number`                               | `1`             | Brightness multiplier (0.35 to 1.65).                                                        |
+| `darkBackground`  | `string`                               | `"#020614"`     | Scene colour in dark mode.                                                                   |
+| `lightBackground` | `string`                               | `"#f4f7fb"`     | Scene colour in light mode.                                                                  |
+| `onMouseDown`     | `ButtonHTMLAttributes["onMouseDown"]`  | -               | Called after the button's own mouse down effect.                                             |
+| `onKeyDown`       | `ButtonHTMLAttributes["onKeyDown"]`    | -               | Called after the button's own key down effect.                                               |
+| `onMouseEnter`    | `ButtonHTMLAttributes["onMouseEnter"]` | -               | Called after the button's own mouse enter effect.                                            |
+| `onMouseLeave`    | `ButtonHTMLAttributes["onMouseLeave"]` | -               | Called after the button's own mouse leave effect.                                            |
+| `onFocus`         | `ButtonHTMLAttributes["onFocus"]`      | -               | Called after the button's own focus effect.                                                  |
+| `onBlur`          | `ButtonHTMLAttributes["onBlur"]`       | -               | Called after the button's own blur effect.                                                   |
+
+Any other `<button>` attribute is passed through to the inner button.

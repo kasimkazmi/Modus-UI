@@ -1,7 +1,7 @@
 import { componentMarkdown } from "@/lib/agent-docs";
 import { registry } from "@/registry";
 
-/** Served at /docs/<name>.md through the rewrite in next.config.js. */
+/** Served at /components/<name>.md through the rewrite in next.config.js. */
 export const dynamic = "force-static";
 export const dynamicParams = false;
 

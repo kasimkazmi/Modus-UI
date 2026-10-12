@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
+import { GITHUB_URL, useGitHubStars } from "@/lib/github";
 
-function GithubIcon({ className }: { className?: string }) {
+export function GithubIcon({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -21,18 +21,7 @@ function GithubIcon({ className }: { className?: string }) {
 }
 
 export function GitHubStarCard() {
-  const [stars, setStars] = useState<number | null>(null);
-
-  useEffect(() => {
-    fetch("https://api.github.com/repos/kasimkazmi/Modus-UI")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && typeof data.stargazers_count === "number") {
-          setStars(data.stargazers_count);
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const stars = useGitHubStars();
 
   return (
     <div className="rounded-xl border border-border bg-background/50 p-4 shadow-sm transition-all duration-300 hover:shadow-md">
@@ -53,7 +42,7 @@ export function GitHubStarCard() {
 
       {/* CTA Button */}
       <a
-        href="https://github.com/kasimkazmi/Modus-UI"
+        href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="group/btn flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 active:scale-[0.98]"

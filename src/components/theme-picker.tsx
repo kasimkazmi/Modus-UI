@@ -20,7 +20,7 @@ interface ThemePickerProps {
   className?: string;
 }
 
-/** Switches the site's palette (colours, typography, radius) and light/dark mode. Previews stay on Modus. */
+/** Switches the site's palette (colours, typography, radius) and light/dark mode. Previews follow it too. */
 export function ThemePicker({ variant = "full", className }: ThemePickerProps) {
   const { palette, setPalette } = usePalette();
   const { theme, setTheme } = useTheme();

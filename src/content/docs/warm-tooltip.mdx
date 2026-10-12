@@ -27,7 +27,11 @@ npx @modus-ui/cli add warm-tooltip
 import { WarmTooltip } from "@/components/ui/warm-tooltip";
 
 export default function Example() {
-  return <WarmTooltip />;
+  return (
+    <WarmTooltip content="Copy">
+      <button>Copy</button>
+    </WarmTooltip>
+  );
 }
 ```
 

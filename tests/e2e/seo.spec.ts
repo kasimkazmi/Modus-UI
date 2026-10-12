@@ -6,8 +6,11 @@ test("sitemap.xml and robots.txt are served", async ({ request }) => {
 });
 
 test("component docs have canonical and Open Graph metadata", async ({ page, request }) => {
-  await page.goto("/docs/blur-text");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/docs\/blur-text$/);
+  await page.goto("/components/blur-text");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/components\/blur-text$/,
+  );
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
 
   const image = await page.locator('meta[property="og:image"]').first().getAttribute("content");

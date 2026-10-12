@@ -1,0 +1,52 @@
+---
+title: Fluid Field
+description: Slow flowing blue and violet light beams on a near-black field.
+---
+
+A full-bleed simplex-noise shader of soft blue and violet light beams flowing slowly across a near-black field. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="fluid-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add fluid-field
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/fluid-field.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { FluidField } from "@/components/ui/fluid-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <FluidField />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                               |
+| :---------------- | :------------------ | :---------- | :---------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.        |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).    |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).           |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).     |
+| `primaryColor`    | `string`            | `"#2640d9"` | First colour of the flowing light beams.  |
+| `secondaryColor`  | `string`            | `"#6633e6"` | Second colour of the flowing light beams. |
+| `backgroundColor` | `string`            | `"#030306"` | Colour behind the effect.                 |

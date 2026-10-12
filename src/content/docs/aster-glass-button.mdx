@@ -1,0 +1,45 @@
+---
+title: Aster Glass Button
+description: A frosted glass button with a corner-lit edge, as text-only or with an arrow chip.
+---
+
+Frosted glass with a one-corner lit edge drawn through a masked gradient border. Hover brightens the edge and lifts the button; the arrow variant adds a glass chip whose arrow slides on hover. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="aster-glass-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add aster-glass-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/aster-glass-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { AsterGlassButton } from "@/components/ui/aster-glass-button";
+
+export default function Example() {
+  return (
+    <div className="h-[400px] w-full">
+      <AsterGlassButton variant="arrow" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default                                       | Description                                                     |
+| :-------- | :------------------------------------- | :-------------------------------------------- | :-------------------------------------------------------------- |
+| `variant` | `"access" \| "arrow"`                  | `"access"`                                    | Text-only glass button, or with an arrow chip.                  |
+| `label`   | `string`                               | "Get access" (access) or "Start free" (arrow) | Button text.                                                    |
+| `mode`    | `"dark" \| "light"`                    | `"dark"`                                      | Ground the glass is toned for; the stage background follows it. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | —                                             | Click handler for the button.                                   |

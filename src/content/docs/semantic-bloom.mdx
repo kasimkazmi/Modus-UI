@@ -1,0 +1,50 @@
+---
+title: Semantic Bloom
+description: Gooey particles drift over large type and light up the words they touch.
+---
+
+A liquid, SVG-filtered particle organism wanders over large type, drawn toward the words and your pointer, lighting up each word it touches. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="semantic-bloom" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add semantic-bloom
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/semantic-bloom.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SemanticBloom } from "@/components/ui/semantic-bloom";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SemanticBloom />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default                                                  | Description                              |
+| :---------------- | :------------------ | :------------------------------------------------------- | :--------------------------------------- |
+| `text`            | `string`            | `"Modus UI"`                                             | Text to display (max 72 characters).     |
+| `mode`            | `"dark" \| "light"` | `"dark"`                                                 | Colour scheme.                           |
+| `size`            | `number`            | `1`                                                      | Text size multiplier (clamped 0.55–1.6). |
+| `opacity`         | `number`            | `1`                                                      | Overall opacity (clamped 0.1–1).         |
+| `backgroundColor` | `string`            | Mode ground (`#030303` dark, `#f4f4f2` light)            | Background colour.                       |
+| `textColor`       | `string`            | Mode resting text (`#555555` dark, `#989894` light)      | Colour of untouched words.               |
+| `activeTextColor` | `string`            | Mode active text (`#e0e0e0` dark, `#151515` light)       | Colour of words the organism touches.    |
+| `particleColor`   | `string`            | Mode particle colour (light grey dark, near-black light) | Fill of the organism's cells.            |
+| `connectionColor` | `string`            | Mode connection colour (faint grey)                      | Stroke of the links between cells.       |

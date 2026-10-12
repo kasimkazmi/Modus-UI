@@ -9,7 +9,7 @@ describe("sitemap", () => {
 
   it("lists every component docs page under the site URL", () => {
     for (const item of registry) {
-      expect(urls).toContain(`${SITE.url}/docs/${item.name}`);
+      expect(urls).toContain(`${SITE.url}/components/${item.name}`);
     }
   });
 

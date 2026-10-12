@@ -1,0 +1,54 @@
+---
+title: Interface Lines
+description: A plexus of bouncing points joined by thin lines when close together.
+---
+
+Seventy points drift and bounce inside the frame and are joined by hairlines whenever they come within reach of each other. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="interface-lines" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add interface-lines
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/interface-lines.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { InterfaceLines } from "@/components/ui/interface-lines";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <InterfaceLines />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default         | Description                                                                      |
+| :---------------- | :------------------ | :-------------- | :------------------------------------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`        | Colour scheme of the original dark and light versions.                           |
+| `speed`           | `number`            | `1`             | Animation speed multiplier (0–3).                                                |
+| `size`            | `number`            | `1`             | Stroke / scale multiplier.                                                       |
+| `length`          | `number`            | `1`             | Length / reach multiplier (0.35–2.5).                                            |
+| `density`         | `number`            | `1`             | Point count multiplier. (0.25–2.5).                                              |
+| `opacity`         | `number`            | `1`             | Opacity of the effect layer (0.05–1).                                            |
+| `hue`             | `number`            | `0`             | Hue rotation in degrees applied to the final frame.                              |
+| `saturation`      | `number`            | `1`             | Saturation multiplier applied to the final frame.                                |
+| `brightness`      | `number`            | `1`             | Brightness multiplier applied to the final frame.                                |
+| `backgroundColor` | `string`            | mode background | Background colour behind the canvas (defaults to `#050505` in its default mode). |

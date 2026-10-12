@@ -1,0 +1,62 @@
+{
+  "name": "gradient-pill-button",
+  "title": "Gradient Pill Button",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/gradient-pill-button.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Gradient Pill Button (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface GradientPillButtonProps {\n  mode?: \"light\" | \"dark\";\n  label?: string;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  background?: string;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nconst clamp = (value: number, minimum: number, maximum: number) =>\n  Math.min(maximum, Math.max(minimum, value));\n\nconst FONT = \"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\";\n\n// The authored --border-gradient hairline drawn by a masked ::before.\nconst BORDER_STYLE = `\n.mgp-button::before {\n  content: \"\"; position: absolute; inset: 0; padding: 1px; border-radius: 9999px;\n  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);\n  -webkit-mask-composite: xor; mask-composite: exclude;\n  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.8));\n  pointer-events: none;\n}\n`;\n\nexport function GradientPillButton({\n  mode = \"dark\",\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  background,\n  onClick,\n  className,\n  label = \"Demo Lesson\",\n}: GradientPillButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const filter = `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`;\n\n  const dark = mode === \"dark\";\n\n  return (\n    <div\n      className={cn(\n        \"flex h-full w-full items-center justify-center overflow-hidden subpixel-antialiased\",\n        className,\n      )}\n      style={{\n        background: background ?? (mode === \"light\" ? \"#f4f7fb\" : \"#111318\"),\n        fontFamily: FONT,\n        colorScheme: mode,\n        filter,\n      }}\n    >\n      <style dangerouslySetInnerHTML={{ __html: BORDER_STYLE }} />\n      <button\n        type=\"button\"\n        onClick={onClick}\n        className={cn(\n          \"mgp-button relative flex items-center gap-x-2 gap-y-2 rounded-full bg-gradient-to-b pb-3 pl-6 pr-6 pt-3 text-sm font-medium\",\n          dark\n            ? \"from-white/[0.16] via-white/[0.07] to-white/[0.16] text-slate-200 hover:bg-white/10\"\n            : \"from-black/10 via-black/20 to-black/10 text-slate-600 hover:bg-slate-50\",\n          !prefersReducedMotion && \"transition-all\",\n        )}\n        style={{\n          boxShadow: \"0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)\",\n          color: \"#e5e7eb\",\n        }}\n      >\n        <span\n          className={cn(\n            \"text-sm font-medium tracking-tight\",\n            dark ? \"text-white/70\" : \"text-black/60\",\n          )}\n        >\n          {label}\n        </span>\n        <svg\n          xmlns=\"http://www.w3.org/2000/svg\"\n          width=\"16\"\n          height=\"16\"\n          viewBox=\"0 0 24 24\"\n          fill=\"none\"\n          stroke={dark ? \"#e5e7eb\" : \"#666\"}\n          strokeWidth=\"1.5\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n          aria-hidden=\"true\"\n          className=\"h-[16px] w-[16px]\"\n        >\n          <path d=\"M5 12h14\" />\n          <path d=\"m12 5 7 7-7 7\" />\n        </svg>\n      </button>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

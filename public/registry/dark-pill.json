@@ -1,0 +1,35 @@
+{
+  "name": "dark-pill",
+  "title": "Dark Pill",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/dark-pill.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Dark Pill (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface DarkPillProps {\n  mode?: \"light\" | \"dark\";\n  label?: string;\n  background?: string;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\n// The authored section-elements.css rules for the glass button, scoped to this component.\nconst STYLES = `\n.mdp-stage, .mdp-stage *, .mdp-stage *::before, .mdp-stage *::after { box-sizing: border-box; }\n.mdp-stage {\n  position: relative; display: grid; place-items: center; width: 100%; height: 100%;\n  min-width: 0; min-height: 0; overflow: hidden; color: rgba(255,255,255,0.95);\n  font-family: -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;\n  -webkit-font-smoothing: antialiased; container-type: size; isolation: isolate;\n}\n.mdp-stage::before {\n  position: absolute; top: 50%; left: 50%; width: min(62cqw, 440px); height: min(50cqh, 240px);\n  border-radius: 50%; background: rgba(255,255,255,0.02); filter: blur(54px);\n  transform: translate(-50%, -50%); content: \"\";\n}\n.mdp-button {\n  position: relative; display: inline-flex; align-items: center; justify-content: center;\n  width: clamp(144px, 23cqw, 288px); height: clamp(52px, 8.3cqw, 104px); padding: 0 32px;\n  overflow: hidden; border: 0; border-radius: 999px; color: rgba(255,255,255,0.7);\n  background: transparent; font: inherit; font-size: clamp(14px, 2.25cqw, 28px);\n  font-weight: 400; line-height: normal; cursor: pointer;\n}\n.mdp-button::before, .mdp-button::after { position: absolute; inset: 0; border-radius: inherit; content: \"\"; }\n.mdp-button::before {\n  background: rgba(23,23,23,0.7); box-shadow: inset 2px 4px 16px rgba(255,255,255,0.06);\n  -webkit-backdrop-filter: blur(50px); backdrop-filter: blur(50px);\n}\n.mdp-button::after {\n  z-index: 2; border: 1px solid rgba(255,255,255,0.25); opacity: 0.25; pointer-events: none;\n  -webkit-mask-image: linear-gradient(170deg, #000, transparent 50%);\n  mask-image: linear-gradient(170deg, #000, transparent 50%);\n}\n.mdp-title { position: relative; z-index: 4; }\n.mdp-circle { position: absolute; z-index: 3; top: calc(50% - 100px); left: calc(50% - 100px); width: 200px; height: 200px; }\n.mdp-circle::before, .mdp-circle::after { position: absolute; inset: 0; border-radius: 50%; content: \"\"; }\n.mdp-circle::before {\n  background: conic-gradient(from 180deg, rgba(255,255,255,0.012) 180deg, rgba(255,255,255,0.05) 360deg);\n  filter: blur(15px); animation: mdp-circle 3.6s linear infinite; transition: opacity 0.5s;\n}\n.mdp-circle::after {\n  inset: 30px; background: rgba(255,255,255,0.12); opacity: 0; filter: blur(5px);\n  transform: scale(0.5); transition: opacity 0.5s, transform 0.7s;\n  -webkit-mask-image: radial-gradient(50% 50%, #000, rgba(23,23,23,0));\n  mask-image: radial-gradient(50% 50%, #000, rgba(23,23,23,0));\n}\n.mdp-button:hover .mdp-circle::before { opacity: 0; }\n.mdp-button:hover .mdp-circle::after { opacity: 1; transform: scale(1); }\n.mdp-button:active { transform: scale(0.98); }\n@keyframes mdp-circle {\n  0% { transform: translate(0) rotate(0); }\n  25% { transform: translateX(-30px) rotate(90deg); }\n  50% { transform: translate(0) rotate(180deg); }\n  75% { transform: translateX(30px) rotate(270deg); }\n  100% { transform: translate(0) rotate(360deg); }\n}\n.mdp-stage[data-mode=\"light\"] { color: rgba(17,17,17,0.95); }\n.mdp-stage[data-mode=\"light\"]::before { background: rgba(17,17,17,0.06); }\n.mdp-stage[data-mode=\"light\"] .mdp-button { color: rgba(17,17,17,0.72); }\n.mdp-stage[data-mode=\"light\"] .mdp-button::before {\n  background: rgba(255,255,255,0.72);\n  box-shadow: inset 2px 4px 16px rgba(17,17,17,0.05), 0 10px 26px -12px rgba(17,17,17,0.4);\n}\n.mdp-stage[data-mode=\"light\"] .mdp-button::after { border-color: rgba(17,17,17,0.34); opacity: 0.45; }\n.mdp-stage[data-mode=\"light\"] .mdp-circle::before {\n  background: conic-gradient(from 180deg, rgba(17,17,17,0.012) 180deg, rgba(17,17,17,0.07) 360deg);\n}\n.mdp-stage[data-mode=\"light\"] .mdp-circle::after { background: rgba(17,17,17,0.12); }\n.mdp-stage[data-reduced] .mdp-circle::before, .mdp-stage[data-reduced] .mdp-circle::after { animation: none; transition: none; }\n.mdp-stage[data-reduced] .mdp-button:active { transform: none; }\n`;\n\nexport function DarkPill({\n  mode = \"dark\",\n  label = \"Sign up\",\n  background,\n  onClick,\n  className,\n}: DarkPillProps) {\n  const prefersReducedMotion = useReducedMotion();\n\n  return (\n    <div\n      className={cn(\"mdp-stage\", className)}\n      data-mode={mode}\n      data-reduced={prefersReducedMotion ? \"\" : undefined}\n      style={{\n        background: background ?? (mode === \"light\" ? \"#eeedeb\" : \"#0a0a0a\"),\n      }}\n    >\n      <style dangerouslySetInnerHTML={{ __html: STYLES }} />\n      <button className=\"mdp-button\" type=\"button\" onClick={onClick}>\n        <span className=\"mdp-title\">{label}</span>\n        <span className=\"mdp-circle\" aria-hidden=\"true\" />\n      </button>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    }
+  ]
+}

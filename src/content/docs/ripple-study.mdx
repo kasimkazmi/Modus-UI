@@ -1,0 +1,49 @@
+---
+title: Ripple Study
+description: A monospace glyph plate where every click sends a ring of weight through the type.
+---
+
+A static 24×24 plate of monospace glyphs. Each click fires a ring that travels outward and thickens the letters it passes. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ripple-study" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ripple-study
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ripple-study.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RippleStudy } from "@/components/ui/ripple-study";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <RippleStudy />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default                                       | Description                                 |
+| :---------------- | :------------------ | :-------------------------------------------- | :------------------------------------------ |
+| `mode`            | `"dark" \| "light"` | `"dark"`                                      | Colour scheme of the ground and ink.        |
+| `scale`           | `number`            | `1`                                           | Scales the drawing (clamped 0.65–1.5).      |
+| `opacity`         | `number`            | `1`                                           | Overall opacity (clamped 0.1–1).            |
+| `hue`             | `number`            | `0`                                           | Hue rotation in degrees (clamped -180–180). |
+| `saturation`      | `number`            | `1`                                           | Saturation multiplier (clamped 0–2).        |
+| `brightness`      | `number`            | `1`                                           | Brightness multiplier (clamped 0.4–1.8).    |
+| `inkColor`        | `string`            | Mode ink (`#eef0f4` dark, `#141310` light)    | Colour of the type, as hex.                 |
+| `backgroundColor` | `string`            | Mode ground (`#08090a` dark, `#f3f5f8` light) | Background colour.                          |

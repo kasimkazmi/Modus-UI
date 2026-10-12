@@ -1,0 +1,52 @@
+---
+title: Structure Flow
+description: A WebGL dome of 15,000 white particles slowly turning beneath a fading mask.
+---
+
+A Three.js cap of a particle sphere rising from the bottom of a dark stage, rotating slowly with additive glow while a gradient mask fades it out toward the top. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="structure-flow" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add structure-flow
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/structure-flow.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { StructureFlow } from "@/components/ui/structure-flow";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <StructureFlow />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                                                   |
+| :---------------- | :------- | :---------- | :------------------------------------------------------------ |
+| `speed`           | `number` | `1`         | Rotation speed multiplier.                                    |
+| `pointSize`       | `number` | `0.08`      | Size of each particle.                                        |
+| `opacity`         | `number` | `0.4`       | Opacity of the particles.                                     |
+| `maskStart`       | `number` | `0.2`       | Fraction of the height where the fade mask begins.            |
+| `maskSolid`       | `number` | `0.5`       | Fraction of the height where the particles are fully visible. |
+| `color`           | `string` | `"#ffffff"` | Particle colour.                                              |
+| `backgroundColor` | `string` | `"#030304"` | Background behind the particles.                              |

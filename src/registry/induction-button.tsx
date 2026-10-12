@@ -1,0 +1,320 @@
+"use client";
+// Ported from ThreeUI Community's Induction Button (MIT, © 2026 Meng To).
+
+import { useEffect, useRef, type ButtonHTMLAttributes } from "react";
+import { useReducedMotion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
+
+const VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+
+const BG_FS = `
+precision highp float;
+uniform vec2 u_res;
+uniform float u_time;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float noise(vec2 p){
+  vec2 i=floor(p), f=fract(p);
+  vec2 u=f*f*(3.0-2.0*f);
+  return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),
+             mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);
+}
+float fbm(vec2 p){
+  float v=0.0; float a=0.5;
+  for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.05+vec2(9.7,3.1); a*=0.5; }
+  return v;
+}
+void main(){
+  vec2 uv = gl_FragCoord.xy / u_res.y;
+  float t = u_time * 0.1;
+  float n1 = fbm(uv * 1.5 + vec2(t * 0.2, t * 0.1));
+  float n2 = fbm(uv * 2.0 - vec2(t * 0.15, -t * 0.2) + n1);
+  vec3 baseCol = vec3(0.039, 0.039, 0.039);
+  vec3 highlightCol = vec3(0.01, 0.08, 0.12);
+  vec3 col = mix(baseCol, highlightCol, n2 * 0.4);
+  vec2 grid = fract(uv * 20.0);
+  float line = smoothstep(0.95, 1.0, max(grid.x, grid.y));
+  col += vec3(0.015) * line * (1.0 - n1);
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+const BTN_FS = `
+precision highp float;
+uniform vec2 u_res;
+uniform float u_time;
+uniform float u_arcs;
+uniform float u_flash;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float noise(vec2 p){
+  vec2 i=floor(p), f=fract(p);
+  vec2 u=f*f*(3.0-2.0*f);
+  return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),
+             mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);
+}
+float fbm(vec2 p){
+  float v=0.0; float a=0.5;
+  for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.05+vec2(9.7,3.1); a*=0.5; }
+  return v;
+}
+float sdRBox(vec2 p, vec2 b, float r){
+  vec2 q = abs(p) - b + r;
+  return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
+}
+void main(){
+  vec2 p = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
+  float ar = u_res.x / u_res.y;
+  vec2 hs = vec2(ar * 0.5 - 0.2, 0.5 - 0.2);
+  float d = sdRBox(p, hs, 0.14);
+  float t = u_time;
+  float hover = clamp(u_arcs / 6.0, 0.0, 1.0);
+  vec3 col = vec3(0.039, 0.039, 0.039);
+  float plate = 1.0 - smoothstep(-0.004, 0.004, d);
+  vec3 plateCol = vec3(0.04, 0.05, 0.055);
+  plateCol += vec3(0.014, 0.022, 0.035) * fbm(p * 9.0);
+  plateCol += vec3(0.0, 0.25, 0.3) * exp(d * 9.0) * (0.25 + hover * 0.6);
+  col = mix(col, plateCol, plate);
+  col *= 1.0 + 0.5 * exp(-max(d, 0.0) * 16.0) * (1.0 - plate);
+  float a = atan(p.y, p.x);
+  vec3 arcCol = vec3(0.0);
+  for (int i = 0; i < 6; i++) {
+    float fi = float(i);
+    float w = clamp(u_arcs - fi, 0.0, 1.0);
+    float n1 = fbm(vec2(a * 2.4 + fi * 11.3, t * (1.6 + fi * 0.27) + fi * 53.1));
+    float off = (n1 - 0.5) * (0.11 + u_flash * 0.1);
+    float seg = smoothstep(0.35, 0.75, noise(vec2(a * 1.8 + fi * 7.7, t * (0.9 + fi * 0.13) + fi * 19.0)));
+    seg = 0.3 + 0.7 * seg;
+    float g = 0.0042 / (abs(d + off) + 0.006);
+    arcCol += (vec3(0.0, 0.75, 0.9) * g + vec3(0.6, 1.0, 0.95) * g * g * 0.55) * w * seg;
+  }
+  float outerMask = 1.0 - smoothstep(0.04, 0.15, d);
+  col += arcCol * (0.6 + 0.4 * hover) * outerMask;
+  float ring = 0.006 / (abs(d) + 0.006);
+  col += vec3(0.8, 0.98, 1.0) * ring * u_flash * 1.5 * outerMask;
+  col += vec3(0.7, 0.95, 1.0) * u_flash * 0.16 * outerMask;
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+function createProgram(gl: WebGLRenderingContext, fs: string) {
+  const compile = (type: number, src: string) => {
+    const s = gl.createShader(type)!;
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  };
+  const prog = gl.createProgram()!;
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const locP = gl.getAttribLocation(prog, "p");
+  gl.enableVertexAttribArray(locP);
+  gl.vertexAttribPointer(locP, 2, gl.FLOAT, false, 0, 0);
+  return prog;
+}
+
+function resizeCanvas(gl: WebGLRenderingContext, canvas: HTMLCanvasElement) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(canvas.clientWidth * dpr));
+  const h = Math.max(1, Math.round(canvas.clientHeight * dpr));
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+    gl.viewport(0, 0, w, h);
+  }
+}
+
+export interface InductionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Button label. */
+  label?: string;
+  /** Scene theme. The dark backdrop is inverted in light mode. */
+  mode?: "dark" | "light";
+  /** Hue rotation in degrees (-180 to 180). */
+  hue?: number;
+  /** Saturation multiplier (0 to 2). */
+  saturation?: number;
+  /** Brightness multiplier (0.35 to 1.65). */
+  brightness?: number;
+  /** Page colour shown in dark mode. */
+  darkBackground?: string;
+  /** Page colour shown in light mode. */
+  lightBackground?: string;
+}
+
+const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+
+export function InductionButton({
+  label = "MODUS CORE",
+  mode = "dark",
+  hue = 0,
+  saturation = 1,
+  brightness = 1,
+  darkBackground = "#050505",
+  lightBackground = "#f4f7fb",
+  className,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
+  ...props
+}: InductionButtonProps) {
+  const prefersReducedMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLCanvasElement>(null);
+  const glRef = useRef<HTMLCanvasElement>(null);
+  const state = useRef({ arcs: 2.4, arcsTarget: 2.4, flash: 0, crawl: 0 });
+
+  useEffect(() => {
+    const root = rootRef.current;
+    const bgCanvas = bgRef.current;
+    const btnCanvas = glRef.current;
+    if (!root || !bgCanvas || !btnCanvas) return;
+    const bg = bgCanvas.getContext("webgl", { alpha: false, antialias: false });
+    const gl = btnCanvas.getContext("webgl", { alpha: false, antialias: true });
+    if (!bg || !gl) return;
+    const bgProg = createProgram(bg, BG_FS);
+    const btnProg = createProgram(gl, BTN_FS);
+    const bgRes = bg.getUniformLocation(bgProg, "u_res");
+    const bgTime = bg.getUniformLocation(bgProg, "u_time");
+    const uRes = gl.getUniformLocation(btnProg, "u_res");
+    const uTime = gl.getUniformLocation(btnProg, "u_time");
+    const uArcs = gl.getUniformLocation(btnProg, "u_arcs");
+    const uFlash = gl.getUniformLocation(btnProg, "u_flash");
+    const s = state.current;
+
+    let raf = 0;
+    let visible = true;
+    let last = performance.now();
+
+    const frame = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      s.arcs += (s.arcsTarget - s.arcs) * Math.min(1, dt * 5);
+      s.flash *= Math.exp(-3.6 * dt);
+      s.crawl += dt * (0.6 + (s.arcs / 6) * 1.1 + s.flash * 2.0);
+      resizeCanvas(bg, bgCanvas);
+      bg.uniform2f(bgRes, bgCanvas.width, bgCanvas.height);
+      bg.uniform1f(bgTime, prefersReducedMotion ? 0 : now / 1000);
+      bg.drawArrays(bg.TRIANGLES, 0, 3);
+      resizeCanvas(gl, btnCanvas);
+      gl.uniform2f(uRes, btnCanvas.width, btnCanvas.height);
+      gl.uniform1f(uTime, prefersReducedMotion ? 3.0 : s.crawl);
+      gl.uniform1f(uArcs, s.arcs);
+      gl.uniform1f(uFlash, s.flash);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+    const loop = (now: number) => {
+      frame(now);
+      raf = requestAnimationFrame(loop);
+    };
+    const start = () => {
+      cancelAnimationFrame(raf);
+      if (!visible || document.hidden) return;
+      last = performance.now();
+      if (prefersReducedMotion) {
+        // still frame, redrawn while hover/flash eases
+        const settle = (now: number) => {
+          frame(now);
+          if (Math.abs(s.arcsTarget - s.arcs) > 0.002 || s.flash > 0.002)
+            raf = requestAnimationFrame(settle);
+          else raf = requestAnimationFrame(idle);
+        };
+        const idle = () => {
+          if (Math.abs(s.arcsTarget - s.arcs) > 0.002 || s.flash > 0.002) {
+            last = performance.now();
+            raf = requestAnimationFrame(settle);
+          } else raf = requestAnimationFrame(idle);
+        };
+        raf = requestAnimationFrame(settle);
+      } else raf = requestAnimationFrame(loop);
+    };
+    const io = new IntersectionObserver(([e]) => {
+      visible = e?.isIntersecting ?? true;
+      start();
+    });
+    io.observe(root);
+    const onVis = () => start();
+    document.addEventListener("visibilitychange", onVis);
+    start();
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+      bg.deleteProgram(bgProg);
+      gl.deleteProgram(btnProg);
+    };
+  }, [prefersReducedMotion]);
+
+  const filter =
+    hue === 0 && saturation === 1 && brightness === 1
+      ? undefined
+      : `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`;
+
+  return (
+    <div
+      ref={rootRef}
+      className={cn("absolute inset-0 flex items-center justify-center overflow-hidden", className)}
+      style={{
+        background: mode === "light" ? lightBackground : darkBackground,
+        filter,
+        fontFamily: "'Inter', sans-serif",
+      }}
+    >
+      <canvas
+        ref={bgRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 block h-full w-full"
+        style={{
+          filter:
+            mode === "light"
+              ? "invert(1) hue-rotate(180deg) saturate(.92) brightness(1.02)"
+              : undefined,
+        }}
+      />
+      <button
+        type="button"
+        {...props}
+        onMouseEnter={(e) => {
+          state.current.arcsTarget = 5.8;
+          onMouseEnter?.(e);
+        }}
+        onMouseLeave={(e) => {
+          state.current.arcsTarget = 2.4;
+          onMouseLeave?.(e);
+        }}
+        onFocus={(e) => {
+          state.current.arcsTarget = 5.8;
+          onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          state.current.arcsTarget = 2.4;
+          onBlur?.(e);
+        }}
+        onClick={(e) => {
+          state.current.flash = 1;
+          onClick?.(e);
+        }}
+        className="group relative z-[2] flex h-[96px] w-[280px] flex-none cursor-pointer items-center justify-center rounded-[18px] bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
+      >
+        <canvas
+          ref={glRef}
+          aria-hidden="true"
+          className="absolute inset-0 block h-full w-full rounded-[18px]"
+        />
+        <span
+          className="pointer-events-none relative z-10 text-sm font-medium tracking-[0.3em] text-[#e0f7f8] [text-indent:0.3em]"
+          style={{
+            textShadow: "0 0 12px rgba(0, 210, 255, .6), 0 1px 4px rgba(0, 0, 0, .8)",
+          }}
+        >
+          {label}
+        </span>
+      </button>
+    </div>
+  );
+}

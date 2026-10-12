@@ -35,7 +35,7 @@ export default function HomePage() {
         </Link>
 
         <nav className="flex items-center space-x-6 text-sm font-semibold text-muted-foreground">
-          <Link href="/docs" className="transition-colors hover:text-foreground">
+          <Link href="/components" className="transition-colors hover:text-foreground">
             Components
           </Link>
           <Link
@@ -68,7 +68,7 @@ export default function HomePage() {
         </p>
 
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link href="/docs" className="btn-landing group h-14 px-10 text-lg">
+          <Link href="/components" className="btn-landing group h-14 px-10 text-lg">
             Explore Components
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>

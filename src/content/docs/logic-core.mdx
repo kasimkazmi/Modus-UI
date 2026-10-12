@@ -1,0 +1,53 @@
+---
+title: Logic Core
+description: An isometric Three.js platform with a pulsing cyan core and orbiting data nodes.
+---
+
+An orthographic, isometric Three.js scene: a dark platform with a glowing logic core whose emissive pulse lights the cubes orbiting around it. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="logic-core" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add logic-core
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/logic-core.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { LogicCore } from "@/components/ui/logic-core";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LogicCore />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                                            |
+| :---------------- | :------------------ | :---------- | :----------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.                     |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).                 |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).                        |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).                  |
+| `accentColor`     | `string`            | `"#00E5FF"` | Glow colour of the core, accent nodes and point light. |
+| `platformColor`   | `string`            | `"#111111"` | Colour of the base platform.                           |
+| `nodeColor`       | `string`            | `"#222222"` | Colour of the non-accent orbiting nodes.               |
+| `backgroundColor` | `string`            | `"#050505"` | Colour behind the effect.                              |

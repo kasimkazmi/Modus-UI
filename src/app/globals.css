@@ -6,8 +6,7 @@
   /*
    * Site themes = palette x mode. A palette sets colours, typography and
    * radius; `.dark` swaps in its dark colours. Keep palette ids in sync with
-   * src/lib/themes.ts. Component previews set data-palette="modus" without
-   * `.dark`, so they always render in the original light Modus design.
+   * src/lib/themes.ts. Component previews inherit the site's palette and mode.
    */
   :root,
   [data-palette="modus"] {
@@ -640,5 +639,15 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground));
+  }
+}
+
+@layer utilities {
+  /* Scrollable without a visible scrollbar. */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

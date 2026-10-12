@@ -66,7 +66,7 @@ for (const { name } of registry) {
   test.describe(name, () => {
     test("docs page renders without errors", async ({ page }) => {
       const errors = trackErrors(page);
-      const response = await page.goto(`/docs/${name}`);
+      const response = await page.goto(`/components/${name}`);
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("tab", { name: "preview" })).toBeVisible();
       await expect(page.getByText(`npx @modus-ui/cli add ${name}`).first()).toBeAttached();

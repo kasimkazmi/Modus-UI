@@ -1,0 +1,48 @@
+---
+title: Spark Badge
+description: A credential badge on a lanyard drawn entirely from embers, standing in slanted rain above a waterline.
+---
+
+A Canvas 2D particle scene: thousands of embers trace the edges of a lanyard badge, curl noise plumes them into fur, slanted rain falls in front of and behind the card and a waterline reflects it. Fills its positioned parent, pauses off screen and paints a still frame for reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="spark-badge" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add spark-badge
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/spark-badge.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SparkBadge } from "@/components/ui/spark-badge";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <SparkBadge />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default  | Description                                  |
+| :---------------- | :------- | :------- | :------------------------------------------- |
+| `speed`           | `number` | `1`      | Simulation speed multiplier (0 to 2).        |
+| `particleAmount`  | `number` | `1`      | Ember count multiplier (0.35 to 1.4).        |
+| `rainAmount`      | `number` | `1`      | Rain count multiplier (0 to 1.5).            |
+| `turbulence`      | `number` | `1`      | Curl-noise turbulence multiplier (0 to 2).   |
+| `spread`          | `number` | `1`      | Ember trail spread multiplier (0.5 to 1.75). |
+| `backgroundColor` | `string` | `"#000"` | Scene background colour.                     |
+| `color`           | `string` | `"#fff"` | Spark colour.                                |

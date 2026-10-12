@@ -1,0 +1,52 @@
+---
+title: Topology Field
+description: A rotating Fibonacci globe of pulsing nodes joined by fading links.
+---
+
+A Three.js globe of 120 Fibonacci-distributed nodes, linked to their neighbours with additive lines, rotating slowly while each node pulses. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="topology-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add topology-field
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/topology-field.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TopologyField } from "@/components/ui/topology-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <TopologyField />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                                  |
+| :---------------- | :------------------ | :---------- | :------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.           |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).       |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).              |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).        |
+| `nodeColor`       | `string`            | `"#ffffff"` | Colour of the pulsing nodes.                 |
+| `fogColor`        | `string`            | `"#0a0a0a"` | Colour the far side of the globe fades into. |
+| `backgroundColor` | `string`            | `"#070707"` | Colour behind the effect.                    |

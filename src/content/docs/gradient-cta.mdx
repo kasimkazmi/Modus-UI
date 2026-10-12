@@ -1,0 +1,43 @@
+---
+title: Gradient CTA
+description: A warm golden gradient pill with layered inset highlights and a paper-plane icon.
+---
+
+A warm golden gradient pill with layered inset highlights and a paper-plane icon. On hover a white wash slides up through it. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="gradient-cta" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add gradient-cta
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/gradient-cta.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GradientCta } from "@/components/ui/gradient-cta";
+
+export default function Example() {
+  return <GradientCta />;
+}
+```
+
+## Props
+
+| Prop        | Type                                   | Default              | Description            |
+| :---------- | :------------------------------------- | :------------------- | :--------------------- |
+| `label`     | `string`                               | `"Start Free Pilot"` | Button text.           |
+| `fromColor` | `string`                               | `"#FFEBB1"`          | Gradient start colour. |
+| `toColor`   | `string`                               | `"#FFC438"`          | Gradient end colour.   |
+| `textColor` | `string`                               | `"#7c2d12"`          | Label and icon colour. |
+| `onClick`   | `MouseEventHandler<HTMLButtonElement>` | `undefined`          | Click handler.         |

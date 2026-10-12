@@ -1,0 +1,17 @@
+{
+  "name": "spinning-border-button",
+  "title": "Spinning Border Button",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/spinning-border-button.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Spinning Border Button (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SpinningBorderButtonProps {\n  label?: string;\n  beamColor?: string;\n  speed?: number;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function SpinningBorderButton({\n  label = \"Request Demo\",\n  beamColor = \"#ffffff\",\n  speed = 3,\n  onClick,\n  className,\n}: SpinningBorderButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const t = prefersReducedMotion ? \"\" : \"transition-all duration-300\";\n  return (\n    <button\n      type=\"button\"\n      onClick={onClick}\n      className={cn(\n        \"group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)]\",\n        !prefersReducedMotion && \"transition-all duration-300 hover:-translate-y-0.5\",\n        className,\n      )}\n      style={{ fontFamily: \"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" }}\n    >\n      <span\n        className={cn(\n          \"absolute inset-[-100%] opacity-0 group-hover:opacity-100\",\n          t,\n          !prefersReducedMotion && \"animate-spin\",\n        )}\n        style={{\n          animationDuration: `${speed}s`,\n          background: `conic-gradient(from 90deg at 50% 50%, transparent 0%, transparent 75%, ${beamColor} 100%)`,\n        }}\n      />\n      <span className={cn(\"absolute inset-0 rounded-full bg-zinc-800 group-hover:opacity-0\", t)} />\n      <span\n        className={cn(\n          \"relative flex h-full w-full items-center justify-center gap-2 rounded-full bg-gradient-to-b from-zinc-800 to-zinc-950 px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-zinc-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] group-hover:text-white\",\n          t,\n        )}\n      >\n        <span className=\"relative z-10\">{label}</span>\n        <svg\n          xmlns=\"http://www.w3.org/2000/svg\"\n          width=\"14\"\n          height=\"14\"\n          viewBox=\"0 0 24 24\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n          className={cn(\"relative z-10 group-hover:translate-x-0.5\", t)}\n          aria-hidden=\"true\"\n        >\n          <path d=\"M5 12h14\" />\n          <path d=\"m12 5 7 7-7 7\" />\n        </svg>\n      </span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

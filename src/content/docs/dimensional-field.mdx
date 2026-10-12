@@ -1,0 +1,52 @@
+---
+title: Dimensional Field
+description: Noise-driven light beams behind dark glass spheres that follow the pointer.
+---
+
+A Three.js scene of drifting simplex-noise light beams seen through four dark glass spheres with fresnel rims. The camera eases toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="dimensional-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dimensional-field
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/dimensional-field.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { DimensionalField } from "@/components/ui/dimensional-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DimensionalField />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default     | Description                                        |
+| :---------------- | :------------------ | :---------- | :------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`    | Colour scheme hint for the effect.                 |
+| `hue`             | `number`            | `0`         | Hue rotation in degrees (-180 to 180).             |
+| `saturation`      | `number`            | `1`         | Saturation multiplier (0 to 2).                    |
+| `brightness`      | `number`            | `1`         | Brightness multiplier (0.35 to 1.65).              |
+| `primaryColor`    | `string`            | `"#00ccb3"` | First glow colour of the beams and glass spheres.  |
+| `secondaryColor`  | `string`            | `"#6600e6"` | Second glow colour of the beams and glass spheres. |
+| `backgroundColor` | `string`            | `"#050608"` | Colour behind the effect.                          |

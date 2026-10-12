@@ -1,0 +1,51 @@
+{
+  "name": "aster-glass-button",
+  "title": "Aster Glass Button",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/aster-glass-button.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Aster Glass (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface AsterGlassButtonProps {\n  /** Text-only glass button, or glass button with an arrow chip. */\n  variant?: \"access\" | \"arrow\";\n  /** Button text. Defaults to \"Get access\" (access) or \"Start free\" (arrow). */\n  label?: string;\n  /** Ground the glass is toned for. */\n  mode?: \"dark\" | \"light\";\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nconst STYLES = `\n.m-aster-glass {\n  --m-ink: #fff;\n  position: relative;\n  display: grid;\n  width: 100%;\n  height: 100%;\n  min-height: 240px;\n  place-items: center;\n  overflow: hidden;\n  isolation: isolate;\n  background: #101010;\n  color: var(--m-ink);\n  font-family: \"Roboto Flex\", \"Arial Narrow\", Inter, \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n.m-aster-glass::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  z-index: -1;\n  pointer-events: none;\n  background:\n    radial-gradient(circle at 64% 42%, rgba(255, 255, 255, .07), transparent 21%),\n    radial-gradient(circle at 38% 62%, rgba(255, 255, 255, .035), transparent 27%);\n}\n.m-aster-glass .m-btn {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: 0;\n  font: inherit;\n  text-decoration: none;\n  white-space: nowrap;\n  cursor: pointer;\n  -webkit-font-smoothing: antialiased;\n  height: 52px;\n  border-radius: 12px;\n  isolation: isolate;\n  background: rgba(255, 255, 255, .055);\n  color: #f1f1f1;\n  font-size: 17px;\n  font-variation-settings: \"wdth\" 100, \"opsz\" 14;\n  letter-spacing: -.004em;\n  box-shadow: 0 12px 34px -22px rgba(255, 255, 255, .35);\n  backdrop-filter: blur(16px) saturate(1.25);\n  -webkit-backdrop-filter: blur(16px) saturate(1.25);\n  transition: transform .5s cubic-bezier(.22, 1, .36, 1), background .4s ease, color .4s ease, box-shadow .5s cubic-bezier(.22, 1, .36, 1);\n}\n.m-aster-glass .m-btn:focus-visible { outline: 2px solid var(--m-ink); outline-offset: 5px; }\n.m-aster-glass .m-btn::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  z-index: -1;\n  border-radius: inherit;\n  padding: 1px;\n  background: linear-gradient(148deg, rgba(255, 255, 255, .72), rgba(255, 255, 255, .16) 34%, rgba(255, 255, 255, .05) 58%, rgba(255, 255, 255, .34));\n  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);\n  mask-composite: exclude;\n  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);\n  -webkit-mask-composite: xor;\n  pointer-events: none;\n  transition: filter .45s cubic-bezier(.22, 1, .36, 1);\n}\n.m-aster-glass .m-btn::after {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  z-index: -1;\n  border-radius: inherit;\n  background: linear-gradient(180deg, rgba(255, 255, 255, .13), transparent 46%);\n  pointer-events: none;\n}\n.m-aster-glass .m-btn > span { position: relative; z-index: 1; }\n.m-aster-glass .m-btn:hover {\n  transform: translateY(-1px);\n  background: rgba(255, 255, 255, .15);\n  color: #fff;\n  box-shadow: 0 8px 26px -12px rgba(255, 255, 255, .42);\n}\n.m-aster-glass .m-btn:hover::before { filter: brightness(1.55); }\n.m-aster-glass .m-btn:active { transform: translateY(0); }\n.m-aster-glass .m-access { padding: 0 31px; }\n.m-aster-glass .m-arrow { gap: 17px; padding: 0 7px 0 22px; }\n.m-aster-glass .m-chip {\n  display: grid;\n  width: 34px;\n  height: 34px;\n  flex: none;\n  place-items: center;\n  border-radius: 9px;\n  background: rgba(255, 255, 255, .10);\n}\n.m-aster-glass .m-chip::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  border-radius: inherit;\n  padding: 1px;\n  background: linear-gradient(150deg, rgba(255, 255, 255, .75), rgba(255, 255, 255, .10) 62%, rgba(255, 255, 255, .42));\n  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);\n  mask-composite: exclude;\n  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);\n  -webkit-mask-composite: xor;\n  pointer-events: none;\n}\n.m-aster-glass .m-arrow svg {\n  width: 15px;\n  height: 15px;\n  fill: none;\n  stroke: currentColor;\n  stroke-width: 1.4;\n  stroke-linecap: round;\n  stroke-linejoin: round;\n  transition: transform .5s cubic-bezier(.22, 1, .36, 1);\n}\n.m-aster-glass .m-arrow:hover svg { transform: translateX(2px); }\n\n.m-aster-glass[data-mode=\"light\"] { background: #eceae7; --m-ink: #101010; }\n.m-aster-glass[data-mode=\"light\"]::before {\n  background:\n    radial-gradient(circle at 64% 42%, rgba(16, 16, 16, .06), transparent 21%),\n    radial-gradient(circle at 38% 62%, rgba(16, 16, 16, .035), transparent 27%);\n}\n.m-aster-glass[data-mode=\"light\"] .m-btn { background: rgba(16, 16, 16, .05); box-shadow: 0 14px 34px -22px rgba(16, 16, 16, .55); color: #16181a; }\n.m-aster-glass[data-mode=\"light\"] .m-btn::before { background: linear-gradient(148deg, rgba(16, 16, 16, .45), rgba(16, 16, 16, .12) 34%, rgba(16, 16, 16, .05) 58%, rgba(16, 16, 16, .26)); }\n.m-aster-glass[data-mode=\"light\"] .m-btn::after { background: linear-gradient(180deg, rgba(255, 255, 255, .8), transparent 46%); }\n.m-aster-glass[data-mode=\"light\"] .m-btn:hover { background: rgba(16, 16, 16, .1); box-shadow: 0 8px 26px -12px rgba(16, 16, 16, .3); color: #000; }\n.m-aster-glass[data-mode=\"light\"] .m-btn:hover::before { filter: brightness(.68); }\n.m-aster-glass[data-mode=\"light\"] .m-chip { background: rgba(16, 16, 16, .07); }\n.m-aster-glass[data-mode=\"light\"] .m-chip::before { background: linear-gradient(150deg, rgba(16, 16, 16, .5), rgba(16, 16, 16, .1) 62%, rgba(16, 16, 16, .3)); }\n.m-aster-glass[data-reduced] .m-btn, .m-aster-glass[data-reduced] .m-btn::before, .m-aster-glass[data-reduced] .m-btn svg { transition-duration: .01ms !important; }\n`;\n\nexport function AsterGlassButton({\n  variant = \"access\",\n  label,\n  mode = \"dark\",\n  onClick,\n  className,\n}: AsterGlassButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const arrow = variant === \"arrow\";\n  return (\n    <div\n      className={cn(\"m-aster-glass\", className)}\n      data-mode={mode}\n      data-reduced={prefersReducedMotion ? \"\" : undefined}\n    >\n      <style dangerouslySetInnerHTML={{ __html: STYLES }} />\n      {arrow ? (\n        <button className=\"m-btn m-arrow\" type=\"button\" onClick={onClick}>\n          <span>{label ?? \"Start free\"}</span>\n          <span className=\"m-chip\">\n            <svg viewBox=\"0 0 12 12\" aria-hidden=\"true\">\n              <path d=\"M2 6h8M6.6 2.6 10 6 6.6 9.4\" />\n            </svg>\n          </span>\n        </button>\n      ) : (\n        <button className=\"m-btn m-access\" type=\"button\" onClick={onClick}>\n          <span>{label ?? \"Get access\"}</span>\n        </button>\n      )}\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "variant",
+      "label": "Variant",
+      "default": "access",
+      "options": [
+        {
+          "value": "access",
+          "label": "Access"
+        },
+        {
+          "value": "arrow",
+          "label": "Arrow"
+        }
+      ]
+    },
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+---
+title: Skeuomorphic Toggle
+description: "One switch in four treatments: tactile skeuomorphic, flat modern, Three.js glass and a shader-lit plasma capsule."
+---
+
+A switch that fills its stage, in four styles: the tactile skeuomorphic original, a flat modern switch with a sprung knob, a refractive Three.js glass capsule, and a single-shader plasma trough. Every variant follows light and dark appearance automatically, works with keyboard and screen readers, and the WebGL variants react to the pointer. The WebGL variants pause off screen, and with reduced motion every variant snaps instead of animating. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="skeuomorphic-toggle" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add skeuomorphic-toggle
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/skeuomorphic-toggle.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { SkeuomorphicToggle } from "@/components/ui/skeuomorphic-toggle";
+
+export default function Example() {
+  return (
+    <div className="flex h-[400px] w-full">
+      <SkeuomorphicToggle variant="glass" onChange={(on) => console.log(on)} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                           | Default       | Description                                                   |
+| :----------- | :--------------------------------------------- | :------------ | :------------------------------------------------------------ |
+| `variant`    | `"classic" \| "modern" \| "glass" \| "shader"` | `"classic"`   | Which treatment to render.                                    |
+| `mode`       | `"auto" \| "dark" \| "light"`                  | `"auto"`      | Appearance; `"auto"` follows the page theme, then the system. |
+| `defaultOn`  | `boolean`                                      | `true`        | Initial state.                                                |
+| `label`      | `string`                                       | `"Live Sync"` | Accessible name, also shown on the knob or in the caption.    |
+| `speed`      | `number`                                       | `1`           | Animation speed of the shader variant (0 to 3).               |
+| `size`       | `number`                                       | `1`           | Scale of the switch (0.35 to 2.5).                            |
+| `opacity`    | `number`                                       | `1`           | Opacity of the whole stage.                                   |
+| `hue`        | `number`                                       | `0`           | Hue rotation in degrees.                                      |
+| `saturation` | `number`                                       | `1`           | Saturation multiplier.                                        |
+| `brightness` | `number`                                       | `1`           | Brightness multiplier.                                        |
+| `onChange`   | `(on: boolean) => void`                        | none          | Called with the new state after each toggle.                  |

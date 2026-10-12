@@ -4,6 +4,7 @@
   "category": "Navigation",
   "type": "components:ui",
   "dependencies": [
+    "next/image",
     "framer-motion",
     "lucide-react",
     "clsx",

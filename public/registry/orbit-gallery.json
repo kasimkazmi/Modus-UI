@@ -1,0 +1,74 @@
+{
+  "name": "orbit-gallery",
+  "title": "Orbit Gallery",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/orbit-gallery.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Gallery (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface OrbitGalleryProps {\n  images?: string[];\n  speed?: number;\n  scale?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  backgroundColor?: string;\n  dotColor?: string;\n  className?: string;\n}\n\nconst DEFAULT_IMAGES = [\n  \"https://images.unsplash.com/photo-1755331039789-7e5680e26e8f?q=80&w=774&auto=format&fit=crop\",\n  \"https://images.unsplash.com/photo-1755569309049-98410b94f66d?q=80&w=772&auto=format&fit=crop\",\n  \"https://images.unsplash.com/photo-1755497595318-7e5e3523854f?q=80&w=774&auto=format&fit=crop\",\n  \"https://images.unsplash.com/photo-1755353985163-c2a0fe5ac3d8?q=80&w=774&auto=format&fit=crop\",\n  \"https://images.unsplash.com/photo-1745965976680-d00be7dc0377?q=80&w=774&auto=format&fit=crop\",\n];\n\nconst clamp = (value: number, minimum: number, maximum: number) =>\n  Math.min(maximum, Math.max(minimum, value));\n\nexport function OrbitGallery({\n  images = DEFAULT_IMAGES,\n  speed = 1,\n  scale = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  backgroundColor = \"#f1f1ef\",\n  dotColor = \"rgba(13, 13, 13, 0.13)\",\n  className,\n}: OrbitGalleryProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const settings = useRef({ speed, scale });\n  settings.current = { speed, scale };\n  const imageKey = images.join(\"\\n\");\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    const urls = imageKey.split(\"\\n\").filter(Boolean);\n    if (!host || !canvas || urls.length === 0) return;\n\n    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });\n    renderer.setClearColor(0x000000, 0);\n    renderer.outputColorSpace = THREE.SRGBColorSpace;\n    const scene = new THREE.Scene();\n    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);\n    camera.position.z = 18;\n    const gallery = new THREE.Group();\n    scene.add(gallery);\n\n    const geometry = new THREE.CylinderGeometry(5, 5, 1.8, 64, 1, true, 0, Math.PI * 0.4);\n    const loader = new THREE.TextureLoader();\n    loader.setCrossOrigin(\"anonymous\");\n    let disposed = false;\n    let frame = 0;\n    let elapsed = 0;\n    let previousTime = 0;\n    let hostVisible = true;\n\n    const render = (time = performance.now()) => {\n      const safeSpeed = clamp(settings.current.speed, 0, 3);\n      const safeScale = clamp(settings.current.scale, 0.7, 1.35);\n      if (previousTime) elapsed += Math.min((time - previousTime) / 1000, 0.05) * safeSpeed;\n      previousTime = time;\n      gallery.rotation.y = elapsed * 0.18;\n      gallery.position.y = Math.sin(elapsed) * 1.5;\n      gallery.scale.setScalar(safeScale);\n      renderer.render(scene, camera);\n    };\n\n    const textures = urls.map((url) => {\n      const texture = loader.load(url, () => {\n        if (disposed) {\n          texture.dispose();\n          return;\n        }\n        renderer.render(scene, camera);\n      });\n      texture.colorSpace = THREE.SRGBColorSpace;\n      texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());\n      return texture;\n    });\n    const materials = Array.from(\n      { length: 16 },\n      (_, index) =>\n        new THREE.MeshBasicMaterial({\n          map: textures[index % textures.length],\n          opacity: 0.85,\n          side: THREE.DoubleSide,\n          toneMapped: false,\n          transparent: true,\n        }),\n    );\n    materials.forEach((material, index) => {\n      const panel = new THREE.Mesh(geometry, material);\n      panel.position.y = (index - 8) * 2.4;\n      panel.rotation.y = (index / 16) * Math.PI * 4;\n      gallery.add(panel);\n    });\n\n    const tick = (time: number) => {\n      if (disposed || !hostVisible || document.hidden) {\n        frame = 0;\n        previousTime = 0;\n        return;\n      }\n      render(time);\n      frame = requestAnimationFrame(tick);\n    };\n    const start = () => {\n      if (prefersReducedMotion) {\n        render(0);\n        return;\n      }\n      if (!frame && hostVisible && !document.hidden) frame = requestAnimationFrame(tick);\n    };\n    const stop = () => {\n      if (frame) cancelAnimationFrame(frame);\n      frame = 0;\n      previousTime = 0;\n    };\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      const width = Math.max(1, Math.round(bounds.width));\n      const height = Math.max(1, Math.round(bounds.height));\n      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));\n      renderer.setSize(width, height, false);\n      camera.aspect = width / height;\n      camera.updateProjectionMatrix();\n      render();\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      hostVisible = entry?.isIntersecting ?? true;\n      if (hostVisible) start();\n      else stop();\n    });\n    const onVisibility = () => (document.hidden ? stop() : start());\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    resize();\n    start();\n\n    return () => {\n      disposed = true;\n      stop();\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n      gallery.clear();\n      geometry.dispose();\n      materials.forEach((material) => material.dispose());\n      textures.forEach((texture) => texture.dispose());\n      renderer.dispose();\n    };\n  }, [prefersReducedMotion, imageKey]);\n\n  return (\n    <div\n      ref={hostRef}\n      role=\"img\"\n      aria-label=\"Rotating cylindrical image gallery\"\n      className={cn(\"pointer-events-none absolute inset-0 overflow-hidden\", className)}\n      style={{\n        backgroundColor,\n        backgroundImage: `radial-gradient(${dotColor} 1px, transparent 1px)`,\n        backgroundSize: \"28px 28px\",\n      }}\n    >\n      <canvas\n        ref={canvasRef}\n        aria-hidden=\"true\"\n        className=\"absolute inset-0 block h-full w-full\"\n        style={{\n          opacity: clamp(opacity, 0.05, 1),\n          filter: `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`,\n        }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 3,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "scale",
+      "label": "Scale",
+      "min": 0.7,
+      "max": 1.35,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

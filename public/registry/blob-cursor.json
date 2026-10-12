@@ -4,9 +4,9 @@
   "category": "Backgrounds",
   "type": "components:ui",
   "dependencies": [
+    "framer-motion",
     "clsx",
-    "tailwind-merge",
-    "framer-motion"
+    "tailwind-merge"
   ],
   "files": [
     {

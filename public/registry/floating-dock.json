@@ -5,7 +5,8 @@
   "type": "components:ui",
   "dependencies": [
     "framer-motion",
-    "lucide-react"
+    "clsx",
+    "tailwind-merge"
   ],
   "files": [
     {

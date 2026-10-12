@@ -1,0 +1,52 @@
+---
+title: Liquid Form
+description: A raymarched WebGL liquid-metal blob that morphs slowly and turns toward the pointer.
+---
+
+A full-bleed raymarched WebGL shader of a chrome blob that morphs with layered simplex noise, lit by studio lights that follow the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="liquid-form" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add liquid-form
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/liquid-form.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { LiquidForm } from "@/components/ui/liquid-form";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LiquidForm />
+      <div className="relative z-10 p-8 text-white">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type     | Default | Description                                  |
+| :------------ | :------- | :------ | :------------------------------------------- |
+| `speed`       | `number` | `1`     | Animation speed multiplier.                  |
+| `morph`       | `number` | `1`     | Strength of the surface deformation.         |
+| `noiseScale`  | `number` | `1`     | Frequency of the deformation noise.          |
+| `mouseAmount` | `number` | `0.15`  | How far the camera looks toward the pointer. |
+| `metal`       | `number` | `1`     | Reflection and specular strength.            |
+| `camera`      | `number` | `5.5`   | Camera distance.                             |
+| `tintHue`     | `number` | `220`   | Hue of the optional tint in degrees.         |
+| `tintAmount`  | `number` | `0`     | Strength of the tint (0 keeps it chrome).    |

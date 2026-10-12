@@ -1,0 +1,54 @@
+---
+title: Tactile Button
+description: A WebGL button holding a glowing liquid that sloshes as you sweep the cursor and drains on click.
+---
+
+A raw-WebGL button holding a cyan liquid over a dark viscous backdrop. Sweeping the cursor tilts and sloshes the surface, and clicking gulps the level down before it refills. It fills its positioned parent, pauses when off screen or when the tab is hidden, and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="tactile-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tactile-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tactile-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TactileButton } from "@/components/ui/tactile-button";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <TactileButton />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                   | Default     | Description                                                                                  |
+| :---------------- | :------------------------------------- | :---------- | :------------------------------------------------------------------------------------------- |
+| `label`           | `string`                               | `"SURGE"`   | Button text.                                                                                 |
+| `mode`            | `"dark" \| "light"`                    | `"dark"`    | Scene theme. The backdrop shader is colour-inverted when the mode differs from the original. |
+| `hue`             | `number`                               | `0`         | Hue rotation in degrees (-180 to 180).                                                       |
+| `saturation`      | `number`                               | `1`         | Saturation multiplier (0 to 2).                                                              |
+| `brightness`      | `number`                               | `1`         | Brightness multiplier (0.35 to 1.65).                                                        |
+| `darkBackground`  | `string`                               | `"#03090d"` | Scene colour in dark mode.                                                                   |
+| `lightBackground` | `string`                               | `"#f4f7fb"` | Scene colour in light mode.                                                                  |
+| `onClick`         | `ButtonHTMLAttributes["onClick"]`      | -           | Called after the button's own click effect.                                                  |
+| `onMouseMove`     | `ButtonHTMLAttributes["onMouseMove"]`  | -           | Called after the button's own mouse move effect.                                             |
+| `onMouseLeave`    | `ButtonHTMLAttributes["onMouseLeave"]` | -           | Called after the button's own mouse leave effect.                                            |
+| `onFocus`         | `ButtonHTMLAttributes["onFocus"]`      | -           | Called after the button's own focus effect.                                                  |
+
+Any other `<button>` attribute is passed through to the inner button.

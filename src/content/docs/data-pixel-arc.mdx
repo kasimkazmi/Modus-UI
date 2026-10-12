@@ -1,0 +1,54 @@
+---
+title: Data Pixel Arc
+description: A green pixel-grid arc that ripples like a live data signal on a near-black background.
+---
+
+A 2D canvas fills a grid of square pixels along a sweeping arc, rippling with travelling waves from deep green edges to a bright emerald core on a near-black background. Set `mode="light"` for sage and emerald ink on pale paper. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="data-pixel-arc" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add data-pixel-arc
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/data-pixel-arc.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DataPixelArc } from "@/components/ui/data-pixel-arc";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DataPixelArc />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default           | Description                                                                    |
+| :---------------- | :------------------ | :---------------- | :----------------------------------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`          | Colour scheme: emerald on near-black, or sage ink on pale paper.               |
+| `speed`           | `number`            | `1`               | Wave speed multiplier.                                                         |
+| `pixelSize`       | `number`            | `8`               | Size of each pixel cell in pixels.                                             |
+| `arcCenter`       | `number`            | `0.4`             | Vertical position of the arc's peak, as a fraction of the height.              |
+| `arcDrop`         | `number`            | `0.9`             | How far the arc falls toward the sides, as a fraction of the height.           |
+| `thickness`       | `number`            | `0.35`            | Thickness of the arc band, as a fraction of the height.                        |
+| `brightness`      | `number`            | `1`               | Pixel brightness multiplier.                                                   |
+| `hue`             | `number`            | `0`               | Hue rotation in degrees.                                                       |
+| `saturation`      | `number`            | `1`               | Saturation multiplier.                                                         |
+| `backgroundColor` | `string`            | depends on `mode` | Scene background; `#030308` in dark mode, a pale paper gradient in light mode. |

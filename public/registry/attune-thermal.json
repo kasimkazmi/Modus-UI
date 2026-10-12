@@ -1,0 +1,35 @@
+{
+  "name": "attune-thermal",
+  "title": "Attune Thermal",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/attune-thermal.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Attune Thermal (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nconst STYLES = `.modus-attune-stage{--ink:#fff;position:relative;display:grid;width:100%;height:100%;min-height:240px;place-items:center;overflow:hidden;isolation:isolate;color:var(--ink);font-family:Inter,\"Helvetica Neue\",Helvetica,Arial,sans-serif}\n.modus-attune-stage::before{content:\"\";position:absolute;inset:0;z-index:-1;pointer-events:none}\n.modus-attune-stage[data-mode=\"light\"]{--ink:#14161a}\n.modus-attune{position:relative;display:inline-flex;align-items:center;justify-content:center;border:0;font:inherit;text-decoration:none;white-space:nowrap;cursor:pointer;-webkit-font-smoothing:antialiased}\n.modus-attune:focus-visible{outline:2px solid var(--ink);outline-offset:5px}\n.modus-attune-still .modus-attune,.modus-attune-still .modus-attune::before,.modus-attune-still .modus-attune svg{transition-duration:.01ms!important}\n\n.modus-attune-stage{background:#070709}\n.modus-attune-stage::before{background:radial-gradient(circle at 50% 50%,rgba(255,122,20,.12),transparent 32%)}\n.modus-attune{gap:10px;height:52px;padding:0 22px;border-radius:11px;background:linear-gradient(180deg,#ffa347 0%,#ff7a14 48%,#f2610a 100%);box-shadow:inset 0 1px rgba(255,255,255,.26),0 8px 28px rgba(255,122,20,.28);color:#1a0e04;font-size:14px;font-weight:650;letter-spacing:.012em;transition:filter .18s ease,transform .18s ease,box-shadow .18s ease}\n.modus-attune svg{width:8px;height:12px;fill:none;stroke:currentColor;stroke-width:1.7}\n.modus-attune:hover{filter:brightness(1.09);transform:translateY(-2px);box-shadow:inset 0 1px rgba(255,255,255,.34),0 12px 34px rgba(255,122,20,.36)}\n.modus-attune:active{transform:translateY(1px)}\n.modus-attune-stage[data-mode=\"light\"]{background:#faf4ee}\n.modus-attune-stage[data-mode=\"light\"]::before{background:radial-gradient(circle at 50% 50%,rgba(255,122,20,.18),transparent 32%)}\n.modus-attune-stage[data-mode=\"light\"] .modus-attune{box-shadow:inset 0 1px rgba(255,255,255,.5),0 8px 24px rgba(226,92,6,.28)}\n.modus-attune-stage[data-mode=\"light\"] .modus-attune:hover{box-shadow:inset 0 1px rgba(255,255,255,.58),0 12px 30px rgba(226,92,6,.34)}\n`;\n\nexport interface AttuneThermalProps {\n  label?: string;\n  mode?: \"dark\" | \"light\";\n  type?: \"button\" | \"submit\" | \"reset\";\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function AttuneThermal({\n  label = \"Start free\",\n  mode = \"dark\",\n  type = \"button\",\n  onClick,\n  className,\n}: AttuneThermalProps) {\n  const prefersReducedMotion = useReducedMotion();\n  return (\n    <div\n      className={cn(\"modus-attune-stage\", prefersReducedMotion && \"modus-attune-still\", className)}\n      data-mode={mode}\n    >\n      <style dangerouslySetInnerHTML={{ __html: STYLES }} />\n      <button className=\"modus-attune\" type={type} onClick={onClick}>\n        <span>{label}</span>\n        <svg viewBox=\"0 0 12 12\" aria-hidden=\"true\">\n          <path d=\"M3 1.5 8 6 3 10.5\" />\n        </svg>\n      </button>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+---
+title: Woven Cloth
+description: A Three.js Verlet cloth with typography woven into its textile, in four cloths — printed linen, iridescent silk, a flown atelier flag and a washi noren.
+---
+
+A Verlet-simulated sheet of fabric with its wordmark printed or woven into a procedural textile, so every letter deforms with the folds. Four variants share the same sheet: the original printed cloth, an iridescent silk with bloom, an atelier flag flown from a mast and a three-panel washi noren in front of a glowing shoji. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="woven-cloth" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add woven-cloth
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/woven-cloth.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { WovenCloth } from "@/components/ui/woven-cloth";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <WovenCloth variant="iridescent" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                                    | Default                                | Description                                      |
+| :---------------- | :------------------------------------------------------ | :------------------------------------- | :----------------------------------------------- |
+| `variant`         | `"woven-cloth" \| "iridescent" \| "atelier" \| "washi"` | `"woven-cloth"`                        | Which cloth to render.                           |
+| `hue`             | `number`                                                | `0`                                    | Hue rotation in degrees, clamped to -180 to 180. |
+| `saturation`      | `number`                                                | `1`                                    | Saturation multiplier, clamped to 0 to 2.        |
+| `brightness`      | `number`                                                | `1`                                    | Brightness multiplier, clamped to 0.35 to 1.65.  |
+| `backgroundColor` | `string`                                                | the variant's original backdrop colour | Colour behind the canvas.                        |

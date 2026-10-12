@@ -1,0 +1,50 @@
+---
+title: Generative Tree
+description: A painterly Canvas 2D tree that grows branch by branch, sways in the wind, fades and regrows.
+---
+
+A warm, painterly branching tree drawn on a 2D canvas. It grows from the trunk outwards, sways with layered wind, bends towards the pointer and shakes on click, then fades and grows a new tree. Drifting particles float around the canopy. It fills its positioned parent, pauses when off screen and renders a fully grown still tree when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="generative-tree" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add generative-tree
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/generative-tree.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GenerativeTree } from "@/components/ui/generative-tree";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GenerativeTree />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                             | Description                                                  |
+| :---------------- | :------- | :---------------------------------- | :----------------------------------------------------------- |
+| `speed`           | `number` | `1`                                 | Animation speed multiplier (0 to 3).                         |
+| `size`            | `number` | `1`                                 | Tree size (0.65 to 1.5). Below 1 the tree is centred.        |
+| `particleAmount`  | `number` | `1`                                 | Particle count multiplier (0 to 2, 50 particles at 1).       |
+| `opacity`         | `number` | `1`                                 | Canvas opacity.                                              |
+| `hue`             | `number` | `0`                                 | Hue rotation in degrees.                                     |
+| `saturation`      | `number` | `1`                                 | Saturation multiplier.                                       |
+| `brightness`      | `number` | `1`                                 | Brightness multiplier.                                       |
+| `backgroundColor` | `string` | `"#0a0a0a"`                         | Scene background colour.                                     |
+| `colors`          | `RGB[]`  | Warm sienna to golden-cream palette | Branch colours from trunk to tips, as `{ r, g, b }` objects. |

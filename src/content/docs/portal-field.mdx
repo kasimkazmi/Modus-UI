@@ -1,0 +1,55 @@
+---
+title: Portal Field
+description: A WebGL shader ring of white light with a deep blue fringe that warps slowly and follows the pointer.
+---
+
+A full-bleed Three.js shader draws a noise-warped ring with a bright white core and a deep blue fringe, blended additively and screened over a near-black background. The ring drifts slightly toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="portal-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add portal-field
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/portal-field.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { PortalField } from "@/components/ui/portal-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <PortalField />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                                 |
+| :---------------- | :------- | :---------- | :------------------------------------------ |
+| `speed`           | `number` | `1`         | Animation speed multiplier (0 to 3).        |
+| `size`            | `number` | `1`         | Ring thickness multiplier.                  |
+| `length`          | `number` | `1`         | Ring radius multiplier (0.35 to 2.5).       |
+| `opacity`         | `number` | `1`         | Opacity of the glow (0.05 to 1).            |
+| `hue`             | `number` | `0`         | Hue rotation in degrees (-180 to 180).      |
+| `saturation`      | `number` | `1`         | Saturation multiplier (0 to 2).             |
+| `brightness`      | `number` | `1`         | Brightness multiplier (0.35 to 1.65).       |
+| `coreColor`       | `string` | `"#FFFFFF"` | Colour of the ring's bright core.           |
+| `fringeColor`     | `string` | `"#1e3a8a"` | Colour of the soft fringe and ambient wash. |
+| `backgroundColor` | `string` | `"#05060a"` | Scene background behind the glow.           |

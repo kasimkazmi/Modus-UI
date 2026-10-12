@@ -4,7 +4,9 @@
   "category": "Data Display",
   "type": "components:ui",
   "dependencies": [
-    "framer-motion"
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
   ],
   "files": [
     {

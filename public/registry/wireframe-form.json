@@ -1,0 +1,118 @@
+{
+  "name": "wireframe-form",
+  "title": "Wireframe Form",
+  "category": "Components",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/wireframe-form.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Wireframe Forms (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ntype WireframeFormVariant = \"cube\" | \"cylinders\" | \"sphere\";\n\ninterface WireframeFormProps {\n  variant?: WireframeFormVariant;\n  mode?: \"dark\" | \"light\";\n  speed?: number;\n  size?: number;\n  length?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  color?: string;\n  className?: string;\n}\n\ntype Point = { x: number; y: number; z: number };\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\nfunction hexToRgb(hex: string) {\n  const value = hex.replace(\"#\", \"\");\n  const full =\n    value.length === 3\n      ? value\n          .split(\"\")\n          .map((c) => c + c)\n          .join(\"\")\n      : value;\n  const n = parseInt(full, 16);\n  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;\n}\n\nfunction buildShape(shapeType: WireframeFormVariant, length: number) {\n  const points: Point[] = [];\n  const edges: [number, number][] = [];\n  if (shapeType === \"cube\") {\n    const s = Math.round(80 * length);\n    points.push(\n      { x: s, y: s, z: s },\n      { x: -s, y: -s, z: s },\n      { x: -s, y: s, z: -s },\n      { x: s, y: -s, z: -s },\n    );\n    points.push(\n      { x: -s, y: -s, z: -s },\n      { x: s, y: s, z: -s },\n      { x: s, y: -s, z: s },\n      { x: -s, y: s, z: s },\n    );\n    edges.push([0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]);\n    edges.push([4, 5], [4, 6], [4, 7], [5, 6], [5, 7], [6, 7]);\n  } else if (shapeType === \"cylinders\") {\n    const r = Math.round(70 * length);\n    const segments = 24;\n    for (let i = 0; i < segments; i++) {\n      const theta = (i / segments) * Math.PI * 2;\n      points.push({ x: Math.cos(theta) * r, y: Math.sin(theta) * r, z: -30 });\n      points.push({ x: Math.cos(theta) * r, y: Math.sin(theta) * r, z: 30 });\n      const next = (i + 1) % segments;\n      edges.push([i * 2, next * 2], [i * 2 + 1, next * 2 + 1], [i * 2, i * 2 + 1]);\n    }\n    const offset = points.length;\n    for (let i = 0; i < segments; i++) {\n      const theta = (i / segments) * Math.PI * 2;\n      points.push({ x: Math.cos(theta) * r, y: -30, z: Math.sin(theta) * r });\n      points.push({ x: Math.cos(theta) * r, y: 30, z: Math.sin(theta) * r });\n      const next = (i + 1) % segments;\n      edges.push(\n        [offset + i * 2, offset + next * 2],\n        [offset + i * 2 + 1, offset + next * 2 + 1],\n        [offset + i * 2, offset + i * 2 + 1],\n      );\n    }\n  } else {\n    const t = (1.0 + Math.sqrt(5.0)) / 2.0;\n    const s = Math.round(50 * length);\n    const p = [\n      [-1, t, 0],\n      [1, t, 0],\n      [-1, -t, 0],\n      [1, -t, 0],\n      [0, -1, t],\n      [0, 1, t],\n      [0, -1, -t],\n      [0, 1, -t],\n      [t, 0, -1],\n      [t, 0, 1],\n      [-t, 0, -1],\n      [-t, 0, 1],\n    ];\n    p.forEach((v) => points.push({ x: v[0] * s, y: v[1] * s, z: v[2] * s }));\n    for (let i = 0; i < points.length; i++) {\n      for (let j = i + 1; j < points.length; j++) {\n        const d = Math.hypot(\n          points[i].x - points[j].x,\n          points[i].y - points[j].y,\n          points[i].z - points[j].z,\n        );\n        if (d < s * 2.1) edges.push([i, j]);\n      }\n    }\n    p.forEach((v) => points.push({ x: v[0] * s * 0.5, y: v[1] * s * 0.5, z: v[2] * s * 0.5 }));\n    const off = 12;\n    for (let i = 0; i < 12; i++) {\n      for (let j = i + 1; j < 12; j++) {\n        const d = Math.hypot(\n          points[off + i].x - points[off + j].x,\n          points[off + i].y - points[off + j].y,\n          points[off + i].z - points[off + j].z,\n        );\n        if (d < s * 1.1) edges.push([off + i, off + j]);\n      }\n      edges.push([i, off + i]);\n    }\n  }\n  return { points, edges };\n}\n\nexport function WireframeForm({\n  variant = \"cube\",\n  mode = \"dark\",\n  speed = 1,\n  size = 1,\n  length = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  color,\n  className,\n}: WireframeFormProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const isLight = mode === \"light\";\n  const ink = color ?? (isLight ? \"#1a1f2a\" : \"#ffffff\");\n  const live = useRef({ speed });\n  live.current = { speed: clamp(speed, 0, 3) };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    const ctx = canvas?.getContext(\"2d\");\n    if (!host || !canvas || !ctx) return;\n\n    const rgb = hexToRgb(ink);\n    const lineAlpha = isLight ? 0.45 : 0.4;\n    const lineWidth = Number((0.8 * clamp(size, 0.05, 200)).toFixed(2));\n    const { points, edges } = buildShape(variant, clamp(length, 0.35, 2.5));\n    let width = 1;\n    let height = 1;\n    let cx = 0;\n    let cy = 0;\n    let angleX = 0;\n    let angleY = 0;\n    let raf = 0;\n    let visible = true;\n\n    const project = (p: Point) => {\n      const x = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);\n      let z = p.z * Math.cos(angleY) + p.x * Math.sin(angleY);\n      const y = p.y * Math.cos(angleX) - z * Math.sin(angleX);\n      z = z * Math.cos(angleX) + p.y * Math.sin(angleX);\n      const fov = 400;\n      const scale = fov / (fov + z);\n      return { x: x * scale + cx, y: y * scale + cy, z };\n    };\n\n    const render = () => {\n      ctx.clearRect(0, 0, width, height);\n      ctx.lineWidth = lineWidth;\n      const projected = points.map(project);\n      edges.forEach((e) => {\n        const p1 = projected[e[0]];\n        const p2 = projected[e[1]];\n        const depth = (p1.z + p2.z) / 2;\n        const alpha = Math.max(0.1, 1 - depth / 200);\n        ctx.beginPath();\n        ctx.moveTo(p1.x, p1.y);\n        ctx.lineTo(p2.x, p2.y);\n        ctx.strokeStyle = `rgba(${rgb}, ${alpha * lineAlpha})`;\n        ctx.stroke();\n      });\n      projected.forEach((p) => {\n        const alpha = Math.max(0.1, 1 - p.z / 200);\n        if (alpha > 0.5) {\n          ctx.fillStyle = `rgba(${rgb}, ${alpha})`;\n          ctx.fillRect(p.x - 1, p.y - 1, 2, 2);\n        }\n      });\n    };\n\n    const resize = () => {\n      const rect = host.getBoundingClientRect();\n      width = rect.width;\n      height = rect.height;\n      cx = width / 2;\n      cy = height / 2;\n      const dpr = Math.min(window.devicePixelRatio || 1, 2);\n      canvas.width = Math.max(1, Math.floor(width * dpr));\n      canvas.height = Math.max(1, Math.floor(height * dpr));\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n      render();\n    };\n\n    const loop = () => {\n      angleY += 0.005 * live.current.speed;\n      angleX += 0.002 * live.current.speed;\n      render();\n      raf = requestAnimationFrame(loop);\n    };\n\n    const sync = () => {\n      cancelAnimationFrame(raf);\n      raf = 0;\n      if (!prefersReducedMotion && visible && !document.hidden) raf = requestAnimationFrame(loop);\n    };\n\n    const ro = new ResizeObserver(resize);\n    ro.observe(host);\n    resize();\n\n    const io = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      sync();\n    });\n    io.observe(host);\n    document.addEventListener(\"visibilitychange\", sync);\n    sync();\n\n    return () => {\n      cancelAnimationFrame(raf);\n      ro.disconnect();\n      io.disconnect();\n      document.removeEventListener(\"visibilitychange\", sync);\n    };\n  }, [variant, ink, isLight, size, length, prefersReducedMotion]);\n\n  const filter =\n    hue === 0 && saturation === 1 && brightness === 1\n      ? undefined\n      : `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`;\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"relative aspect-square w-[480px] max-w-[72vw]\", className)}\n      style={{ opacity: clamp(opacity, 0.05, 1), filter }}\n    >\n      <canvas ref={canvasRef} className=\"absolute inset-0 h-full w-full\" />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "variant",
+      "label": "Variant",
+      "default": "cube",
+      "options": [
+        {
+          "value": "cube",
+          "label": "Cube"
+        },
+        {
+          "value": "cylinders",
+          "label": "Cylinders"
+        },
+        {
+          "value": "sphere",
+          "label": "Sphere"
+        }
+      ]
+    },
+    {
+      "kind": "choice",
+      "key": "mode",
+      "label": "Mode",
+      "default": "dark",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ]
+    },
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 3,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "size",
+      "label": "Size",
+      "min": 0.35,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "length",
+      "label": "Length",
+      "min": 0.35,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+---
+title: Particle Wordmark
+description: A word drawn from a grid of dots and squares, lit by drifting snowfall bands.
+---
+
+A seeded grid of dots and squares samples a rendered wordmark, and a squall of falling bands sweeps light across the letters. It fills its parent, pauses off screen and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="particle-wordmark" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add particle-wordmark
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/particle-wordmark.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ParticleWordmark } from "@/components/ui/particle-wordmark";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full">
+      <ParticleWordmark text="MODUS" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                         | Default                               | Description                                 |
+| :---------------- | :--------------------------- | :------------------------------------ | :------------------------------------------ |
+| `text`            | `string`                     | `"MODUS"`                             | Text the particle field spells out.         |
+| `colors`          | `[number, number, number][]` | white to pale steel blue RGB triplets | Particle palette, blended across particles. |
+| `backgroundColor` | `string`                     | `"#0c0c0d"`                           | Scene background.                           |
+| `speed`           | `number`                     | `2`                                   | Animation speed multiplier.                 |

@@ -1,0 +1,46 @@
+---
+title: Tideform Outline
+description: A monospace, uppercase outline button on a graphite stage.
+---
+
+A monospace, uppercase outline button on a graphite stage. On hover it turns orange and nudges its long arrow forward. The component fills its parent and paints its own stage, so give it a sized container. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="tideform-outline" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tideform-outline
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/tideform-outline.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TideformOutline } from "@/components/ui/tideform-outline";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <TideformOutline onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default          | Description               |
+| :-------- | :------------------------------------- | :--------------- | :------------------------ |
+| `label`   | `string`                               | `"See the work"` | Button text.              |
+| `mode`    | `"dark" \| "light"`                    | `"dark"`         | Stage and button palette. |
+| `type`    | `"button" \| "submit" \| "reset"`      | `"button"`       | Native button type.       |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`      | Click handler.            |

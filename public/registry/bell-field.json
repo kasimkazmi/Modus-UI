@@ -1,0 +1,91 @@
+{
+  "name": "bell-field",
+  "title": "Bell Field",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/bell-field.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Bell Field (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface BellFieldProps {\n  speed?: number;\n  pointerAmount?: number;\n  strikeDuration?: number;\n  emberAmount?: number;\n  brightness?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  backgroundColor?: string;\n  colors?: string[];\n  emberColors?: string[];\n  className?: string;\n}\n\nconst DEFAULT_COLORS = [\"#080e0d\", \"#4e9b8a\", \"#d89b3f\", \"#efe9dc\"];\nconst DEFAULT_EMBER_COLORS = [\"#e7c165\", \"#8fcbb9\"];\nconst EMBER_COUNT = 58;\n\nconst VERTEX_SHADER = `\nattribute vec2 position;\nvoid main() { gl_Position = vec4(position, 0.0, 1.0); }\n`;\n\nconst FRAGMENT_SHADER = `\nprecision highp float;\nuniform vec2 u_resolution;\nuniform float u_time;\nuniform vec2 u_mouse;\nuniform float u_strike;\nuniform vec3 u_deep;\nuniform vec3 u_patina;\nuniform vec3 u_bronze;\nuniform vec3 u_ash;\n\n#define PI 3.14159265359\n\nfloat hash(vec2 p) { return fract(sin(dot(p, vec2(23.71, 91.37))) * 41537.1234); }\n\n// damped-cosine stand-in for the Bessel envelope of a circular mode\nfloat bess(float x) { return cos(x - 0.785398) / sqrt(1.0 + abs(x)); }\n\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n  vec2 p = uv * 2.0 - 1.0;\n  p.x *= u_resolution.x / u_resolution.y;\n  p.y += 0.08;\n\n  vec2 m = u_mouse / u_resolution.xy * 2.0 - 1.0;\n  m.y = -m.y;\n  m.x *= u_resolution.x / u_resolution.y;\n  p -= m * 0.11;\n\n  float t = u_time * 0.09;\n  float r = length(p);\n  float a = atan(p.y, p.x);\n\n  // the bell drifts between partials the way a struck bell does\n  float ang = 3.0 + 1.6 * sin(t * 0.37) + sin(t * 0.19 + 1.7);\n  float k   = 3.1 + 1.0 * sin(t * 0.23 + 0.6);\n\n  float amp = 1.0 + (1.0 - u_strike) * 0.55;\n  float f1 = bess(r * k * PI - t * 2.2) * cos(ang * a + t * 0.5);\n  float f2 = bess(r * k * 1.6 * PI + t * 1.4) * cos((ang * 2.0 + 1.0) * a - t * 0.31);\n  float f = (f1 + f2 * 0.30) * amp;\n\n  // nodal lines — where the metal stands still\n  float node = 1.0 - smoothstep(0.0, 0.075 + 0.075 * r, abs(f));\n  // antinodes — where it moves, and glows hot\n  float anti = smoothstep(0.40, 0.95, abs(f));\n\n  // the crown stays quiet — clears a reading zone under the type\n  float open = smoothstep(0.14, 0.92, r);\n  node *= open;\n  anti *= open;\n\n  vec3 col = u_deep;\n  col = mix(col, u_patina, node * 0.50);\n  col = mix(col, u_bronze, anti * 0.22);\n  col += u_ash * pow(node, 3.0) * 0.13;\n\n  // shock ring travelling out from the strike\n  float ring = smoothstep(0.06, 0.0, abs(r - u_strike * 2.3)) * (1.0 - u_strike);\n  col += mix(u_bronze, u_ash, 0.4) * ring * 0.7;\n\n  col *= mix(0.10, 1.0, smoothstep(2.0, 0.28, r));\n  col += (hash(gl_FragCoord.xy) - 0.5) * 0.022;\n\n  gl_FragColor = vec4(col, 1.0);\n}\n`;\n\ntype Ember = {\n  x: number;\n  y: number;\n  r: number;\n  vy: number;\n  vx: number;\n  ph: number;\n  sp: number;\n  hot: boolean;\n};\n\nfunction compile(gl: WebGLRenderingContext, type: number, source: string) {\n  const shader = gl.createShader(type);\n  if (!shader) throw new Error(\"Unable to create Bell Field shader\");\n  gl.shaderSource(shader, source);\n  gl.compileShader(shader);\n  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {\n    throw new Error(gl.getShaderInfoLog(shader) ?? \"Bell Field shader compilation failed\");\n  }\n  return shader;\n}\n\nfunction hexToRgb(hex: string): [number, number, number] {\n  const value = parseInt(hex.replace(\"#\", \"\"), 16);\n  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];\n}\n\nexport function BellField({\n  speed = 1,\n  pointerAmount = 1,\n  strikeDuration = 2400,\n  emberAmount = 1,\n  brightness = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  backgroundColor = \"#08100f\",\n  colors = DEFAULT_COLORS,\n  emberColors = DEFAULT_EMBER_COLORS,\n  className,\n}: BellFieldProps) {\n  const hostRef = useRef<HTMLDivElement>(null);\n  const modeRef = useRef<HTMLCanvasElement>(null);\n  const emberRef = useRef<HTMLCanvasElement>(null);\n  const prefersReducedMotion = useReducedMotion();\n  const optionsRef = useRef({\n    speed,\n    pointerAmount,\n    strikeDuration,\n    emberAmount,\n    colors,\n    emberColors,\n  });\n  optionsRef.current = { speed, pointerAmount, strikeDuration, emberAmount, colors, emberColors };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = modeRef.current;\n    const emberCanvas = emberRef.current;\n    if (!host || !canvas || !emberCanvas) return;\n    const gl = canvas.getContext(\"webgl\");\n    const emberContext = emberCanvas.getContext(\"2d\");\n    if (!gl || !emberContext) return;\n\n    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX_SHADER);\n    const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);\n    const program = gl.createProgram();\n    if (!program) return;\n    gl.attachShader(program, vertex);\n    gl.attachShader(program, fragment);\n    gl.linkProgram(program);\n    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {\n      throw new Error(gl.getProgramInfoLog(program) ?? \"Bell Field program link failed\");\n    }\n    gl.useProgram(program);\n\n    const buffer = gl.createBuffer();\n    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);\n    gl.bufferData(\n      gl.ARRAY_BUFFER,\n      new Float32Array([-1, -1, 1, -1, -1, 1, 1, -1, 1, 1, -1, 1]),\n      gl.STATIC_DRAW,\n    );\n    const position = gl.getAttribLocation(program, \"position\");\n    gl.enableVertexAttribArray(position);\n    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);\n\n    const resolution = gl.getUniformLocation(program, \"u_resolution\");\n    const time = gl.getUniformLocation(program, \"u_time\");\n    const mouseUniform = gl.getUniformLocation(program, \"u_mouse\");\n    const strikeUniform = gl.getUniformLocation(program, \"u_strike\");\n    const colorUniforms = [\"u_deep\", \"u_patina\", \"u_bronze\", \"u_ash\"].map((name) =>\n      gl.getUniformLocation(program, name),\n    );\n\n    let width = 1;\n    let height = 1;\n    let dpr = 1;\n    let mouseX = 0.5;\n    let mouseY = 0.5;\n    let targetX = 0.5;\n    let targetY = 0.5;\n    let frame = 0;\n    let visible = true;\n    let initialized = false;\n    let lastStrikeMs = -1e9;\n    const startedAt = performance.now();\n\n    const embers: Ember[] = Array.from({ length: EMBER_COUNT }, () => ({\n      x: Math.random(),\n      y: Math.random(),\n      r: 0.4 + Math.random() * 1.4,\n      vy: -(0.1 + Math.random() * 0.26),\n      vx: (Math.random() - 0.5) * 0.08,\n      ph: Math.random() * Math.PI * 2,\n      sp: 0.5 + Math.random() * 1.4,\n      hot: Math.random() < 0.36,\n    }));\n\n    const draw = (now: number) => {\n      const options = optionsRef.current;\n      const t = now * 0.001 * options.speed;\n      mouseX += (targetX - mouseX) * 0.04;\n      mouseY += (targetY - mouseY) * 0.04;\n      gl.uniform1f(time, (now - startedAt) * 0.001 * options.speed);\n      gl.uniform1f(\n        strikeUniform,\n        Math.min(1, Math.max(0, (now - lastStrikeMs) / options.strikeDuration)),\n      );\n      gl.uniform2f(mouseUniform, mouseX * dpr, mouseY * dpr);\n      colorUniforms.forEach((location, index) => {\n        const [r, g, b] = hexToRgb(options.colors[index] ?? DEFAULT_COLORS[index]);\n        gl.uniform3f(location, r / 255, g / 255, b / 255);\n      });\n      gl.drawArrays(gl.TRIANGLES, 0, 6);\n\n      const hot = hexToRgb(options.emberColors[0] ?? DEFAULT_EMBER_COLORS[0]).join(\", \");\n      const cool = hexToRgb(options.emberColors[1] ?? DEFAULT_EMBER_COLORS[1]).join(\", \");\n      emberContext.clearRect(0, 0, width, height);\n      const count = Math.max(\n        0,\n        Math.min(EMBER_COUNT, Math.round(EMBER_COUNT * options.emberAmount)),\n      );\n      for (let index = 0; index < count; index += 1) {\n        const ember = embers[index];\n        if (!prefersReducedMotion) {\n          ember.y += ember.vy * options.speed;\n          ember.x += (ember.vx + Math.sin(t * ember.sp * 0.5 + ember.ph) * 0.13) * options.speed;\n        }\n        if (ember.y < -4) {\n          ember.y = height + 4;\n          ember.x = Math.random() * width;\n        }\n        if (ember.x < -4) ember.x = width + 4;\n        if (ember.x > width + 4) ember.x = -4;\n        const twinkle = 0.5 + 0.5 * Math.sin(t * ember.sp + ember.ph);\n        emberContext.beginPath();\n        emberContext.arc(ember.x, ember.y, ember.r, 0, Math.PI * 2);\n        emberContext.fillStyle = ember.hot\n          ? `rgba(${hot}, ${0.06 + twinkle * 0.34})`\n          : `rgba(${cool}, ${0.04 + twinkle * 0.24})`;\n        emberContext.fill();\n      }\n    };\n\n    const render = (now: number) => {\n      draw(now);\n      frame = visible && !document.hidden ? requestAnimationFrame(render) : 0;\n    };\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      width = Math.max(1, bounds.width);\n      height = Math.max(1, bounds.height);\n      dpr = Math.min(window.devicePixelRatio || 1, 2);\n      canvas.width = Math.max(1, Math.round(width * dpr));\n      canvas.height = Math.max(1, Math.round(height * dpr));\n      emberCanvas.width = canvas.width;\n      emberCanvas.height = canvas.height;\n      emberContext.setTransform(dpr, 0, 0, dpr, 0, 0);\n      gl.viewport(0, 0, canvas.width, canvas.height);\n      gl.uniform2f(resolution, canvas.width, canvas.height);\n      if (!initialized) {\n        mouseX = targetX = width * 0.5;\n        mouseY = targetY = height * 0.5;\n        initialized = true;\n      }\n      embers.forEach((ember) => {\n        if (ember.x <= 1) ember.x *= width;\n        if (ember.y <= 1) ember.y *= height;\n      });\n      if (prefersReducedMotion) draw(startedAt + 14000 / Math.max(speed, 0.001));\n    };\n\n    const inside = (event: PointerEvent) => {\n      const bounds = host.getBoundingClientRect();\n      return (\n        event.clientX >= bounds.left &&\n        event.clientX <= bounds.right &&\n        event.clientY >= bounds.top &&\n        event.clientY <= bounds.bottom\n      );\n    };\n    const pointer = (event: PointerEvent) => {\n      if (!inside(event)) return;\n      const bounds = host.getBoundingClientRect();\n      const amount = optionsRef.current.pointerAmount;\n      targetX = width * 0.5 + (event.clientX - bounds.left - width * 0.5) * amount;\n      targetY = height * 0.5 + (event.clientY - bounds.top - height * 0.5) * amount;\n    };\n    const strike = () => {\n      lastStrikeMs = performance.now();\n    };\n    const pointerDown = (event: PointerEvent) => {\n      if (inside(event)) strike();\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(host);\n    resize();\n\n    if (prefersReducedMotion) {\n      return () => {\n        resizeObserver.disconnect();\n        gl.deleteBuffer(buffer);\n        gl.deleteShader(vertex);\n        gl.deleteShader(fragment);\n        gl.deleteProgram(program);\n      };\n    }\n\n    const firstStrike = window.setTimeout(strike, 1700);\n    const strikeTimer = window.setInterval(strike, 8200);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible && !frame) frame = requestAnimationFrame(render);\n      if (!visible && frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    intersection.observe(host);\n    window.addEventListener(\"pointermove\", pointer, { passive: true });\n    window.addEventListener(\"pointerdown\", pointerDown);\n    frame = requestAnimationFrame(render);\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      window.clearTimeout(firstStrike);\n      window.clearInterval(strikeTimer);\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      window.removeEventListener(\"pointermove\", pointer);\n      window.removeEventListener(\"pointerdown\", pointerDown);\n      gl.deleteBuffer(buffer);\n      gl.deleteShader(vertex);\n      gl.deleteShader(fragment);\n      gl.deleteProgram(program);\n    };\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [prefersReducedMotion]);\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{\n        background: backgroundColor,\n        opacity,\n        filter: `hue-rotate(${hue}deg) saturate(${saturation}) brightness(${brightness})`,\n      }}\n    >\n      <canvas ref={modeRef} className=\"absolute inset-0 z-0 block h-full w-full\" />\n      <canvas\n        ref={emberRef}\n        className=\"pointer-events-none absolute inset-0 z-[1] block h-full w-full\"\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "pointerAmount",
+      "label": "Pointer",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "strikeDuration",
+      "label": "Strike",
+      "min": 600,
+      "max": 5000,
+      "step": 50,
+      "default": 2400
+    },
+    {
+      "kind": "range",
+      "key": "emberAmount",
+      "label": "Embers",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.8,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

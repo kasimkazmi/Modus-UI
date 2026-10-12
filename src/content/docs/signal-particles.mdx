@@ -1,0 +1,55 @@
+---
+title: Signal Particles
+description: A dark dot field where travelling sine waves light up a grid of signal particles, with rare blue and purple highlights.
+---
+
+A dark dot field where travelling sine waves light up a grid of signal particles, with rare blue and purple highlights. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="signal-particles" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add signal-particles
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/signal-particles.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SignalParticles } from "@/components/ui/signal-particles";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SignalParticles />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                | Default           | Description                                        |
+| :---------------- | :------------------ | :---------------- | :------------------------------------------------- |
+| `mode`            | `"dark" \| "light"` | `"dark"`          | Colour scheme for the dots and background.         |
+| `speed`           | `number`            | `1`               | Animation speed multiplier.                        |
+| `size`            | `number`            | `1`               | Dot radius multiplier.                             |
+| `length`          | `number`            | `1`               | Grid density; higher values tighten the spacing.   |
+| `opacity`         | `number`            | `1`               | Canvas opacity.                                    |
+| `hue`             | `number`            | `0`               | Hue rotation in degrees.                           |
+| `saturation`      | `number`            | `1`               | Saturation multiplier.                             |
+| `brightness`      | `number`            | `1`               | Brightness multiplier.                             |
+| `dotColor`        | `string`            | depends on `mode` | Hex colour of the regular dots.                    |
+| `highlightColors` | `[string, string]`  | depends on `mode` | Hex colours of the blue and purple highlight dots. |
+| `backgroundColor` | `string`            | depends on `mode` | Background colour.                                 |

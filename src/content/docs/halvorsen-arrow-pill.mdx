@@ -1,0 +1,44 @@
+---
+title: Halvorsen Arrow Pill
+description: A maximum-contrast pill button with an inverted arrow endcap.
+---
+
+A paper-white pill on a near-black stage with an ink arrow endcap; in light mode the whole build inverts. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="halvorsen-arrow-pill" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add halvorsen-arrow-pill
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/halvorsen-arrow-pill.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { HalvorsenArrowPill } from "@/components/ui/halvorsen-arrow-pill";
+
+export default function Example() {
+  return (
+    <div className="h-[400px] w-full">
+      <HalvorsenArrowPill label="See the work" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default          | Description                                                      |
+| :-------- | :------------------------------------- | :--------------- | :--------------------------------------------------------------- |
+| `label`   | `string`                               | `"See the work"` | Button text.                                                     |
+| `mode`    | `"dark" \| "light"`                    | `"dark"`         | Ground the button is toned for; the stage background follows it. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | —                | Click handler for the button.                                    |

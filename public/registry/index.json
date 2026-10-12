@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 51,
+  "count": 187,
   "categories": [
     "Navigation",
     "Actions",
@@ -17,9 +17,9 @@
       "category": "Navigation",
       "description": "A tab switcher with a physics-driven, stretching selection pill.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -39,6 +39,7 @@
       "category": "Navigation",
       "description": "A premium, scroll-aware header that dynamically adjusts its layout density and logo scale based on scroll position.",
       "dependencies": [
+        "next/image",
         "framer-motion",
         "lucide-react",
         "clsx",
@@ -52,7 +53,8 @@
       "description": "A premium navigation dock with smooth Apple-style magnifying zoom animation on hover.",
       "dependencies": [
         "framer-motion",
-        "lucide-react"
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -94,7 +96,9 @@
       "category": "Actions",
       "description": "A smooth animated button using Framer Motion.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -103,7 +107,9 @@
       "category": "Actions",
       "description": "A smooth button with hover and tap scale animations using Framer Motion.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -112,7 +118,9 @@
       "category": "Actions",
       "description": "A button with an organic, rhythmic pulsing animation to draw user attention.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -187,7 +195,9 @@
       "category": "Data Display",
       "description": "A 3D-style rotating card that responds to user hover with smooth perspective shifts.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -196,7 +206,9 @@
       "category": "Data Display",
       "description": "A 3D parallax tilt card featuring smooth physics-based rotations on hover, collapsible tags and descriptions, and custom CTA buttons.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -249,7 +261,9 @@
       "category": "Backgrounds",
       "description": "A highly ambient, canvas-based circuit board animation with interactive mouse ripple effects.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -258,9 +272,9 @@
       "category": "Backgrounds",
       "description": "Elements that mathematically orbit around a central node in circular paths.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -269,9 +283,9 @@
       "category": "Backgrounds",
       "description": "A morphing gelatinous blob that trails your mouse cursor.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -297,14 +311,252 @@
       ]
     },
     {
+      "name": "orbital-sphere",
+      "title": "Orbital Sphere",
+      "category": "Backgrounds",
+      "description": "A WebGL sphere of 15,000 violet particles ringed by slowly turning orbits and glowing nodes.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "bell-field",
+      "title": "Bell Field",
+      "category": "Backgrounds",
+      "description": "A WebGL shader background of a struck bell's vibration modes in patina and bronze, with drifting embers.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "stream-convergence",
+      "title": "Stream Convergence",
+      "category": "Backgrounds",
+      "description": "A WebGL shader background of three converging red, green and blue light streams on black.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ribbon-field",
+      "title": "Ribbon Field",
+      "category": "Backgrounds",
+      "description": "A WebGL shader background of glowing teal and violet ribbons drawn through a halftone dot grid.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "liquid-form",
+      "title": "Liquid Form",
+      "category": "Backgrounds",
+      "description": "A raymarched WebGL liquid-metal blob that morphs slowly and turns toward the pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "energy-orb",
+      "title": "Energy Orb",
+      "category": "Backgrounds",
+      "description": "A WebGL violet energy sphere filled with turbulent smoke, set in a drifting star field.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "laser",
+      "title": "Laser",
+      "category": "Backgrounds",
+      "description": "A WebGL shader background of a green laser blade cutting through drifting fog, with four more variants, including a crossing light-beam junction.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dot-matrix",
+      "title": "Dot Matrix",
+      "category": "Backgrounds",
+      "description": "A WebGL grid of cyan dots that pulse in diagonal waves and drift with the pointer.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "emerald-horizon",
+      "title": "Emerald Horizon",
+      "category": "Backgrounds",
+      "description": "A WebGL aurora of green light rolling along the bottom of a black horizon.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "structure-flow",
+      "title": "Structure Flow",
+      "category": "Backgrounds",
+      "description": "A WebGL dome of 15,000 white particles slowly turning beneath a fading mask.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "warp-field",
+      "title": "Warp Field",
+      "category": "Backgrounds",
+      "description": "A WebGL warp-speed corridor of streaks with four variants: streaks, letters, keycaps and hyperspace.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "orbit-gallery",
+      "title": "Orbit Gallery",
+      "category": "Backgrounds",
+      "description": "A WebGL helix of curved image panels turning and bobbing over a dotted paper background.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "constellation-field",
+      "title": "Constellation Field",
+      "category": "Backgrounds",
+      "description": "A canvas constellation of pale gold nodes on a deep navy field, linked when close and gently drawn toward the pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "portal-field",
+      "title": "Portal Field",
+      "category": "Backgrounds",
+      "description": "A WebGL shader ring of white light with a deep blue fringe that warps slowly and follows the pointer.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "data-pixel-arc",
+      "title": "Data Pixel Arc",
+      "category": "Backgrounds",
+      "description": "A green pixel-grid arc that ripples like a live data signal on a near-black background.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "predictive-arc",
+      "title": "Predictive Arc",
+      "category": "Backgrounds",
+      "description": "A violet dotted arch whose dots swell and shimmer in moving waves on a black background.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "condensation",
+      "title": "Condensation",
+      "category": "Backgrounds",
+      "description": "Blue water droplets that bead up, merge and run down like condensation on dark glass.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "lumen-cta",
+      "title": "Lumen CTA",
+      "category": "Actions",
+      "description": "Lumen's pill call-to-action, a deep violet gradient with a ring glyph, plus its frosted glass sibling.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "typography-vortex",
+      "title": "Typography Vortex",
+      "category": "Backgrounds",
+      "description": "Rotating rings of monospaced type that dissolve into glyph dust under the cursor and get sucked into a sink on click.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "crt-screen",
+      "title": "CRT Screen",
+      "category": "Backgrounds",
+      "description": "A WebGL cathode-ray tube with four screens - a typing green-phosphor terminal, a film countdown leader, a blue fault screen and a pixel-art title screen.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "editorial-heading",
+      "title": "Editorial Heading",
+      "category": "Typography",
+      "description": "A field-notes list whose article headings decode from scrambled glyphs into their titles.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
       "name": "gravity-text-swap",
       "title": "Gravity Text Swap",
       "category": "Typography",
       "description": "Text that detaches and falls away with simulated gravity when swapped.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -313,9 +565,9 @@
       "category": "Typography",
       "description": "A sleek text rotator that flips individual words sequentially using 3D perspective.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -324,9 +576,9 @@
       "category": "Typography",
       "description": "Typography rendered with dynamic, animated noise and grain displacement.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -335,9 +587,9 @@
       "category": "Typography",
       "description": "A marque text effect whose speed scales dynamically based on scroll velocity.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -423,7 +675,9 @@
       "category": "Typography",
       "description": "A text component that floats and drifts subtly, creating an editorial, high-end feel.",
       "dependencies": [
-        "framer-motion"
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
       ]
     },
     {
@@ -432,9 +686,9 @@
       "category": "Components",
       "description": "A dynamic SVG beam animation that traces paths between elements.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -443,9 +697,9 @@
       "category": "Components",
       "description": "A glowing, animated gradient beam that endlessly traces the perimeter.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -454,9 +708,9 @@
       "category": "Components",
       "description": "A highly structured, responsive layout primitive for creating asymmetric grid layouts.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -465,9 +719,9 @@
       "category": "Components",
       "description": "A 3D interactive card that decays and shatters its visual elements when hovered.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -476,9 +730,9 @@
       "category": "Components",
       "description": "An interactive canvas component that lets users scratch off an overlay to reveal the content underneath.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -487,9 +741,9 @@
       "category": "Components",
       "description": "A 3D interactive stack of cards that can be dragged and rearranged.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -498,9 +752,9 @@
       "category": "Components",
       "description": "A glowing button border animation that circles the perimeter.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -509,9 +763,9 @@
       "category": "Components",
       "description": "A 3D interactive card that physically tilts and pans relative to the cursor position.",
       "dependencies": [
+        "framer-motion",
         "clsx",
-        "tailwind-merge",
-        "framer-motion"
+        "tailwind-merge"
       ]
     },
     {
@@ -552,6 +806,1321 @@
       "title": "Border Glow",
       "category": "Components",
       "description": "An interactive card wrapper with an ambient glowing mesh gradient that mathematically tracks the mouse.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "comparison-slider",
+      "title": "Comparison Slider",
+      "category": "Components",
+      "description": "Two layers stacked, with a divider the user drags to compare them.",
+      "dependencies": [
+        "lucide-react",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dock",
+      "title": "Dock",
+      "category": "Components",
+      "description": "A highly interactive macOS-style dock that magnifies items on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "progress-ring",
+      "title": "Progress Ring",
+      "category": "Components",
+      "description": "A circular ring that smoothly sweeps to a value, with a live numeric readout.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "marquee",
+      "title": "Marquee",
+      "category": "Components",
+      "description": "A seamless, infinitely scrolling row of elements.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "reflective-card",
+      "title": "Reflective Card",
+      "category": "Components",
+      "description": "A shiny, reflective glass card with distorted background.",
+      "dependencies": [
+        "lucide-react",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "fluid-glass",
+      "title": "Fluid Glass",
+      "category": "Components",
+      "description": "TODO one sentence on what Fluid Glass does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dome-gallery",
+      "title": "Dome Gallery",
+      "category": "Components",
+      "description": "An immersive 3D gallery dome.",
+      "dependencies": [
+        "@use-gesture/react",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "chroma-grid",
+      "title": "Chroma Grid",
+      "category": "Components",
+      "description": "A smooth, animated grid of glowing spotlight cards.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "bell-toggle",
+      "title": "Bell Toggle",
+      "category": "Components",
+      "description": "TODO one sentence on what Bell Toggle does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "branched-menu",
+      "title": "Branched Menu",
+      "category": "Components",
+      "description": "TODO one sentence on what Branched Menu does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "call-chip",
+      "title": "Call Chip",
+      "category": "Components",
+      "description": "TODO one sentence on what Call Chip does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "code-slots",
+      "title": "Code Slots",
+      "category": "Components",
+      "description": "TODO one sentence on what Code Slots does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "comet-dial",
+      "title": "Comet Dial",
+      "category": "Components",
+      "description": "TODO one sentence on what Comet Dial does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dodge-field",
+      "title": "Dodge Field",
+      "category": "Components",
+      "description": "TODO one sentence on what Dodge Field does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "flip-card",
+      "title": "Flip Card",
+      "category": "Components",
+      "description": "TODO one sentence on what Flip Card does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "folder-float",
+      "title": "Folder Float",
+      "category": "Components",
+      "description": "TODO one sentence on what Folder Float does.",
+      "dependencies": [
+        "matter-js",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "fuse-button",
+      "title": "Fuse Button",
+      "category": "Components",
+      "description": "TODO one sentence on what Fuse Button does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "glide-select",
+      "title": "Glide Select",
+      "category": "Components",
+      "description": "TODO one sentence on what Glide Select does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "hold-button",
+      "title": "Hold Button",
+      "category": "Components",
+      "description": "TODO one sentence on what Hold Button does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "jelly-radio",
+      "title": "Jelly Radio",
+      "category": "Components",
+      "description": "TODO one sentence on what Jelly Radio does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "lattice-loader",
+      "title": "Lattice Loader",
+      "category": "Components",
+      "description": "TODO one sentence on what Lattice Loader does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "paper-crumple",
+      "title": "Paper Crumple",
+      "category": "Components",
+      "description": "An interactive paper that crumples and folds on drag.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "peek-rating",
+      "title": "Peek Rating",
+      "category": "Components",
+      "description": "TODO one sentence on what Peek Rating does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "prompt-bar",
+      "title": "Prompt Bar",
+      "category": "Components",
+      "description": "TODO one sentence on what Prompt Bar does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "pulse-heart",
+      "title": "Pulse Heart",
+      "category": "Components",
+      "description": "TODO one sentence on what Pulse Heart does.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "refine-frame",
+      "title": "Refine Frame",
+      "category": "Components",
+      "description": "TODO one sentence on what Refine Frame does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "rubber-segment",
+      "title": "Rubber Segment",
+      "category": "Components",
+      "description": "TODO one sentence on what Rubber Segment does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "scrub-field",
+      "title": "Scrub Field",
+      "category": "Components",
+      "description": "TODO one sentence on what Scrub Field does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "shredder",
+      "title": "Shredder",
+      "category": "Components",
+      "description": "TODO one sentence on what Shredder does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "slide-commit",
+      "title": "Slide Commit",
+      "category": "Components",
+      "description": "TODO one sentence on what Slide Commit does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "sling-button",
+      "title": "Sling Button",
+      "category": "Components",
+      "description": "TODO one sentence on what Sling Button does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "slosh-gauge",
+      "title": "Slosh Gauge",
+      "category": "Components",
+      "description": "TODO one sentence on what Slosh Gauge does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "spring-check",
+      "title": "Spring Check",
+      "category": "Components",
+      "description": "TODO one sentence on what Spring Check does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "squish-switch",
+      "title": "Squish Switch",
+      "category": "Components",
+      "description": "TODO one sentence on what Squish Switch does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "status-mark",
+      "title": "Status Mark",
+      "category": "Components",
+      "description": "TODO one sentence on what Status Mark does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "swipe-row",
+      "title": "Swipe Row",
+      "category": "Components",
+      "description": "TODO one sentence on what Swipe Row does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "swipe-toast",
+      "title": "Swipe Toast",
+      "category": "Components",
+      "description": "TODO one sentence on what Swipe Toast does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "tear-ticket",
+      "title": "Tear Ticket",
+      "category": "Components",
+      "description": "TODO one sentence on what Tear Ticket does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "thought-line",
+      "title": "Thought Line",
+      "category": "Components",
+      "description": "TODO one sentence on what Thought Line does.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "voice-pill",
+      "title": "Voice Pill",
+      "category": "Components",
+      "description": "TODO one sentence on what Voice Pill does.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "wake-slider",
+      "title": "Wake Slider",
+      "category": "Components",
+      "description": "TODO one sentence on what Wake Slider does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "warm-tooltip",
+      "title": "Warm Tooltip",
+      "category": "Components",
+      "description": "TODO one sentence on what Warm Tooltip does.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "generative-tree",
+      "title": "Generative Tree",
+      "category": "Backgrounds",
+      "description": "A painterly Canvas 2D tree that grows branch by branch, sways in the wind, fades and regrows.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "elemental-field",
+      "title": "Elemental Field",
+      "category": "Backgrounds",
+      "description": "A WebGL2 background where water ripples, lightning arcs or flames play around a mark, with pointer-driven interaction.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "top-dock",
+      "title": "Top Dock",
+      "category": "Navigation",
+      "description": "A proximity-spring navigation dock in four fits — a centred dock, a command bar, a dithered pixel terminal and a refracting glass rail.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "particle-drift",
+      "title": "Particle Drift",
+      "category": "Backgrounds",
+      "description": "A drifting field of ASCII glyphs and rising light beams that link up to your pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "particle-network",
+      "title": "Particle Network",
+      "category": "Backgrounds",
+      "description": "A 3D starfield of hairline streaks rushing toward the viewer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gateway-flow",
+      "title": "Gateway Flow",
+      "category": "Backgrounds",
+      "description": "Dotted bezier paths funnel particles into a central gateway; clicks send out shockwaves.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "connectivity-graph",
+      "title": "Connectivity Graph",
+      "category": "Backgrounds",
+      "description": "Blue gradient rays fan upward from below the frame like a signal burst.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "interface-lines",
+      "title": "Interface Lines",
+      "category": "Backgrounds",
+      "description": "A plexus of bouncing points joined by thin lines when close together.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "defense-lines",
+      "title": "Defense Lines",
+      "category": "Backgrounds",
+      "description": "Crimson rain lines rise and glow brighter toward the centre of the frame.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "topo-field",
+      "title": "Topo Field",
+      "category": "Backgrounds",
+      "description": "A WebGL topographic contour map drifting over a fine pixel grid.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "star-portal",
+      "title": "Star Portal",
+      "category": "Actions",
+      "description": "A holographic pill button floating over a drifting, twinkling starfield.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ignition-button",
+      "title": "Ignition Button",
+      "category": "Actions",
+      "description": "A WebGL launch button whose starfield warps into hyperspace on hover and flashes white on click.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "induction-button",
+      "title": "Induction Button",
+      "category": "Actions",
+      "description": "A WebGL button wrapped in crawling cyan electric arcs that multiply on hover and discharge on click.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "plasma-button",
+      "title": "Plasma Button",
+      "category": "Actions",
+      "description": "A WebGL button filled with churning blue plasma that heats up on hover and erupts on press.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "tactile-button",
+      "title": "Tactile Button",
+      "category": "Actions",
+      "description": "A WebGL button holding a glowing liquid that sloshes as you sweep the cursor and drains on click.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "thinking-button",
+      "title": "Thinking Button",
+      "category": "Actions",
+      "description": "A canvas loading button with a comet of light tracing its border, a braille spinner and a shimmering label.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "signal-particles",
+      "title": "Signal Particles",
+      "category": "Backgrounds",
+      "description": "A dark dot field where travelling sine waves light up a grid of signal particles, with rare blue and purple highlights.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "override-grid",
+      "title": "Override Grid",
+      "category": "Backgrounds",
+      "description": "A block-by-block grid that pulses outward from the centre in telemetry orange.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "void-field",
+      "title": "Void Field",
+      "category": "Backgrounds",
+      "description": "A curved CRT-style dot matrix that breathes outward from the centre and drifts with the pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "halftone-flow",
+      "title": "Halftone Flow",
+      "category": "Backgrounds",
+      "description": "A flowing field resolved through a halftone dot matrix, with a red-orange shader variant and an amber Three.js point-field variant.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "cloud-field",
+      "title": "Cloud Field",
+      "category": "Backgrounds",
+      "description": "A night sky over layered parallax ridges, with twinkling stars and the occasional meteor, steered by the pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "flow-field",
+      "title": "Flow Field",
+      "category": "Backgrounds",
+      "description": "Warm amber, gold and coral particles trace a simplex-noise flow field and part around the pointer.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "woven-cloth",
+      "title": "Woven Cloth",
+      "category": "Backgrounds",
+      "description": "A Three.js Verlet cloth with typography woven into its textile, in four cloths — printed linen, iridescent silk, a flown atelier flag and a washi noren.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "semantic-bloom",
+      "title": "Semantic Bloom",
+      "category": "Typography",
+      "description": "Gooey particles drift over large type and light up the words they touch.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "globe-study",
+      "title": "Globe Study",
+      "category": "Typography",
+      "description": "A canvas globe whose land is drawn as type along the latitude lines, with a halftone ocean.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "outline-typeflow",
+      "title": "Outline Typeflow",
+      "category": "Typography",
+      "description": "A sentence flowing around the outline of an SVG mark, drawn on canvas.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "morphing-glyph-cloud",
+      "title": "Morphing Glyph Cloud",
+      "category": "Typography",
+      "description": "A cloud of glyphs filling one SVG mark that morphs into another on click.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "cloth-study",
+      "title": "Cloth Study",
+      "category": "Typography",
+      "description": "A verlet cloth woven from letters that shear with the weave. Grab it and pull.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ripple-study",
+      "title": "Ripple Study",
+      "category": "Typography",
+      "description": "A monospace glyph plate where every click sends a ring of weight through the type.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ball-study",
+      "title": "Ball Study",
+      "category": "Typography",
+      "description": "Glyphs scattered over a spinning sphere; click to knock letters loose.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "brand-orb",
+      "title": "Brand Orb",
+      "category": "Components",
+      "description": "A tiny animated dot-matrix orb that draws 23 brand marks, from Claude and OpenAI to GitHub and Email.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "diagnostics-panel",
+      "title": "Diagnostics Panel",
+      "category": "Components",
+      "description": "An isometric emerald wireframe readout with layered planes, node cubes or a flowing mesh.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "skeuomorphic-toggle",
+      "title": "Skeuomorphic Toggle",
+      "category": "Components",
+      "description": "One switch in four treatments: tactile skeuomorphic, flat modern, Three.js glass and a shader-lit plasma capsule.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "wireframe-form",
+      "title": "Wireframe Form",
+      "category": "Components",
+      "description": "A slowly rotating perspective wireframe: a hypercube, interlocking cylinders or a nested icosahedron.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "performance-gauge",
+      "title": "Performance Gauge",
+      "category": "Data Display",
+      "description": "A machined automotive gauge with a self-test needle sweep, in tachometer, speedometer, boost and power variants.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "generate-button",
+      "title": "Generate Button",
+      "category": "Actions",
+      "description": "A dark glass pill with a flickering sparkle icon and letters that shimmer in sequence.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "spinning-border-button",
+      "title": "Spinning Border Button",
+      "category": "Actions",
+      "description": "A small uppercase pill.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gradient-cta",
+      "title": "Gradient CTA",
+      "category": "Actions",
+      "description": "A warm golden gradient pill with layered inset highlights and a paper-plane icon.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "trochil-signal",
+      "title": "Trochil Signal",
+      "category": "Actions",
+      "description": "A hairline glass rectangle on a near-black stage with an amber glow.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "attune-thermal",
+      "title": "Attune Thermal",
+      "category": "Actions",
+      "description": "A thermal orange gradient button with a chevron, on a dark stage with a soft heat glow.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "tideform-outline",
+      "title": "Tideform Outline",
+      "category": "Actions",
+      "description": "A monospace, uppercase outline button on a graphite stage.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "glassmorphism-cta",
+      "title": "Glassmorphism CTA",
+      "category": "Actions",
+      "description": "A frosted-glass pill link with an avatar, a label and a wand icon.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "expanse-field",
+      "title": "Expanse Field",
+      "category": "Backgrounds",
+      "description": "A stepped WebGL horizon of eleven breathing gradient bars with film grain.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "logic-core",
+      "title": "Logic Core",
+      "category": "Backgrounds",
+      "description": "An isometric Three.js platform with a pulsing cyan core and orbiting data nodes.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dimensional-field",
+      "title": "Dimensional Field",
+      "category": "Backgrounds",
+      "description": "Noise-driven light beams behind dark glass spheres that follow the pointer.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "data-field",
+      "title": "Data Field",
+      "category": "Backgrounds",
+      "description": "Sixty warm additive lines rolling like silk in a tilted 3D plane.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "topology-field",
+      "title": "Topology Field",
+      "category": "Backgrounds",
+      "description": "A rotating Fibonacci globe of pulsing nodes joined by fading links.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "nebula",
+      "title": "Nebula",
+      "category": "Backgrounds",
+      "description": "An indigo fbm nebula that drifts toward the pointer.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "fluid-field",
+      "title": "Fluid Field",
+      "category": "Backgrounds",
+      "description": "Slow flowing blue and violet light beams on a near-black field.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ember-storm",
+      "title": "Ember Storm",
+      "category": "Backgrounds",
+      "description": "A spiralling vortex of 12,000 additive embers cooling from white to crimson.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "flux-vortex",
+      "title": "Flux Vortex",
+      "category": "Backgrounds",
+      "description": "A monochrome particle funnel with spiral guides and bloom that tilts with the pointer.",
+      "dependencies": [
+        "three",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "understory-arrow-pill",
+      "title": "Understory Arrow Pill",
+      "category": "Actions",
+      "description": "A violet capsule button with an arrow disc that nudges forward on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "meridian-keycap",
+      "title": "Meridian Keycap",
+      "category": "Actions",
+      "description": "A mechanical keycap button that travels down and lights its LED on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "halvorsen-arrow-pill",
+      "title": "Halvorsen Arrow Pill",
+      "category": "Actions",
+      "description": "A maximum-contrast pill button with an inverted arrow endcap.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "aster-glass-button",
+      "title": "Aster Glass Button",
+      "category": "Actions",
+      "description": "A frosted glass button with a corner-lit edge, as text-only or with an arrow chip.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "circle-button",
+      "title": "Circle Button",
+      "category": "Actions",
+      "description": "Round icon buttons: dark glass play, amber launch plus, and dot-border mail.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "liquid-metal-button",
+      "title": "Liquid Metal Button",
+      "category": "Actions",
+      "description": "A WebGL2 button whose face pours into prismatic liquid metal on hover, with ripples on press.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "spark-badge",
+      "title": "Spark Badge",
+      "category": "Components",
+      "description": "A credential badge on a lanyard drawn entirely from embers, standing in slanted rain above a waterline.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "sketchbook",
+      "title": "Sketchbook",
+      "category": "Components",
+      "description": "An open sketchbook whose leaves curl as you drag them, with a brass magnifier you can slide across the page.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dark-pill",
+      "title": "Dark Pill",
+      "category": "Actions",
+      "description": "A smoked-glass pill button with a slowly orbiting conic sheen that turns into a soft light pool on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "launch-button",
+      "title": "Launch Button",
+      "category": "Actions",
+      "description": "An amber gradient keycap button with a glowing halo and a pressable bottom edge.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "dot-border-button",
+      "title": "Dot Border Button",
+      "category": "Actions",
+      "description": "An outline button that draws a dashed frame, corner dots and a hatch fill around itself on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "floating-dots-cta",
+      "title": "Floating Dots CTA",
+      "category": "Actions",
+      "description": "A blue gradient button with tiny particles drifting up through it and an arrow that redraws on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "sliding-text-cta",
+      "title": "Sliding Text CTA",
+      "category": "Actions",
+      "description": "A dark pill whose label blurs away downward while a copy slides in from above on hover.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gradient-beam-cta",
+      "title": "Gradient Beam CTA",
+      "category": "Actions",
+      "description": "A black pill with an orange beam circling its border and a drifting dot texture inside.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "gradient-pill-button",
+      "title": "Gradient Pill Button",
+      "category": "Actions",
+      "description": "A metallic concave pill with a gradient hairline border and an arrow.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "intro-wordmark",
+      "title": "Intro Wordmark",
+      "category": "Typography",
+      "description": "A keynote-style wordmark that assembles letter by letter with chromatic fringes, then holds and loops.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "particle-wordmark",
+      "title": "Particle Wordmark",
+      "category": "Typography",
+      "description": "A word drawn from a grid of dots and squares, lit by drifting snowfall bands.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "audio-wordmark",
+      "title": "Audio Wordmark",
+      "category": "Typography",
+      "description": "A radio-identity wordmark over two equaliser discs, one with pulsing bars and one cut out.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "character-carousel",
+      "title": "Character Carousel",
+      "category": "Data Display",
+      "description": "A 3D carousel of profile cards, as an editorial filmstrip or a dark card wave.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "uplink-loader",
+      "title": "Uplink Loader",
+      "category": "Components",
+      "description": "A green terminal-style progress loader with a ticked bar, glowing readout and phase labels.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "engraved-certificate",
+      "title": "Engraved Certificate",
+      "category": "Components",
+      "description": "A guilloche-engraved certificate whose rosette cycles through four lathe cams.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "koi-studies",
+      "title": "Koi Studies",
+      "category": "Backgrounds",
+      "description": "A draggable stack of three koi cards over a swirling shader background, with pixel-tile reveals.",
       "dependencies": [
         "framer-motion",
         "clsx",

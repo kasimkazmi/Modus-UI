@@ -6,7 +6,7 @@ test("llms.txt indexes the components", async ({ request }) => {
   expect(res.headers()["content-type"]).toContain("text/plain");
   const body = await res.text();
   expect(body).toMatch(/^# Modus UI/);
-  expect(body).toContain("/docs/blur-text.md");
+  expect(body).toContain("/components/blur-text.md");
 });
 
 test("llms-full.txt includes docs and source", async ({ request }) => {
@@ -18,8 +18,8 @@ test("llms-full.txt includes docs and source", async ({ request }) => {
   expect(body).toContain("```tsx");
 });
 
-test("/docs/<name>.md serves one component as markdown", async ({ request }) => {
-  const res = await request.get("/docs/blur-text.md");
+test("/components/<name>.md serves one component as markdown", async ({ request }) => {
+  const res = await request.get("/components/blur-text.md");
   expect(res.status()).toBe(200);
   expect(res.headers()["content-type"]).toContain("text/markdown");
   const body = await res.text();
@@ -30,5 +30,5 @@ test("/docs/<name>.md serves one component as markdown", async ({ request }) => 
 });
 
 test("unknown component markdown is a 404", async ({ request }) => {
-  expect((await request.get("/docs/does-not-exist.md")).status()).toBe(404);
+  expect((await request.get("/components/does-not-exist.md")).status()).toBe(404);
 });

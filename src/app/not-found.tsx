@@ -63,7 +63,7 @@ export default function NotFound() {
             </motion.button>
           </Link>
 
-          <Link href="/docs">
+          <Link href="/components">
             <button className="rounded-full border border-border bg-card px-8 py-4 text-sm font-semibold text-foreground transition-all hover:bg-secondary">
               View Documentation
             </button>
