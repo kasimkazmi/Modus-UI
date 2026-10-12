@@ -1,0 +1,47 @@
+---
+title: Loom Field
+description: A Three.js Verlet cloth printed with Modus type in the theme ink, plus three dramatic cloths — iridescent silk, a flown folio flag and a washi noren.
+---
+
+A Verlet-simulated sheet of fabric with its wordmark printed or woven into a procedural textile, so every letter deforms with the folds. Four variants share the same sheet: the default `linen`, printed in `--primary` and `--foreground` on `--card` with the theme heading face and redrawn whenever the theme or palette changes, an iridescent silk with bloom, a folio flag flown from a mast and a three-panel washi noren in front of a glowing shoji. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's WovenCloth (MIT).
+
+<ComponentPreview name="loom-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add loom-field
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/loom-field.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { LoomField } from "@/components/ui/loom-field";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LoomField variant="iridescent" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                              | Default                                                     | Description                                      |
+| :---------------- | :------------------------------------------------ | :---------------------------------------------------------- | :----------------------------------------------- |
+| `variant`         | `"linen" \| "iridescent" \| "atelier" \| "washi"` | `"linen"`                                                   | Which cloth to render.                           |
+| `hue`             | `number`                                          | `0`                                                         | Hue rotation in degrees, clamped to -180 to 180. |
+| `saturation`      | `number`                                          | `1`                                                         | Saturation multiplier, clamped to 0 to 2.        |
+| `brightness`      | `number`                                          | `1`                                                         | Brightness multiplier, clamped to 0.35 to 1.65.  |
+| `backgroundColor` | `string`                                          | the theme background for `linen`, a dark backdrop otherwise | Colour behind the canvas.                        |

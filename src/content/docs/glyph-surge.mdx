@@ -1,0 +1,48 @@
+---
+title: Glyph Surge
+description: A quiet field of mono glyphs where every click sends a surge of weight and colour through the type.
+---
+
+A 19×19 field of mono glyphs set in faint theme ink. It opens with one surge from the centre, and each click fires another that travels outward, swelling the letters it passes and lifting them into the primary colour. Colours and type follow the active Modus theme and palette. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Ripple Study (MIT).
+
+<ComponentPreview name="glyph-surge" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glyph-surge
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glyph-surge.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlyphSurge } from "@/components/ui/glyph-surge";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GlyphSurge />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                 |
+| :---------------- | :------- | :------------------- | :------------------------------------------ |
+| `scale`           | `number` | `1`                  | Scales the drawing (clamped 0.65–1.5).      |
+| `opacity`         | `number` | `1`                  | Overall opacity (clamped 0.1–1).            |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees (clamped -180–180). |
+| `saturation`      | `number` | `1`                  | Saturation multiplier (clamped 0–2).        |
+| `brightness`      | `number` | `1`                  | Brightness multiplier (clamped 0.4–1.8).    |
+| `inkColor`        | `string` | Theme `--foreground` | Resting colour of the type, any CSS colour. |
+| `backgroundColor` | `string` | Theme `--background` | Background colour, any CSS colour.          |

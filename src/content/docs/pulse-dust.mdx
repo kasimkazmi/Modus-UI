@@ -1,0 +1,54 @@
+---
+title: Pulse Dust
+description: A grain field on the page's own paper where slow travelling waves swell the dots, with rare accent grains in the theme primary.
+---
+
+A grain field on the page's own paper where slow travelling waves swell the dots, with rare accent grains in the theme primary. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Signal Particles (MIT).
+
+<ComponentPreview name="pulse-dust" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pulse-dust
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pulse-dust.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PulseDust } from "@/components/ui/pulse-dust";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <PulseDust />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type               | Default                            | Description                                      |
+| :---------------- | :----------------- | :--------------------------------- | :----------------------------------------------- |
+| `speed`           | `number`           | `0.8`                              | Animation speed multiplier.                      |
+| `size`            | `number`           | `1.15`                             | Grain radius multiplier.                         |
+| `length`          | `number`           | `0.75`                             | Grid density; higher values tighten the spacing. |
+| `opacity`         | `number`           | `1`                                | Canvas opacity.                                  |
+| `hue`             | `number`           | `0`                                | Hue rotation in degrees.                         |
+| `saturation`      | `number`           | `1`                                | Saturation multiplier.                           |
+| `brightness`      | `number`           | `1`                                | Brightness multiplier.                           |
+| `dotColor`        | `string`           | theme foreground                   | Colour of the regular grains.                    |
+| `highlightColors` | `[string, string]` | theme primary and muted foreground | Colours of the rare accent grains.               |
+| `backgroundColor` | `string`           | theme background                   | Background colour.                               |

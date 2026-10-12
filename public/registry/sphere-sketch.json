@@ -1,0 +1,64 @@
+{
+  "name": "sphere-sketch",
+  "title": "Sphere Sketch",
+  "category": "Typography",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/sphere-sketch.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Ball Study (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface SphereSketchProps {\n  scale?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  inkColor?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst CHARS = \"abcdefghijklmnopqrstuvwxyzæœßfi&¶§†‡*?!;:,.()[]αβγδεζηθλμξπσφψω\";\nconst N = 1900;\nconst TILT = 0.17;\nconst ct = Math.cos(TILT);\nconst st = Math.sin(TILT);\n// radius / glyph size / drop, as fractions of the card\nconst RR = 0.3065;\nconst FS = 0.0265;\nconst CYOFF = 0.046;\n\ninterface Part {\n  x: number;\n  y: number;\n  vx: number;\n  vy: number;\n  rot: number;\n  vr: number;\n  size: number;\n  c: string;\n  t: number;\n  life: number;\n}\n\nfunction clamp(value: number, min: number, max: number) {\n  return Math.min(max, Math.max(min, value));\n}\n\n/** Reads a bare-HSL theme token (e.g. `--foreground`) as a canvas colour. */\nfunction token(name: string) {\n  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();\n  return v ? `hsl(${v})` : \"currentColor\";\n}\n\nfunction rng(seed: number) {\n  let s = seed >>> 0;\n  return () => {\n    s ^= s << 13;\n    s >>>= 0;\n    s ^= s >> 17;\n    s ^= s << 5;\n    s >>>= 0;\n    return s / 4294967296;\n  };\n}\n\nexport function SphereSketch({\n  scale = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  inkColor,\n  backgroundColor,\n  className,\n}: SphereSketchProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n\n  useEffect(() => {\n    const cv = canvasRef.current;\n    if (!cv) return;\n    const ctx = cv.getContext(\"2d\");\n    if (!ctx) return;\n    const ac = new AbortController();\n    const s = { w: 0, h: 0, dpr: 1 };\n    let ink = \"\";\n    let accent = \"\";\n    let face = \"\";\n    const readTheme = () => {\n      ink = inkColor ?? token(\"--foreground\");\n      accent = token(\"--primary\");\n      face = getComputedStyle(cv).fontFamily || \"serif\";\n    };\n    readTheme();\n\n    const resize = () => {\n      const r = { width: cv.clientWidth, height: cv.clientHeight };\n      if (!r.width || !r.height) return false;\n      const dpr = Math.min(2, window.devicePixelRatio || 1);\n      const w = Math.round(r.width * dpr);\n      const h = Math.round(r.height * dpr);\n      if (w === cv.width && h === cv.height && s.w === r.width) return false;\n      cv.width = w;\n      cv.height = h;\n      s.w = r.width;\n      s.h = r.height;\n      s.dpr = dpr;\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n      return true;\n    };\n\n    const pts: { x: number; y: number; z: number; c: string; back: number }[] = [];\n    const r0 = rng(77712345);\n    for (let i = 0; i < N; i++) {\n      // uniform random on the sphere — a lattice would show its spiral arms\n      const y = 1 - 2 * r0();\n      const rad = Math.sqrt(Math.max(0, 1 - y * y));\n      const th = r0() * Math.PI * 2;\n      pts.push({\n        x: Math.cos(th) * rad,\n        y,\n        z: Math.sin(th) * rad,\n        c: CHARS.charAt(Math.floor(r0() * CHARS.length)),\n        back: 0, // timestamp at which it regrows\n      });\n    }\n\n    let spin = 0;\n    let vel = 0.17;\n    let hover = false;\n    const parts: Part[] = [];\n    const proj = new Float32Array(N * 4); // x, y, scale, depth\n\n    const draw = (now: number, dt: number) => {\n      ctx.clearRect(0, 0, s.w, s.h);\n\n      const target = hover ? 0.62 : 0.17;\n      vel += (target - vel) * Math.min(1, dt / 300);\n      spin += (vel * dt) / 1000;\n\n      const size = Math.min(s.w, s.h);\n      const cx = s.w / 2;\n      const cy = s.h / 2 + size * CYOFF;\n      const R = size * RR;\n      const fs = size * FS;\n      const cs = Math.cos(spin);\n      const sn = Math.sin(spin);\n\n      const order: number[] = [];\n      for (let i = 0; i < N; i++) {\n        const p = pts[i];\n        const x1 = p.x * cs - p.z * sn;\n        const z1 = p.x * sn + p.z * cs;\n        const y2 = p.y * ct - z1 * st;\n        const z2 = p.y * st + z1 * ct;\n        const d = (z2 + 1) * 0.5; // 0 = far side, 1 = nearest point\n        const sc = 0.1 + 0.9 * Math.pow(d, 1.8);\n        proj[i * 4] = cx + x1 * R;\n        proj[i * 4 + 1] = cy + y2 * R;\n        proj[i * 4 + 2] = sc;\n        proj[i * 4 + 3] = d;\n        if (p.back > now) continue;\n        order.push(i);\n      }\n      order.sort((a, b) => proj[a * 4 + 3] - proj[b * 4 + 3]);\n\n      ctx.textAlign = \"center\";\n      ctx.textBaseline = \"middle\";\n\n      let lastFont = \"\";\n      for (let k = 0; k < order.length; k++) {\n        const j = order[k];\n        const z2b = proj[j * 4 + 3];\n        const scb = proj[j * 4 + 2];\n        let a = 0.55 + 0.45 * Math.pow(z2b, 1.1);\n        const grow = pts[j].back ? Math.min(1, (now - pts[j].back) / 420) : 1;\n        if (grow < 1) a *= grow;\n        // depth-sorted, so quantising the size keeps ctx.font churn low\n        const f = \"italic \" + Math.round(fs * scb * 4.4) / 4 + \"px \" + face;\n        if (f !== lastFont) {\n          ctx.font = f;\n          lastFont = f;\n        }\n        ctx.globalAlpha = a;\n        ctx.fillStyle = z2b > 0.9 ? accent : ink;\n        ctx.fillText(pts[j].c, proj[j * 4], proj[j * 4 + 1]);\n      }\n\n      // knocked-loose letters\n      const g = size * 0.8;\n      for (let m = parts.length - 1; m >= 0; m--) {\n        const q = parts[m];\n        const age = now - q.t;\n        if (age > q.life || q.y > s.h + 40) {\n          parts.splice(m, 1);\n          continue;\n        }\n        q.vy += (g * dt) / 1000;\n        q.x += (q.vx * dt) / 1000;\n        q.y += (q.vy * dt) / 1000;\n        q.rot += (q.vr * dt) / 1000;\n        const af = Math.max(0, 1 - age / q.life);\n        ctx.save();\n        ctx.translate(q.x, q.y);\n        ctx.rotate(q.rot);\n        ctx.font = \"italic \" + q.size.toFixed(2) + \"px \" + face;\n        ctx.globalAlpha = 0.95 * Math.pow(af, 0.5);\n        ctx.fillStyle = accent;\n        ctx.fillText(q.c, 0, 0);\n        ctx.restore();\n      }\n      ctx.globalAlpha = 1;\n    };\n\n    let raf = 0;\n    let onScreen = true;\n    let prev = performance.now();\n    const frame = (now: number) => {\n      const dt = Math.min(64, now - prev);\n      prev = now;\n      draw(now, dt);\n      raf = requestAnimationFrame(frame);\n    };\n    const update = () => {\n      const run = onScreen && !document.hidden && !prefersReducedMotion;\n      if (run && !raf) {\n        prev = performance.now();\n        raf = requestAnimationFrame(frame);\n      } else if (!run && raf) {\n        cancelAnimationFrame(raf);\n        raf = 0;\n      }\n    };\n\n    const opts = { signal: ac.signal };\n    cv.addEventListener(\"pointerenter\", () => (hover = true), opts);\n    cv.addEventListener(\"pointerleave\", () => (hover = false), opts);\n    cv.addEventListener(\n      \"pointerdown\",\n      (e) => {\n        const r = cv.getBoundingClientRect();\n        const kk = cv.clientWidth / (r.width || 1);\n        const p = { x: (e.clientX - r.left) * kk, y: (e.clientY - r.top) * kk };\n        const size = Math.min(s.w, s.h);\n        const fs = size * FS;\n        const now = performance.now();\n        const hitR = size * 0.055;\n        const hit = hitR * hitR;\n        for (let i = 0; i < N; i++) {\n          if (pts[i].back > now) continue;\n          if (proj[i * 4 + 3] < 0.72) continue; // only the letters actually facing you\n          const dx = proj[i * 4] - p.x;\n          const dy = proj[i * 4 + 1] - p.y;\n          if (dx * dx + dy * dy > hit) continue;\n          const d = Math.sqrt(dx * dx + dy * dy) || 1;\n          pts[i].back = now + 1500 + Math.random() * 260;\n          parts.push({\n            x: proj[i * 4],\n            y: proj[i * 4 + 1],\n            vx:\n              (dx / d) * size * (0.1 + Math.random() * 0.16) + (Math.random() - 0.5) * size * 0.05,\n            vy: (dy / d) * size * 0.08 - size * (0.04 + Math.random() * 0.1),\n            rot: 0,\n            vr: (Math.random() - 0.5) * 5.5,\n            size: fs * (0.85 + 0.15 * proj[i * 4 + 2]), // reads as a whole letter once it is off the ball\n            c: pts[i].c,\n            t: now,\n            life: 2100,\n          });\n        }\n        if (parts.length > 420) parts.splice(0, parts.length - 420);\n      },\n      opts,\n    );\n\n    const onResize = () => {\n      if (resize()) parts.length = 0;\n      draw(performance.now(), 16);\n    };\n    const ro = new ResizeObserver(onResize);\n    ro.observe(cv);\n    const io = new IntersectionObserver(([entry]) => {\n      onScreen = entry?.isIntersecting ?? true;\n      update();\n    });\n    io.observe(cv);\n    document.addEventListener(\"visibilitychange\", update, {\n      signal: ac.signal,\n    });\n    const themeObserver = new MutationObserver(() => {\n      readTheme();\n      draw(performance.now(), 16);\n    });\n    themeObserver.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\"],\n    });\n    onResize();\n    update();\n\n    return () => {\n      cancelAnimationFrame(raf);\n      ro.disconnect();\n      io.disconnect();\n      themeObserver.disconnect();\n      ac.abort();\n    };\n  }, [inkColor, prefersReducedMotion]);\n\n  const boundedHue = clamp(hue, -180, 180);\n  const boundedSaturation = clamp(saturation, 0, 2);\n  const boundedBrightness = clamp(brightness, 0.4, 1.8);\n  const boundedScale = clamp(scale, 0.65, 1.5);\n  const filter =\n    boundedHue === 0 && boundedSaturation === 1 && boundedBrightness === 1\n      ? undefined\n      : `hue-rotate(${boundedHue}deg) saturate(${boundedSaturation}) brightness(${boundedBrightness})`;\n\n  return (\n    <div\n      className={cn(\"absolute inset-0 overflow-hidden bg-background\", className)}\n      style={{\n        background: backgroundColor,\n        opacity: clamp(opacity, 0.1, 1),\n        filter,\n      }}\n    >\n      <canvas\n        ref={canvasRef}\n        aria-label=\"Letter sphere: hover to spin faster, click to knock letters loose\"\n        className=\"absolute inset-0 block h-full w-full cursor-crosshair touch-none font-serif\"\n        style={{\n          transform: boundedScale === 1 ? undefined : `scale(${boundedScale})`,\n        }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "scale",
+      "label": "Scale",
+      "min": 0.65,
+      "max": 1.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.8,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+---
+title: Dust Signature
+description: A word set in the theme's italic serif, drawn from a grid of dots and squares lit by drifting bands.
+---
+
+A seeded grid of fine dots and squares samples a word set in the theme's italic heading face, and slanted bands drift across the letters, shading each grain from the muted tone through `--primary` to the foreground. It sits on the page ground in light and dark mode, re-reads the palette when it changes, fills its parent, pauses off screen and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Particle Wordmark (MIT, © 2026 Meng To).
+
+<ComponentPreview name="dust-signature" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dust-signature
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/dust-signature.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DustSignature } from "@/components/ui/dust-signature";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full">
+      <DustSignature text="Modus" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                         | Default                                   | Description                                 |
+| :---------------- | :--------------------------- | :---------------------------------------- | :------------------------------------------ |
+| `text`            | `string`                     | `"Modus"`                                 | Text the particle field spells out.         |
+| `colors`          | `[number, number, number][]` | Theme ramp (muted → primary → foreground) | Particle palette, blended across particles. |
+| `backgroundColor` | `string`                     | `"hsl(var(--background))"`                | Scene background.                           |
+| `speed`           | `number`                     | `2`                                       | Animation speed multiplier.                 |

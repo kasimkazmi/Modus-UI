@@ -1,0 +1,55 @@
+{
+  "name": "signal-tiles",
+  "title": "Signal Tiles",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/signal-tiles.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Override Grid (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SignalTilesProps {\n  speed?: number;\n  size?: number;\n  gap?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  color?: string;\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\n/** A bare-HSL theme token (`\"24 9% 10%\"`) read from the document root. */\nconst readToken = (name: string) =>\n  getComputedStyle(document.documentElement).getPropertyValue(name).trim();\n\nexport function SignalTiles({\n  speed = 1,\n  size = 28,\n  gap = 6,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  color,\n  backgroundColor,\n  className,\n}: SignalTilesProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const options = useRef({ speed, size, gap, color });\n  options.current = { speed, size, gap, color };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    const ctx = canvas?.getContext(\"2d\");\n    if (!host || !canvas || !ctx) return;\n\n    let width = 0;\n    let height = 0;\n    let time = 0;\n    let frame = 0;\n    let visible = true;\n    let ink = \"\";\n    let accent = \"\";\n    const readTheme = () => {\n      ink = readToken(\"--muted-foreground\");\n      accent = readToken(\"--primary\");\n    };\n\n    const draw = () => {\n      const o = options.current;\n      const blockSize = Math.max(8, Math.round(clamp(o.size, 0.05, 200)));\n      const blockGap = Math.max(0, Math.round(clamp(o.gap, 0, 64)));\n\n      ctx.clearRect(0, 0, width, height);\n      const pitch = blockSize + blockGap;\n      const cols = Math.ceil(width / pitch);\n      const rows = Math.ceil(height / pitch);\n      // The wave rolls in from the lower-left corner rather than the centre.\n      const originX = -cols * 0.1;\n      const originY = rows * 1.1;\n\n      for (let i = 0; i < cols; i++) {\n        for (let j = 0; j < rows; j++) {\n          const dist = Math.hypot(i - originX, j - originY);\n          const wave = Math.sin(time - dist * 0.4);\n          if (wave > 0) {\n            // Crests take the accent; the shoulders of each wave stay in muted ink.\n            const crest = wave > 0.82;\n            const alpha = crest ? 0.55 + wave * 0.35 : wave * 0.28;\n            ctx.fillStyle = o.color ?? `hsl(${crest ? accent : ink} / ${alpha})`;\n            if (o.color) ctx.globalAlpha = alpha;\n            const scale = wave * 0.65 + 0.35;\n            const blockScaled = blockSize * scale;\n            const offset = (pitch - blockScaled) / 2;\n            ctx.beginPath();\n            ctx.roundRect(\n              i * pitch + offset,\n              j * pitch + offset,\n              blockScaled,\n              blockScaled,\n              blockScaled * 0.28,\n            );\n            ctx.fill();\n            ctx.globalAlpha = 1;\n          }\n        }\n      }\n    };\n\n    const tick = () => {\n      time += 0.04 * clamp(options.current.speed, 0, 3);\n      draw();\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (!prefersReducedMotion && visible && !document.hidden && !frame)\n        frame = requestAnimationFrame(tick);\n    };\n    const resize = () => {\n      width = canvas.width = host.offsetWidth;\n      height = canvas.height = host.offsetHeight;\n      if (prefersReducedMotion) time = 1;\n      draw();\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else if (frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    const onVisibility = () => !document.hidden && start();\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    const themeObserver = new MutationObserver(() => {\n      readTheme();\n      draw();\n    });\n    themeObserver.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"style\", \"data-theme\", \"data-palette\"],\n    });\n    readTheme();\n    resize();\n    start();\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      themeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n    };\n  }, [prefersReducedMotion]);\n\n  const filter =\n    hue === 0 && saturation === 1 && brightness === 1\n      ? undefined\n      : `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`;\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\", filter }}\n    >\n      <canvas\n        ref={canvasRef}\n        aria-hidden=\"true\"\n        className=\"absolute inset-0 block h-full w-full\"\n        style={{ opacity: clamp(opacity, 0.05, 1) }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.6,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+---
+title: Light Cut
+description: A WebGL shader of a beam of light cutting through fog, tinted from your theme, with five scenes.
+---
+
+A full-bleed WebGL shader of a beam of light through drifting fog that tilts toward the pointer, tinted from the palette's primary on the page ground. It opens on the prism aperture; switch to the matrix field, atmospheric blade, vanishing array or halftone relay. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Laser (MIT, © 2026 Meng To).
+
+<ComponentPreview name="light-cut" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add light-cut
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/light-cut.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { LightCut } from "@/components/ui/light-cut";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LightCut />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                                                                                         | Default                  | Description                                   |
+| :---------------- | :----------------------------------------------------------------------------------------------------------- | :----------------------- | :-------------------------------------------- |
+| `variant`         | `"matrix-field"` \| `"atmospheric-blade"` \| `"vanishing-array"` \| `"prism-aperture"` \| `"halftone-relay"` | `"prism-aperture"`       | Which scene to draw.                          |
+| `speed`           | `number`                                                                                                     | `1`                      | Animation speed (0 to 3).                     |
+| `size`            | `number`                                                                                                     | `1`                      | Beam width (0.35 to 2.5).                     |
+| `length`          | `number`                                                                                                     | `1`                      | Beam length (0.35 to 2.5).                    |
+| `density`         | `number`                                                                                                     | `1`                      | Fog and detail density (0.25 to 2.5).         |
+| `opacity`         | `number`                                                                                                     | `1`                      | Canvas opacity (0.05 to 1).                   |
+| `hue`             | `number`                                                                                                     | `0`                      | Hue shift in degrees (-180 to 180).           |
+| `saturation`      | `number`                                                                                                     | `1`                      | Colour saturation (0 to 2).                   |
+| `brightness`      | `number`                                                                                                     | `1`                      | Brightness (0.35 to 1.65).                    |
+| `backgroundColor` | `string`                                                                                                     | `hsl(var(--background))` | Background behind the canvas, any CSS colour. |

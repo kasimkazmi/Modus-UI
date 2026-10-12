@@ -1,0 +1,54 @@
+---
+title: Dispatch Colophon
+description: An editorial footer with an outlined serif sign-off, a ruled sign-up line and mono legal links, drawn from your theme.
+---
+
+An editorial footer that opens with a large outlined italic serif sign-off, then a ruled row with a mono issue number, a short blurb and an underlined email field whose primary button stretches into an inline success state. Legal links sit in a mono row underneath. Every colour comes from theme tokens, so it follows light and dark mode and the palette picker. All copy and links come from props, and `onSubmit` receives the entered email. Layout scales through container query units. Transitions stop when the user prefers reduced motion. Ported from ThreeUI Community's Newsletter Footer (MIT).
+
+<ComponentPreview name="dispatch-colophon" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dispatch-colophon
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/dispatch-colophon.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DispatchColophon } from "@/components/ui/dispatch-colophon";
+
+export default function Example() {
+  return (
+    <div className="relative aspect-video w-full overflow-hidden">
+      <DispatchColophon onSubmit={(email) => console.log(email)} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                | Default                                                                                   | Description                                          |
+| :---------------- | :---------------------------------- | :---------------------------------------------------------------------------------------- | :--------------------------------------------------- |
+| `marker`          | `string`                            | `"01"`                                                                                    | Issue number shown as "No. 01".                      |
+| `description`     | `string`                            | `"Letters from the studio, once a month:\nnew components, notes on craft, nothing else."` | Blurb beside the marker; `\n` breaks the line.       |
+| `placeholder`     | `string`                            | `"you@studio.com"`                                                                        | Email field placeholder.                             |
+| `buttonLabel`     | `string`                            | `"Subscribe"`                                                                             | Submit button label.                                 |
+| `successLabel`    | `string`                            | `"On the list. Thank you."`                                                               | Button label after a successful submit.              |
+| `closingPhrase`   | `string`                            | `"Until next issue."`                                                                     | Oversized outlined serif sign-off.                   |
+| `copyright`       | `string`                            | `"© 2026 Modus. Set with care."`                                                          | Copyright text in the legal row.                     |
+| `links`           | `{ label: string; href: string }[]` | Privacy, Terms and Contact anchors                                                        | Links in the legal row.                              |
+| `onSubmit`        | `(email: string) => void`           | None                                                                                      | Called with the email when the form is submitted.    |
+| `backgroundColor` | `string`                            | None                                                                                      | Footer background; defaults to the theme background. |
+| `accentColor`     | `string`                            | None                                                                                      | Success-state colour; defaults to the theme primary. |
+| `className`       | `string`                            | None                                                                                      | Extra classes for the footer.                        |
+| `style`           | `CSSProperties`                     | None                                                                                      | Inline styles for the footer.                        |

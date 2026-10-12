@@ -92,58 +92,58 @@ import ThoughtLineDemo from "./thought-line-demo";
 import VoicePillDemo from "./voice-pill-demo";
 import WakeSliderDemo from "./wake-slider-demo";
 import WarmTooltipDemo from "./warm-tooltip-demo";
-import OrbitalSphereDemo from "./orbital-sphere-demo";
+import MoonLatticeDemo from "./moon-lattice-demo";
 import ResonancePlateDemo from "./resonance-plate-demo";
-import StreamConvergenceDemo from "./stream-convergence-demo";
-import RibbonFieldDemo from "./ribbon-field-demo";
-import LiquidFormDemo from "./liquid-form-demo";
+import ConfluenceLinesDemo from "./confluence-lines-demo";
+import SilkBandsDemo from "./silk-bands-demo";
+import MercuryBloomDemo from "./mercury-bloom-demo";
 import LumenCoreDemo from "./lumen-core-demo";
-import LaserDemo from "./laser-demo";
+import LightCutDemo from "./light-cut-demo";
 import StippleTideDemo from "./stipple-tide-demo";
 import TideLineDemo from "./tide-line-demo";
-import StructureFlowDemo from "./structure-flow-demo";
-import WarpFieldDemo from "./warp-field-demo";
-import OrbitGalleryDemo from "./orbit-gallery-demo";
+import LatticeDriftDemo from "./lattice-drift-demo";
+import StarTunnelDemo from "./star-tunnel-demo";
+import PlateWheelDemo from "./plate-wheel-demo";
 import NodeWeaveDemo from "./node-weave-demo";
-import PortalFieldDemo from "./portal-field-demo";
+import ApertureBloomDemo from "./aperture-bloom-demo";
 import MosaicCrestDemo from "./mosaic-crest-demo";
-import PredictiveArcDemo from "./predictive-arc-demo";
+import ForecastCurveDemo from "./forecast-curve-demo";
 import DewPaneDemo from "./dew-pane-demo";
 import InkPillDemo from "./ink-pill-demo";
-import TypographyVortexDemo from "./typography-vortex-demo";
+import GlyphEddyDemo from "./glyph-eddy-demo";
 import PhosphorTubeDemo from "./phosphor-tube-demo";
-import EditorialHeadingDemo from "./editorial-heading-demo";
-import GenerativeTreeDemo from "./generative-tree-demo";
+import FolioTitleDemo from "./folio-title-demo";
+import BoughStudyDemo from "./bough-study-demo";
 import SigilWeatherDemo from "./sigil-weather-demo";
-import TopDockDemo from "./top-dock-demo";
-import ParticleDriftDemo from "./particle-drift-demo";
-import ParticleNetworkDemo from "./particle-network-demo";
+import CrownBarDemo from "./crown-bar-demo";
+import MoteBeaconDemo from "./mote-beacon-demo";
+import InkRushDemo from "./ink-rush-demo";
 import ArchCurrentDemo from "./arch-current-demo";
 import InkFountainDemo from "./ink-fountain-demo";
-import InterfaceLinesDemo from "./interface-lines-demo";
+import WireLedgerDemo from "./wire-ledger-demo";
 import RisingStrokesDemo from "./rising-strokes-demo";
-import TopoFieldDemo from "./topo-field-demo";
+import ContourSheetDemo from "./contour-sheet-demo";
 import NightGateDemo from "./night-gate-demo";
 import StarstreamButtonDemo from "./starstream-button-demo";
 import ArcHaloButtonDemo from "./arc-halo-button-demo";
 import CurrentButtonDemo from "./current-button-demo";
 import InkwellDemo from "./inkwell-demo";
 import MuseButtonDemo from "./muse-button-demo";
-import SignalParticlesDemo from "./signal-particles-demo";
-import OverrideGridDemo from "./override-grid-demo";
-import VoidFieldDemo from "./void-field-demo";
-import HalftoneFlowDemo from "./halftone-flow-demo";
+import PulseDustDemo from "./pulse-dust-demo";
+import SignalTilesDemo from "./signal-tiles-demo";
+import HollowBloomDemo from "./hollow-bloom-demo";
+import GrainSwellDemo from "./grain-swell-demo";
 import RidgeStrataDemo from "./ridge-strata-demo";
 import DriftLinesDemo from "./drift-lines-demo";
-import WovenClothDemo from "./woven-cloth-demo";
-import SemanticBloomDemo from "./semantic-bloom-demo";
-import GlobeStudyDemo from "./globe-study-demo";
-import OutlineTypeflowDemo from "./outline-typeflow-demo";
-import MorphingGlyphCloudDemo from "./morphing-glyph-cloud-demo";
-import ClothStudyDemo from "./cloth-study-demo";
-import RippleStudyDemo from "./ripple-study-demo";
-import BallStudyDemo from "./ball-study-demo";
-import BrandOrbDemo from "./brand-orb-demo";
+import LoomFieldDemo from "./loom-field-demo";
+import WordSwarmDemo from "./word-swarm-demo";
+import OrbLetteringDemo from "./orb-lettering-demo";
+import ContourStreamDemo from "./contour-stream-demo";
+import ShiftingSwarmDemo from "./shifting-swarm-demo";
+import DrapeTypeDemo from "./drape-type-demo";
+import GlyphSurgeDemo from "./glyph-surge-demo";
+import SphereSketchDemo from "./sphere-sketch-demo";
+import EmblemGlobeDemo from "./emblem-globe-demo";
 import AuroraVeilDemo from "./aurora-veil-demo";
 import SilkMeshDemo from "./silk-mesh-demo";
 import LiquidChromeOrbDemo from "./liquid-chrome-orb-demo";
@@ -163,14 +163,14 @@ import TowerLandscapeDemo from "./tower-landscape-demo";
 import BookshelfSceneDemo from "./bookshelf-scene-demo";
 import DotScreenDemo from "./dot-screen-demo";
 import TubelightDemo from "./tubelight-demo";
-import GalleryHeadingDemo from "./gallery-heading-demo";
+import SalonBannerDemo from "./salon-banner-demo";
 import ButtonAtlasDemo from "./button-atlas-demo";
-import EditorialIntroDemo from "./editorial-intro-demo";
-import NewsletterFooterDemo from "./newsletter-footer-demo";
-import DiagnosticsPanelDemo from "./diagnostics-panel-demo";
-import SkeuomorphicToggleDemo from "./skeuomorphic-toggle-demo";
-import WireframeFormDemo from "./wireframe-form-demo";
-import PerformanceGaugeDemo from "./performance-gauge-demo";
+import FolioOpeningDemo from "./folio-opening-demo";
+import DispatchColophonDemo from "./dispatch-colophon-demo";
+import VitalsBoardDemo from "./vitals-board-demo";
+import TactileSwitchDemo from "./tactile-switch-demo";
+import DraftFormDemo from "./draft-form-demo";
+import PaceDialDemo from "./pace-dial-demo";
 import ConjureButtonDemo from "./conjure-button-demo";
 import HaloTraceDemo from "./halo-trace-demo";
 import GlazeButtonDemo from "./glaze-button-demo";
@@ -179,11 +179,11 @@ import KilnButtonDemo from "./kiln-button-demo";
 import HairlineCtaDemo from "./hairline-cta-demo";
 import HaloInviteDemo from "./halo-invite-demo";
 import TerraceDuskDemo from "./terrace-dusk-demo";
-import LogicCoreDemo from "./logic-core-demo";
+import CircuitHeartDemo from "./circuit-heart-demo";
 import LensDriftDemo from "./lens-drift-demo";
 import ThreadSwellDemo from "./thread-swell-demo";
-import TopologyFieldDemo from "./topology-field-demo";
-import NebulaDemo from "./nebula-demo";
+import ReliefMeshDemo from "./relief-mesh-demo";
+import DustVeilDemo from "./dust-veil-demo";
 import RibbonLightDemo from "./ribbon-light-demo";
 import AshSpiralDemo from "./ash-spiral-demo";
 import DotWhirlDemo from "./dot-whirl-demo";
@@ -193,8 +193,8 @@ import InkEndcapButtonDemo from "./ink-endcap-button-demo";
 import PrismKeyDemo from "./prism-key-demo";
 import RoundGlyphDemo from "./round-glyph-demo";
 import PrismFlowButtonDemo from "./prism-flow-button-demo";
-import SparkBadgeDemo from "./spark-badge-demo";
-import SketchbookDemo from "./sketchbook-demo";
+import EmberTagDemo from "./ember-tag-demo";
+import DraftFolioDemo from "./draft-folio-demo";
 import InkCapsuleDemo from "./ink-capsule-demo";
 import KeystrokeButtonDemo from "./keystroke-button-demo";
 import StitchFrameButtonDemo from "./stitch-frame-button-demo";
@@ -202,13 +202,13 @@ import RisingMotesDemo from "./rising-motes-demo";
 import RollLabelDemo from "./roll-label-demo";
 import CometRingButtonDemo from "./comet-ring-button-demo";
 import SatinCapsuleDemo from "./satin-capsule-demo";
-import IntroWordmarkDemo from "./intro-wordmark-demo";
-import ParticleWordmarkDemo from "./particle-wordmark-demo";
-import AudioWordmarkDemo from "./audio-wordmark-demo";
-import CharacterCarouselDemo from "./character-carousel-demo";
-import UplinkLoaderDemo from "./uplink-loader-demo";
-import EngravedCertificateDemo from "./engraved-certificate-demo";
-import KoiStudiesDemo from "./koi-studies-demo";
+import OpeningMarkDemo from "./opening-mark-demo";
+import DustSignatureDemo from "./dust-signature-demo";
+import EchoLettersDemo from "./echo-letters-demo";
+import CastReelDemo from "./cast-reel-demo";
+import SignalRelayDemo from "./signal-relay-demo";
+import IntaglioDeedDemo from "./intaglio-deed-demo";
+import PondGlideDemo from "./pond-glide-demo";
 import type { ComponentName } from "./index";
 
 /** The demo rendered for each component in docs and standalone previews. */
@@ -306,58 +306,58 @@ export const demos: Record<ComponentName, ComponentType> = {
   "voice-pill": VoicePillDemo,
   "wake-slider": WakeSliderDemo,
   "warm-tooltip": WarmTooltipDemo,
-  "orbital-sphere": OrbitalSphereDemo,
+  "moon-lattice": MoonLatticeDemo,
   "resonance-plate": ResonancePlateDemo,
-  "stream-convergence": StreamConvergenceDemo,
-  "ribbon-field": RibbonFieldDemo,
-  "liquid-form": LiquidFormDemo,
+  "confluence-lines": ConfluenceLinesDemo,
+  "silk-bands": SilkBandsDemo,
+  "mercury-bloom": MercuryBloomDemo,
   "lumen-core": LumenCoreDemo,
-  laser: LaserDemo,
+  "light-cut": LightCutDemo,
   "stipple-tide": StippleTideDemo,
   "tide-line": TideLineDemo,
-  "structure-flow": StructureFlowDemo,
-  "warp-field": WarpFieldDemo,
-  "orbit-gallery": OrbitGalleryDemo,
+  "lattice-drift": LatticeDriftDemo,
+  "star-tunnel": StarTunnelDemo,
+  "plate-wheel": PlateWheelDemo,
   "node-weave": NodeWeaveDemo,
-  "portal-field": PortalFieldDemo,
+  "aperture-bloom": ApertureBloomDemo,
   "mosaic-crest": MosaicCrestDemo,
-  "predictive-arc": PredictiveArcDemo,
+  "forecast-curve": ForecastCurveDemo,
   "dew-pane": DewPaneDemo,
   "ink-pill": InkPillDemo,
-  "typography-vortex": TypographyVortexDemo,
+  "glyph-eddy": GlyphEddyDemo,
   "phosphor-tube": PhosphorTubeDemo,
-  "editorial-heading": EditorialHeadingDemo,
-  "generative-tree": GenerativeTreeDemo,
+  "folio-title": FolioTitleDemo,
+  "bough-study": BoughStudyDemo,
   "sigil-weather": SigilWeatherDemo,
-  "top-dock": TopDockDemo,
-  "particle-drift": ParticleDriftDemo,
-  "particle-network": ParticleNetworkDemo,
+  "crown-bar": CrownBarDemo,
+  "mote-beacon": MoteBeaconDemo,
+  "ink-rush": InkRushDemo,
   "arch-current": ArchCurrentDemo,
   "ink-fountain": InkFountainDemo,
-  "interface-lines": InterfaceLinesDemo,
+  "wire-ledger": WireLedgerDemo,
   "rising-strokes": RisingStrokesDemo,
-  "topo-field": TopoFieldDemo,
+  "contour-sheet": ContourSheetDemo,
   "night-gate": NightGateDemo,
   "starstream-button": StarstreamButtonDemo,
   "arc-halo-button": ArcHaloButtonDemo,
   "current-button": CurrentButtonDemo,
   inkwell: InkwellDemo,
   "muse-button": MuseButtonDemo,
-  "signal-particles": SignalParticlesDemo,
-  "override-grid": OverrideGridDemo,
-  "void-field": VoidFieldDemo,
-  "halftone-flow": HalftoneFlowDemo,
+  "pulse-dust": PulseDustDemo,
+  "signal-tiles": SignalTilesDemo,
+  "hollow-bloom": HollowBloomDemo,
+  "grain-swell": GrainSwellDemo,
   "ridge-strata": RidgeStrataDemo,
   "drift-lines": DriftLinesDemo,
-  "woven-cloth": WovenClothDemo,
-  "semantic-bloom": SemanticBloomDemo,
-  "globe-study": GlobeStudyDemo,
-  "outline-typeflow": OutlineTypeflowDemo,
-  "morphing-glyph-cloud": MorphingGlyphCloudDemo,
-  "cloth-study": ClothStudyDemo,
-  "ripple-study": RippleStudyDemo,
-  "ball-study": BallStudyDemo,
-  "brand-orb": BrandOrbDemo,
+  "loom-field": LoomFieldDemo,
+  "word-swarm": WordSwarmDemo,
+  "orb-lettering": OrbLetteringDemo,
+  "contour-stream": ContourStreamDemo,
+  "shifting-swarm": ShiftingSwarmDemo,
+  "drape-type": DrapeTypeDemo,
+  "glyph-surge": GlyphSurgeDemo,
+  "sphere-sketch": SphereSketchDemo,
+  "emblem-globe": EmblemGlobeDemo,
   "aurora-veil": AuroraVeilDemo,
   "silk-mesh": SilkMeshDemo,
   "liquid-chrome-orb": LiquidChromeOrbDemo,
@@ -377,14 +377,14 @@ export const demos: Record<ComponentName, ComponentType> = {
   "bookshelf-scene": BookshelfSceneDemo,
   "dot-screen": DotScreenDemo,
   tubelight: TubelightDemo,
-  "gallery-heading": GalleryHeadingDemo,
+  "salon-banner": SalonBannerDemo,
   "button-atlas": ButtonAtlasDemo,
-  "editorial-intro": EditorialIntroDemo,
-  "newsletter-footer": NewsletterFooterDemo,
-  "diagnostics-panel": DiagnosticsPanelDemo,
-  "skeuomorphic-toggle": SkeuomorphicToggleDemo,
-  "wireframe-form": WireframeFormDemo,
-  "performance-gauge": PerformanceGaugeDemo,
+  "folio-opening": FolioOpeningDemo,
+  "dispatch-colophon": DispatchColophonDemo,
+  "vitals-board": VitalsBoardDemo,
+  "tactile-switch": TactileSwitchDemo,
+  "draft-form": DraftFormDemo,
+  "pace-dial": PaceDialDemo,
   "conjure-button": ConjureButtonDemo,
   "halo-trace": HaloTraceDemo,
   "glaze-button": GlazeButtonDemo,
@@ -393,11 +393,11 @@ export const demos: Record<ComponentName, ComponentType> = {
   "hairline-cta": HairlineCtaDemo,
   "halo-invite": HaloInviteDemo,
   "terrace-dusk": TerraceDuskDemo,
-  "logic-core": LogicCoreDemo,
+  "circuit-heart": CircuitHeartDemo,
   "lens-drift": LensDriftDemo,
   "thread-swell": ThreadSwellDemo,
-  "topology-field": TopologyFieldDemo,
-  nebula: NebulaDemo,
+  "relief-mesh": ReliefMeshDemo,
+  "dust-veil": DustVeilDemo,
   "ribbon-light": RibbonLightDemo,
   "ash-spiral": AshSpiralDemo,
   "dot-whirl": DotWhirlDemo,
@@ -407,8 +407,8 @@ export const demos: Record<ComponentName, ComponentType> = {
   "prism-key": PrismKeyDemo,
   "round-glyph": RoundGlyphDemo,
   "prism-flow-button": PrismFlowButtonDemo,
-  "spark-badge": SparkBadgeDemo,
-  sketchbook: SketchbookDemo,
+  "ember-tag": EmberTagDemo,
+  "draft-folio": DraftFolioDemo,
   "ink-capsule": InkCapsuleDemo,
   "keystroke-button": KeystrokeButtonDemo,
   "stitch-frame-button": StitchFrameButtonDemo,
@@ -416,13 +416,13 @@ export const demos: Record<ComponentName, ComponentType> = {
   "roll-label": RollLabelDemo,
   "comet-ring-button": CometRingButtonDemo,
   "satin-capsule": SatinCapsuleDemo,
-  "intro-wordmark": IntroWordmarkDemo,
-  "particle-wordmark": ParticleWordmarkDemo,
-  "audio-wordmark": AudioWordmarkDemo,
-  "character-carousel": CharacterCarouselDemo,
-  "uplink-loader": UplinkLoaderDemo,
-  "engraved-certificate": EngravedCertificateDemo,
-  "koi-studies": KoiStudiesDemo,
+  "opening-mark": OpeningMarkDemo,
+  "dust-signature": DustSignatureDemo,
+  "echo-letters": EchoLettersDemo,
+  "cast-reel": CastReelDemo,
+  "signal-relay": SignalRelayDemo,
+  "intaglio-deed": IntaglioDeedDemo,
+  "pond-glide": PondGlideDemo,
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

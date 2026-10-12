@@ -1,0 +1,53 @@
+---
+title: Confluence Lines
+description: A WebGL shader of three light streams meeting on the page background, inked in the theme primary, foreground and muted tones.
+---
+
+A WebGL shader of three light streams meeting on the page background, inked in the theme primary, foreground and muted tones. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Stream Convergence (MIT).
+
+<ComponentPreview name="confluence-lines" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add confluence-lines
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/confluence-lines.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ConfluenceLines } from "@/components/ui/confluence-lines";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ConfluenceLines />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type       | Default                                        | Description                       |
+| :---------------- | :--------- | :--------------------------------------------- | :-------------------------------- |
+| `speed`           | `number`   | `1`                                            | Animation speed multiplier.       |
+| `fidelity`        | `number`   | `0.5`                                          | Spread between the three streams. |
+| `scale`           | `number`   | `1`                                            | Scale of the rendered canvas.     |
+| `brightness`      | `number`   | `1`                                            | CSS brightness filter.            |
+| `opacity`         | `number`   | `1`                                            | Canvas opacity.                   |
+| `hue`             | `number`   | `0`                                            | Hue rotation in degrees.          |
+| `saturation`      | `number`   | `1`                                            | CSS saturation filter.            |
+| `backgroundColor` | `string`   | theme background                               | Background behind the canvas.     |
+| `colors`          | `string[]` | theme primary, foreground and muted foreground | One colour per stream.            |

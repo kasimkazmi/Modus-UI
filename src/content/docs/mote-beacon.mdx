@@ -1,0 +1,53 @@
+---
+title: Mote Beacon
+description: Italic serif letters and marks sinking through the page while accent beams rise, threading themselves to your pointer.
+---
+
+About seventy italic letters and editorial marks (§ ¶ † &) set in the theme heading font sink down the page, swapping characters and linking to their neighbours with hairlines, while beams in `--primary` rise through them. Marks near the pointer take the accent and connect to it. Everything is drawn from theme tokens on `--background` and follows palette and mode changes live. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Particle Drift (MIT).
+
+<ComponentPreview name="mote-beacon" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mote-beacon
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mote-beacon.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MoteBeacon } from "@/components/ui/mote-beacon";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <MoteBeacon />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                         |
+| :---------------- | :------- | :------------------- | :-------------------------------------------------- |
+| `speed`           | `number` | `1`                  | Animation speed multiplier (0–3).                   |
+| `size`            | `number` | `1`                  | Stroke / scale multiplier.                          |
+| `length`          | `number` | `1`                  | Length / reach multiplier (0.35–2.5).               |
+| `density`         | `number` | `0.8`                | Glyph and beam count multiplier. (0.25–2.5).        |
+| `opacity`         | `number` | `1`                  | Opacity of the effect layer (0.05–1).               |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees applied to the final frame. |
+| `saturation`      | `number` | `1`                  | Saturation multiplier applied to the final frame.   |
+| `brightness`      | `number` | `1`                  | Brightness multiplier applied to the final frame.   |
+| `backgroundColor` | `string` | theme `--background` | Background colour behind the canvas.                |

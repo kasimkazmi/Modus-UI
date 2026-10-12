@@ -1,0 +1,46 @@
+---
+title: Signal Relay
+description: A ticked progress readout in your theme colours, with a glowing percentage and press-room phase labels.
+---
+
+Set on the page paper in the theme primary, a 56-tick progress bar fills through a scripted run, lighting each tick with a flash while a glowing mono percentage readout flickers above it and a status line steps through its phases. Scanlines, film grain and a glitch on each restart finish the look. It scales a 1200×800 stage to fit its parent, pauses off screen and shows a still frame at 50% when the user prefers reduced motion. Ported from ThreeUI Community's Uplink Loader (MIT).
+
+<ComponentPreview name="signal-relay" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add signal-relay
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/signal-relay.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SignalRelay } from "@/components/ui/signal-relay";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full">
+      <SignalRelay label="PRESS RUN" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                 | Default                           | Description                                                    |
+| :---------------- | :------------------- | :-------------------------------- | :------------------------------------------------------------- |
+| `label`           | `string`             | `"PRESS RUN"`                     | Label above the progress bar.                                  |
+| `phases`          | `[number, string][]` | five press phases from 0% to 100% | Status lines, each shown from its percentage threshold upward. |
+| `duration`        | `number`             | `8600`                            | Duration of the 0 → 100 run, in milliseconds.                  |
+| `color`           | `string`             | `"hsl(var(--primary))"`           | Accent colour for the lit ticks, readout and glow.             |
+| `backgroundColor` | `string`             | `"hsl(var(--background))"`        | Screen background.                                             |

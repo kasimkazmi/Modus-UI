@@ -1,0 +1,50 @@
+---
+title: Wire Ledger
+description: Drifting points joined by hairlines when they come within reach, inked in your theme.
+---
+
+Points drift and bounce inside the frame and are joined by fine ink hairlines whenever they come within reach of each other, drawn from the theme's foreground and primary on the page ground. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Interface Lines (MIT, © 2026 Meng To).
+
+<ComponentPreview name="wire-ledger" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add wire-ledger
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/wire-ledger.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { WireLedger } from "@/components/ui/wire-ledger";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <WireLedger />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                  | Description                                         |
+| :---------------- | :------- | :----------------------- | :-------------------------------------------------- |
+| `speed`           | `number` | `1`                      | Animation speed multiplier (0–3).                   |
+| `size`            | `number` | `1`                      | Stroke / scale multiplier.                          |
+| `length`          | `number` | `1`                      | Length / reach multiplier (0.35–2.5).               |
+| `density`         | `number` | `1`                      | Point count multiplier (0.25–2.5).                  |
+| `opacity`         | `number` | `1`                      | Opacity of the effect layer (0.05–1).               |
+| `hue`             | `number` | `0`                      | Hue rotation in degrees applied to the final frame. |
+| `saturation`      | `number` | `1`                      | Saturation multiplier applied to the final frame.   |
+| `brightness`      | `number` | `1`                      | Brightness multiplier applied to the final frame.   |
+| `backgroundColor` | `string` | `hsl(var(--background))` | Colour behind the canvas, any CSS colour.           |

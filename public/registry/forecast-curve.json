@@ -1,0 +1,55 @@
+{
+  "name": "forecast-curve",
+  "title": "Forecast Curve",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/forecast-curve.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Predictive Arc (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nconst readToken = (name: string) =>\n  getComputedStyle(document.documentElement).getPropertyValue(name).trim();\n\nexport interface ForecastCurveProps {\n  speed?: number;\n  spacing?: number;\n  dotSize?: number;\n  archHeight?: number;\n  thickness?: number;\n  brightness?: number;\n  hue?: number;\n  saturation?: number;\n  backgroundColor?: string;\n  className?: string;\n}\n\nexport function ForecastCurve({\n  speed = 1,\n  spacing = 7,\n  dotSize = 5,\n  archHeight = 0.5,\n  thickness = 1,\n  brightness = 1,\n  hue = 0,\n  saturation = 1,\n  backgroundColor,\n  className,\n}: ForecastCurveProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const options = useRef({\n    speed,\n    spacing,\n    dotSize,\n    archHeight,\n    thickness,\n    brightness,\n    backgroundColor,\n  });\n  options.current = {\n    speed,\n    spacing,\n    dotSize,\n    archHeight,\n    thickness,\n    brightness,\n    backgroundColor,\n  };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    const context = canvas?.getContext(\"2d\", { alpha: false });\n    if (!host || !canvas || !context) return;\n\n    let width = 1;\n    let height = 1;\n    let time = 0;\n    let background = \"\";\n    let accent = \"\";\n    let ink = \"\";\n    let isLight = true;\n    const readTheme = () => {\n      background = readToken(\"--background\");\n      accent = readToken(\"--primary\");\n      ink = readToken(\"--muted-foreground\");\n      isLight = Number.parseFloat(background.split(/\\s+/)[2] ?? \"100\") > 50;\n    };\n    readTheme();\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      width = Math.max(1, bounds.width);\n      height = Math.max(1, bounds.height);\n      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);\n      canvas.width = Math.round(width * pixelRatio);\n      canvas.height = Math.round(height * pixelRatio);\n      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);\n    };\n\n    const render = () => {\n      const o = options.current;\n      context.fillStyle = o.backgroundColor ?? `hsl(${background})`;\n      context.fillRect(0, 0, width, height);\n      time += 0.015 * o.speed;\n\n      const centerX = width / 2;\n      // A rising curve: low in the middle, lifting toward both edges.\n      const archPeakY = height * 0.72;\n      const archWidth = width * 1.5;\n      const archHeight = height * o.archHeight;\n      context.globalCompositeOperation = isLight ? \"source-over\" : \"lighter\";\n\n      for (let x = 0; x < width; x += o.spacing) {\n        const normX = (x - centerX) / (archWidth / 2);\n        const curveY = archPeakY - normX * normX * archHeight;\n        for (let y = 0; y < height; y += o.spacing) {\n          const distanceToCurve = Math.abs(y - curveY);\n          const band = (90 + (1 - Math.abs(normX)) * 60) * o.thickness;\n          if (distanceToCurve >= band) continue;\n          let intensity = 1 - distanceToCurve / band;\n          const waveX = Math.sin(x * 0.015 + time);\n          const waveY = Math.cos(y * 0.02 + time);\n          intensity = intensity * 0.7 + waveX * waveY * 0.3 * intensity;\n          intensity *= Math.max(0, 1 - Math.pow(Math.abs(normX), 2.5));\n          if (intensity <= 0.02) continue;\n\n          // Cores take the accent; the band's edges stay in muted ink.\n          const alpha = Math.min(1, intensity * o.brightness);\n          context.fillStyle = `hsl(${intensity > 0.6 ? accent : ink} / ${alpha.toFixed(2)})`;\n          context.fillRect(x, y, o.dotSize * intensity, o.dotSize * intensity);\n        }\n      }\n      context.globalCompositeOperation = \"source-over\";\n    };\n\n    let frame = 0;\n    let visible = true;\n    const tick = () => {\n      render();\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (prefersReducedMotion || frame || !visible || document.hidden) return;\n      frame = requestAnimationFrame(tick);\n    };\n    const stop = () => {\n      if (frame) cancelAnimationFrame(frame);\n      frame = 0;\n    };\n\n    const resizeObserver = new ResizeObserver(() => {\n      resize();\n      render();\n    });\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else stop();\n    });\n    const onVisibility = () => (document.hidden ? stop() : start());\n\n    resize();\n    render();\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    start();\n    const themeObserver = new MutationObserver(() => {\n      readTheme();\n      render();\n    });\n    themeObserver.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"style\", \"data-theme\", \"data-palette\"],\n    });\n\n    return () => {\n      stop();\n      themeObserver.disconnect();\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n    };\n  }, [prefersReducedMotion]);\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\" }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ filter: `hue-rotate(${hue}deg) saturate(${saturation})` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.6,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

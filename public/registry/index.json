@@ -313,10 +313,10 @@
       ]
     },
     {
-      "name": "orbital-sphere",
-      "title": "Orbital Sphere",
+      "name": "moon-lattice",
+      "title": "Moon Lattice",
       "category": "Backgrounds",
-      "description": "A WebGL sphere of 15,000 violet particles ringed by slowly turning orbits and glowing nodes.",
+      "description": "A centred WebGL globe of noise-carved points, tilted and threaded with thin rings, inked in the theme colours.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -336,10 +336,10 @@
       ]
     },
     {
-      "name": "stream-convergence",
-      "title": "Stream Convergence",
+      "name": "confluence-lines",
+      "title": "Confluence Lines",
       "category": "Backgrounds",
-      "description": "A WebGL shader background of three converging red, green and blue light streams on black.",
+      "description": "A WebGL shader of three light streams meeting on the page background, inked in the theme primary, foreground and muted tones.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -347,10 +347,10 @@
       ]
     },
     {
-      "name": "ribbon-field",
-      "title": "Ribbon Field",
+      "name": "silk-bands",
+      "title": "Silk Bands",
       "category": "Backgrounds",
-      "description": "A WebGL shader background of glowing teal and violet ribbons drawn through a halftone dot grid.",
+      "description": "A WebGL background of slow, wide bands printed through a coarse halftone screen in a ramp of the theme colours.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -358,10 +358,10 @@
       ]
     },
     {
-      "name": "liquid-form",
-      "title": "Liquid Form",
+      "name": "mercury-bloom",
+      "title": "Mercury Bloom",
       "category": "Backgrounds",
-      "description": "A raymarched WebGL liquid-metal blob that morphs slowly and turns toward the pointer.",
+      "description": "A raymarched WebGL blob of liquid metal that reflects your theme and turns toward the pointer.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -380,10 +380,10 @@
       ]
     },
     {
-      "name": "laser",
-      "title": "Laser",
+      "name": "light-cut",
+      "title": "Light Cut",
       "category": "Backgrounds",
-      "description": "A WebGL shader background of a green laser blade cutting through drifting fog, with four more variants, including a crossing light-beam junction.",
+      "description": "A WebGL shader of a beam of light cutting through fog, tinted from your theme, with five scenes.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -415,10 +415,10 @@
       ]
     },
     {
-      "name": "structure-flow",
-      "title": "Structure Flow",
+      "name": "lattice-drift",
+      "title": "Lattice Drift",
       "category": "Backgrounds",
-      "description": "A WebGL dome of 15,000 white particles slowly turning beneath a fading mask.",
+      "description": "A WebGL dome of ink points turning slowly under a fading mask, with scattered accent points in the theme primary.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -427,10 +427,10 @@
       ]
     },
     {
-      "name": "warp-field",
-      "title": "Warp Field",
+      "name": "star-tunnel",
+      "title": "Star Tunnel",
       "category": "Backgrounds",
-      "description": "A WebGL warp-speed corridor of streaks with four variants: streaks, letters, keycaps and hyperspace.",
+      "description": "A WebGL flight down a corridor of letters, streaks, keycaps or rings, coloured from a ramp of the theme primary and foreground.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -439,10 +439,10 @@
       ]
     },
     {
-      "name": "orbit-gallery",
-      "title": "Orbit Gallery",
+      "name": "plate-wheel",
+      "title": "Plate Wheel",
       "category": "Backgrounds",
-      "description": "A WebGL helix of curved image panels turning and bobbing over a dotted paper background.",
+      "description": "A tilted WebGL wheel of curved, muted image plates turning over a ruled sheet in the theme colours.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -462,10 +462,10 @@
       ]
     },
     {
-      "name": "portal-field",
-      "title": "Portal Field",
+      "name": "aperture-bloom",
+      "title": "Aperture Bloom",
       "category": "Backgrounds",
-      "description": "A WebGL shader ring of white light with a deep blue fringe that warps slowly and follows the pointer.",
+      "description": "A centred, noise-warped pair of WebGL rings inked in the theme colours that leans toward the pointer.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -485,10 +485,10 @@
       ]
     },
     {
-      "name": "predictive-arc",
-      "title": "Predictive Arc",
+      "name": "forecast-curve",
+      "title": "Forecast Curve",
       "category": "Backgrounds",
-      "description": "A violet dotted arch whose dots swell and shimmer in moving waves on a black background.",
+      "description": "A rising dotted curve whose dots swell and shimmer in crossing waves, inked in the theme accent.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -518,10 +518,10 @@
       ]
     },
     {
-      "name": "typography-vortex",
-      "title": "Typography Vortex",
+      "name": "glyph-eddy",
+      "title": "Glyph Eddy",
       "category": "Backgrounds",
-      "description": "Rotating rings of monospaced type that dissolve into glyph dust under the cursor and get sucked into a sink on click.",
+      "description": "Turning rings of set type that crumble into glyph dust under the cursor and gather into the centre on click, drawn in the Modus type and theme ink.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -540,10 +540,10 @@
       ]
     },
     {
-      "name": "editorial-heading",
-      "title": "Editorial Heading",
+      "name": "folio-title",
+      "title": "Folio Title",
       "category": "Typography",
-      "description": "A field-notes list whose article headings decode from scrambled glyphs into their titles.",
+      "description": "A journal index whose italic serif titles decode from scrambled glyphs, set in your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1314,10 +1314,10 @@
       ]
     },
     {
-      "name": "generative-tree",
-      "title": "Generative Tree",
+      "name": "bough-study",
+      "title": "Bough Study",
       "category": "Backgrounds",
-      "description": "A painterly Canvas 2D tree that grows branch by branch, sways in the wind, fades and regrows.",
+      "description": "A painterly canvas tree that grows, sways and regrows in ink drawn from your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1336,10 +1336,10 @@
       ]
     },
     {
-      "name": "top-dock",
-      "title": "Top Dock",
+      "name": "crown-bar",
+      "title": "Crown Bar",
       "category": "Navigation",
-      "description": "A proximity-spring navigation dock in four fits — a centred dock, a command bar, a dithered pixel terminal and a refracting glass rail.",
+      "description": "A proximity-spring navigation bar in four fits — a masthead command bar, a centred pill, a dithered pixel strip and a refracting glass rail.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1348,10 +1348,10 @@
       ]
     },
     {
-      "name": "particle-drift",
-      "title": "Particle Drift",
+      "name": "mote-beacon",
+      "title": "Mote Beacon",
       "category": "Backgrounds",
-      "description": "A drifting field of ASCII glyphs and rising light beams that link up to your pointer.",
+      "description": "Italic serif letters and marks sinking through the page while accent beams rise, threading themselves to your pointer.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1359,10 +1359,10 @@
       ]
     },
     {
-      "name": "particle-network",
-      "title": "Particle Network",
+      "name": "ink-rush",
+      "title": "Ink Rush",
       "category": "Backgrounds",
-      "description": "A 3D starfield of hairline streaks rushing toward the viewer.",
+      "description": "Rounded ink strokes rushing out of a high vanishing point, in the theme ink and accent.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1392,10 +1392,10 @@
       ]
     },
     {
-      "name": "interface-lines",
-      "title": "Interface Lines",
+      "name": "wire-ledger",
+      "title": "Wire Ledger",
       "category": "Backgrounds",
-      "description": "A plexus of bouncing points joined by thin lines when close together.",
+      "description": "Drifting points joined by hairlines when they come within reach, inked in your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1414,10 +1414,10 @@
       ]
     },
     {
-      "name": "topo-field",
-      "title": "Topo Field",
+      "name": "contour-sheet",
+      "title": "Contour Sheet",
       "category": "Backgrounds",
-      "description": "A WebGL topographic contour map drifting over a fine pixel grid.",
+      "description": "A WebGL contour map drawn like a survey sheet: ink contours on paper, with every fifth index line in the theme primary.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1491,10 +1491,10 @@
       ]
     },
     {
-      "name": "signal-particles",
-      "title": "Signal Particles",
+      "name": "pulse-dust",
+      "title": "Pulse Dust",
       "category": "Backgrounds",
-      "description": "A dark dot field where travelling sine waves light up a grid of signal particles, with rare blue and purple highlights.",
+      "description": "A grain field on the page's own paper where slow travelling waves swell the dots, with rare accent grains in the theme primary.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1502,10 +1502,10 @@
       ]
     },
     {
-      "name": "override-grid",
-      "title": "Override Grid",
+      "name": "signal-tiles",
+      "title": "Signal Tiles",
       "category": "Backgrounds",
-      "description": "A block-by-block grid that pulses outward from the centre in telemetry orange.",
+      "description": "Rounded tiles that swell in waves rolling across the frame from one corner, crested in the theme accent.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1513,10 +1513,10 @@
       ]
     },
     {
-      "name": "void-field",
-      "title": "Void Field",
+      "name": "hollow-bloom",
+      "title": "Hollow Bloom",
       "category": "Backgrounds",
-      "description": "A curved CRT-style dot matrix that breathes outward from the centre and drifts with the pointer.",
+      "description": "A curved dot matrix that blooms outward from a hollow centre and drifts with the pointer, tinted from the theme primary.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1524,10 +1524,10 @@
       ]
     },
     {
-      "name": "halftone-flow",
-      "title": "Halftone Flow",
+      "name": "grain-swell",
+      "title": "Grain Swell",
       "category": "Backgrounds",
-      "description": "A flowing field resolved through a halftone dot matrix, with a red-orange shader variant and an amber Three.js point-field variant.",
+      "description": "A flowing field resolved through a dot screen, inked in your theme on the page ground.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1558,10 +1558,10 @@
       ]
     },
     {
-      "name": "woven-cloth",
-      "title": "Woven Cloth",
+      "name": "loom-field",
+      "title": "Loom Field",
       "category": "Backgrounds",
-      "description": "A Three.js Verlet cloth with typography woven into its textile, in four cloths — printed linen, iridescent silk, a flown atelier flag and a washi noren.",
+      "description": "A Three.js Verlet cloth printed with Modus type in the theme ink, plus three dramatic cloths — iridescent silk, a flown folio flag and a washi noren.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1570,10 +1570,10 @@
       ]
     },
     {
-      "name": "semantic-bloom",
-      "title": "Semantic Bloom",
+      "name": "word-swarm",
+      "title": "Word Swarm",
       "category": "Typography",
-      "description": "Gooey particles drift over large type and light up the words they touch.",
+      "description": "A gooey swarm of cells drifts over serif type and turns each word it touches to ink and italic.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1581,10 +1581,10 @@
       ]
     },
     {
-      "name": "globe-study",
-      "title": "Globe Study",
+      "name": "orb-lettering",
+      "title": "Orb Lettering",
       "category": "Typography",
-      "description": "A canvas globe whose land is drawn as type along the latitude lines, with a halftone ocean.",
+      "description": "A canvas sphere whose land is set in italic serif type along the latitudes, inked in your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1592,10 +1592,10 @@
       ]
     },
     {
-      "name": "outline-typeflow",
-      "title": "Outline Typeflow",
+      "name": "contour-stream",
+      "title": "Contour Stream",
       "category": "Typography",
-      "description": "A sentence flowing around the outline of an SVG mark, drawn on canvas.",
+      "description": "A sentence in italic serif running around the contour of an SVG mark, drawn on canvas.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1603,10 +1603,10 @@
       ]
     },
     {
-      "name": "morphing-glyph-cloud",
-      "title": "Morphing Glyph Cloud",
+      "name": "shifting-swarm",
+      "title": "Shifting Swarm",
       "category": "Typography",
-      "description": "A cloud of glyphs filling one SVG mark that morphs into another on click.",
+      "description": "A swarm of serif glyphs filling one SVG mark that turns into another on click.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1614,10 +1614,10 @@
       ]
     },
     {
-      "name": "cloth-study",
-      "title": "Cloth Study",
+      "name": "drape-type",
+      "title": "Drape Type",
       "category": "Typography",
-      "description": "A verlet cloth woven from letters that shear with the weave. Grab it and pull.",
+      "description": "A verlet drape woven from italic serif letters in your theme's ink. Grab it and pull.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1625,10 +1625,10 @@
       ]
     },
     {
-      "name": "ripple-study",
-      "title": "Ripple Study",
+      "name": "glyph-surge",
+      "title": "Glyph Surge",
       "category": "Typography",
-      "description": "A monospace glyph plate where every click sends a ring of weight through the type.",
+      "description": "A quiet field of mono glyphs where every click sends a surge of weight and colour through the type.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1636,10 +1636,10 @@
       ]
     },
     {
-      "name": "ball-study",
-      "title": "Ball Study",
+      "name": "sphere-sketch",
+      "title": "Sphere Sketch",
       "category": "Typography",
-      "description": "Glyphs scattered over a spinning sphere; click to knock letters loose.",
+      "description": "Italic serif letters wrapped around a turning globe; click to shake some loose.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1647,10 +1647,10 @@
       ]
     },
     {
-      "name": "brand-orb",
-      "title": "Brand Orb",
+      "name": "emblem-globe",
+      "title": "Emblem Globe",
       "category": "Components",
-      "description": "A tiny animated dot-matrix orb that draws 23 brand marks, from Claude and OpenAI to GitHub and Email.",
+      "description": "A tiny dot-matrix globe that draws 23 marks in the theme ink, for a status pill or an avatar slot.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1658,10 +1658,10 @@
       ]
     },
     {
-      "name": "diagnostics-panel",
-      "title": "Diagnostics Panel",
+      "name": "vitals-board",
+      "title": "Vitals Board",
       "category": "Components",
-      "description": "An isometric emerald wireframe readout with layered planes, node cubes or a flowing mesh.",
+      "description": "An isometric ink-line readout in your theme colours, with floating node cubes, layered planes or a flowing mesh.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1669,10 +1669,10 @@
       ]
     },
     {
-      "name": "skeuomorphic-toggle",
-      "title": "Skeuomorphic Toggle",
+      "name": "tactile-switch",
+      "title": "Tactile Switch",
       "category": "Components",
-      "description": "One switch in four treatments: tactile skeuomorphic, flat modern, Three.js glass and a shader-lit plasma capsule.",
+      "description": "One switch in four treatments drawn from the Modus tokens: a flat sprung switch, a pressed-paper tactile slider, Three.js glass and a shader-lit capsule.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1681,10 +1681,10 @@
       ]
     },
     {
-      "name": "wireframe-form",
-      "title": "Wireframe Form",
+      "name": "draft-form",
+      "title": "Draft Form",
       "category": "Components",
-      "description": "A slowly rotating perspective wireframe: a hypercube, interlocking cylinders or a nested icosahedron.",
+      "description": "A turning wireframe solid inked on a drafting guide, in your theme's colours.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1692,10 +1692,10 @@
       ]
     },
     {
-      "name": "performance-gauge",
-      "title": "Performance Gauge",
+      "name": "pace-dial",
+      "title": "Pace Dial",
       "category": "Data Display",
-      "description": "A machined automotive gauge with a self-test needle sweep, in tachometer, speedometer, boost and power variants.",
+      "description": "A printed instrument dial with a self-test needle sweep, in speedometer, tachometer, boost and power variants.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1792,10 +1792,10 @@
       ]
     },
     {
-      "name": "logic-core",
-      "title": "Logic Core",
+      "name": "circuit-heart",
+      "title": "Circuit Heart",
       "category": "Backgrounds",
-      "description": "An isometric Three.js platform with a pulsing cyan core and orbiting data nodes.",
+      "description": "An isometric Three.js platform with a pulsing core and orbiting nodes, lit from your theme.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1828,10 +1828,10 @@
       ]
     },
     {
-      "name": "topology-field",
-      "title": "Topology Field",
+      "name": "relief-mesh",
+      "title": "Relief Mesh",
       "category": "Backgrounds",
-      "description": "A rotating Fibonacci globe of pulsing nodes joined by fading links.",
+      "description": "A slowly turning mesh globe of pulsing nodes joined by fine links, inked in theme tokens and fading into the page background.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1840,10 +1840,10 @@
       ]
     },
     {
-      "name": "nebula",
-      "title": "Nebula",
+      "name": "dust-veil",
+      "title": "Dust Veil",
       "category": "Backgrounds",
-      "description": "An indigo fbm nebula that drifts toward the pointer.",
+      "description": "A drifting fbm veil of dust in your theme's tones that leans toward the pointer.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1954,10 +1954,10 @@
       ]
     },
     {
-      "name": "spark-badge",
-      "title": "Spark Badge",
+      "name": "ember-tag",
+      "title": "Ember Tag",
       "category": "Components",
-      "description": "A credential badge on a lanyard drawn entirely from embers, standing in slanted rain above a waterline.",
+      "description": "A lanyard tag sketched in thousands of theme-ink embers, standing in light slanted rain above a waterline.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1965,10 +1965,10 @@
       ]
     },
     {
-      "name": "sketchbook",
-      "title": "Sketchbook",
+      "name": "draft-folio",
+      "title": "Draft Folio",
       "category": "Components",
-      "description": "An open sketchbook whose leaves curl as you drag them, with a brass magnifier you can slide across the page.",
+      "description": "An open folio in theme ink whose leaves curl as you drag them, with a primary-tinted loupe you can slide across the page.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2053,10 +2053,10 @@
       ]
     },
     {
-      "name": "intro-wordmark",
-      "title": "Intro Wordmark",
+      "name": "opening-mark",
+      "title": "Opening Mark",
       "category": "Typography",
-      "description": "A keynote-style wordmark that assembles letter by letter with chromatic fringes, then holds and loops.",
+      "description": "An opening title in the theme's italic serif that assembles letter by letter, then holds and loops.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2064,10 +2064,10 @@
       ]
     },
     {
-      "name": "particle-wordmark",
-      "title": "Particle Wordmark",
+      "name": "dust-signature",
+      "title": "Dust Signature",
       "category": "Typography",
-      "description": "A word drawn from a grid of dots and squares, lit by drifting snowfall bands.",
+      "description": "A word set in the theme's italic serif, drawn from a grid of dots and squares lit by drifting bands.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2075,10 +2075,10 @@
       ]
     },
     {
-      "name": "audio-wordmark",
-      "title": "Audio Wordmark",
+      "name": "echo-letters",
+      "title": "Echo Letters",
       "category": "Typography",
-      "description": "A radio-identity wordmark over two equaliser discs, one with pulsing bars and one cut out.",
+      "description": "A serif wordmark between two offset equaliser discs, one pulsing in your primary colour and one cut from a plate.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2086,10 +2086,10 @@
       ]
     },
     {
-      "name": "character-carousel",
-      "title": "Character Carousel",
+      "name": "cast-reel",
+      "title": "Cast Reel",
       "category": "Data Display",
-      "description": "A 3D carousel of profile cards, as an editorial filmstrip or a dark card wave.",
+      "description": "A 3D reel of team cards, as a tonal card wave or a contact-sheet filmstrip, coloured by your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2097,10 +2097,10 @@
       ]
     },
     {
-      "name": "uplink-loader",
-      "title": "Uplink Loader",
+      "name": "signal-relay",
+      "title": "Signal Relay",
       "category": "Components",
-      "description": "A green terminal-style progress loader with a ticked bar, glowing readout and phase labels.",
+      "description": "A ticked progress readout in your theme colours, with a glowing percentage and press-room phase labels.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2108,10 +2108,10 @@
       ]
     },
     {
-      "name": "engraved-certificate",
-      "title": "Engraved Certificate",
+      "name": "intaglio-deed",
+      "title": "Intaglio Deed",
       "category": "Components",
-      "description": "A guilloche-engraved certificate whose rosette cycles through four lathe cams.",
+      "description": "A guilloche intaglio deed in theme ink whose rosette cycles through four lathe cams.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2119,10 +2119,10 @@
       ]
     },
     {
-      "name": "koi-studies",
-      "title": "Koi Studies",
+      "name": "pond-glide",
+      "title": "Pond Glide",
       "category": "Backgrounds",
-      "description": "A draggable stack of three koi cards over a swirling shader background, with pixel-tile reveals.",
+      "description": "A draggable stack of three cards over a slow theme-tinted swirl, with pixel-tile reveals.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2213,10 +2213,10 @@
       ]
     },
     {
-      "name": "gallery-heading",
-      "title": "Gallery Heading",
+      "name": "salon-banner",
+      "title": "Salon Banner",
       "category": "Typography",
-      "description": "An oversized headline ringed by twelve noise-shaded plates that orbit while hovered.",
+      "description": "An oversized serif headline ringed by twelve plates mixed from your theme, orbiting while hovered.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2235,10 +2235,10 @@
       ]
     },
     {
-      "name": "editorial-intro",
-      "title": "Editorial Intro",
+      "name": "folio-opening",
+      "title": "Folio Opening",
       "category": "Sections",
-      "description": "A centred editorial intro with a dimly lit device illustration, circuit traces and oversized gradient type.",
+      "description": "A two-column opening spread with a serif headline, a ruled lede and an inked device illustration in your theme colours.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2246,10 +2246,10 @@
       ]
     },
     {
-      "name": "newsletter-footer",
-      "title": "Newsletter Footer",
+      "name": "dispatch-colophon",
+      "title": "Dispatch Colophon",
       "category": "Sections",
-      "description": "A dark product footer with an inline newsletter form, an oversized closing phrase and compact legal links.",
+      "description": "An editorial footer with an outlined serif sign-off, a ruled sign-up line and mono legal links, drawn from your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",

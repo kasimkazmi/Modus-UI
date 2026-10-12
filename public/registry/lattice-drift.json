@@ -1,0 +1,65 @@
+{
+  "name": "lattice-drift",
+  "title": "Lattice Drift",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/lattice-drift.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Structure Flow (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface LatticeDriftProps {\n  speed?: number;\n  pointSize?: number;\n  opacity?: number;\n  maskStart?: number;\n  maskSolid?: number;\n  /** Colour of most points. Defaults to the theme foreground. */\n  color?: string;\n  /** Colour of the scattered accent points. Defaults to the theme primary. */\n  accentColor?: string;\n  /** Defaults to the theme background. */\n  backgroundColor?: string;\n  className?: string;\n}\n\ntype Rgb = [number, number, number];\nconst TOKENS = [\n  \"background\",\n  \"foreground\",\n  \"primary\",\n  \"muted-foreground\",\n  \"border\",\n  \"card\",\n] as const;\ntype Theme = Record<(typeof TOKENS)[number], Rgb>;\n\n/** Any CSS colour as 0–1 sRGB channels, resolved by the browser. */\nfunction toRgb(color: string): Rgb {\n  const probe = document.createElement(\"i\");\n  probe.style.display = \"none\";\n  probe.style.color = color;\n  document.body.appendChild(probe);\n  const [r = 0, g = 0, b = 0] = (getComputedStyle(probe).color.match(/[\\d.]+/g) ?? []).map(Number);\n  probe.remove();\n  return [r / 255, g / 255, b / 255];\n}\n\n/** The Modus theme tokens, re-read whenever the mode or palette on <html> changes. */\nfunction useTheme() {\n  const [theme, setTheme] = useState<Theme | null>(null);\n  useEffect(() => {\n    const root = document.documentElement;\n    const read = () => {\n      const style = getComputedStyle(root);\n      setTheme(\n        Object.fromEntries(\n          TOKENS.map((t) => [t, toRgb(`hsl(${style.getPropertyValue(`--${t}`).trim()})`)]),\n        ) as Theme,\n      );\n    };\n    read();\n    const observer = new MutationObserver(read);\n    observer.observe(root, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return theme;\n}\n\nconst mix = (a: Rgb, b: Rgb, t: number): Rgb => [\n  a[0] + (b[0] - a[0]) * t,\n  a[1] + (b[1] - a[1]) * t,\n  a[2] + (b[2] - a[2]) * t,\n];\n\nexport function LatticeDrift({\n  speed = 0.7,\n  pointSize = 0.11,\n  opacity = 0.75,\n  maskStart = 0.05,\n  maskSolid = 0.35,\n  color,\n  accentColor,\n  backgroundColor,\n  className,\n}: LatticeDriftProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const theme = useTheme();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const options = useRef({ speed, pointSize, opacity });\n  options.current = { speed, pointSize, opacity };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas || !theme) return;\n\n    const scene = new THREE.Scene();\n    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);\n    // Looking down onto the dome's crown rather than across its rim.\n    camera.position.set(0, 14, 24);\n    camera.lookAt(0, -2, 0);\n    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    // The original ran on three r128 (no colour management): colours reach the screen untouched.\n    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;\n    const ink = color ? toRgb(color) : theme.foreground;\n    const accent = accentColor ? toRgb(accentColor) : theme.primary;\n    const geometry = new THREE.BufferGeometry();\n    const count = 15000;\n    const positions = new Float32Array(count * 3);\n    const tints = new Float32Array(count * 3);\n    const radius = 25;\n    for (let index = 0; index < count; index += 1) {\n      const u = Math.random();\n      Math.random(); // The original sampled an unused v here.\n      const theta = u * 2 * Math.PI;\n      const phi = Math.acos(Math.random() * 0.8 + 0.2);\n      positions[index * 3] = radius * Math.sin(phi) * Math.cos(theta);\n      positions[index * 3 + 1] = radius * Math.cos(phi) - 20;\n      positions[index * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);\n      // Points ink in the foreground, with a seeded scatter of accent points.\n      tints.set(\n        Math.random() < 0.14 ? accent : mix(ink, theme[\"muted-foreground\"], Math.random() * 0.5),\n        index * 3,\n      );\n    }\n    geometry.setAttribute(\"position\", new THREE.BufferAttribute(positions, 3));\n    geometry.setAttribute(\"color\", new THREE.BufferAttribute(tints, 3));\n    const material = new THREE.PointsMaterial({\n      size: 0.08,\n      vertexColors: true,\n      transparent: true,\n      opacity: 0.4,\n      depthWrite: false,\n    });\n    const particles = new THREE.Points(geometry, material);\n    scene.add(particles);\n\n    const render = (advance: boolean) => {\n      const o = options.current;\n      if (advance) {\n        particles.rotation.y += 0.0008 * o.speed;\n        particles.rotation.z += 0.0002 * o.speed;\n      }\n      material.size = o.pointSize;\n      material.opacity = o.opacity;\n      renderer.render(scene, camera);\n    };\n    const resize = () => {\n      const { width, height } = host.getBoundingClientRect();\n      camera.aspect = width / Math.max(1, height);\n      camera.updateProjectionMatrix();\n      renderer.setSize(width, height, false);\n      render(false);\n    };\n\n    let frame = 0;\n    let visible = true;\n    const tick = () => {\n      render(true);\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (!prefersReducedMotion && visible && !frame) frame = requestAnimationFrame(tick);\n    };\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else if (frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    const onVisibility = () => !document.hidden && start();\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    resize();\n    start();\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n    };\n  }, [prefersReducedMotion, theme, color, accentColor]);\n\n  const mask = `linear-gradient(to bottom, transparent ${maskStart * 100}%, black ${maskSolid * 100}%, black 100%)`;\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\" }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ WebkitMaskImage: mask, maskImage: mask }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 3,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "pointSize",
+      "label": "Point size",
+      "min": 0.02,
+      "max": 0.2,
+      "step": 0.005,
+      "default": 0.08
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.4
+    },
+    {
+      "kind": "range",
+      "key": "maskStart",
+      "label": "Mask start",
+      "min": 0,
+      "max": 0.45,
+      "step": 0.01,
+      "default": 0.2
+    },
+    {
+      "kind": "range",
+      "key": "maskSolid",
+      "label": "Mask solid",
+      "min": 0.3,
+      "max": 0.8,
+      "step": 0.01,
+      "default": 0.5
+    }
+  ]
+}

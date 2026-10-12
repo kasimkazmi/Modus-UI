@@ -1,0 +1,49 @@
+---
+title: Mercury Bloom
+description: A raymarched WebGL blob of liquid metal that reflects your theme and turns toward the pointer.
+---
+
+A full-bleed raymarched WebGL shader of a metal blob that morphs with layered simplex noise. Its studio environment is built from the theme's background, card and primary tones, so it reads as polished pewter on paper in light mode and as dark mercury in dark mode, and follows the palette. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Liquid Form (MIT, © 2026 Meng To).
+
+<ComponentPreview name="mercury-bloom" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mercury-bloom
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mercury-bloom.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MercuryBloom } from "@/components/ui/mercury-bloom";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <MercuryBloom />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type     | Default | Description                                     |
+| :------------ | :------- | :------ | :---------------------------------------------- |
+| `speed`       | `number` | `1`     | Animation speed multiplier.                     |
+| `morph`       | `number` | `1.8`   | Strength of the surface deformation.            |
+| `noiseScale`  | `number` | `1.3`   | Frequency of the deformation noise.             |
+| `mouseAmount` | `number` | `0.15`  | How far the camera looks toward the pointer.    |
+| `metal`       | `number` | `1`     | Reflection and specular strength.               |
+| `camera`      | `number` | `6.5`   | Camera distance.                                |
+| `tintHue`     | `number` | `220`   | Hue of the optional tint in degrees.            |
+| `tintAmount`  | `number` | `0`     | Strength of the tint (0 keeps the theme metal). |

@@ -1,0 +1,55 @@
+---
+title: Aperture Bloom
+description: A centred, noise-warped pair of WebGL rings inked in the theme colours that leans toward the pointer.
+---
+
+A full-bleed Three.js shader draws a tight aperture of two noise-warped rings at the centre of the frame. In light mode they are inked on `--background` in `--primary` with a `--muted-foreground` fringe; in dark mode they glow additively, a `--foreground` core over a `--primary` fringe. It follows palette and mode changes live, and drifts slightly toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Portal Field (MIT).
+
+<ComponentPreview name="aperture-bloom" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add aperture-bloom
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/aperture-bloom.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { ApertureBloom } from "@/components/ui/aperture-bloom";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ApertureBloom />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                 |
+| :---------------- | :------- | :------------------- | :------------------------------------------ |
+| `speed`           | `number` | `1`                  | Animation speed multiplier (0 to 3).        |
+| `size`            | `number` | `1`                  | Ring thickness multiplier.                  |
+| `length`          | `number` | `1`                  | Ring radius multiplier (0.35 to 2.5).       |
+| `opacity`         | `number` | `1`                  | Opacity of the glow (0.05 to 1).            |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees (-180 to 180).      |
+| `saturation`      | `number` | `1`                  | Saturation multiplier (0 to 2).             |
+| `brightness`      | `number` | `1`                  | Brightness multiplier (0.35 to 1.65).       |
+| `coreColor`       | `string` | theme tokens         | Colour of the ring's bright core.           |
+| `fringeColor`     | `string` | theme tokens         | Colour of the soft fringe and ambient wash. |
+| `backgroundColor` | `string` | theme `--background` | Scene background behind the glow.           |

@@ -1,0 +1,58 @@
+---
+title: Moon Lattice
+description: A centred WebGL globe of noise-carved points, tilted and threaded with thin rings, inked in the theme colours.
+---
+
+A Three.js point globe carved by noise and tilted on its axis, wrapped in six thin rings that drift in opposite directions. Colours come from the theme: `--primary` for the bright points and nodes, `--muted-foreground` for the dim ones and `--foreground` for the rings. In light mode it is drawn as ink on paper; in dark mode it glows additively. It follows palette and mode changes live. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Orbital Sphere (MIT).
+
+<ComponentPreview name="moon-lattice" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add moon-lattice
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/moon-lattice.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { MoonLattice } from "@/components/ui/moon-lattice";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <MoonLattice />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop               | Type     | Default                    | Description                           |
+| :----------------- | :------- | :------------------------- | :------------------------------------ |
+| `speed`            | `number` | `1`                        | Rotation speed multiplier.            |
+| `particleSize`     | `number` | `0.022`                    | Size of each particle.                |
+| `particleOpacity`  | `number` | `0.8`                      | Opacity of the particles.             |
+| `orbitOpacity`     | `number` | `0.35`                     | Opacity of the rings.                 |
+| `scale`            | `number` | `1`                        | Scale of the whole sphere.            |
+| `haloOpacity`      | `number` | `0.2`                      | Opacity of the glow around each node. |
+| `hue`              | `number` | `0`                        | Hue rotation in degrees.              |
+| `particleColor`    | `string` | theme `--primary`          | Colour of the bright particles.       |
+| `particleDimColor` | `string` | theme `--muted-foreground` | Colour of the dim particles.          |
+| `orbitColor`       | `string` | theme `--foreground`       | Colour of the orbit rings.            |
+| `nodeColor`        | `string` | theme `--primary`          | Colour of the orbiting nodes.         |
+| `haloColor`        | `string` | theme `--primary`          | Colour of the node halos.             |
+| `backgroundColor`  | `string` | theme `--background`       | Background behind the sphere.         |

@@ -1,0 +1,48 @@
+---
+title: Ember Tag
+description: A lanyard tag sketched in thousands of theme-ink embers, standing in light slanted rain above a waterline.
+---
+
+A Canvas 2D particle scene in the theme's ink: thousands of embers in `--primary` trace the edges of a lanyard badge, curl noise plumes them into fur, slanted rain in `--muted-foreground` falls in front of and behind the card and a waterline reflects it. On paper the strokes multiply like ink; in dark mode they add up like light, and both follow the palette picker. Fills its positioned parent, pauses off screen and paints a still frame for reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ember-tag" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ember-tag
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ember-tag.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { EmberTag } from "@/components/ui/ember-tag";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <EmberTag />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                    | Description                                         |
+| :---------------- | :------- | :------------------------- | :-------------------------------------------------- |
+| `speed`           | `number` | `0.8`                      | Simulation speed multiplier (0 to 2).               |
+| `particleAmount`  | `number` | `0.8`                      | Ember count multiplier (0.35 to 1.4).               |
+| `rainAmount`      | `number` | `0.45`                     | Rain count multiplier (0 to 1.5).                   |
+| `turbulence`      | `number` | `1.3`                      | Curl-noise turbulence multiplier (0 to 2).          |
+| `spread`          | `number` | `1.25`                     | Ember trail spread multiplier (0.5 to 1.75).        |
+| `backgroundColor` | `string` | `"hsl(var(--background))"` | Scene background colour; theme tokens are resolved. |
+| `color`           | `string` | `"hsl(var(--primary))"`    | Ember colour; theme tokens are resolved.            |

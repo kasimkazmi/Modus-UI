@@ -1,0 +1,60 @@
+---
+title: Crown Bar
+description: A proximity-spring navigation bar in four fits — a masthead command bar, a centred pill, a dithered pixel strip and a refracting glass rail.
+---
+
+A navigation bar whose items swell, drop and settle on a damped spring as the pointer moves across them, with keyboard focus driving the same motion. The default `modern` fit is a masthead with an italic serif wordmark, the dock and actions over a serif headline; `pill` is a centred dock, `retro` a fitted strip over an ordered-dither WebGL field ramped from paper through the primary to ink, and `glass` a vertical rail over a Three.js field of refracting beads on a primary-tinted paper wash. Every colour comes from theme tokens (the shaders re-read them when the mode or palette changes), so it follows light and dark mode and the palette picker. The spring is disabled for reduced motion, coarse pointers and narrow viewports, and the shader fields pause off screen. Ported from ThreeUI Community's Animated Top Dock (MIT).
+
+<ComponentPreview name="crown-bar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add crown-bar
+```
+
+### Manual
+
+1. Install `three` and `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/crown-bar.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { CrownBar } from "@/components/ui/crown-bar";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <CrownBar variant="glass" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                       | Default    | Description                                                   |
+| :------------- | :----------------------------------------- | :--------- | :------------------------------------------------------------ |
+| `variant`      | `"pill" \| "modern" \| "retro" \| "glass"` | `"modern"` | Which fit to render.                                          |
+| `proximity`    | `number`                                   | `122`      | Distance in pixels over which the pointer influences an item. |
+| `spring`       | `number`                                   | `0.19`     | Spring stiffness of the item motion.                          |
+| `damping`      | `number`                                   | `0.7`      | Velocity damping per frame.                                   |
+| `widthGrowth`  | `number`                                   | `17`       | Extra width in pixels an item gains at full influence.        |
+| `heightGrowth` | `number`                                   | `16`       | Extra height in pixels an item gains at full influence.       |
+| `drop`         | `number`                                   | `3.5`      | How far an active item drops (or leans out on the rail).      |
+| `pixelSize`    | `number`                                   | `4`        | Retro: screen pixels per field pixel.                         |
+| `speed`        | `number`                                   | `1`        | Retro: field animation speed.                                 |
+| `noise`        | `number`                                   | `1`        | Retro: weather noise and grain strength.                      |
+| `levels`       | `number`                                   | `7`        | Retro: number of palette steps.                               |
+| `scanlines`    | `number`                                   | `0.32`     | Retro: scanline overlay strength.                             |
+| `particles`    | `number`                                   | `22`       | Glass: number of visible beads (4–34).                        |
+| `thickness`    | `number`                                   | `0.115`    | Glass: refraction offset strength.                            |
+| `dispersion`   | `number`                                   | `0.05`     | Glass: chromatic split between colour channels.               |
+| `specular`     | `number`                                   | `0.85`     | Glass: highlight intensity.                                   |
+| `rim`          | `number`                                   | `0.5`      | Glass: fresnel rim intensity.                                 |
+| `drift`        | `number`                                   | `1`        | Glass: bead drift and spin speed.                             |

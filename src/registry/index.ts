@@ -267,12 +267,12 @@ export const registry = [
     files: ["registry/grid-motion.tsx"],
   },
   {
-    name: "orbital-sphere",
-    title: "Orbital Sphere",
+    name: "moon-lattice",
+    title: "Moon Lattice",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/orbital-sphere.tsx"],
+    files: ["registry/moon-lattice.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
@@ -374,12 +374,12 @@ export const registry = [
     ],
   },
   {
-    name: "stream-convergence",
-    title: "Stream Convergence",
+    name: "confluence-lines",
+    title: "Confluence Lines",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/stream-convergence.tsx"],
+    files: ["registry/confluence-lines.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
@@ -415,12 +415,12 @@ export const registry = [
     ],
   },
   {
-    name: "ribbon-field",
-    title: "Ribbon Field",
+    name: "silk-bands",
+    title: "Silk Bands",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/ribbon-field.tsx"],
+    files: ["registry/silk-bands.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
@@ -464,12 +464,12 @@ export const registry = [
     ],
   },
   {
-    name: "liquid-form",
-    title: "Liquid Form",
+    name: "mercury-bloom",
+    title: "Mercury Bloom",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/liquid-form.tsx"],
+    files: ["registry/mercury-bloom.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 2, step: 0.01, default: 1 },
       { kind: "range", key: "morph", label: "Morph", min: 0, max: 2, step: 0.01, default: 1 },
@@ -593,12 +593,12 @@ export const registry = [
     ],
   },
   {
-    name: "laser",
-    title: "Laser",
+    name: "light-cut",
+    title: "Light Cut",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/laser.tsx"],
+    files: ["registry/light-cut.tsx"],
     controls: [
       {
         kind: "choice",
@@ -753,12 +753,12 @@ export const registry = [
     ],
   },
   {
-    name: "structure-flow",
-    title: "Structure Flow",
+    name: "lattice-drift",
+    title: "Lattice Drift",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/structure-flow.tsx"],
+    files: ["registry/lattice-drift.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
@@ -800,12 +800,12 @@ export const registry = [
     ],
   },
   {
-    name: "warp-field",
-    title: "Warp Field",
+    name: "star-tunnel",
+    title: "Star Tunnel",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/warp-field.tsx"],
+    files: ["registry/star-tunnel.tsx"],
     controls: [
       {
         kind: "choice",
@@ -861,12 +861,12 @@ export const registry = [
     ],
   },
   {
-    name: "orbit-gallery",
-    title: "Orbit Gallery",
+    name: "plate-wheel",
+    title: "Plate Wheel",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/orbit-gallery.tsx"],
+    files: ["registry/plate-wheel.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       { kind: "range", key: "scale", label: "Scale", min: 0.7, max: 1.35, step: 0.01, default: 1 },
@@ -968,12 +968,12 @@ export const registry = [
     ],
   },
   {
-    name: "portal-field",
-    title: "Portal Field",
+    name: "aperture-bloom",
+    title: "Aperture Bloom",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/portal-field.tsx"],
+    files: ["registry/aperture-bloom.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       { kind: "range", key: "size", label: "Size", min: 0.35, max: 2.5, step: 0.01, default: 1 },
@@ -1047,23 +1047,13 @@ export const registry = [
     ],
   },
   {
-    name: "predictive-arc",
-    title: "Predictive Arc",
+    name: "forecast-curve",
+    title: "Forecast Curve",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/predictive-arc.tsx"],
+    files: ["registry/forecast-curve.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 2, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -1147,23 +1137,13 @@ export const registry = [
     ],
   },
   {
-    name: "typography-vortex",
-    title: "Typography Vortex",
+    name: "glyph-eddy",
+    title: "Glyph Eddy",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/typography-vortex.tsx"],
+    files: ["registry/glyph-eddy.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
         kind: "range",
@@ -1258,23 +1238,13 @@ export const registry = [
     ],
   },
   {
-    name: "editorial-heading",
-    title: "Editorial Heading",
+    name: "folio-title",
+    title: "Folio Title",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/editorial-heading.tsx"],
+    files: ["registry/folio-title.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       {
         kind: "range",
         key: "duration",
@@ -1933,12 +1903,12 @@ export const registry = [
     files: ["registry/warm-tooltip.tsx"],
   },
   {
-    name: "generative-tree",
-    title: "Generative Tree",
+    name: "bough-study",
+    title: "Bough Study",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/generative-tree.tsx"],
+    files: ["registry/bough-study.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
@@ -2042,23 +2012,23 @@ export const registry = [
     ],
   },
   {
-    name: "top-dock",
-    title: "Top Dock",
+    name: "crown-bar",
+    title: "Crown Bar",
     category: "Navigation",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/top-dock.tsx"],
+    files: ["registry/crown-bar.tsx"],
     controls: [
       {
         kind: "choice",
         key: "variant",
         label: "Variant",
-        default: "sable",
+        default: "modern",
         options: [
-          { value: "sable", label: "Sable Dock" },
-          { value: "modern", label: "Command Bar" },
-          { value: "retro", label: "Pixel Terminal" },
-          { value: "glass", label: "Liquid Glass" },
+          { value: "pill", label: "Pill" },
+          { value: "modern", label: "Modern" },
+          { value: "retro", label: "Retro" },
+          { value: "glass", label: "Glass" },
         ],
       },
       {
@@ -2110,23 +2080,13 @@ export const registry = [
     ],
   },
   {
-    name: "particle-drift",
-    title: "Particle Drift",
+    name: "mote-beacon",
+    title: "Mote Beacon",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/particle-drift.tsx"],
+    files: ["registry/mote-beacon.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       { kind: "range", key: "size", label: "Size", min: 0.35, max: 2.5, step: 0.01, default: 1 },
       {
@@ -2178,23 +2138,13 @@ export const registry = [
     ],
   },
   {
-    name: "particle-network",
-    title: "Particle Network",
+    name: "ink-rush",
+    title: "Ink Rush",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/particle-network.tsx"],
+    files: ["registry/ink-rush.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       { kind: "range", key: "size", label: "Size", min: 0.35, max: 2.5, step: 0.01, default: 1 },
       {
@@ -2353,23 +2303,13 @@ export const registry = [
     ],
   },
   {
-    name: "interface-lines",
-    title: "Interface Lines",
+    name: "wire-ledger",
+    title: "Wire Ledger",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/interface-lines.tsx"],
+    files: ["registry/wire-ledger.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       { kind: "range", key: "size", label: "Size", min: 0.35, max: 2.5, step: 0.01, default: 1 },
       {
@@ -2479,23 +2419,13 @@ export const registry = [
     ],
   },
   {
-    name: "topo-field",
-    title: "Topo Field",
+    name: "contour-sheet",
+    title: "Contour Sheet",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/topo-field.tsx"],
+    files: ["registry/contour-sheet.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
       {
         kind: "range",
@@ -2678,23 +2608,13 @@ export const registry = [
     ],
   },
   {
-    name: "signal-particles",
-    title: "Signal Particles",
+    name: "pulse-dust",
+    title: "Pulse Dust",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/signal-particles.tsx"],
+    files: ["registry/pulse-dust.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 2, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -2718,23 +2638,13 @@ export const registry = [
     ],
   },
   {
-    name: "override-grid",
-    title: "Override Grid",
+    name: "signal-tiles",
+    title: "Signal Tiles",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/override-grid.tsx"],
+    files: ["registry/signal-tiles.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 2, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -2758,12 +2668,12 @@ export const registry = [
     ],
   },
   {
-    name: "void-field",
-    title: "Void Field",
+    name: "hollow-bloom",
+    title: "Hollow Bloom",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/void-field.tsx"],
+    files: ["registry/hollow-bloom.tsx"],
     controls: [
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -2787,21 +2697,21 @@ export const registry = [
     ],
   },
   {
-    name: "halftone-flow",
-    title: "Halftone Flow",
+    name: "grain-swell",
+    title: "Grain Swell",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/halftone-flow.tsx"],
+    files: ["registry/grain-swell.tsx"],
     controls: [
       {
         kind: "choice",
         key: "variant",
         label: "Variant",
-        default: "halftone",
+        default: "ripple",
         options: [
-          { value: "halftone", label: "Halftone" },
-          { value: "amber", label: "Amber" },
+          { value: "ripple", label: "Ripple" },
+          { value: "swell", label: "Swell" },
         ],
       },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -2913,23 +2823,23 @@ export const registry = [
     ],
   },
   {
-    name: "woven-cloth",
-    title: "Woven Cloth",
+    name: "loom-field",
+    title: "Loom Field",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/woven-cloth.tsx"],
+    files: ["registry/loom-field.tsx"],
     controls: [
       {
         kind: "choice",
         key: "variant",
         label: "Variant",
-        default: "woven-cloth",
+        default: "linen",
         options: [
-          { value: "woven-cloth", label: "Woven Cloth" },
-          { value: "iridescent", label: "Iridescent Silk" },
-          { value: "atelier", label: "Atelier Flag" },
-          { value: "washi", label: "Washi Noren" },
+          { value: "linen", label: "Linen" },
+          { value: "iridescent", label: "Iridescent" },
+          { value: "atelier", label: "Atelier" },
+          { value: "washi", label: "Washi" },
         ],
       },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -2954,23 +2864,13 @@ export const registry = [
     ],
   },
   {
-    name: "semantic-bloom",
-    title: "Semantic Bloom",
+    name: "word-swarm",
+    title: "Word Swarm",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/semantic-bloom.tsx"],
+    files: ["registry/word-swarm.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "text", key: "text", label: "Text", default: "Modus UI" },
       {
         kind: "range",
@@ -2985,23 +2885,13 @@ export const registry = [
     ],
   },
   {
-    name: "globe-study",
-    title: "Globe Study",
+    name: "orb-lettering",
+    title: "Orb Lettering",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/globe-study.tsx"],
+    files: ["registry/orb-lettering.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3026,23 +2916,13 @@ export const registry = [
     ],
   },
   {
-    name: "outline-typeflow",
-    title: "Outline Typeflow",
+    name: "contour-stream",
+    title: "Contour Stream",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/outline-typeflow.tsx"],
+    files: ["registry/contour-stream.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3067,23 +2947,13 @@ export const registry = [
     ],
   },
   {
-    name: "morphing-glyph-cloud",
-    title: "Morphing Glyph Cloud",
+    name: "shifting-swarm",
+    title: "Shifting Swarm",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/morphing-glyph-cloud.tsx"],
+    files: ["registry/shifting-swarm.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3108,23 +2978,13 @@ export const registry = [
     ],
   },
   {
-    name: "cloth-study",
-    title: "Cloth Study",
+    name: "drape-type",
+    title: "Drape Type",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/cloth-study.tsx"],
+    files: ["registry/drape-type.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3149,23 +3009,13 @@ export const registry = [
     ],
   },
   {
-    name: "ripple-study",
-    title: "Ripple Study",
+    name: "glyph-surge",
+    title: "Glyph Surge",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/ripple-study.tsx"],
+    files: ["registry/glyph-surge.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3190,23 +3040,13 @@ export const registry = [
     ],
   },
   {
-    name: "ball-study",
-    title: "Ball Study",
+    name: "sphere-sketch",
+    title: "Sphere Sketch",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/ball-study.tsx"],
+    files: ["registry/sphere-sketch.tsx"],
     controls: [
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "scale", label: "Scale", min: 0.65, max: 1.5, step: 0.01, default: 1 },
       { kind: "range", key: "opacity", label: "Opacity", min: 0.1, max: 1, step: 0.01, default: 1 },
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
@@ -3231,12 +3071,12 @@ export const registry = [
     ],
   },
   {
-    name: "brand-orb",
-    title: "Brand Orb",
+    name: "emblem-globe",
+    title: "Emblem Globe",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/brand-orb.tsx"],
+    files: ["registry/emblem-globe.tsx"],
     controls: [
       {
         kind: "choice",
@@ -3279,26 +3119,16 @@ export const registry = [
           { value: "medium", label: "Medium" },
         ],
       },
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
-        ],
-      },
       { kind: "range", key: "speed", label: "Speed", min: 0.25, max: 2, step: 0.05, default: 1 },
     ],
   },
   {
-    name: "diagnostics-panel",
-    title: "Diagnostics Panel",
+    name: "vitals-board",
+    title: "Vitals Board",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/diagnostics-panel.tsx"],
+    files: ["registry/vitals-board.tsx"],
     controls: [
       {
         kind: "choice",
@@ -3309,16 +3139,6 @@ export const registry = [
           { value: "layers", label: "Layered Planes" },
           { value: "nodes", label: "Node Cubes" },
           { value: "flow", label: "Flowing Mesh" },
-        ],
-      },
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
         ],
       },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
@@ -3354,12 +3174,12 @@ export const registry = [
     ],
   },
   {
-    name: "skeuomorphic-toggle",
-    title: "Skeuomorphic Toggle",
+    name: "tactile-switch",
+    title: "Tactile Switch",
     category: "Components",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/skeuomorphic-toggle.tsx"],
+    files: ["registry/tactile-switch.tsx"],
     controls: [
       {
         kind: "choice",
@@ -3417,12 +3237,12 @@ export const registry = [
     ],
   },
   {
-    name: "wireframe-form",
-    title: "Wireframe Form",
+    name: "draft-form",
+    title: "Draft Form",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/wireframe-form.tsx"],
+    files: ["registry/draft-form.tsx"],
     controls: [
       {
         kind: "choice",
@@ -3433,16 +3253,6 @@ export const registry = [
           { value: "cube", label: "Cube" },
           { value: "cylinders", label: "Cylinders" },
           { value: "sphere", label: "Sphere" },
-        ],
-      },
-      {
-        kind: "choice",
-        key: "mode",
-        label: "Mode",
-        default: "dark",
-        options: [
-          { value: "dark", label: "Dark" },
-          { value: "light", label: "Light" },
         ],
       },
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 3, step: 0.01, default: 1 },
@@ -3487,12 +3297,12 @@ export const registry = [
     ],
   },
   {
-    name: "performance-gauge",
-    title: "Performance Gauge",
+    name: "pace-dial",
+    title: "Pace Dial",
     category: "Data Display",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/performance-gauge.tsx"],
+    files: ["registry/pace-dial.tsx"],
     controls: [
       {
         kind: "choice",
@@ -3613,12 +3423,12 @@ export const registry = [
     ],
   },
   {
-    name: "logic-core",
-    title: "Logic Core",
+    name: "circuit-heart",
+    title: "Circuit Heart",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/logic-core.tsx"],
+    files: ["registry/circuit-heart.tsx"],
     controls: [
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -3700,12 +3510,12 @@ export const registry = [
     ],
   },
   {
-    name: "topology-field",
-    title: "Topology Field",
+    name: "relief-mesh",
+    title: "Relief Mesh",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/topology-field.tsx"],
+    files: ["registry/relief-mesh.tsx"],
     controls: [
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -3729,12 +3539,12 @@ export const registry = [
     ],
   },
   {
-    name: "nebula",
-    title: "Nebula",
+    name: "dust-veil",
+    title: "Dust Veil",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["three", "framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/nebula.tsx"],
+    files: ["registry/dust-veil.tsx"],
     controls: [
       { kind: "range", key: "hue", label: "Hue", min: -180, max: 180, step: 1, default: 0 },
       {
@@ -3963,12 +3773,12 @@ export const registry = [
     ],
   },
   {
-    name: "spark-badge",
-    title: "Spark Badge",
+    name: "ember-tag",
+    title: "Ember Tag",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/spark-badge.tsx"],
+    files: ["registry/ember-tag.tsx"],
     controls: [
       { kind: "range", key: "speed", label: "Speed", min: 0, max: 2, step: 0.01, default: 1 },
       {
@@ -4002,12 +3812,12 @@ export const registry = [
     ],
   },
   {
-    name: "sketchbook",
-    title: "Sketchbook",
+    name: "draft-folio",
+    title: "Draft Folio",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/sketchbook.tsx"],
+    files: ["registry/draft-folio.tsx"],
   },
   {
     name: "ink-capsule",
@@ -4087,36 +3897,36 @@ export const registry = [
     files: ["registry/satin-capsule.tsx"],
   },
   {
-    name: "intro-wordmark",
-    title: "Intro Wordmark",
+    name: "opening-mark",
+    title: "Opening Mark",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/intro-wordmark.tsx"],
+    files: ["registry/opening-mark.tsx"],
   },
   {
-    name: "particle-wordmark",
-    title: "Particle Wordmark",
+    name: "dust-signature",
+    title: "Dust Signature",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/particle-wordmark.tsx"],
+    files: ["registry/dust-signature.tsx"],
   },
   {
-    name: "audio-wordmark",
-    title: "Audio Wordmark",
+    name: "echo-letters",
+    title: "Echo Letters",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/audio-wordmark.tsx"],
+    files: ["registry/echo-letters.tsx"],
   },
   {
-    name: "character-carousel",
-    title: "Character Carousel",
+    name: "cast-reel",
+    title: "Cast Reel",
     category: "Data Display",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/character-carousel.tsx"],
+    files: ["registry/cast-reel.tsx"],
     controls: [
       {
         kind: "choice",
@@ -4153,28 +3963,28 @@ export const registry = [
     ],
   },
   {
-    name: "uplink-loader",
-    title: "Uplink Loader",
+    name: "signal-relay",
+    title: "Signal Relay",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/uplink-loader.tsx"],
+    files: ["registry/signal-relay.tsx"],
   },
   {
-    name: "engraved-certificate",
-    title: "Engraved Certificate",
+    name: "intaglio-deed",
+    title: "Intaglio Deed",
     category: "Components",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/engraved-certificate.tsx"],
+    files: ["registry/intaglio-deed.tsx"],
   },
   {
-    name: "koi-studies",
-    title: "Koi Studies",
+    name: "pond-glide",
+    title: "Pond Glide",
     category: "Backgrounds",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/koi-studies.tsx"],
+    files: ["registry/pond-glide.tsx"],
   },
   {
     name: "sylva-world",
@@ -4233,12 +4043,12 @@ export const registry = [
     files: ["registry/tubelight.tsx"],
   },
   {
-    name: "gallery-heading",
-    title: "Gallery Heading",
+    name: "salon-banner",
+    title: "Salon Banner",
     category: "Typography",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/gallery-heading.tsx"],
+    files: ["registry/salon-banner.tsx"],
   },
   {
     name: "button-atlas",
@@ -4249,20 +4059,20 @@ export const registry = [
     files: ["registry/button-atlas.tsx"],
   },
   {
-    name: "editorial-intro",
-    title: "Editorial Intro",
+    name: "folio-opening",
+    title: "Folio Opening",
     category: "Sections",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/editorial-intro.tsx"],
+    files: ["registry/folio-opening.tsx"],
   },
   {
-    name: "newsletter-footer",
-    title: "Newsletter Footer",
+    name: "dispatch-colophon",
+    title: "Dispatch Colophon",
     category: "Sections",
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
-    files: ["registry/newsletter-footer.tsx"],
+    files: ["registry/dispatch-colophon.tsx"],
   },
   {
     name: "aurora-veil",

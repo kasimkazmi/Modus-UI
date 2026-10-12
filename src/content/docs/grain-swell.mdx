@@ -1,0 +1,53 @@
+---
+title: Grain Swell
+description: A flowing field resolved through a dot screen, inked in your theme on the page ground.
+---
+
+A flowing field resolved through a dot matrix, inked from theme tokens: `ripple` draws a soft two-tone dot screen, `swell` a Three.js point field rising from ground to crest. Light mode sets ink dots on paper, dark mode lifts them off the dark ground. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Halftone Flow (MIT, © 2026 Meng To).
+
+<ComponentPreview name="grain-swell" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add grain-swell
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/grain-swell.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GrainSwell } from "@/components/ui/grain-swell";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GrainSwell />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                    | Default                  | Description                                                                   |
+| :---------------- | :---------------------- | :----------------------- | :---------------------------------------------------------------------------- |
+| `variant`         | `"ripple"` \| `"swell"` | `"ripple"`               | Which dot renderer to show.                                                   |
+| `speed`           | `number`                | `1`                      | Animation speed multiplier.                                                   |
+| `size`            | `number`                | `1`                      | Point size multiplier (swell).                                                |
+| `length`          | `number`                | `1`                      | Wave frequency multiplier (swell).                                            |
+| `density`         | `number`                | `1`                      | Point density (swell).                                                        |
+| `opacity`         | `number`                | `1`                      | Canvas opacity (swell).                                                       |
+| `hue`             | `number`                | `0`                      | Hue rotation in degrees.                                                      |
+| `saturation`      | `number`                | `1`                      | Saturation multiplier.                                                        |
+| `brightness`      | `number`                | `1`                      | Brightness multiplier.                                                        |
+| `colors`          | `string[]`              | Theme inks per `variant` | Ink colours: ground, body and crest for `swell`; top and bottom for `ripple`. |
+| `backgroundColor` | `string`                | `hsl(var(--background))` | Colour behind the dots, any CSS colour.                                       |

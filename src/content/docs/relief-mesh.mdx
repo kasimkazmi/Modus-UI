@@ -1,0 +1,51 @@
+---
+title: Relief Mesh
+description: A slowly turning mesh globe of pulsing nodes joined by fine links, inked in theme tokens and fading into the page background.
+---
+
+A slowly turning mesh globe of pulsing nodes joined by fine links, inked in theme tokens and fading into the page background. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Topology Field (MIT).
+
+<ComponentPreview name="relief-mesh" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add relief-mesh
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/relief-mesh.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ReliefMesh } from "@/components/ui/relief-mesh";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ReliefMesh />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default          | Description                                  |
+| :---------------- | :------- | :--------------- | :------------------------------------------- |
+| `hue`             | `number` | `0`              | Hue rotation in degrees (-180 to 180).       |
+| `saturation`      | `number` | `1`              | Saturation multiplier (0 to 2).              |
+| `brightness`      | `number` | `1`              | Brightness multiplier (0.35 to 1.65).        |
+| `nodeColor`       | `string` | theme primary    | Colour of the pulsing nodes.                 |
+| `lineColor`       | `string` | theme foreground | Colour of the links between nodes.           |
+| `fogColor`        | `string` | theme background | Colour the far side of the globe fades into. |
+| `backgroundColor` | `string` | theme background | Colour behind the effect.                    |

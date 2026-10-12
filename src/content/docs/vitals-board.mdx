@@ -1,0 +1,50 @@
+---
+title: Vitals Board
+description: An isometric ink-line readout in your theme colours, with floating node cubes, layered planes or a flowing mesh.
+---
+
+A square canvas drawn in isometric projection on the page paper: a cluster of floating wireframe cubes, five stacked scan planes, or a breathing height-field mesh. Strong lines take the theme primary and faint ones the foreground, so it follows light, dark and every palette. It pauses when off screen and draws a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Diagnostics Panel (MIT).
+
+<ComponentPreview name="vitals-board" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add vitals-board
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/vitals-board.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { VitalsBoard } from "@/components/ui/vitals-board";
+
+export default function Example() {
+  return (
+    <div className="flex min-h-[400px] items-center justify-center">
+      <VitalsBoard variant="flow" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                            | Default   | Description                                                          |
+| :---------------- | :------------------------------ | :-------- | :------------------------------------------------------------------- |
+| `variant`         | `"layers" \| "nodes" \| "flow"` | `"nodes"` | Which diagnostic figure to draw.                                     |
+| `speed`           | `number`                        | `1`       | Animation speed multiplier (0 to 3).                                 |
+| `size`            | `number`                        | `1`       | Scale of the panel.                                                  |
+| `opacity`         | `number`                        | `1`       | Opacity of the panel.                                                |
+| `hue`             | `number`                        | `0`       | Hue rotation in degrees.                                             |
+| `saturation`      | `number`                        | `1`       | Saturation multiplier.                                               |
+| `brightness`      | `number`                        | `1`       | Brightness multiplier.                                               |
+| `color`           | `string`                        | none      | Hex stroke override; defaults to the theme primary and foreground.   |
+| `backgroundColor` | `string`                        | none      | Fill used to occlude hidden lines; defaults to the theme background. |

@@ -1,0 +1,50 @@
+---
+title: Contour Stream
+description: A sentence in italic serif running around the contour of an SVG mark, drawn on canvas.
+---
+
+A mark's contour sampled as one path, with an italic serif sentence running its full length in your theme's ink. It defaults to a rounded square. Hover to speed it up, click to shove the letters outward. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Outline Typeflow (MIT, © 2026 Meng To).
+
+<ComponentPreview name="contour-stream" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add contour-stream
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/contour-stream.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ContourStream } from "@/components/ui/contour-stream";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ContourStream />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                                                     | Description                                     |
+| :---------------- | :------- | :-------------------------------------------------------------------------- | :---------------------------------------------- |
+| `path`            | `string` | `"M6 2h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4Z"` | SVG path data (24×24 viewBox) the type follows. |
+| `text`            | `string` | `"modusfollowsthecontourandwritesitbackonemoretime"`                        | Phrase running along the outline.               |
+| `scale`           | `number` | `1`                                                                         | Scales the drawing (clamped 0.65–1.5).          |
+| `opacity`         | `number` | `1`                                                                         | Overall opacity (clamped 0.1–1).                |
+| `hue`             | `number` | `0`                                                                         | Hue rotation in degrees (clamped -180–180).     |
+| `saturation`      | `number` | `1`                                                                         | Saturation multiplier (clamped 0–2).            |
+| `brightness`      | `number` | `1`                                                                         | Brightness multiplier (clamped 0.4–1.8).        |
+| `inkColor`        | `string` | Theme ramp (`--muted-foreground` → `--primary`)                             | Colour of the type, any CSS colour.             |
+| `backgroundColor` | `string` | `hsl(var(--background))`                                                    | Ground colour, any CSS colour.                  |

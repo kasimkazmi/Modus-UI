@@ -1,0 +1,52 @@
+---
+title: Glyph Eddy
+description: Turning rings of set type that crumble into glyph dust under the cursor and gather into the centre on click, drawn in the Modus type and theme ink.
+---
+
+Turning rings of set type that crumble into glyph dust under the cursor and gather into the centre on click, drawn in the Modus type and theme ink. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Typography Vortex (MIT).
+
+<ComponentPreview name="glyph-eddy" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glyph-eddy
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glyph-eddy.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlyphEddy } from "@/components/ui/glyph-eddy";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <GlyphEddy />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                 | Description                                          |
+| :---------------- | :------- | :-------------------------------------- | :--------------------------------------------------- |
+| `phrase`          | `string` | `"MODUS / FORM FOLLOWS MOTION / "`      | Text repeated around every ring.                     |
+| `speed`           | `number` | `0.8`                                   | Ring rotation speed multiplier.                      |
+| `ringGrowth`      | `number` | `1.15`                                  | Radius ratio between neighbouring rings (min 1.08).  |
+| `opacity`         | `number` | `1`                                     | Overall opacity of the type, guides and dust.        |
+| `dissolveRadius`  | `number` | `1`                                     | Size multiplier of the hole carved by the pointer.   |
+| `particleAmount`  | `number` | `1`                                     | How much dust the pointer sheds.                     |
+| `suctionDuration` | `number` | `920`                                   | Length of the click gather in milliseconds.          |
+| `hint`            | `string` | `"Hover to dissolve · Click to gather"` | Caption at the bottom; pass an empty string to hide. |

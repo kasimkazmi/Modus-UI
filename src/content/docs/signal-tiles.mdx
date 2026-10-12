@@ -1,0 +1,53 @@
+---
+title: Signal Tiles
+description: Rounded tiles that swell in waves rolling across the frame from one corner, crested in the theme accent.
+---
+
+A field of rounded tiles that swell and shrink as waves roll in from the lower-left corner. Wave shoulders are drawn in `--muted-foreground`, crests in `--primary`, on the theme `--background`, so it reads as ink on paper in light mode and follows palette changes live. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Override Grid (MIT).
+
+<ComponentPreview name="signal-tiles" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add signal-tiles
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/signal-tiles.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SignalTiles } from "@/components/ui/signal-tiles";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SignalTiles />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                       |
+| :---------------- | :------- | :------------------- | :-------------------------------- |
+| `speed`           | `number` | `1`                  | Animation speed multiplier.       |
+| `size`            | `number` | `28`                 | Tile size in pixels.              |
+| `gap`             | `number` | `6`                  | Gap between tiles in pixels.      |
+| `opacity`         | `number` | `1`                  | Canvas opacity.                   |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees.          |
+| `saturation`      | `number` | `1`                  | Saturation multiplier.            |
+| `brightness`      | `number` | `1`                  | Brightness multiplier.            |
+| `color`           | `string` | theme tokens         | Single CSS colour for every tile. |
+| `backgroundColor` | `string` | theme `--background` | Background colour.                |

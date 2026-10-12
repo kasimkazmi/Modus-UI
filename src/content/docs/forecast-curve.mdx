@@ -1,0 +1,53 @@
+---
+title: Forecast Curve
+description: A rising dotted curve whose dots swell and shimmer in crossing waves, inked in the theme accent.
+---
+
+A 2D canvas samples a curve that dips low in the middle and lifts toward both edges, like a chart line climbing out of a trough. Each dot on a sparse grid grows with its closeness to the curve and shimmers in crossing waves: cores are drawn in `--primary`, edges in `--muted-foreground`, on `--background`. In dark mode the dots blend additively. It follows palette and mode changes live. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Predictive Arc (MIT).
+
+<ComponentPreview name="forecast-curve" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add forecast-curve
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/forecast-curve.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ForecastCurve } from "@/components/ui/forecast-curve";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ForecastCurve />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                                            |
+| :---------------- | :------- | :------------------- | :--------------------------------------------------------------------- |
+| `speed`           | `number` | `1`                  | Wave speed multiplier.                                                 |
+| `spacing`         | `number` | `7`                  | Grid spacing between dots in pixels.                                   |
+| `dotSize`         | `number` | `5`                  | Maximum dot size in pixels.                                            |
+| `archHeight`      | `number` | `0.5`                | How far the curve rises toward the sides, as a fraction of the height. |
+| `thickness`       | `number` | `1`                  | Thickness multiplier of the curve band.                                |
+| `brightness`      | `number` | `1`                  | Dot opacity multiplier.                                                |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees.                                               |
+| `saturation`      | `number` | `1`                  | Saturation multiplier.                                                 |
+| `backgroundColor` | `string` | theme `--background` | Scene background.                                                      |

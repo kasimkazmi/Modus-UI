@@ -1,0 +1,82 @@
+{
+  "name": "confluence-lines",
+  "title": "Confluence Lines",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/confluence-lines.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Stream Convergence (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface ConfluenceLinesProps {\n  speed?: number;\n  fidelity?: number;\n  scale?: number;\n  brightness?: number;\n  opacity?: number;\n  hue?: number;\n  saturation?: number;\n  /** Defaults to the theme background. */\n  backgroundColor?: string;\n  /** One CSS colour per stream. Defaults to the theme primary, foreground and muted foreground. */\n  colors?: string[];\n  className?: string;\n}\n\ntype Rgb = [number, number, number];\nconst TOKENS = [\n  \"background\",\n  \"foreground\",\n  \"primary\",\n  \"muted-foreground\",\n  \"border\",\n  \"card\",\n] as const;\ntype Theme = Record<(typeof TOKENS)[number], Rgb>;\n\n/** Any CSS colour as 0–1 sRGB channels, resolved by the browser. */\nfunction toRgb(color: string): Rgb {\n  const probe = document.createElement(\"i\");\n  probe.style.display = \"none\";\n  probe.style.color = color;\n  document.body.appendChild(probe);\n  const [r = 0, g = 0, b = 0] = (getComputedStyle(probe).color.match(/[\\d.]+/g) ?? []).map(Number);\n  probe.remove();\n  return [r / 255, g / 255, b / 255];\n}\n\n/** The Modus theme tokens, re-read whenever the mode or palette on <html> changes. */\nfunction useTheme() {\n  const [theme, setTheme] = useState<Theme | null>(null);\n  useEffect(() => {\n    const root = document.documentElement;\n    const read = () => {\n      const style = getComputedStyle(root);\n      setTheme(\n        Object.fromEntries(\n          TOKENS.map((t) => [t, toRgb(`hsl(${style.getPropertyValue(`--${t}`).trim()})`)]),\n        ) as Theme,\n      );\n    };\n    read();\n    const observer = new MutationObserver(read);\n    observer.observe(root, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return theme;\n}\n\nconst mix = (a: Rgb, b: Rgb, t: number): Rgb => [\n  a[0] + (b[0] - a[0]) * t,\n  a[1] + (b[1] - a[1]) * t,\n  a[2] + (b[2] - a[2]) * t,\n];\n\n// Per-band ink strength: the middle stream is the boldest.\nconst BAND_GAIN = [0.75, 1, 0.55];\n\nconst VERTEX_SHADER = `\nattribute vec2 position;\nvarying vec2 vUv;\nvoid main() {\n  vUv = position * 0.5 + 0.5;\n  gl_Position = vec4(position, 0.0, 1.0);\n}\n`;\n\nconst FRAGMENT_SHADER = /* glsl */ `\nprecision highp float;\nuniform float u_time;\nuniform vec2 u_resolution;\nuniform float u_interactive_fidelity;\nuniform vec3 u_band0;\nuniform vec3 u_band1;\nuniform vec3 u_band2;\nuniform vec3 u_background;\nvarying vec2 vUv;\n\nmat2 rotate2d(float _angle){\n  return mat2(cos(_angle),-sin(_angle),\n              sin(_angle),cos(_angle));\n}\n\nvoid main() {\n  vec2 p = vUv * 2.0 - 1.0;\n  p.x *= u_resolution.x / u_resolution.y;\n  p = rotate2d(-0.32) * p;\n\n  vec3 color = u_background;\n  float spread = 0.09 * (0.3 + u_interactive_fidelity * 0.7);\n  float fade = exp(-length(vUv * 2.0 - 1.0) * 0.9);\n\n  // Streams are inked onto the paper one over the other, so they hold on light and dark grounds.\n  for(int i = 0; i < 3; i++) {\n    float offset = float(1 - i) * spread;\n    float y = p.y + offset + (sin(p.x * 1.8 - u_time * 1.2) * 0.18);\n    float line = sin(y * 4.5 + u_time * 1.6) * 0.5 + 0.5;\n    float wave = smoothstep(0.9, 0.995, line) + smoothstep(0.7, 0.995, line) * 0.18;\n    vec3 ink = i == 0 ? u_band0 : (i == 1 ? u_band1 : u_band2);\n    float gain = i == 0 ? ${BAND_GAIN[0].toFixed(2)} : (i == 1 ? ${BAND_GAIN[1].toFixed(2)} : ${BAND_GAIN[2].toFixed(2)});\n    color = mix(color, ink, clamp(wave * gain * fade, 0.0, 1.0));\n  }\n\n  gl_FragColor = vec4(color, 1.0);\n}\n`;\n\nfunction compile(gl: WebGLRenderingContext, type: number, source: string) {\n  const shader = gl.createShader(type);\n  if (!shader) throw new Error(\"Unable to create Confluence Lines shader\");\n  gl.shaderSource(shader, source);\n  gl.compileShader(shader);\n  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {\n    throw new Error(gl.getShaderInfoLog(shader) ?? \"Confluence Lines shader compilation failed\");\n  }\n  return shader;\n}\n\nexport function ConfluenceLines({\n  speed = 1,\n  fidelity = 0.5,\n  scale = 1,\n  brightness = 1,\n  opacity = 1,\n  hue = 0,\n  saturation = 1,\n  backgroundColor,\n  colors,\n  className,\n}: ConfluenceLinesProps) {\n  const theme = useTheme();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const prefersReducedMotion = useReducedMotion();\n  const optionsRef = useRef({ speed, fidelity, inks: [] as Rgb[], ground: [0, 0, 0] as Rgb });\n  const colorKey = colors?.join(\",\");\n  useEffect(() => {\n    if (!theme) return;\n    optionsRef.current.ground = backgroundColor ? toRgb(backgroundColor) : theme.background;\n    optionsRef.current.inks = colorKey\n      ? colorKey.split(\",\").map(toRgb)\n      : [theme.primary, theme.foreground, theme[\"muted-foreground\"]];\n  }, [theme, backgroundColor, colorKey]);\n  optionsRef.current.speed = speed;\n  optionsRef.current.fidelity = fidelity;\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas || !theme) return;\n    const gl = canvas.getContext(\"webgl\", { alpha: true, antialias: false });\n    if (!gl) return;\n\n    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX_SHADER);\n    const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);\n    const program = gl.createProgram();\n    if (!program) return;\n    gl.attachShader(program, vertex);\n    gl.attachShader(program, fragment);\n    gl.linkProgram(program);\n    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {\n      throw new Error(gl.getProgramInfoLog(program) ?? \"Confluence Lines program link failed\");\n    }\n    gl.useProgram(program);\n\n    const buffer = gl.createBuffer();\n    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);\n    gl.bufferData(\n      gl.ARRAY_BUFFER,\n      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),\n      gl.STATIC_DRAW,\n    );\n    const position = gl.getAttribLocation(program, \"position\");\n    gl.enableVertexAttribArray(position);\n    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);\n\n    const uTime = gl.getUniformLocation(program, \"u_time\");\n    const uResolution = gl.getUniformLocation(program, \"u_resolution\");\n    const uFidelity = gl.getUniformLocation(program, \"u_interactive_fidelity\");\n    const uBands = [\"u_band0\", \"u_band1\", \"u_band2\"].map((name) =>\n      gl.getUniformLocation(program, name),\n    );\n    const uBackground = gl.getUniformLocation(program, \"u_background\");\n    let frame = 0;\n    let visible = true;\n\n    const draw = (now: number) => {\n      const options = optionsRef.current;\n      gl.uniform1f(uTime, now * 0.0003 * options.speed);\n      gl.uniform1f(uFidelity, options.fidelity);\n      uBands.forEach((location, index) => {\n        gl.uniform3fv(location, options.inks[index] ?? options.inks[0] ?? options.ground);\n      });\n      gl.uniform3fv(uBackground, options.ground);\n      gl.drawArrays(gl.TRIANGLES, 0, 6);\n    };\n\n    const render = (now: number) => {\n      draw(now);\n      frame = visible && !document.hidden ? requestAnimationFrame(render) : 0;\n    };\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      const dpr = Math.min(window.devicePixelRatio || 1, 2);\n      canvas.width = Math.max(1, Math.round(bounds.width * dpr));\n      canvas.height = Math.max(1, Math.round(bounds.height * dpr));\n      gl.viewport(0, 0, canvas.width, canvas.height);\n      gl.uniform2f(uResolution, canvas.width, canvas.height);\n      if (prefersReducedMotion) draw(8000);\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(host);\n    resize();\n\n    let intersection: IntersectionObserver | undefined;\n    if (!prefersReducedMotion) {\n      intersection = new IntersectionObserver(([entry]) => {\n        visible = entry?.isIntersecting ?? true;\n        if (visible && !frame) frame = requestAnimationFrame(render);\n        if (!visible && frame) {\n          cancelAnimationFrame(frame);\n          frame = 0;\n        }\n      });\n      intersection.observe(host);\n      frame = requestAnimationFrame(render);\n    }\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection?.disconnect();\n      gl.deleteBuffer(buffer);\n      gl.deleteShader(vertex);\n      gl.deleteShader(fragment);\n      gl.deleteProgram(program);\n    };\n  }, [prefersReducedMotion, theme]);\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"pointer-events-none absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\" }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"absolute inset-0 block h-full w-full\"\n        style={{\n          opacity,\n          filter: `hue-rotate(${hue}deg) saturate(${saturation}) brightness(${brightness})`,\n          transform: `scale(${scale})`,\n        }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 3,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "fidelity",
+      "label": "Fidelity",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.5
+    },
+    {
+      "kind": "range",
+      "key": "scale",
+      "label": "Scale",
+      "min": 0.7,
+      "max": 1.4,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

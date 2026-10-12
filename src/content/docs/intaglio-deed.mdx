@@ -1,0 +1,48 @@
+---
+title: Intaglio Deed
+description: A guilloche intaglio deed in theme ink whose rosette cycles through four lathe cams.
+---
+
+A paper certificate drawn on Canvas 2D: an engraved wave field and guilloche border, a medal of two rosettes and a slowly drifting harmonic pass. Every few seconds it switches to the next cam, redrawing the rosettes. It pauses off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="intaglio-deed" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add intaglio-deed
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/intaglio-deed.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { IntaglioDeed } from "@/components/ui/intaglio-deed";
+
+export default function Example() {
+  return (
+    <div className="relative h-[560px] w-full">
+      <IntaglioDeed label="Modus UI" title="Folio 07 · Plate" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default               | Description                              |
+| :---------------- | :------- | :-------------------- | :--------------------------------------- |
+| `label`           | `string` | `"Modus Atelier"`     | Small mono label above the medal.        |
+| `title`           | `string` | `"Folio 07 · Plate"`  | Headline before the cam letter.          |
+| `caption`         | `string` | `"Current plate ·"`   | Caption before the cam letter.           |
+| `inkColor`        | `string` | `"#1f3a30"`           | Engraving ink colour (hex).              |
+| `paperColor`      | `string` | `"#f5efdf"`           | Certificate paper colour.                |
+| `backgroundColor` | `string` | `"hsl(var(--muted))"` | Scene background behind the certificate. |
+| `cycleInterval`   | `number` | `4200`                | Milliseconds between cam changes.        |

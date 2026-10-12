@@ -1,0 +1,49 @@
+---
+title: Circuit Heart
+description: An isometric Three.js platform with a pulsing core and orbiting nodes, lit from your theme.
+---
+
+An orthographic, isometric Three.js scene: a platform on a theme surface with a glowing core in the palette's primary whose pulse lights the cubes orbiting around it, set on the page ground. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Logic Core (MIT, © 2026 Meng To).
+
+<ComponentPreview name="circuit-heart" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add circuit-heart
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/circuit-heart.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { CircuitHeart } from "@/components/ui/circuit-heart";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <CircuitHeart />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                        | Description                                            |
+| :---------------- | :------- | :----------------------------- | :----------------------------------------------------- |
+| `hue`             | `number` | `0`                            | Hue rotation in degrees (-180 to 180).                 |
+| `saturation`      | `number` | `1`                            | Saturation multiplier (0 to 2).                        |
+| `brightness`      | `number` | `1`                            | Brightness multiplier (0.35 to 1.65).                  |
+| `accentColor`     | `string` | `hsl(var(--primary))`          | Glow colour of the core, accent nodes and point light. |
+| `platformColor`   | `string` | `hsl(var(--card))`             | Colour of the base disc.                               |
+| `nodeColor`       | `string` | `hsl(var(--muted-foreground))` | Colour of the non-accent orbiting nodes.               |
+| `backgroundColor` | `string` | `hsl(var(--background))`       | Colour behind the effect.                              |

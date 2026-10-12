@@ -1,0 +1,52 @@
+---
+title: Lattice Drift
+description: A WebGL dome of ink points turning slowly under a fading mask, with scattered accent points in the theme primary.
+---
+
+A WebGL dome of ink points turning slowly under a fading mask, with scattered accent points in the theme primary. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Structure Flow (MIT).
+
+<ComponentPreview name="lattice-drift" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add lattice-drift
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/lattice-drift.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { LatticeDrift } from "@/components/ui/lattice-drift";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LatticeDrift />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default          | Description                                                |
+| :---------------- | :------- | :--------------- | :--------------------------------------------------------- |
+| `speed`           | `number` | `0.7`            | Rotation speed multiplier.                                 |
+| `pointSize`       | `number` | `0.11`           | Size of each point.                                        |
+| `opacity`         | `number` | `0.75`           | Opacity of the points.                                     |
+| `maskStart`       | `number` | `0.05`           | Fraction of the height where the fade mask begins.         |
+| `maskSolid`       | `number` | `0.35`           | Fraction of the height where the points are fully visible. |
+| `color`           | `string` | theme foreground | Colour of most points.                                     |
+| `accentColor`     | `string` | theme primary    | Colour of the scattered accent points.                     |
+| `backgroundColor` | `string` | theme background | Background behind the points.                              |

@@ -1,0 +1,50 @@
+---
+title: Hollow Bloom
+description: A curved dot matrix that blooms outward from a hollow centre and drifts with the pointer, tinted from the theme primary.
+---
+
+A curved dot matrix that blooms outward from a hollow centre and drifts with the pointer, tinted from the theme primary. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Void Field (MIT).
+
+<ComponentPreview name="hollow-bloom" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hollow-bloom
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hollow-bloom.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { HollowBloom } from "@/components/ui/hollow-bloom";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <HollowBloom />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default          | Description                   |
+| :---------------- | :------- | :--------------- | :---------------------------- |
+| `speed`           | `number` | `0.8`            | Animation speed multiplier.   |
+| `hue`             | `number` | `0`              | Hue rotation in degrees.      |
+| `saturation`      | `number` | `1`              | Saturation multiplier.        |
+| `brightness`      | `number` | `1`              | Brightness multiplier.        |
+| `color`           | `string` | theme primary    | Colour of the blooming marks. |
+| `backgroundColor` | `string` | theme background | Background colour.            |

@@ -1,0 +1,50 @@
+---
+title: Bough Study
+description: A painterly canvas tree that grows, sways and regrows in ink drawn from your theme.
+---
+
+A branching tree drawn on a 2D canvas in an ink ramp from the foreground up to the palette's primary, on the page ground. It grows from the trunk outwards, sways with layered wind, bends towards the pointer and shakes on click, then fades and grows a new one while motes drift around the canopy. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and stays still when the user prefers reduced motion. Ported from ThreeUI Community's Generative Tree (MIT, © 2026 Meng To).
+
+<ComponentPreview name="bough-study" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add bough-study
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bough-study.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BoughStudy } from "@/components/ui/bough-study";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <BoughStudy />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                   | Description                                               |
+| :---------------- | :------- | :---------------------------------------- | :-------------------------------------------------------- |
+| `speed`           | `number` | `1`                                       | Animation speed multiplier (0 to 3).                      |
+| `size`            | `number` | `1`                                       | Tree size (0.65 to 1.5). Below 1 the tree is centred.     |
+| `particleAmount`  | `number` | `1`                                       | Particle count multiplier (0 to 2, 50 particles at 1).    |
+| `opacity`         | `number` | `1`                                       | Canvas opacity.                                           |
+| `hue`             | `number` | `0`                                       | Hue rotation in degrees.                                  |
+| `saturation`      | `number` | `1`                                       | Saturation multiplier.                                    |
+| `brightness`      | `number` | `1`                                       | Brightness multiplier.                                    |
+| `backgroundColor` | `string` | `hsl(var(--background))`                  | Colour behind the tree, any CSS colour.                   |
+| `colors`          | `RGB[]`  | Theme ramp (`--foreground` → `--primary`) | Branch inks from trunk to tips, as `{ r, g, b }` objects. |

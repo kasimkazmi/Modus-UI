@@ -1,0 +1,49 @@
+---
+title: Drape Type
+description: A verlet drape woven from italic serif letters in your theme's ink. Grab it and pull.
+---
+
+A sheet of italic serif letters hanging from five pegs on the page, faint strokes in the muted tone and dense folds in the palette's primary. Letters stretch and rotate with the weave; grab the sheet and pull. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Cloth Study (MIT, © 2026 Meng To).
+
+<ComponentPreview name="drape-type" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add drape-type
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/drape-type.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DrapeType } from "@/components/ui/drape-type";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DrapeType />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                                     | Description                                 |
+| :---------------- | :------- | :---------------------------------------------------------- | :------------------------------------------ |
+| `text`            | `string` | `"modusholdsthefoldandletsthedraftcarryeverylinetotheedge"` | Phrase woven into the sheet.                |
+| `scale`           | `number` | `1`                                                         | Scales the drawing (clamped 0.65–1.5).      |
+| `opacity`         | `number` | `1`                                                         | Overall opacity (clamped 0.1–1).            |
+| `hue`             | `number` | `0`                                                         | Hue rotation in degrees (clamped -180–180). |
+| `saturation`      | `number` | `1`                                                         | Saturation multiplier (clamped 0–2).        |
+| `brightness`      | `number` | `1`                                                         | Brightness multiplier (clamped 0.4–1.8).    |
+| `inkColor`        | `string` | Theme ramp (`--muted-foreground` → `--primary`)             | Colour of the type, any CSS colour.         |
+| `backgroundColor` | `string` | `hsl(var(--background))`                                    | Ground colour, any CSS colour.              |

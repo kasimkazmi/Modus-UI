@@ -1,0 +1,53 @@
+---
+title: Silk Bands
+description: A WebGL background of slow, wide bands printed through a coarse halftone screen in a ramp of the theme colours.
+---
+
+A full-bleed WebGL shader of three slow, wide bands printed through a coarse scanning halftone screen. The colours are a ramp built from the theme (`--primary` at several lightnesses, `--foreground` and `--muted-foreground`) over `--background`, so it is ink on paper in light mode and follows palette changes live. The bands gather on the left and fade out to the right, leaving room for text, and drift with the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Ribbon Field (MIT).
+
+<ComponentPreview name="silk-bands" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add silk-bands
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/silk-bands.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SilkBands } from "@/components/ui/silk-bands";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SilkBands />
+      <div className="relative z-10 p-8 text-white">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type       | Default              | Description                                                         |
+| :---------------- | :--------- | :------------------- | :------------------------------------------------------------------ |
+| `speed`           | `number`   | `1`                  | Animation speed multiplier.                                         |
+| `pointerAmount`   | `number`   | `1`                  | How strongly the bands follow the pointer.                          |
+| `smoothing`       | `number`   | `0.035`              | Pointer easing per frame.                                           |
+| `brightness`      | `number`   | `1`                  | CSS brightness filter.                                              |
+| `opacity`         | `number`   | `1`                  | Canvas opacity.                                                     |
+| `hue`             | `number`   | `0`                  | Hue rotation in degrees.                                            |
+| `saturation`      | `number`   | `1`                  | CSS saturation filter.                                              |
+| `backgroundColor` | `string`   | theme `--background` | Base colour behind the bands.                                       |
+| `colors`          | `string[]` | theme ramp           | Six band colours (any CSS colour): three bands, two accents, bloom. |

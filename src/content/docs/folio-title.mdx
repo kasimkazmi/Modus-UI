@@ -1,0 +1,54 @@
+---
+title: Folio Title
+description: A journal index whose italic serif titles decode from scrambled glyphs, set in your theme.
+---
+
+A numbered journal index on the page ground: mono caption, numerals in `--primary`, italic serif titles and pill-shaped meta tags, all drawn from the theme tokens so it follows light, dark and every palette. On mount each title decodes left to right, one after another. A short band of scrambled glyphs leads the reveal while a few characters further along flicker, then the title settles. Type scales with the container, the meta column drops away on narrow screens, and titles appear as-is when the user prefers reduced motion. The component fills its parent, so give it a sized container. Ported from ThreeUI Community's Article Headings (MIT, © 2026 Meng To).
+
+<ComponentPreview name="folio-title" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add folio-title
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/folio-title.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { FolioTitle } from "@/components/ui/folio-title";
+
+export default function Example() {
+  return (
+    <div className="h-[420px] w-full">
+      <FolioTitle
+        entries={[
+          { title: "A Grid Is a Promise You Keep", meta: "ESSAY · 6 MIN" },
+          { title: "Tokens Before Pixels", meta: "WORKSHOP · 9 MIN" },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop             | Type                                | Default                     | Description                                         |
+| :--------------- | :---------------------------------- | :-------------------------- | :-------------------------------------------------- |
+| `duration`       | `number`                            | `560`                       | Length of each decode in milliseconds.              |
+| `stagger`        | `number`                            | `140`                       | Delay between headings in milliseconds.             |
+| `scrambleLength` | `number`                            | `10`                        | Number of scrambled glyphs leading the reveal.      |
+| `preserveChance` | `number`                            | `0.3`                       | Chance a leading glyph shows its real character.    |
+| `tailChance`     | `number`                            | `0.18`                      | Chance an unrevealed character flickers to a glyph. |
+| `label`          | `string`                            | `"MODUS JOURNAL"`           | Header caption on the left.                         |
+| `entries`        | `{ title: string; meta: string }[]` | Three Modus journal entries | Rows to list; each is numbered automatically.       |

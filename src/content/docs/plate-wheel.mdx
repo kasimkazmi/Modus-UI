@@ -1,0 +1,54 @@
+---
+title: Plate Wheel
+description: A tilted WebGL wheel of curved, muted image plates turning over a ruled sheet in the theme colours.
+---
+
+Sixteen curved image plates wound around a tilted cylinder, turning slowly and floating up and down over a ruled grid drawn from the theme background and foreground tokens. Photos are desaturated by default for a quiet editorial tone. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Gallery (MIT).
+
+<ComponentPreview name="plate-wheel" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add plate-wheel
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/plate-wheel.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { PlateWheel } from "@/components/ui/plate-wheel";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <PlateWheel />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type       | Default                           | Description                                  |
+| :---------------- | :--------- | :-------------------------------- | :------------------------------------------- |
+| `images`          | `string[]` | five sample photos                | Image URLs, repeated across the 16 panels.   |
+| `speed`           | `number`   | `1`                               | Rotation speed, clamped to 0–3.              |
+| `scale`           | `number`   | `1`                               | Scale of the helix, clamped to 0.7–1.35.     |
+| `opacity`         | `number`   | `1`                               | Canvas opacity, clamped to 0.05–1.           |
+| `hue`             | `number`   | `0`                               | Hue rotation in degrees, clamped to ±180.    |
+| `saturation`      | `number`   | `0.55`                            | CSS saturation filter, clamped to 0–2.       |
+| `brightness`      | `number`   | `1`                               | CSS brightness filter, clamped to 0.35–1.65. |
+| `backgroundColor` | `string`   | `"hsl(var(--background))"`        | Background colour.                           |
+| `dotColor`        | `string`   | `"hsl(var(--foreground) / 0.08)"` | Colour of the ruled background grid.         |

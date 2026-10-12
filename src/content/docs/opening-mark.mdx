@@ -1,0 +1,48 @@
+---
+title: Opening Mark
+description: An opening title in the theme's italic serif that assembles letter by letter, then holds and loops.
+---
+
+Each letter drifts in from a seeded offset in the theme's italic heading face, trailing soft fringes in the primary and muted tones that converge as it lands, while a square seal in `--primary` settles beside the word. The finished title holds, then replays. It reads its colours from the theme, scales to fill its parent, pauses off screen and shows the finished title when the user prefers reduced motion. Ported from ThreeUI Community's ThreeUI Intro (MIT, © 2026 Meng To).
+
+<ComponentPreview name="opening-mark" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add opening-mark
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/opening-mark.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { OpeningMark } from "@/components/ui/opening-mark";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full">
+      <OpeningMark text="Modus UI" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type      | Default                    | Description                                            |
+| :---------------- | :-------- | :------------------------- | :----------------------------------------------------- |
+| `text`            | `string`  | `"Modus UI"`               | Wordmark text that assembles.                          |
+| `showMark`        | `boolean` | `true`                     | Show the seal mark (in `--primary`) before the text.   |
+| `color`           | `string`  | `"hsl(var(--foreground))"` | Text colour, any CSS colour.                           |
+| `backgroundColor` | `string`  | `"hsl(var(--background))"` | Scene background.                                      |
+| `fontSize`        | `number`  | `150`                      | Font size of the wordmark on the 1280×720 composition. |
+| `duration`        | `number`  | `1.7`                      | Seconds the assemble animation runs.                   |
+| `holdTime`        | `number`  | `1.1`                      | Seconds the finished wordmark holds before looping.    |

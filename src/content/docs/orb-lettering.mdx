@@ -1,0 +1,49 @@
+---
+title: Orb Lettering
+description: A canvas sphere whose land is set in italic serif type along the latitudes, inked in your theme.
+---
+
+Land set in italic serif type along the latitude lines over a halftone sea, inked from the muted tone up to the palette's primary on the page ground. Drag to spin and tilt, scroll to zoom and click to drop a pin. It fills its positioned parent, re-reads the theme when the mode or palette changes, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Globe Study (MIT, © 2026 Meng To).
+
+<ComponentPreview name="orb-lettering" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add orb-lettering
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/orb-lettering.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { OrbLettering } from "@/components/ui/orb-lettering";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <OrbLettering />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                          | Description                                 |
+| :---------------- | :------- | :----------------------------------------------- | :------------------------------------------ |
+| `text`            | `string` | `"alettertravelsroundthesphereandcomesbackhome"` | Phrase written across the land.             |
+| `scale`           | `number` | `1`                                              | Scales the drawing (clamped 0.65–1.5).      |
+| `opacity`         | `number` | `1`                                              | Overall opacity (clamped 0.1–1).            |
+| `hue`             | `number` | `0`                                              | Hue rotation in degrees (clamped -180–180). |
+| `saturation`      | `number` | `1`                                              | Saturation multiplier (clamped 0–2).        |
+| `brightness`      | `number` | `1`                                              | Brightness multiplier (clamped 0.4–1.8).    |
+| `inkColor`        | `string` | Theme ramp (`--muted-foreground` → `--primary`)  | Colour of the type, any CSS colour.         |
+| `backgroundColor` | `string` | `hsl(var(--background))`                         | Ground colour, any CSS colour.              |

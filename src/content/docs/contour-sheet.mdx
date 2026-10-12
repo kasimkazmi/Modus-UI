@@ -1,0 +1,54 @@
+---
+title: Contour Sheet
+description: "A WebGL contour map drawn like a survey sheet: ink contours on paper, with every fifth index line in the theme primary."
+---
+
+A WebGL contour map drawn like a survey sheet: ink contours on paper, with every fifth index line in the theme primary. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Topo Field (MIT).
+
+<ComponentPreview name="contour-sheet" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add contour-sheet
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/contour-sheet.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ContourSheet } from "@/components/ui/contour-sheet";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ContourSheet />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default          | Description                                         |
+| :---------------- | :------- | :--------------- | :-------------------------------------------------- |
+| `speed`           | `number` | `0.7`            | Animation speed multiplier (0–3).                   |
+| `length`          | `number` | `0.8`            | Length / reach multiplier (0.35–2.5).               |
+| `density`         | `number` | `1.4`            | Contour band count multiplier (0.25–2.5).           |
+| `opacity`         | `number` | `1`              | Opacity of the effect layer (0.05–1).               |
+| `hue`             | `number` | `0`              | Hue rotation in degrees applied to the final frame. |
+| `saturation`      | `number` | `1`              | Saturation multiplier applied to the final frame.   |
+| `brightness`      | `number` | `1`              | Brightness multiplier applied to the final frame.   |
+| `backgroundColor` | `string` | theme background | Paper colour.                                       |
+| `lineColor`       | `string` | theme foreground | Contour ink.                                        |
+| `accentColor`     | `string` | theme primary    | Colour of every fifth (index) contour.              |

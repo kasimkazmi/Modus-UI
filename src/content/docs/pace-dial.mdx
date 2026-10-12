@@ -1,0 +1,45 @@
+---
+title: Pace Dial
+description: A printed instrument dial with a self-test needle sweep, in speedometer, tachometer, boost and power variants.
+---
+
+A flat, printed instrument dial set on a card: hairline ticks, italic serif numerals, a mono label and unit, a large serif readout and a slim needle and progress arc in the theme primary, with the red line drawn in the primary as well. Every colour comes from theme tokens, so it follows light and dark mode and the palette picker. When it scrolls into view it runs an instrument self-test (full-scale sweep, fall back, settle on the live reading) and repeats every eight seconds. It renders the settled reading without motion when the user prefers reduced motion. Ported from ThreeUI Community's Performance Gauges (MIT).
+
+<ComponentPreview name="pace-dial" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pace-dial
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pace-dial.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PaceDial } from "@/components/ui/pace-dial";
+
+export default function Example() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <PaceDial variant="boost" className="max-w-[340px]" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                                  | Default         | Description                                   |
+| :----------- | :---------------------------------------------------- | :-------------- | :-------------------------------------------- |
+| `variant`    | `"tachometer" \| "speedometer" \| "boost" \| "power"` | `"speedometer"` | Which instrument to render.                   |
+| `hue`        | `number`                                              | `0`             | Hue rotation applied to the dial, in degrees. |
+| `saturation` | `number`                                              | `1`             | Saturation multiplier applied to the dial.    |
+| `brightness` | `number`                                              | `1`             | Brightness multiplier applied to the dial.    |

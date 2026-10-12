@@ -1,0 +1,49 @@
+---
+title: Sphere Sketch
+description: Italic serif letters wrapped around a turning globe; click to shake some loose.
+---
+
+1,900 italic serif letters and printer's marks wrapped around a turning globe, inked in the theme foreground with the side facing you picked out in the primary colour. Hover to spin faster, click to shake letters off; they tumble away in the primary colour and regrow. Colours and the typeface come from the theme, so it follows light and dark mode and the palette picker. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Ball Study (MIT).
+
+<ComponentPreview name="sphere-sketch" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add sphere-sketch
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/sphere-sketch.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SphereSketch } from "@/components/ui/sphere-sketch";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <SphereSketch />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default | Description                                                    |
+| :---------------- | :------- | :------ | :------------------------------------------------------------- |
+| `scale`           | `number` | `1`     | Scales the drawing (clamped 0.65–1.5).                         |
+| `opacity`         | `number` | `1`     | Overall opacity (clamped 0.1–1).                               |
+| `hue`             | `number` | `0`     | Hue rotation in degrees (clamped -180–180).                    |
+| `saturation`      | `number` | `1`     | Saturation multiplier (clamped 0–2).                           |
+| `brightness`      | `number` | `1`     | Brightness multiplier (clamped 0.4–1.8).                       |
+| `inkColor`        | `string` | None    | Any CSS colour for the type; defaults to the theme foreground. |
+| `backgroundColor` | `string` | None    | Background colour; defaults to the theme background.           |
+| `className`       | `string` | None    | Extra classes for the wrapper.                                 |
