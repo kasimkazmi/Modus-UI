@@ -72,7 +72,8 @@ void main(){
   col += star * u_warp * 0.18 * exp(-abs(uv.y) * 6.0);
   vec2 e = sc * (1.0 - sc);
   col *= 0.45 + 0.55 * pow(e.x * e.y * 16.0, 0.25);
-  col = mix(col, u_paper, clamp(u_flash, 0.0, 1.0));
+  // The flash lifts the field toward the star tone but keeps it dark under the light label.
+  col = mix(col, mix(col, star, 0.35), clamp(u_flash, 0.0, 1.0));
   gl_FragColor = vec4(col, 1.0);
 }
 `;

@@ -1,5 +1,4 @@
 "use client";
-// Ported from ThreeUI Community's Sylva Living World (MIT, © 2026 Meng To).
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import * as THREE from "three";

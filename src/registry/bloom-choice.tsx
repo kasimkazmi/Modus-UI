@@ -260,7 +260,7 @@ export function BloomChoice({
       role="radiogroup"
       aria-label={ariaLabel}
       data-disabled={disabled ? "" : undefined}
-      className={`group inline-flex select-none items-center gap-[var(--jr-gap)] px-[var(--jr-pad-x)] py-[var(--jr-pad-y)] [-webkit-touch-callout:none] data-[disabled]:pointer-events-none data-[disabled]:opacity-50${className ? ` ${className}` : ""}`}
+      className={`group inline-flex max-w-full select-none flex-wrap items-center justify-center gap-[var(--jr-gap)] px-[var(--jr-pad-x)] py-[var(--jr-pad-y)] [-webkit-touch-callout:none] data-[disabled]:pointer-events-none data-[disabled]:opacity-50${className ? ` ${className}` : ""}`}
       style={
         {
           "--jr-chip": chipColor,
