@@ -1,0 +1,55 @@
+{
+  "name": "mosaic-crest",
+  "title": "Mosaic Crest",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/mosaic-crest.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Data Pixel Arc (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ntype Tokens = {\n  primary: string;\n  foreground: string;\n  muted: string;\n  background: string;\n  card: string;\n  border: string;\n  dark: boolean;\n};\n\n/** Reads the Modus theme tokens (bare HSL channels) as comma `hsl()` strings canvas and three.js both parse. */\nfunction readTokens(): Tokens {\n  const root = document.documentElement;\n  const cs = getComputedStyle(root);\n  const hsl = (name: string) =>\n    `hsl(${cs\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,]+/)\n      .filter(Boolean)\n      .join(\", \")})`;\n  return {\n    primary: hsl(\"--primary\"),\n    foreground: hsl(\"--foreground\"),\n    muted: hsl(\"--muted-foreground\"),\n    background: hsl(\"--background\"),\n    card: hsl(\"--card\"),\n    border: hsl(\"--border\"),\n    dark: root.classList.contains(\"dark\") || root.dataset.theme === \"dark\",\n  };\n}\n\n/** The current theme tokens, re-read whenever the mode or palette on <html> changes. */\nfunction useTokens() {\n  const [tokens, setTokens] = useState<Tokens | null>(null);\n  useEffect(() => {\n    const update = () => setTokens(readTokens());\n    update();\n    const observer = new MutationObserver(update);\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return tokens;\n}\n\nexport interface MosaicCrestProps {\n  speed?: number;\n  pixelSize?: number;\n  arcCenter?: number;\n  arcDrop?: number;\n  thickness?: number;\n  brightness?: number;\n  hue?: number;\n  saturation?: number;\n  /** Scene background. Defaults to the theme's `--background`. */\n  backgroundColor?: string;\n  className?: string;\n}\n\nexport function MosaicCrest({\n  speed = 1,\n  pixelSize = 12,\n  arcCenter = 0.82,\n  arcDrop = -0.72,\n  thickness = 0.24,\n  brightness = 1,\n  hue = 0,\n  saturation = 1,\n  backgroundColor,\n  className,\n}: MosaicCrestProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const tokens = useTokens();\n  const paper = backgroundColor ?? tokens?.background;\n  const ink = tokens?.primary;\n  const edge = tokens?.muted;\n  const options = useRef({\n    speed,\n    pixelSize,\n    arcCenter,\n    arcDrop,\n    thickness,\n    brightness,\n    paper,\n    ink,\n    edge,\n  });\n  const repaint = useRef<() => void>(() => {});\n  options.current = {\n    speed,\n    pixelSize,\n    arcCenter,\n    arcDrop,\n    thickness,\n    brightness,\n    paper,\n    ink,\n    edge,\n  };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    const context = canvas?.getContext(\"2d\", { alpha: false });\n    if (!host || !canvas || !context) return;\n\n    let width = 1;\n    let height = 1;\n    let time = 0;\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      width = Math.max(1, bounds.width);\n      height = Math.max(1, bounds.height);\n      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);\n      canvas.width = Math.round(width * pixelRatio);\n      canvas.height = Math.round(height * pixelRatio);\n      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);\n    };\n\n    const render = () => {\n      const o = options.current;\n      if (!o.paper || !o.ink || !o.edge) return;\n      context.globalAlpha = 1;\n      context.fillStyle = o.paper;\n      context.fillRect(0, 0, width, height);\n      const cols = Math.ceil(width / o.pixelSize);\n      const rows = Math.ceil(height / o.pixelSize);\n      const arcCenterY = height * o.arcCenter;\n      const drop = height * o.arcDrop;\n      const band = height * o.thickness;\n      const gap = Math.max(1, Math.round(o.pixelSize * 0.18));\n      for (let x = 0; x < cols; x += 1) {\n        for (let y = 0; y < rows; y += 1) {\n          const px = x * o.pixelSize;\n          const py = y * o.pixelSize;\n          const nx = (px / width) * 2 - 1;\n          const curveY = arcCenterY + Math.pow(Math.abs(nx), 1.8) * drop;\n          let intensity = Math.max(0, 1 - Math.abs(py - curveY) / band);\n          if (intensity <= 0.01) continue;\n          const wave1 = Math.sin(nx * 4 - time * 1.5) * 0.1;\n          const wave2 = Math.cos(py * 0.01 + time) * 0.1;\n          intensity = Math.max(0, Math.min(1, intensity + wave1 + wave2));\n          intensity *= Math.max(0, 1 - Math.pow(Math.abs(nx), 2.5));\n          if (intensity <= 0.02) continue;\n          const size = o.pixelSize - gap;\n          // Muted tesserae make the band; the crest is laid in the primary colour on top.\n          context.fillStyle = o.edge;\n          context.globalAlpha = Math.min(1, Math.pow(intensity, 0.8) * 0.55 * o.brightness);\n          context.fillRect(px, py, size, size);\n          const core = Math.pow(intensity, 2.6);\n          if (core > 0.04) {\n            context.fillStyle = o.ink;\n            context.globalAlpha = Math.min(1, core * o.brightness);\n            context.fillRect(px, py, size, size);\n          }\n        }\n      }\n      context.globalAlpha = 1;\n      time += 0.02 * o.speed;\n    };\n\n    let frame = 0;\n    let visible = true;\n    const tick = () => {\n      render();\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (prefersReducedMotion || frame || !visible || document.hidden) return;\n      frame = requestAnimationFrame(tick);\n    };\n    const stop = () => {\n      if (frame) cancelAnimationFrame(frame);\n      frame = 0;\n    };\n\n    const resizeObserver = new ResizeObserver(() => {\n      resize();\n      render();\n    });\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else stop();\n    });\n    const onVisibility = () => (document.hidden ? stop() : start());\n\n    repaint.current = render;\n    resize();\n    render();\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    start();\n\n    return () => {\n      stop();\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n    };\n  }, [prefersReducedMotion]);\n\n  // Repaint the still frame when the theme changes under it.\n  useEffect(() => {\n    repaint.current();\n  }, [paper, ink, edge]);\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\" }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ filter: `hue-rotate(${hue}deg) saturate(${saturation})` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 1.6,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

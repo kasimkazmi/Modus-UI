@@ -1,0 +1,50 @@
+---
+title: Tubelight
+description: Serif neon lettering on canvas, lit in the theme colour, that breathes and flickers one letter.
+---
+
+The heading serif is bent into outline glass tubing on a 2D canvas, drawn in layered passes — spill, bloom, a hot core and a specular streak — inside a rounded framing tube fed by two electrodes. The gas takes its colour from `--primary`: in dark mode the tubes glow, in light mode they read as unlit daylight glass on paper with a cast shadow. The sign breathes gently and one letter drops out and re-strikes on a seeded flicker schedule. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="tubelight" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tubelight
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tubelight.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Tubelight } from "@/components/ui/tubelight";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full">
+      <Tubelight text={"Open\nlate"} />
+    </div>
+  );
+}
+```
+
+Any text the heading font can set is supported; use `\n` for a new line.
+
+## Props
+
+| Prop              | Type                          | Default   | Description                                                      |
+| :---------------- | :---------------------------- | :-------- | :--------------------------------------------------------------- |
+| `text`            | `string`                      | `"Modus"` | Lettering in the heading serif; `\n` starts a new line.          |
+| `mode`            | `"auto" \| "dark" \| "light"` | `"auto"`  | Lit tubes, unlit daylight glass, or follow the site theme.       |
+| `frame`           | `boolean`                     | `true`    | Bend a framing tube around the lettering, fed by two electrodes. |
+| `backgroundColor` | `string`                      | —         | Stage colour. Defaults to the theme background.                  |
+| `hue`             | `number`                      | `0`       | Hue rotation of the final frame, in degrees.                     |
+| `saturation`      | `number`                      | `1`       | Saturation of the final frame.                                   |
+| `brightness`      | `number`                      | `1`       | Brightness of the final frame.                                   |

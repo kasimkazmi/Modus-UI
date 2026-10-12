@@ -1,0 +1,51 @@
+---
+title: Ribbon Light
+description: Diagonal ribbons of ink-toned light drifting over the page, tinted from your theme.
+---
+
+A full-bleed Three.js simplex-noise shader of soft diagonal ribbons that drift and fold across the frame. The two ribbon inks come from the theme's primary hue and are mixed onto the theme background, so it reads as ink on paper in light mode and as light in dark mode. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Fluid Field (MIT).
+
+<ComponentPreview name="ribbon-light" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ribbon-light
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ribbon-light.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { RibbonLight } from "@/components/ui/ribbon-light";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <RibbonLight />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                    | Description                            |
+| :---------------- | :------- | :------------------------- | :------------------------------------- |
+| `hue`             | `number` | `0`                        | Hue rotation in degrees (-180 to 180). |
+| `saturation`      | `number` | `1`                        | Saturation multiplier (0 to 2).        |
+| `brightness`      | `number` | `1`                        | Brightness multiplier (0.35 to 1.65).  |
+| `primaryColor`    | `string` | theme primary              | First colour of the ribbons.           |
+| `secondaryColor`  | `string` | theme primary, shifted     | Second colour of the ribbons.          |
+| `backgroundColor` | `string` | `"hsl(var(--background))"` | Colour behind the ribbons.             |

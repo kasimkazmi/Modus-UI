@@ -1,0 +1,53 @@
+---
+title: Rising Strokes
+description: Fine pen strokes rise through the frame, slowing, lengthening and taking the primary colour as they cross a low horizon.
+---
+
+Fine strokes rise through a 2D canvas with fading tails. As they cross a horizon line a little below the middle of the frame they slow, lengthen and switch from the muted ink colour to the primary colour. Colours and background come from the active theme, so it is ink on paper in light mode and follows the palette in dark mode. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Defense Lines (MIT).
+
+<ComponentPreview name="rising-strokes" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add rising-strokes
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/rising-strokes.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RisingStrokes } from "@/components/ui/rising-strokes";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <RisingStrokes />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default        | Description                                             |
+| :---------------- | :------- | :------------- | :------------------------------------------------------ |
+| `speed`           | `number` | `1`            | Animation speed multiplier (0–3).                       |
+| `size`            | `number` | `1`            | Stroke width multiplier (0.9px at 1).                   |
+| `length`          | `number` | `1`            | Length / reach multiplier (0.35–2.5).                   |
+| `density`         | `number` | `1`            | Streak count multiplier. (0.25–2.5).                    |
+| `opacity`         | `number` | `1`            | Opacity of the effect layer (0.05–1).                   |
+| `hue`             | `number` | `0`            | Hue rotation in degrees applied to the final frame.     |
+| `saturation`      | `number` | `1`            | Saturation multiplier applied to the final frame.       |
+| `brightness`      | `number` | `1`            | Brightness multiplier applied to the final frame.       |
+| `backgroundColor` | `string` | `--background` | Background behind the strokes (theme token by default). |

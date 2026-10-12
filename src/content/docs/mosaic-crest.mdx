@@ -1,0 +1,53 @@
+---
+title: Mosaic Crest
+description: A swooping band of square tesserae that ripples with travelling waves, laid in the active theme colours.
+---
+
+A 2D canvas lays square tesserae along a swooping band that dips low through the frame and rises to both corners, rippling with travelling waves. Edge tiles are muted ink; the crest of the band is laid in the primary colour, on the page's own background, so it reads as ink on paper in light mode and follows the active palette. Set a positive `arcDrop` to turn the band into an arch. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Data Pixel Arc (MIT).
+
+<ComponentPreview name="mosaic-crest" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mosaic-crest
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mosaic-crest.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MosaicCrest } from "@/components/ui/mosaic-crest";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <MosaicCrest />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default        | Description                                                                            |
+| :---------------- | :------- | :------------- | :------------------------------------------------------------------------------------- |
+| `speed`           | `number` | `1`            | Wave speed multiplier.                                                                 |
+| `pixelSize`       | `number` | `12`           | Size of each tile cell in pixels.                                                      |
+| `arcCenter`       | `number` | `0.82`         | Vertical position of the band at the centre, as a fraction of the height.              |
+| `arcDrop`         | `number` | `-0.72`        | How far the band moves toward the sides, as a fraction of the height (negative rises). |
+| `thickness`       | `number` | `0.24`         | Thickness of the arc band, as a fraction of the height.                                |
+| `brightness`      | `number` | `1`            | Tile opacity multiplier.                                                               |
+| `hue`             | `number` | `0`            | Hue rotation in degrees.                                                               |
+| `saturation`      | `number` | `1`            | Saturation multiplier.                                                                 |
+| `backgroundColor` | `string` | `--background` | Scene background (theme token by default).                                             |

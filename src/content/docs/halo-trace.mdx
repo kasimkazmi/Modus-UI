@@ -1,0 +1,42 @@
+---
+title: Halo Trace
+description: A mono pill whose hairline is traced by a slow beam of the theme's primary colour.
+---
+
+A card-coloured pill with an uppercase mono label and a status dot. A beam of the theme's primary colour continuously traces its hairline border; on hover the beam brightens, the dot and label ink in, the pill lifts and the arrow nudges outward. It follows the active theme and palette in light and dark mode. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="halo-trace" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add halo-trace
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/halo-trace.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { HaloTrace } from "@/components/ui/halo-trace";
+
+export default function Example() {
+  return <HaloTrace />;
+}
+```
+
+## Props
+
+| Prop        | Type                                   | Default                 | Description                         |
+| :---------- | :------------------------------------- | :---------------------- | :---------------------------------- |
+| `label`     | `string`                               | `"Send for review"`     | Button text.                        |
+| `beamColor` | `string`                               | `"hsl(var(--primary))"` | Colour of the spinning border beam. |
+| `speed`     | `number`                               | `4`                     | Seconds per beam rotation.          |
+| `onClick`   | `MouseEventHandler<HTMLButtonElement>` | `undefined`             | Click handler.                      |

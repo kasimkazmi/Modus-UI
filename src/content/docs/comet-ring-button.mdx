@@ -1,0 +1,41 @@
+---
+title: Comet Ring Button
+description: A card-toned button whose hairline rim is chased by a comet of theme colour.
+---
+
+A quiet card-toned button with a mono, tracked label. A single comet of the theme's primary colour laps its hairline rim, a fine ruled texture drifts across the face, and on hover a soft glow rises from below while the arrow chip turns. Everything is drawn from the theme tokens, so it follows light, dark and every palette; motion stops when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="comet-ring-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add comet-ring-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/comet-ring-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { CometRingButton } from "@/components/ui/comet-ring-button";
+
+export default function Example() {
+  return <CometRingButton onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default           | Description                                           |
+| :-------- | :------------------------------------- | :---------------- | :---------------------------------------------------- |
+| `label`   | `string`                               | `"Begin a draft"` | Button text.                                          |
+| `speed`   | `number`                               | `4`               | Seconds for the comet to complete one lap of the rim. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`       | Click handler.                                        |

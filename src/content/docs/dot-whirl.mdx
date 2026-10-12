@@ -1,0 +1,55 @@
+---
+title: Dot Whirl
+description: A leaning funnel of 9,500 dots wound by two spiral guides, drawn in your theme's ink.
+---
+
+A Three.js funnel of 9,500 orbiting dots, wound by two spiral guides and a haze of ambient dust, leaning across the frame and turning toward the pointer. Dots and guides take the theme's ink and muted tones over the theme background: additive light in dark mode, plain ink on paper in light mode, following the palette picker. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Flux Vortex (MIT).
+
+<ComponentPreview name="dot-whirl" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dot-whirl
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/dot-whirl.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { DotWhirl } from "@/components/ui/dot-whirl";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DotWhirl />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default          | Description                                           |
+| :---------------- | :------- | :--------------- | :---------------------------------------------------- |
+| `speed`           | `number` | `1`              | Animation speed multiplier (0 to 3).                  |
+| `size`            | `number` | `1`              | Point size multiplier.                                |
+| `density`         | `number` | `1`              | Particle count multiplier (0.25 to 2.5).              |
+| `opacity`         | `number` | `1`              | Opacity of the effect (0.05 to 1).                    |
+| `hue`             | `number` | `0`              | Hue rotation in degrees (-180 to 180).                |
+| `saturation`      | `number` | `1`              | Saturation multiplier (0 to 2).                       |
+| `brightness`      | `number` | `1`              | Brightness multiplier (0.35 to 1.65).                 |
+| `primaryColor`    | `string` | theme ink        | Colour of the whirl dots and the bright spiral guide. |
+| `secondaryColor`  | `string` | theme muted tone | Colour of the dim spiral guide and ambient dust.      |
+| `backgroundColor` | `string` | theme background | Colour behind the whirl.                              |

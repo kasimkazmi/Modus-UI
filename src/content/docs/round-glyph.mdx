@@ -1,0 +1,43 @@
+---
+title: Round Glyph
+description: "Three round icon buttons in the theme's colours: a raised plus key, a frosted play disc and a stitched mail ring."
+---
+
+Round icon buttons in three treatments. The default plus is a raised ink key with a pressed lip whose cross turns on hover; play is a frosted disc with a sheen orbiting inside that fills with the primary colour on hover; mail is a dashed ring that stitches a second ring around itself on hover. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="round-glyph" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add round-glyph
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/round-glyph.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { RoundGlyph } from "@/components/ui/round-glyph";
+
+export default function Example() {
+  return <RoundGlyph variant="mail" />;
+}
+```
+
+## Props
+
+| Prop        | Type                                   | Default                                 | Description             |
+| :---------- | :------------------------------------- | :-------------------------------------- | :---------------------- |
+| `variant`   | `"plus" \| "play" \| "mail"`           | `"plus"`                                | Which button to render. |
+| `ariaLabel` | `string`                               | "Add", "Play" or "Send mail" by variant | Accessible label.       |
+| `disabled`  | `boolean`                              | `false`                                 | Disables the button.    |
+| `type`      | `"button" \| "submit" \| "reset"`      | `"button"`                              | Native button type.     |
+| `onClick`   | `MouseEventHandler<HTMLButtonElement>` | `undefined`                             | Click handler.          |

@@ -1,0 +1,48 @@
+---
+title: Roll Label
+description: A paper pill whose mono label rolls up and away while an inked copy with an arrow rises in on hover.
+---
+
+A card-coloured pill with a hairline border and an uppercase mono label. On hover the button lifts, the label rolls upward and blurs out while a copy in the theme's primary colour rises from below with an arrow, and a primary underline draws across. It follows the active theme and palette in light and dark mode. Hue, saturation and brightness grade the button with a CSS filter, and the motion is switched off when the user prefers reduced motion. The component centres the button in its parent and is transparent unless you pass `background`. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="roll-label" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add roll-label
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/roll-label.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { RollLabel } from "@/components/ui/roll-label";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <RollLabel onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                   | Default              | Description                                      |
+| :----------- | :------------------------------------- | :------------------- | :----------------------------------------------- |
+| `label`      | `string`                               | `"Open the archive"` | Button text.                                     |
+| `hue`        | `number`                               | `0`                  | Hue rotation in degrees, clamped to -180 to 180. |
+| `saturation` | `number`                               | `1`                  | Saturation multiplier, clamped to 0 to 2.        |
+| `brightness` | `number`                               | `1`                  | Brightness multiplier, clamped to 0.35 to 1.65.  |
+| `background` | `string`                               | `undefined`          | Stage background; transparent when omitted.      |
+| `onClick`    | `MouseEventHandler<HTMLButtonElement>` | `undefined`          | Click handler.                                   |

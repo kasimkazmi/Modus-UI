@@ -1,0 +1,51 @@
+---
+title: Inkwell
+description: A round WebGL button holding a well of theme ink that tilts as you sweep the cursor and draws down on click.
+---
+
+A round raw-WebGL button: a card-coloured glass holding a well of the theme's primary ink, over a faint paper-grain field. Sweeping the cursor tilts and sloshes the surface, and clicking draws the level down before it refills. The label is uppercase mono. Colours come from the theme tokens and are re-read when the theme or palette changes, so it works on paper in light mode and on the dark ground in dark mode. It fills its positioned parent, pauses when off screen or when the tab is hidden, and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="inkwell" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add inkwell
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/inkwell.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { Inkwell } from "@/components/ui/inkwell";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <Inkwell />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                   | Default  | Description                                       |
+| :------------- | :------------------------------------- | :------- | :------------------------------------------------ |
+| `label`        | `string`                               | `"Fill"` | Button text.                                      |
+| `hue`          | `number`                               | `0`      | Hue rotation in degrees (-180 to 180).            |
+| `saturation`   | `number`                               | `1`      | Saturation multiplier (0 to 2).                   |
+| `brightness`   | `number`                               | `1`      | Brightness multiplier (0.35 to 1.65).             |
+| `onClick`      | `ButtonHTMLAttributes["onClick"]`      | -        | Called after the button's own click effect.       |
+| `onMouseMove`  | `ButtonHTMLAttributes["onMouseMove"]`  | -        | Called after the button's own mouse move effect.  |
+| `onMouseLeave` | `ButtonHTMLAttributes["onMouseLeave"]` | -        | Called after the button's own mouse leave effect. |
+| `onFocus`      | `ButtonHTMLAttributes["onFocus"]`      | -        | Called after the button's own focus effect.       |
+
+Any other `<button>` attribute is passed through to the inner button.

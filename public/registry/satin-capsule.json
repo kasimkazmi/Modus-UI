@@ -1,0 +1,17 @@
+{
+  "name": "satin-capsule",
+  "title": "Satin Capsule",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/satin-capsule.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Gradient Pill Button (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SatinCapsuleProps {\n  label?: string;\n  /** Small mono annotation after the label; pass an empty string to hide it. */\n  meta?: string;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\n// A hairline drawn by a masked ::before, graded from the theme ink.\nconst BORDER_STYLE = `\n.msc-button::before {\n  content: \"\"; position: absolute; inset: 0; padding: 1px; border-radius: inherit;\n  -webkit-mask: linear-gradient(white 0 0) content-box, linear-gradient(white 0 0);\n  -webkit-mask-composite: xor; mask-composite: exclude;\n  background: linear-gradient(180deg, hsl(var(--foreground) / 0.35), hsl(var(--primary) / 0.05) 50%, hsl(var(--foreground) / 0.25));\n  pointer-events: none;\n}\n`;\n\nexport function SatinCapsule({\n  label = \"Read the notes\",\n  meta = \"04 min\",\n  onClick,\n  className,\n}: SatinCapsuleProps) {\n  const prefersReducedMotion = useReducedMotion();\n  return (\n    <button\n      type=\"button\"\n      onClick={onClick}\n      className={cn(\n        \"msc-button group relative inline-flex items-center gap-3 rounded-full bg-[linear-gradient(180deg,hsl(var(--card)),hsl(var(--muted))_50%,hsl(var(--card)))] py-2.5 pl-6 pr-2.5 text-sm text-foreground shadow-[0_18px_34px_-16px_hsl(var(--foreground)/0.45),inset_0_1px_0_hsl(var(--background))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))] focus-visible:ring-offset-2 focus-visible:ring-offset-background\",\n        !prefersReducedMotion &&\n          \"transition-shadow duration-300 hover:shadow-[0_22px_40px_-14px_hsl(var(--primary)/0.5),inset_0_1px_0_hsl(var(--background))]\",\n        className,\n      )}\n    >\n      <style dangerouslySetInnerHTML={{ __html: BORDER_STYLE }} />\n      <span className=\"font-sans tracking-tight\">{label}</span>\n      {meta ? (\n        <span className=\"font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground\">\n          {meta}\n        </span>\n      ) : null}\n      <span\n        aria-hidden\n        className={cn(\n          \"grid h-7 w-7 place-items-center rounded-full bg-[hsl(var(--primary))] text-primary-foreground\",\n          !prefersReducedMotion && \"transition-transform duration-300 group-hover:translate-x-0.5\",\n        )}\n      >\n        <svg\n          viewBox=\"0 0 24 24\"\n          width=\"14\"\n          height=\"14\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"1.75\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n        >\n          <path d=\"M5 12h14\" />\n          <path d=\"m12 5 7 7-7 7\" />\n        </svg>\n      </span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

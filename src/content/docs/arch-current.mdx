@@ -1,0 +1,52 @@
+---
+title: Arch Current
+description: Dotted Bézier paths sweeping in from both edges to a low vanishing point, drawn in your theme's ink.
+---
+
+A canvas of dotted Bézier paths that sweep in from both edges and gather at a low point near the bottom of the frame, with beads of ink travelling along them. Click anywhere to send a shockwave through the beads. Guides use the theme's muted tone and beads its primary ink over the theme background, so it follows light, dark and the palette picker. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Gateway Flow (MIT).
+
+<ComponentPreview name="arch-current" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add arch-current
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/arch-current.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ArchCurrent } from "@/components/ui/arch-current";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ArchCurrent />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                    | Description                                         |
+| :---------------- | :------- | :------------------------- | :-------------------------------------------------- |
+| `speed`           | `number` | `1`                        | Animation speed multiplier (0–3).                   |
+| `size`            | `number` | `1`                        | Stroke / scale multiplier.                          |
+| `density`         | `number` | `1`                        | Path count multiplier. (0.25–2.5).                  |
+| `opacity`         | `number` | `1`                        | Opacity of the effect layer (0.05–1).               |
+| `hue`             | `number` | `0`                        | Hue rotation in degrees applied to the final frame. |
+| `saturation`      | `number` | `1`                        | Saturation multiplier applied to the final frame.   |
+| `brightness`      | `number` | `1`                        | Brightness multiplier applied to the final frame.   |
+| `backgroundColor` | `string` | `"hsl(var(--background))"` | Colour behind the canvas.                           |

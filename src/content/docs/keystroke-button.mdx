@@ -1,0 +1,41 @@
+---
+title: Keystroke Button
+description: A keycap button with a key legend, a serif label and a hard bottom edge that sinks when pressed.
+---
+
+A keycap shaded from the card and muted tokens with a hard ink edge underneath. A mono key legend and a small primary status light sit in its top row above a serif label; a primary halo blooms on hover and the cap sinks 3px when pressed. Transitions are off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="keystroke-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add keystroke-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/keystroke-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { KeystrokeButton } from "@/components/ui/keystroke-button";
+
+export default function Example() {
+  return <KeystrokeButton onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default            | Description                                  |
+| :-------- | :------------------------------------- | :----------------- | :------------------------------------------- |
+| `label`   | `string`                               | `"Commit changes"` | Button text.                                 |
+| `keyHint` | `string`                               | `"⌘ S"`            | Key legend printed in the corner of the cap. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler.                               |

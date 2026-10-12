@@ -1,0 +1,41 @@
+---
+title: Prism Key
+description: A frosted key-shaped button with a palette-tinted prism edge and an ink arrow chip.
+---
+
+A frosted button whose masked gradient rim catches the theme's primary colour like light through a prism. The default arrow variant carries a solid ink chip whose arrow tilts upward on hover; the plain variant is text only. Labels are set in uppercase mono, and every colour comes from the active theme. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="prism-key" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add prism-key
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/prism-key.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { PrismKey } from "@/components/ui/prism-key";
+
+export default function Example() {
+  return <PrismKey onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default                                            | Description                           |
+| :-------- | :------------------------------------- | :------------------------------------------------- | :------------------------------------ |
+| `variant` | `"arrow" \| "plain"`                   | `"arrow"`                                          | Key with an arrow chip, or text only. |
+| `label`   | `string`                               | "Open the kit" (arrow) or "Request access" (plain) | Button text.                          |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`                                        | Click handler.                        |

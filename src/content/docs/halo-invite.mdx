@@ -1,0 +1,45 @@
+---
+title: Halo Invite
+description: A card-coloured invite pill with a monogram badge and a halo of light circling its edge.
+---
+
+An invite link in a card-coloured pill: a serif monogram badge (or a portrait), a serif label and an arrow chip that fills with ink on hover, while a halo of the theme's primary colour circles the edge. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="halo-invite" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add halo-invite
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/halo-invite.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { HaloInvite } from "@/components/ui/halo-invite";
+
+export default function Example() {
+  return <HaloInvite href="/contact" />;
+}
+```
+
+## Props
+
+| Prop        | Type                                   | Default                | Description                                                       |
+| :---------- | :------------------------------------- | :--------------------- | :---------------------------------------------------------------- |
+| `label`     | `string`                               | `"Book a studio call"` | Link text.                                                        |
+| `href`      | `string`                               | `"#"`                  | Link target.                                                      |
+| `avatarSrc` | `string`                               | `undefined`            | Portrait for the leading badge; a monogram is drawn when omitted. |
+| `avatarAlt` | `string`                               | `""`                   | Alt text for the portrait.                                        |
+| `monogram`  | `string`                               | `"M"`                  | Letter for the monogram badge.                                    |
+| `speed`     | `number`                               | `5`                    | Seconds per revolution of the halo.                               |
+| `onClick`   | `MouseEventHandler<HTMLAnchorElement>` | `undefined`            | Click handler.                                                    |

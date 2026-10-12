@@ -1,0 +1,41 @@
+---
+title: Ink Endcap Button
+description: An italic serif pill with a round ink endcap, as a hairline outline or a solid fill.
+---
+
+An italic serif pill finished with a round endcap holding an arrow. The default `outline` variant is a hairline ring with a primary endcap; `solid` fills the pill with the primary colour and inverts the endcap. It lifts slightly on hover and holds still when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ink-endcap-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ink-endcap-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ink-endcap-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { InkEndcapButton } from "@/components/ui/ink-endcap-button";
+
+export default function Example() {
+  return <InkEndcapButton label="Open the archive" />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default              | Description                                                               |
+| :-------- | :------------------------------------- | :------------------- | :------------------------------------------------------------------------ |
+| `label`   | `string`                               | `"Open the archive"` | Button text.                                                              |
+| `variant` | `"solid" \| "outline"`                 | `"outline"`          | `solid` is ink on paper; `outline` is a hairline ring with an ink endcap. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | —                    | Click handler for the button.                                             |

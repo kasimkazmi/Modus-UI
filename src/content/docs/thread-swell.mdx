@@ -1,0 +1,51 @@
+---
+title: Thread Swell
+description: A curtain of Three.js threads that swell in rolling waves, inked in the active theme colours.
+---
+
+Forty-six Three.js threads hang like a curtain seen from below, swelling in two layered waves and fading from the primary colour to the muted ink colour. On a dark theme the threads glow additively; on paper they are drawn as ink, and both follow the active palette. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Data Field (MIT).
+
+<ComponentPreview name="thread-swell" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add thread-swell
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/thread-swell.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { ThreadSwell } from "@/components/ui/thread-swell";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ThreadSwell />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                          |
+| :---------------- | :------- | :------------------- | :--------------------------------------------------- |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees (-180 to 180).               |
+| `saturation`      | `number` | `1`                  | Saturation multiplier (0 to 2).                      |
+| `brightness`      | `number` | `1`                  | Brightness multiplier (0.35 to 1.65).                |
+| `startColor`      | `string` | `--primary`          | Colour of the first thread (theme token by default). |
+| `endColor`        | `string` | `--muted-foreground` | Colour of the last thread (theme token by default).  |
+| `backgroundColor` | `string` | `--background`       | Colour behind the threads (theme token by default).  |

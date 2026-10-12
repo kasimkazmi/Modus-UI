@@ -1,0 +1,41 @@
+---
+title: Kiln Button
+description: A glowing pill button fired from the theme's primary and destructive colours, with a coal-chip chevron.
+---
+
+A pill whose gradient is mixed from the theme's primary and destructive tokens, so it smoulders in any palette, with a soft kiln glow behind it. It lifts and brightens on hover and presses in on click; the chevron sits in a round coal chip. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="kiln-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add kiln-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/kiln-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { KilnButton } from "@/components/ui/kiln-button";
+
+export default function Example() {
+  return <KilnButton onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default        | Description         |
+| :-------- | :------------------------------------- | :------------- | :------------------ |
+| `label`   | `string`                               | `"Fire it up"` | Button text.        |
+| `type`    | `"button" \| "submit" \| "reset"`      | `"button"`     | Native button type. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`    | Click handler.      |

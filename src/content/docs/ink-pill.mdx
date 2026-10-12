@@ -1,0 +1,52 @@
+---
+title: Ink Pill
+description: A mono-set pill call-to-action washed in the theme's ink, with a diamond glyph and a paper-card sibling.
+---
+
+A pill call-to-action set in uppercase mono. The primary variant is an ink wash of the theme's primary colour that thins toward the paper, with a soft shadow and a small diamond glyph, and brightens on hover. The ghost variant is a card-coloured pill with a hairline border. Both follow the active theme and palette in light and dark mode. Hue, saturation and brightness grade the button with a CSS filter, and transitions are switched off when the user prefers reduced motion. The component centres the button in its parent and is transparent unless you pass `background`. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ink-pill" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ink-pill
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ink-pill.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { InkPill } from "@/components/ui/ink-pill";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <InkPill label="Get started" onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                   | Default           | Description                                      |
+| :----------- | :------------------------------------- | :---------------- | :----------------------------------------------- |
+| `variant`    | `"primary" \| "ghost"`                 | `"primary"`       | Ink wash pill or card pill.                      |
+| `label`      | `string`                               | `"Begin a draft"` | Button text.                                     |
+| `ring`       | `boolean`                              | `true`            | Shows the small diamond glyph after the label.   |
+| `hue`        | `number`                               | `0`               | Hue rotation in degrees, clamped to -180 to 180. |
+| `saturation` | `number`                               | `1`               | Saturation multiplier, clamped to 0 to 2.        |
+| `brightness` | `number`                               | `1`               | Brightness multiplier, clamped to 0.35 to 1.65.  |
+| `disabled`   | `boolean`                              | `false`           | Disables the button.                             |
+| `type`       | `"button" \| "submit" \| "reset"`      | `"button"`        | Native button type.                              |
+| `onClick`    | `MouseEventHandler<HTMLButtonElement>` | `undefined`       | Click handler.                                   |
+| `background` | `string`                               | `undefined`       | Stage background; transparent when omitted.      |

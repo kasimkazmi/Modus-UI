@@ -1,0 +1,40 @@
+---
+title: Stitch Frame Button
+description: A paper button that pins four corners and stitches a dashed frame around itself on hover.
+---
+
+A card-coloured button with an italic serif label. On hover four round pins travel to the corners, a dashed frame is stitched around it one edge at a time, a dot grid fades in behind, and the button fills with the primary ink. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="stitch-frame-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stitch-frame-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/stitch-frame-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { StitchFrameButton } from "@/components/ui/stitch-frame-button";
+
+export default function Example() {
+  return <StitchFrameButton onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default             | Description    |
+| :-------- | :------------------------------------- | :------------------ | :------------- |
+| `label`   | `string`                               | `"Start sketching"` | Button text.   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`         | Click handler. |

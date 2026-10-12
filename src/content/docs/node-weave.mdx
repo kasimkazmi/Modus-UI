@@ -1,0 +1,55 @@
+---
+title: Node Weave
+description: A canvas weave of hollow knots and solid ink hubs, threaded by hairlines that tighten around the pointer.
+---
+
+Hollow knots drift across a 2D canvas on the page's own background, threaded together by hairlines whenever they come close; every sixth knot is a solid hub in the primary colour with a breathing ring, and its threads take on that colour. Colours come from the active theme, so the weave is ink on paper in light mode and follows the palette in dark mode. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Constellation Field (MIT).
+
+<ComponentPreview name="node-weave" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add node-weave
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/node-weave.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { NodeWeave } from "@/components/ui/node-weave";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <NodeWeave />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default        | Description                                                     |
+| :---------------- | :------- | :------------- | :-------------------------------------------------------------- |
+| `speed`           | `number` | `1`            | Drift and pulse speed multiplier (0 to 3).                      |
+| `size`            | `number` | `1`            | Knot radius multiplier.                                         |
+| `length`          | `number` | `1`            | Link distance multiplier (base 160px, 0.35 to 2.5).             |
+| `density`         | `number` | `1`            | Node count multiplier (85 nodes on wide hosts, 40 under 768px). |
+| `strokeWidth`     | `number` | `0.75`         | Link line width in pixels.                                      |
+| `opacity`         | `number` | `1`            | Opacity of nodes and links (0.05 to 1).                         |
+| `hue`             | `number` | `0`            | Hue rotation in degrees (-180 to 180).                          |
+| `saturation`      | `number` | `1`            | Saturation multiplier (0 to 2).                                 |
+| `brightness`      | `number` | `1`            | Brightness multiplier (0.35 to 1.65).                           |
+| `color`           | `string` | `--primary`    | Hub and hub-thread colour (theme token by default).             |
+| `backgroundColor` | `string` | `--background` | Scene background (theme token by default).                      |

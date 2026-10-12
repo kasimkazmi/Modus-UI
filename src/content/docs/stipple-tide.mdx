@@ -1,0 +1,54 @@
+---
+title: Stipple Tide
+description: A WebGL stipple of theme-coloured dots that swell in slow rings from the centre and drift with the pointer.
+---
+
+A full-bleed Three.js stipple that sits on the page's own background: dots rest in the muted ink colour and swell into the primary colour as slow rings travel outward from the centre, fading toward the edges. It follows the active palette and light or dark mode, and shifting slightly as the pointer moves anywhere over the page. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Dot Matrix (MIT).
+
+<ComponentPreview name="stipple-tide" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stipple-tide
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/stipple-tide.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { StippleTide } from "@/components/ui/stipple-tide";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <StippleTide />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default        | Description                                                 |
+| :---------------- | :------- | :------------- | :---------------------------------------------------------- |
+| `speed`           | `number` | `1`            | Animation speed multiplier.                                 |
+| `gridScale`       | `number` | `36`           | Number of dot cells across the height.                      |
+| `mouseAmount`     | `number` | `0.03`         | How far the grid shifts with the pointer.                   |
+| `pulseSpeed`      | `number` | `0.25`         | Rings per second travelling outward.                        |
+| `radius`          | `number` | `0.26`         | Extra dot radius at the peak of a pulse.                    |
+| `opacity`         | `number` | `0.9`          | Overall opacity of the dots.                                |
+| `hue`             | `number` | `0`            | Hue rotation in degrees.                                    |
+| `color`           | `string` | `--primary`    | Dot colour at the crest of a ring (theme token by default). |
+| `backgroundColor` | `string` | `--background` | Background behind the dots (theme token by default).        |

@@ -1,0 +1,45 @@
+---
+title: Sheen CTA
+description: A paper pill with a serif italic label and a sweep of primary light on hover.
+---
+
+A paper-card pill with a serif italic label and a primary dot. On hover it lifts and a soft band of primary light sweeps across it. Colours come from the active theme and palette. Transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="sheen-cta" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add sheen-cta
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/sheen-cta.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { SheenCta } from "@/components/ui/sheen-cta";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <SheenCta onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default            | Description         |
+| :-------- | :------------------------------------- | :----------------- | :------------------ |
+| `label`   | `string`                               | `"Join the folio"` | Button text.        |
+| `type`    | `"button" \| "submit" \| "reset"`      | `"button"`         | Native button type. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler.      |

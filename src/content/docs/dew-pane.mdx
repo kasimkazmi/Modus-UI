@@ -1,0 +1,52 @@
+---
+title: Dew Pane
+description: Fine beads of dew that grow, merge and run down a pane, drawn in theme ink.
+---
+
+A 2D canvas simulates beads that grow in place, then run down, swallowing smaller beads in their path and leaving a primary ripple at the bottom edge. Beads use the theme's muted ink with a paper glint; every colour can be overridden. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="dew-pane" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dew-pane
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/dew-pane.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DewPane } from "@/components/ui/dew-pane";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DewPane />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                                                             |
+| :---------------- | :------- | :---------- | :---------------------------------------------------------------------- |
+| `speed`           | `number` | `0.8`       | Simulation speed multiplier.                                            |
+| `dropAmount`      | `number` | `1.5`       | Multiplier on the maximum number of beads.                              |
+| `opacity`         | `number` | `1`         | Overall opacity of the beads.                                           |
+| `dropColor`       | `string` | `undefined` | Hex override for the bead body. Defaults to the theme muted foreground. |
+| `edgeColor`       | `string` | `undefined` | Hex override for the bead rim. Defaults to the theme foreground.        |
+| `highlightColor`  | `string` | `undefined` | Hex override for the glint. Defaults to the theme background.           |
+| `splashColor`     | `string` | `undefined` | Hex override for the ripple. Defaults to the theme primary.             |
+| `backgroundColor` | `string` | `undefined` | CSS background. Defaults to the theme background.                       |

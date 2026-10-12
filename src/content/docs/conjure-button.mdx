@@ -1,0 +1,41 @@
+---
+title: Conjure Button
+description: A seated paper button whose serif letters shimmer in a wave and swap to an active label on focus.
+---
+
+A card button seated in a muted well. Its serif letters shimmer in a wave, the spark icon flickers, and on focus the letters bloom and blur into the active label, with a glow rising from the theme's primary colour. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="conjure-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add conjure-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/conjure-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { ConjureButton } from "@/components/ui/conjure-button";
+
+export default function Example() {
+  return <ConjureButton onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop          | Type                                   | Default       | Description                |
+| :------------ | :------------------------------------- | :------------ | :------------------------- |
+| `label`       | `string`                               | `"Compose"`   | Resting label.             |
+| `activeLabel` | `string`                               | `"Composing"` | Label shown while focused. |
+| `onClick`     | `MouseEventHandler<HTMLButtonElement>` | `undefined`   | Click handler.             |

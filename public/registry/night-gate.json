@@ -1,0 +1,46 @@
+{
+  "name": "night-gate",
+  "title": "Night Gate",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/night-gate.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Imaginie Star Portal (MIT, © 2026 Meng To).\n\nimport * as React from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface NightGateProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {\n  label?: string;\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  starColors?: string[];\n  className?: string;\n}\n\n/* Theme tokens are bare HSL channels, so wrap them for the canvas. */\nconst token = (name: string) =>\n  `hsl(${getComputedStyle(document.documentElement).getPropertyValue(name).trim()})`;\nconst themeStarColors = () => [\n  token(\"--primary\"),\n  token(\"--foreground\"),\n  token(\"--muted-foreground\"),\n  token(\"--primary\"),\n];\n\nconst clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));\n\nexport function NightGate({\n  label = \"Step inside\",\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  starColors,\n  className,\n  onClick,\n  href = \"#\",\n  ...props\n}: NightGateProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const rootRef = React.useRef<HTMLDivElement>(null);\n  const portalRef = React.useRef<HTMLCanvasElement>(null);\n  const ambientRef = React.useRef<HTMLCanvasElement>(null);\n  const colorsKey = starColors?.join(\"|\") ?? \"\";\n\n  React.useEffect(() => {\n    const root = rootRef.current;\n    const portalCanvas = portalRef.current;\n    const ambientCanvas = ambientRef.current;\n    if (!root || !portalCanvas || !ambientCanvas) return;\n    const ctxPortal = portalCanvas.getContext(\"2d\");\n    const ctxAmbient = ambientCanvas.getContext(\"2d\");\n    if (!ctxPortal || !ctxAmbient) return;\n    let colors = colorsKey ? colorsKey.split(\"|\") : themeStarColors();\n    let ink = token(\"--foreground\");\n\n    type Star = {\n      x: number;\n      y: number;\n      radius: number;\n      color: string;\n      speed: number;\n      angle: number;\n      pulse: number;\n    };\n    type AmbientStar = {\n      x: number;\n      y: number;\n      size: number;\n      opacity: number;\n      drift: number;\n    };\n    let stars: Star[] = [];\n    let ambientStars: AmbientStar[] = [];\n    let width = 0;\n    let height = 0;\n\n    const resize = () => {\n      const rect = root.getBoundingClientRect();\n      width = rect.width;\n      height = rect.height;\n      portalCanvas.width = width;\n      portalCanvas.height = height;\n      ambientCanvas.width = width;\n      ambientCanvas.height = height;\n      stars = [];\n      for (let i = 0; i < 45; i++) {\n        stars.push({\n          x: Math.random() * width,\n          y: Math.random() * height,\n          radius: Math.random() * 1.5 + 0.5,\n          color: colors[Math.floor(Math.random() * colors.length)],\n          speed: Math.random() * 0.15 + 0.05,\n          angle: Math.random() * Math.PI * 2,\n          pulse: Math.random() * 0.02,\n        });\n      }\n      ambientStars = [];\n      for (let i = 0; i < 70; i++) {\n        ambientStars.push({\n          x: Math.random() * width,\n          y: Math.random() * height,\n          size: Math.random() * 0.8 + 0.2,\n          opacity: Math.random() * 0.6 + 0.1,\n          drift: Math.random() * 0.02 + 0.01,\n        });\n      }\n    };\n\n    const draw = (move: boolean) => {\n      ctxPortal.clearRect(0, 0, width, height);\n      stars.forEach((s) => {\n        if (move) {\n          s.x += Math.cos(s.angle) * s.speed;\n          s.y += Math.sin(s.angle) * s.speed;\n          if (s.x < 0 || s.x > width) s.angle = Math.PI - s.angle;\n          if (s.y < 0 || s.y > height) s.angle = -s.angle;\n          s.speed += (Math.random() - 0.5) * 0.01;\n          s.speed = Math.max(0.02, Math.min(s.speed, 0.25));\n        }\n        ctxPortal.globalAlpha = 0.3 + Math.abs(Math.sin(Date.now() * s.pulse)) * 0.7;\n        ctxPortal.beginPath();\n        ctxPortal.arc(s.x, s.y, s.radius, 0, Math.PI * 2);\n        ctxPortal.fillStyle = s.color;\n        ctxPortal.shadowBlur = s.radius * 4;\n        ctxPortal.shadowColor = s.color;\n        ctxPortal.fill();\n      });\n      ctxPortal.globalAlpha = 1;\n      ctxAmbient.clearRect(0, 0, width, height);\n      ambientStars.forEach((s) => {\n        if (move) {\n          s.y -= s.drift;\n          if (s.y < 0) s.y = height;\n        }\n        ctxAmbient.globalAlpha = s.opacity;\n        ctxAmbient.fillStyle = ink;\n        ctxAmbient.fillRect(s.x, s.y, s.size * 1.6, s.size * 1.6);\n      });\n      ctxAmbient.globalAlpha = 1;\n    };\n\n    resize();\n    draw(false);\n\n    const themeObserver = new MutationObserver(() => {\n      if (!colorsKey) colors = themeStarColors();\n      ink = token(\"--foreground\");\n      stars.forEach((star) => {\n        star.color = colors[Math.floor(Math.random() * colors.length)];\n      });\n      draw(false);\n    });\n    themeObserver.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n\n    let raf = 0;\n    let visible = true;\n    const loop = () => {\n      draw(true);\n      raf = requestAnimationFrame(loop);\n    };\n    const update = () => {\n      cancelAnimationFrame(raf);\n      raf = 0;\n      if (!prefersReducedMotion && visible && !document.hidden) {\n        raf = requestAnimationFrame(loop);\n      }\n    };\n    const ro = new ResizeObserver(() => {\n      resize();\n      draw(false);\n    });\n    ro.observe(root);\n    const io = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      update();\n    });\n    io.observe(root);\n    document.addEventListener(\"visibilitychange\", update);\n    update();\n    return () => {\n      cancelAnimationFrame(raf);\n      ro.disconnect();\n      io.disconnect();\n      themeObserver.disconnect();\n      document.removeEventListener(\"visibilitychange\", update);\n    };\n  }, [prefersReducedMotion, colorsKey]);\n\n  const h = clamp(hue, -180, 180);\n  const sat = clamp(saturation, 0, 2);\n  const bri = clamp(brightness, 0.35, 1.65);\n  const filter =\n    h === 0 && sat === 1 && bri === 1\n      ? undefined\n      : `hue-rotate(${h}deg) saturate(${sat}) brightness(${bri})`;\n\n  return (\n    <div\n      ref={rootRef}\n      className={cn(\n        \"relative flex h-full min-h-[inherit] w-full items-center justify-center overflow-hidden\",\n        className,\n      )}\n      style={{ filter }}\n    >\n      <canvas\n        ref={ambientRef}\n        aria-hidden=\"true\"\n        className=\"pointer-events-none absolute inset-0 z-0 h-full w-full\"\n      />\n      <canvas\n        ref={portalRef}\n        aria-hidden=\"true\"\n        className=\"pointer-events-none absolute inset-0 z-0 h-full w-full\"\n      />\n      <a\n        href={href}\n        onClick={(event) => {\n          if (href === \"#\") event.preventDefault();\n          onClick?.(event);\n        }}\n        className=\"relative z-[2] flex items-center gap-3 rounded-full border border-[hsl(var(--primary)/0.4)] bg-[hsl(var(--background)/0.7)] py-3 pl-6 pr-3 font-serif text-[17px] italic text-foreground antialiased shadow-[0_0_0_6px_hsl(var(--primary)/0.06)] backdrop-blur-sm transition-all duration-[400ms] ease-[ease] hover:shadow-[0_0_0_10px_hsl(var(--primary)/0.1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--primary))]\"\n        {...props}\n      >\n        {label}\n        <span className=\"grid h-7 w-7 place-items-center rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]\">\n          <svg aria-hidden=\"true\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\">\n            <path\n              fill=\"none\"\n              stroke=\"currentColor\"\n              strokeLinecap=\"round\"\n              strokeLinejoin=\"round\"\n              strokeWidth=\"1.5\"\n              d=\"M4 12h16m0 0l-6-6m6 6l-6 6\"\n            />\n          </svg>\n        </span>\n      </a>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

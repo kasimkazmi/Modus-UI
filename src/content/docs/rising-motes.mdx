@@ -1,0 +1,40 @@
+---
+title: Rising Motes
+description: A primary-ink button with motes of light drifting up through it.
+---
+
+A button in the theme's primary colour, lit from below, with small motes drifting upward through it. The arrow rises on hover and the button presses in on click. The label is set in uppercase mono. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="rising-motes" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add rising-motes
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/rising-motes.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { RisingMotes } from "@/components/ui/rising-motes";
+
+export default function Example() {
+  return <RisingMotes onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default       | Description    |
+| :-------- | :------------------------------------- | :------------ | :------------- |
+| `label`   | `string`                               | `"Subscribe"` | Button text.   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`   | Click handler. |

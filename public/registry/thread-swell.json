@@ -1,0 +1,47 @@
+{
+  "name": "thread-swell",
+  "title": "Thread Swell",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/thread-swell.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Data Field (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ntype Tokens = {\n  primary: string;\n  foreground: string;\n  muted: string;\n  background: string;\n  card: string;\n  border: string;\n  dark: boolean;\n};\n\n/** Reads the Modus theme tokens (bare HSL channels) as comma `hsl()` strings canvas and three.js both parse. */\nfunction readTokens(): Tokens {\n  const root = document.documentElement;\n  const cs = getComputedStyle(root);\n  const hsl = (name: string) =>\n    `hsl(${cs\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,]+/)\n      .filter(Boolean)\n      .join(\", \")})`;\n  return {\n    primary: hsl(\"--primary\"),\n    foreground: hsl(\"--foreground\"),\n    muted: hsl(\"--muted-foreground\"),\n    background: hsl(\"--background\"),\n    card: hsl(\"--card\"),\n    border: hsl(\"--border\"),\n    dark: root.classList.contains(\"dark\") || root.dataset.theme === \"dark\",\n  };\n}\n\n/** The current theme tokens, re-read whenever the mode or palette on <html> changes. */\nfunction useTokens() {\n  const [tokens, setTokens] = useState<Tokens | null>(null);\n  useEffect(() => {\n    const update = () => setTokens(readTokens());\n    update();\n    const observer = new MutationObserver(update);\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return tokens;\n}\n\nexport interface ThreadSwellProps {\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  /** Colour of the first thread. Defaults to the theme's `--primary`. */\n  startColor?: string;\n  /** Colour of the last thread. Defaults to the theme's `--muted-foreground`. */\n  endColor?: string;\n  /** Colour behind the threads. Defaults to the theme's `--background`. */\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\n// The original ran on three r128 without colour management: hex values are used as-is.\nconst raw = (value: string) => new THREE.Color(value).convertLinearToSRGB();\n\nexport function ThreadSwell({\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  startColor,\n  endColor,\n  backgroundColor,\n  className,\n}: ThreadSwellProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const tokens = useTokens();\n  const from = startColor ?? tokens?.primary;\n  const to = endColor ?? tokens?.muted;\n  // Additive light only reads on a dark ground; on paper the threads are drawn as ink.\n  const additive = tokens?.dark ?? true;\n\n  useEffect(() => {\n    const container = hostRef.current;\n    if (!container || !from || !to) return;\n\n    const scene = new THREE.Scene();\n    const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);\n    camera.position.set(0, -6, 8);\n    camera.lookAt(0, 0, 0);\n\n    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });\n    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    renderer.domElement.style.cssText =\n      \"position:absolute;inset:0;width:100%;height:100%;display:block\";\n    container.appendChild(renderer.domElement);\n\n    const group = new THREE.Group();\n    scene.add(group);\n\n    const numLines = 46;\n    const pointsPerLine = 100;\n    const colorStart = raw(from);\n    const colorEnd = raw(to);\n    const lines: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>[] = [];\n\n    for (let i = 0; i < numLines; i++) {\n      const points: THREE.Vector3[] = [];\n      const xPos = (i - numLines / 2) * 0.3;\n      for (let j = 0; j < pointsPerLine; j++) {\n        const yPos = (j - pointsPerLine / 2) * 0.2;\n        points.push(new THREE.Vector3(xPos, yPos, 0));\n      }\n      const geometry = new THREE.BufferGeometry().setFromPoints(points);\n      const color = new THREE.Color().lerpColors(colorStart, colorEnd, i / numLines);\n      const material = new THREE.LineBasicMaterial({\n        color,\n        transparent: true,\n        opacity: (additive ? 0.2 : 0.3) + Math.random() * 0.4,\n        blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,\n      });\n      const line = new THREE.Line(geometry, material);\n      group.add(line);\n      lines.push(line);\n    }\n\n    // Tilt to create a flowing plane\n    group.rotation.x = Math.PI / 2.6;\n    group.rotation.z = Math.PI / 9;\n\n    const render = (seconds: number) => {\n      const time = seconds * 0.4; // Slower, more relaxed pace\n      lines.forEach((line) => {\n        const attribute = line.geometry.attributes.position as THREE.BufferAttribute;\n        const positions = attribute.array as Float32Array;\n        for (let j = 0; j < pointsPerLine; j++) {\n          const idx = j * 3;\n          const x = positions[idx];\n          const y = positions[idx + 1];\n          // Smooth, rolling, gentle waves reminiscent of water or silk\n          const wave1 = Math.sin(y * 1.2 + time + x * 0.8) * 0.8;\n          const wave2 = Math.cos(x * 1.5 - time * 0.8 + y * 0.5) * 0.6;\n          positions[idx + 2] = wave1 + wave2;\n        }\n        attribute.needsUpdate = true;\n      });\n      renderer.render(scene, camera);\n    };\n\n    let elapsed = 0;\n    let last = performance.now();\n    let frame = 0;\n    let visible = true;\n\n    const resize = () => {\n      const width = Math.max(1, container.clientWidth);\n      const height = Math.max(1, container.clientHeight);\n      camera.aspect = width / height;\n      camera.updateProjectionMatrix();\n      renderer.setSize(width, height, false);\n      if (prefersReducedMotion) render(elapsed);\n    };\n\n    const loop = (now: number) => {\n      elapsed += (now - last) / 1000;\n      last = now;\n      render(elapsed);\n      frame = requestAnimationFrame(loop);\n    };\n    const start = () => {\n      cancelAnimationFrame(frame);\n      if (prefersReducedMotion) render(elapsed);\n      else if (visible && !document.hidden) {\n        last = performance.now();\n        frame = requestAnimationFrame(loop);\n      }\n    };\n\n    resize();\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(container);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      start();\n    });\n    intersection.observe(container);\n    document.addEventListener(\"visibilitychange\", start);\n    start();\n\n    return () => {\n      cancelAnimationFrame(frame);\n      intersection.disconnect();\n      resizeObserver.disconnect();\n      document.removeEventListener(\"visibilitychange\", start);\n      lines.forEach((line) => {\n        line.geometry.dispose();\n        line.material.dispose();\n      });\n      renderer.dispose();\n      renderer.domElement.remove();\n    };\n  }, [prefersReducedMotion, from, to, additive]);\n\n  const safeHue = clamp(hue, -180, 180);\n  const safeSaturation = clamp(saturation, 0, 2);\n  const safeBrightness = clamp(brightness, 0.35, 1.65);\n  const filter =\n    safeHue === 0 && safeSaturation === 1 && safeBrightness === 1\n      ? undefined\n      : `hue-rotate(${safeHue}deg) saturate(${safeSaturation}) brightness(${safeBrightness})`;\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\", filter }}\n    />\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

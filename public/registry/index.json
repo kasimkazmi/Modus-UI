@@ -325,10 +325,10 @@
       ]
     },
     {
-      "name": "bell-field",
-      "title": "Bell Field",
+      "name": "resonance-plate",
+      "title": "Resonance Plate",
       "category": "Backgrounds",
-      "description": "A WebGL shader background of a struck bell's vibration modes in patina and bronze, with drifting embers.",
+      "description": "Chladni-style nodal lines shimmering across an off-centre plate, with drifting motes, in theme ink.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -369,10 +369,10 @@
       ]
     },
     {
-      "name": "energy-orb",
-      "title": "Energy Orb",
+      "name": "lumen-core",
+      "title": "Lumen Core",
       "category": "Backgrounds",
-      "description": "A WebGL violet energy sphere filled with turbulent smoke, set in a drifting star field.",
+      "description": "A slowly turning sphere of smoke-veined light in a field of drifting motes, shaded from your theme.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -391,10 +391,10 @@
       ]
     },
     {
-      "name": "dot-matrix",
-      "title": "Dot Matrix",
+      "name": "stipple-tide",
+      "title": "Stipple Tide",
       "category": "Backgrounds",
-      "description": "A WebGL grid of cyan dots that pulse in diagonal waves and drift with the pointer.",
+      "description": "A WebGL stipple of theme-coloured dots that swell in slow rings from the centre and drift with the pointer.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -403,10 +403,10 @@
       ]
     },
     {
-      "name": "emerald-horizon",
-      "title": "Emerald Horizon",
+      "name": "tide-line",
+      "title": "Tide Line",
       "category": "Backgrounds",
-      "description": "A WebGL aurora of green light rolling along the bottom of a black horizon.",
+      "description": "A slow band of ink-toned light rolling along the top edge, tinted from your theme.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -451,10 +451,10 @@
       ]
     },
     {
-      "name": "constellation-field",
-      "title": "Constellation Field",
+      "name": "node-weave",
+      "title": "Node Weave",
       "category": "Backgrounds",
-      "description": "A canvas constellation of pale gold nodes on a deep navy field, linked when close and gently drawn toward the pointer.",
+      "description": "A canvas weave of hollow knots and solid ink hubs, threaded by hairlines that tighten around the pointer.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -474,10 +474,10 @@
       ]
     },
     {
-      "name": "data-pixel-arc",
-      "title": "Data Pixel Arc",
+      "name": "mosaic-crest",
+      "title": "Mosaic Crest",
       "category": "Backgrounds",
-      "description": "A green pixel-grid arc that ripples like a live data signal on a near-black background.",
+      "description": "A swooping band of square tesserae that ripples with travelling waves, laid in the active theme colours.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -496,10 +496,10 @@
       ]
     },
     {
-      "name": "condensation",
-      "title": "Condensation",
+      "name": "dew-pane",
+      "title": "Dew Pane",
       "category": "Backgrounds",
-      "description": "Blue water droplets that bead up, merge and run down like condensation on dark glass.",
+      "description": "Fine beads of dew that grow, merge and run down a pane, drawn in theme ink.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -507,10 +507,10 @@
       ]
     },
     {
-      "name": "lumen-cta",
-      "title": "Lumen CTA",
+      "name": "ink-pill",
+      "title": "Ink Pill",
       "category": "Actions",
-      "description": "Lumen's pill call-to-action, a deep violet gradient with a ring glyph, plus its frosted glass sibling.",
+      "description": "A mono-set pill call-to-action washed in the theme's ink, with a diamond glyph and a paper-card sibling.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -529,10 +529,10 @@
       ]
     },
     {
-      "name": "crt-screen",
-      "title": "CRT Screen",
+      "name": "phosphor-tube",
+      "title": "Phosphor Tube",
       "category": "Backgrounds",
-      "description": "A WebGL cathode-ray tube with four screens - a typing green-phosphor terminal, a film countdown leader, a blue fault screen and a pixel-art title screen.",
+      "description": "A WebGL cathode-ray tube tinted with the theme tokens, showing a film countdown, a typing boot log, a fault report or a pixel-art title screen.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1325,10 +1325,10 @@
       ]
     },
     {
-      "name": "elemental-field",
-      "title": "Elemental Field",
+      "name": "sigil-weather",
+      "title": "Sigil Weather",
       "category": "Backgrounds",
-      "description": "A WebGL2 background where water ripples, lightning arcs or flames play around a mark, with pointer-driven interaction.",
+      "description": "A WebGL2 background where lightning, water or flame plays around a sigil, toned in the active theme colours.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1370,10 +1370,10 @@
       ]
     },
     {
-      "name": "gateway-flow",
-      "title": "Gateway Flow",
+      "name": "arch-current",
+      "title": "Arch Current",
       "category": "Backgrounds",
-      "description": "Dotted bezier paths funnel particles into a central gateway; clicks send out shockwaves.",
+      "description": "Dotted Bézier paths sweeping in from both edges to a low vanishing point, drawn in your theme's ink.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1381,10 +1381,10 @@
       ]
     },
     {
-      "name": "connectivity-graph",
-      "title": "Connectivity Graph",
+      "name": "ink-fountain",
+      "title": "Ink Fountain",
       "category": "Backgrounds",
-      "description": "Blue gradient rays fan upward from below the frame like a signal burst.",
+      "description": "Primary ink strokes fanning rightward from a source on the left edge.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1403,10 +1403,10 @@
       ]
     },
     {
-      "name": "defense-lines",
-      "title": "Defense Lines",
+      "name": "rising-strokes",
+      "title": "Rising Strokes",
       "category": "Backgrounds",
-      "description": "Crimson rain lines rise and glow brighter toward the centre of the frame.",
+      "description": "Fine pen strokes rise through the frame, slowing, lengthening and taking the primary colour as they cross a low horizon.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1425,10 +1425,10 @@
       ]
     },
     {
-      "name": "star-portal",
-      "title": "Star Portal",
+      "name": "night-gate",
+      "title": "Night Gate",
       "category": "Actions",
-      "description": "A holographic pill button floating over a drifting, twinkling starfield.",
+      "description": "A serif link pill floating over a drifting field of ink specks and pulsing motes.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1436,10 +1436,10 @@
       ]
     },
     {
-      "name": "ignition-button",
-      "title": "Ignition Button",
+      "name": "starstream-button",
+      "title": "Starstream Button",
       "category": "Actions",
-      "description": "A WebGL launch button whose starfield warps into hyperspace on hover and flashes white on click.",
+      "description": "A WebGL pill whose face carries a sideways stream of stars that stretches into streaks on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1447,10 +1447,10 @@
       ]
     },
     {
-      "name": "induction-button",
-      "title": "Induction Button",
+      "name": "arc-halo-button",
+      "title": "Arc Halo Button",
       "category": "Actions",
-      "description": "A WebGL button wrapped in crawling cyan electric arcs that multiply on hover and discharge on click.",
+      "description": "A WebGL card button traced by crawling ink arcs that multiply on hover and discharge on click.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1458,10 +1458,10 @@
       ]
     },
     {
-      "name": "plasma-button",
-      "title": "Plasma Button",
+      "name": "current-button",
+      "title": "Current Button",
       "category": "Actions",
-      "description": "A WebGL button filled with churning blue plasma that heats up on hover and erupts on press.",
+      "description": "A WebGL pill filled with a slow ink current that quickens on hover and flares on press.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1469,10 +1469,10 @@
       ]
     },
     {
-      "name": "tactile-button",
-      "title": "Tactile Button",
+      "name": "inkwell",
+      "title": "Inkwell",
       "category": "Actions",
-      "description": "A WebGL button holding a glowing liquid that sloshes as you sweep the cursor and drains on click.",
+      "description": "A round WebGL button holding a well of theme ink that tilts as you sweep the cursor and draws down on click.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1480,10 +1480,10 @@
       ]
     },
     {
-      "name": "thinking-button",
-      "title": "Thinking Button",
+      "name": "muse-button",
+      "title": "Muse Button",
       "category": "Actions",
-      "description": "A canvas loading button with a comet of light tracing its border, a braille spinner and a shimmering label.",
+      "description": "A canvas busy-state button in the theme's ink, with a comet tracing its border, a dot spinner and a shimmering serif label.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1536,10 +1536,10 @@
       ]
     },
     {
-      "name": "cloud-field",
-      "title": "Cloud Field",
+      "name": "ridge-strata",
+      "title": "Ridge Strata",
       "category": "Backgrounds",
-      "description": "A night sky over layered parallax ridges, with twinkling stars and the occasional meteor, steered by the pointer.",
+      "description": "Layered ink-wash ridges drifting in parallax, rimmed in the theme's primary.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1547,10 +1547,10 @@
       ]
     },
     {
-      "name": "flow-field",
-      "title": "Flow Field",
+      "name": "drift-lines",
+      "title": "Drift Lines",
       "category": "Backgrounds",
-      "description": "Warm amber, gold and coral particles trace a simplex-noise flow field and part around the pointer.",
+      "description": "Thousands of fine strokes drifting along a simplex-noise current, drawn in your theme's inks.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1703,10 +1703,10 @@
       ]
     },
     {
-      "name": "generate-button",
-      "title": "Generate Button",
+      "name": "conjure-button",
+      "title": "Conjure Button",
       "category": "Actions",
-      "description": "A dark glass pill with a flickering sparkle icon and letters that shimmer in sequence.",
+      "description": "A seated paper button whose serif letters shimmer in a wave and swap to an active label on focus.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1714,10 +1714,10 @@
       ]
     },
     {
-      "name": "spinning-border-button",
-      "title": "Spinning Border Button",
+      "name": "halo-trace",
+      "title": "Halo Trace",
       "category": "Actions",
-      "description": "A small uppercase pill.",
+      "description": "A mono pill whose hairline is traced by a slow beam of the theme's primary colour.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1725,10 +1725,10 @@
       ]
     },
     {
-      "name": "gradient-cta",
-      "title": "Gradient CTA",
+      "name": "glaze-button",
+      "title": "Glaze Button",
       "category": "Actions",
-      "description": "A warm golden gradient pill with layered inset highlights and a paper-plane icon.",
+      "description": "A glazed button in the theme's primary colour with a serif label and a sheen that sweeps across on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1736,10 +1736,10 @@
       ]
     },
     {
-      "name": "trochil-signal",
-      "title": "Trochil Signal",
+      "name": "sheen-cta",
+      "title": "Sheen CTA",
       "category": "Actions",
-      "description": "A hairline glass rectangle on a near-black stage with an amber glow.",
+      "description": "A paper pill with a serif italic label and a sweep of primary light on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1747,10 +1747,10 @@
       ]
     },
     {
-      "name": "attune-thermal",
-      "title": "Attune Thermal",
+      "name": "kiln-button",
+      "title": "Kiln Button",
       "category": "Actions",
-      "description": "A thermal orange gradient button with a chevron, on a dark stage with a soft heat glow.",
+      "description": "A glowing pill button fired from the theme's primary and destructive colours, with a coal-chip chevron.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1758,10 +1758,10 @@
       ]
     },
     {
-      "name": "tideform-outline",
-      "title": "Tideform Outline",
+      "name": "hairline-cta",
+      "title": "Hairline CTA",
       "category": "Actions",
-      "description": "A monospace, uppercase outline button on a graphite stage.",
+      "description": "A mono, uppercase hairline button whose primary ink floods up from the baseline on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1769,10 +1769,10 @@
       ]
     },
     {
-      "name": "glassmorphism-cta",
-      "title": "Glassmorphism CTA",
+      "name": "halo-invite",
+      "title": "Halo Invite",
       "category": "Actions",
-      "description": "A frosted-glass pill link with an avatar, a label and a wand icon.",
+      "description": "A card-coloured invite pill with a monogram badge and a halo of light circling its edge.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1780,10 +1780,10 @@
       ]
     },
     {
-      "name": "expanse-field",
-      "title": "Expanse Field",
+      "name": "terrace-dusk",
+      "title": "Terrace Dusk",
       "category": "Backgrounds",
-      "description": "A stepped WebGL horizon of eleven breathing gradient bars with film grain.",
+      "description": "Fifteen breathing terraces stepping down from left to right, cut from your theme's tones.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1804,10 +1804,10 @@
       ]
     },
     {
-      "name": "dimensional-field",
-      "title": "Dimensional Field",
+      "name": "lens-drift",
+      "title": "Lens Drift",
       "category": "Backgrounds",
-      "description": "Noise-driven light beams behind dark glass spheres that follow the pointer.",
+      "description": "Soft noise-driven bands of theme colour drifting behind a trail of glass lenses that follow the pointer.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1816,10 +1816,10 @@
       ]
     },
     {
-      "name": "data-field",
-      "title": "Data Field",
+      "name": "thread-swell",
+      "title": "Thread Swell",
       "category": "Backgrounds",
-      "description": "Sixty warm additive lines rolling like silk in a tilted 3D plane.",
+      "description": "A curtain of Three.js threads that swell in rolling waves, inked in the active theme colours.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1852,10 +1852,10 @@
       ]
     },
     {
-      "name": "fluid-field",
-      "title": "Fluid Field",
+      "name": "ribbon-light",
+      "title": "Ribbon Light",
       "category": "Backgrounds",
-      "description": "Slow flowing blue and violet light beams on a near-black field.",
+      "description": "Diagonal ribbons of ink-toned light drifting over the page, tinted from your theme.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1864,10 +1864,10 @@
       ]
     },
     {
-      "name": "ember-storm",
-      "title": "Ember Storm",
+      "name": "ash-spiral",
+      "title": "Ash Spiral",
       "category": "Backgrounds",
-      "description": "A spiralling vortex of 12,000 additive embers cooling from white to crimson.",
+      "description": "A drifting spiral of 12,000 sparks drawn in your theme's ink, set off-centre.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1876,10 +1876,10 @@
       ]
     },
     {
-      "name": "flux-vortex",
-      "title": "Flux Vortex",
+      "name": "dot-whirl",
+      "title": "Dot Whirl",
       "category": "Backgrounds",
-      "description": "A monochrome particle funnel with spiral guides and bloom that tilts with the pointer.",
+      "description": "A leaning funnel of 9,500 dots wound by two spiral guides, drawn in your theme's ink.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1888,10 +1888,10 @@
       ]
     },
     {
-      "name": "understory-arrow-pill",
-      "title": "Understory Arrow Pill",
+      "name": "orbit-chip-button",
+      "title": "Orbit Chip Button",
       "category": "Actions",
-      "description": "A violet capsule button with an arrow disc that nudges forward on hover.",
+      "description": "A solid primary pill led by a paper chip whose arrow turns forward on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1899,10 +1899,10 @@
       ]
     },
     {
-      "name": "meridian-keycap",
-      "title": "Meridian Keycap",
+      "name": "stamp-key",
+      "title": "Stamp Key",
       "category": "Actions",
-      "description": "A mechanical keycap button that travels down and lights its LED on hover.",
+      "description": "A theme-inked key that presses into its base and lights its index tick on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1910,10 +1910,10 @@
       ]
     },
     {
-      "name": "halvorsen-arrow-pill",
-      "title": "Halvorsen Arrow Pill",
+      "name": "ink-endcap-button",
+      "title": "Ink Endcap Button",
       "category": "Actions",
-      "description": "A maximum-contrast pill button with an inverted arrow endcap.",
+      "description": "An italic serif pill with a round ink endcap, as a hairline outline or a solid fill.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1921,10 +1921,10 @@
       ]
     },
     {
-      "name": "aster-glass-button",
-      "title": "Aster Glass Button",
+      "name": "prism-key",
+      "title": "Prism Key",
       "category": "Actions",
-      "description": "A frosted glass button with a corner-lit edge, as text-only or with an arrow chip.",
+      "description": "A frosted key-shaped button with a palette-tinted prism edge and an ink arrow chip.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1932,10 +1932,10 @@
       ]
     },
     {
-      "name": "circle-button",
-      "title": "Circle Button",
+      "name": "round-glyph",
+      "title": "Round Glyph",
       "category": "Actions",
-      "description": "Round icon buttons: dark glass play, amber launch plus, and dot-border mail.",
+      "description": "Three round icon buttons in the theme's colours: a raised plus key, a frosted play disc and a stitched mail ring.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1943,10 +1943,10 @@
       ]
     },
     {
-      "name": "liquid-metal-button",
-      "title": "Liquid Metal Button",
+      "name": "prism-flow-button",
+      "title": "Prism Flow Button",
       "category": "Actions",
-      "description": "A WebGL2 button whose face pours into prismatic liquid metal on hover, with ripples on press.",
+      "description": "A WebGL2 button whose face pours into prismatic ribbons on hover, set on a soft theme-coloured pool.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1976,10 +1976,10 @@
       ]
     },
     {
-      "name": "dark-pill",
-      "title": "Dark Pill",
+      "name": "ink-capsule",
+      "title": "Ink Capsule",
       "category": "Actions",
-      "description": "A smoked-glass pill button with a slowly orbiting conic sheen that turns into a soft light pool on hover.",
+      "description": "An ink-filled capsule with a comet of light orbiting inside it and a serif label.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1987,10 +1987,10 @@
       ]
     },
     {
-      "name": "launch-button",
-      "title": "Launch Button",
+      "name": "keystroke-button",
+      "title": "Keystroke Button",
       "category": "Actions",
-      "description": "An amber gradient keycap button with a glowing halo and a pressable bottom edge.",
+      "description": "A keycap button with a key legend, a serif label and a hard bottom edge that sinks when pressed.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1998,10 +1998,10 @@
       ]
     },
     {
-      "name": "dot-border-button",
-      "title": "Dot Border Button",
+      "name": "stitch-frame-button",
+      "title": "Stitch Frame Button",
       "category": "Actions",
-      "description": "An outline button that draws a dashed frame, corner dots and a hatch fill around itself on hover.",
+      "description": "A paper button that pins four corners and stitches a dashed frame around itself on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2009,10 +2009,10 @@
       ]
     },
     {
-      "name": "floating-dots-cta",
-      "title": "Floating Dots CTA",
+      "name": "rising-motes",
+      "title": "Rising Motes",
       "category": "Actions",
-      "description": "A blue gradient button with tiny particles drifting up through it and an arrow that redraws on hover.",
+      "description": "A primary-ink button with motes of light drifting up through it.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2020,10 +2020,10 @@
       ]
     },
     {
-      "name": "sliding-text-cta",
-      "title": "Sliding Text CTA",
+      "name": "roll-label",
+      "title": "Roll Label",
       "category": "Actions",
-      "description": "A dark pill whose label blurs away downward while a copy slides in from above on hover.",
+      "description": "A paper pill whose mono label rolls up and away while an inked copy with an arrow rises in on hover.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2031,10 +2031,10 @@
       ]
     },
     {
-      "name": "gradient-beam-cta",
-      "title": "Gradient Beam CTA",
+      "name": "comet-ring-button",
+      "title": "Comet Ring Button",
       "category": "Actions",
-      "description": "A black pill with an orange beam circling its border and a drifting dot texture inside.",
+      "description": "A card-toned button whose hairline rim is chased by a comet of theme colour.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2042,10 +2042,10 @@
       ]
     },
     {
-      "name": "gradient-pill-button",
-      "title": "Gradient Pill Button",
+      "name": "satin-capsule",
+      "title": "Satin Capsule",
       "category": "Actions",
-      "description": "A metallic concave pill with a gradient hairline border and an arrow.",
+      "description": "A satin card-toned capsule with a graded hairline, a mono annotation and a primary arrow chip.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2145,7 +2145,7 @@
       "name": "temple-night",
       "title": "Temple Night",
       "category": "Three.js",
-      "description": "A Kyoto mountain temple after dark, with rain, mist, falling maple leaves and a blood moon.",
+      "description": "A mountain temple at the edge of night, graded into your theme's palette, with rain, mist and falling maple leaves.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2190,10 +2190,10 @@
       ]
     },
     {
-      "name": "amber-halftone",
-      "title": "Amber Halftone",
+      "name": "dot-screen",
+      "title": "Dot Screen",
       "category": "Backgrounds",
-      "description": "An animated amber-to-white Three.js point field rippling outward on a dark plane.",
+      "description": "A printed dot screen whose rings roll in from the lower-left corner, inked in theme colours.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -2202,10 +2202,10 @@
       ]
     },
     {
-      "name": "neon-sign",
-      "title": "Neon Sign",
+      "name": "tubelight",
+      "title": "Tubelight",
       "category": "Typography",
-      "description": "Hand-bent glass neon lettering on canvas that breathes and flickers one letter.",
+      "description": "Serif neon lettering on canvas, lit in the theme colour, that breathes and flickers one letter.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2224,10 +2224,10 @@
       ]
     },
     {
-      "name": "rectangle-button",
-      "title": "Rectangle Button",
+      "name": "button-atlas",
+      "title": "Button Atlas",
       "category": "Actions",
-      "description": "Twenty-two authored rectangle-button and animated CTA treatments collected into one component.",
+      "description": "Twenty-two rectangle buttons and animated CTAs, each drawn from your theme tokens and set in the Modus type.",
       "dependencies": [
         "framer-motion",
         "clsx",

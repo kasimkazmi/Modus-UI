@@ -1,0 +1,51 @@
+---
+title: Lens Drift
+description: Soft noise-driven bands of theme colour drifting behind a trail of glass lenses that follow the pointer.
+---
+
+A Three.js scene of soft simplex-noise bands seen through a trail of glass lenses: one large lens low on the left and smaller ones rising to the right, each with a fresnel rim. The ground, lens tint and bands come from the active theme, so it is a pale study on paper in light mode and a dim one in dark mode, and follows the palette. The camera eases toward the pointer. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Dimensional Field (MIT).
+
+<ComponentPreview name="lens-drift" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add lens-drift
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/lens-drift.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { LensDrift } from "@/components/ui/lens-drift";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <LensDrift />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default              | Description                                              |
+| :---------------- | :------- | :------------------- | :------------------------------------------------------- |
+| `hue`             | `number` | `0`                  | Hue rotation in degrees (-180 to 180).                   |
+| `saturation`      | `number` | `1`                  | Saturation multiplier (0 to 2).                          |
+| `brightness`      | `number` | `1`                  | Brightness multiplier (0.35 to 1.65).                    |
+| `primaryColor`    | `string` | `--primary`          | First beam colour (theme token by default).              |
+| `secondaryColor`  | `string` | `--muted-foreground` | Second beam colour (theme token by default).             |
+| `backgroundColor` | `string` | `--background`       | Ground colour behind the beams (theme token by default). |

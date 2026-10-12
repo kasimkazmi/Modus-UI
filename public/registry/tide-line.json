@@ -1,0 +1,74 @@
+{
+  "name": "tide-line",
+  "title": "Tide Line",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/tide-line.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Emerald Horizon (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface TideLineProps {\n  speed?: number;\n  waveScale?: number;\n  variation?: number;\n  glow?: number;\n  vignette?: number;\n  hue?: number;\n  /** Two glow colours; defaults to a ramp derived from the theme's primary hue. */\n  colors?: [string, string];\n  /** Colour behind the glow; defaults to the theme background. */\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst VERTEX_SHADER = `\nvarying vec2 vUv;\nvoid main() {\n  vUv = uv;\n  gl_Position = vec4(position, 1.0);\n}\n`;\n\nconst FRAGMENT_SHADER = `\nuniform float u_time;\nuniform vec2 u_resolution;\nuniform float u_wave_scale;\nuniform float u_variation;\nuniform float u_glow;\nuniform float u_vignette;\nuniform vec3 u_base;\nuniform vec3 u_glow1;\nuniform vec3 u_glow2;\nvarying vec2 vUv;\nfloat hash(float n) { return fract(sin(n) * 1e4); }\nfloat noise(float x) {\n  float i = floor(x);\n  float f = fract(x);\n  float u = f * f * (3.0 - 2.0 * f);\n  return mix(hash(i), hash(i + 1.0), u);\n}\nvoid main() {\n  vec2 st = gl_FragCoord.xy / u_resolution.xy;\n  float yPos = 1.0 - st.y;\n  float wave1 = sin(st.x * 3.0 + u_time * 0.5) * 0.1 * u_wave_scale;\n  float wave2 = sin(st.x * 5.0 - u_time * 0.3) * 0.05 * u_wave_scale;\n  float combinedWave = wave1 + wave2;\n  float intensity = smoothstep(0.4, -0.1, yPos + combinedWave);\n  float variation = noise(st.x * 2.0 + u_time * 0.1) * 0.5 + 0.5;\n  intensity *= variation * 1.5 * u_variation;\n  vec3 finalGlow = mix(u_glow1, u_glow2, clamp(st.x + sin(u_time*0.2)*0.5, 0.0, 1.0));\n  // Ink mixed onto the ground, so it reads on paper as well as on a dark stage.\n  vec3 color = mix(u_base, finalGlow, clamp(pow(intensity, 1.5) * 1.2 * u_glow, 0.0, 1.0));\n  float vignette = mix(1.0, smoothstep(1.2, 0.5, length(st - vec2(0.5, 1.0))), u_vignette);\n  color = mix(u_base, color, vignette);\n  gl_FragColor = vec4(color, 1.0);\n}\n`;\n\ntype Hsl = [number, number, number];\n\n/** Theme tokens are bare HSL channels (\"24 8% 20%\"). */\nfunction readTheme() {\n  const style = getComputedStyle(document.documentElement);\n  const read = (name: string): Hsl => {\n    const [h = 0, s = 0, l = 0] = style\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,/%]+/)\n      .map(Number);\n    return [h, s, l];\n  };\n  const background = read(\"--background\");\n  return {\n    dark: background[2] < 50,\n    background,\n    foreground: read(\"--foreground\"),\n    primary: read(\"--primary\"),\n    muted: read(\"--muted-foreground\"),\n  };\n}\n\n/** Comma-separated hsl(), which both canvas and THREE.Color parse. */\nconst hsl = ([h, s, l]: Hsl, alpha = 1) =>\n  `hsla(${Math.round(h)}, ${Math.round(Math.min(100, Math.max(0, s)))}%, ${Math.round(Math.min(100, Math.max(0, l)))}%, ${alpha})`;\n\n/** Bumps on light/dark or palette changes so canvas colours re-resolve. */\nfunction useThemeVersion() {\n  const [version, setVersion] = useState(0);\n  useEffect(() => {\n    const observer = new MutationObserver(() => setVersion((v) => v + 1));\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return version;\n}\n\n/** Two inks on the primary hue, spread apart for a little colour movement. */\nfunction themeGlow(): [string, string] {\n  const { dark, primary } = readTheme();\n  const [h, s] = primary;\n  const sat = Math.max(s, 38);\n  return dark\n    ? [hsl([h, sat, 58]), hsl([h - 22, sat + 10, 72])]\n    : [hsl([h, sat, 30]), hsl([h - 22, sat + 6, 44])];\n}\n\nexport function TideLine({\n  speed = 1,\n  waveScale = 1,\n  variation = 1,\n  glow = 1,\n  vignette = 1,\n  hue = 0,\n  colors,\n  backgroundColor,\n  className,\n}: TideLineProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const theme = useThemeVersion();\n  const options = useRef({ speed, waveScale, variation, glow, vignette });\n  options.current = { speed, waveScale, variation, glow, vignette };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas) return;\n\n    const scene = new THREE.Scene();\n    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);\n    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    const uniforms = {\n      u_time: { value: 0 },\n      u_resolution: { value: new THREE.Vector2(1, 1) },\n      u_wave_scale: { value: 1 },\n      u_variation: { value: 1 },\n      u_glow: { value: 1 },\n      u_vignette: { value: 1 },\n      u_base: { value: new THREE.Color() },\n      u_glow1: { value: new THREE.Color() },\n      u_glow2: { value: new THREE.Color() },\n    };\n    const material = new THREE.ShaderMaterial({\n      vertexShader: VERTEX_SHADER,\n      fragmentShader: FRAGMENT_SHADER,\n      uniforms,\n      depthWrite: false,\n      depthTest: false,\n    });\n    const geometry = new THREE.PlaneGeometry(2, 2);\n    scene.add(new THREE.Mesh(geometry, material));\n\n    const glowColors = colors ?? themeGlow();\n    const base = backgroundColor ?? hsl(readTheme().background);\n    const startedAt = performance.now();\n    let frame = 0;\n    let visible = true;\n    const draw = (now: number) => {\n      const o = options.current;\n      uniforms.u_time.value = (now - startedAt) * 0.001 * o.speed;\n      uniforms.u_wave_scale.value = o.waveScale;\n      uniforms.u_variation.value = o.variation;\n      uniforms.u_glow.value = o.glow;\n      uniforms.u_vignette.value = o.vignette;\n      // Colours go straight into the shader as sRGB values.\n      uniforms.u_base.value.setStyle(base, THREE.LinearSRGBColorSpace);\n      uniforms.u_glow1.value.setStyle(glowColors[0], THREE.LinearSRGBColorSpace);\n      uniforms.u_glow2.value.setStyle(glowColors[1], THREE.LinearSRGBColorSpace);\n      renderer.render(scene, camera);\n    };\n    const tick = (now: number) => {\n      draw(now);\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (!prefersReducedMotion && visible && !frame) frame = requestAnimationFrame(tick);\n    };\n    const resize = () => {\n      const { width, height } = host.getBoundingClientRect();\n      renderer.setSize(width, height, false);\n      uniforms.u_resolution.value.set(width, height);\n      if (prefersReducedMotion) draw(startedAt);\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else if (frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    const onVisibility = () => !document.hidden && start();\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    resize();\n    start();\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n    };\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [prefersReducedMotion, theme, colors?.[0], colors?.[1], backgroundColor]);\n\n  return (\n    <div className={cn(\"absolute inset-0 isolate overflow-hidden\", className)} ref={hostRef}>\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ filter: `hue-rotate(${hue}deg)` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "waveScale",
+      "label": "Wave scale",
+      "min": 0,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "variation",
+      "label": "Variation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "glow",
+      "label": "Glow",
+      "min": 0.2,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "vignette",
+      "label": "Vignette",
+      "min": 0,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

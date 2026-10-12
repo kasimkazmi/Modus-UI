@@ -1,0 +1,41 @@
+---
+title: Satin Capsule
+description: A satin card-toned capsule with a graded hairline, a mono annotation and a primary arrow chip.
+---
+
+A satin capsule shaded from the card and muted tokens, edged by a graded hairline. The label sits beside a small mono annotation and a round arrow chip in the primary colour that nudges forward on hover, while the shadow warms toward the primary. Transitions are off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="satin-capsule" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add satin-capsule
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/satin-capsule.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { SatinCapsule } from "@/components/ui/satin-capsule";
+
+export default function Example() {
+  return <SatinCapsule onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default            | Description                                                             |
+| :-------- | :------------------------------------- | :----------------- | :---------------------------------------------------------------------- |
+| `label`   | `string`                               | `"Read the notes"` | Button text.                                                            |
+| `meta`    | `string`                               | `"04 min"`         | Small mono annotation after the label; pass an empty string to hide it. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler.                                                          |

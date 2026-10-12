@@ -1,0 +1,54 @@
+---
+title: Drift Lines
+description: Thousands of fine strokes drifting along a simplex-noise current, drawn in your theme's inks.
+---
+
+A canvas of particles tracing a 3D simplex-noise current, each leaving a fading stroke and parting gently around the pointer. The strokes are five inks on the theme's primary hue laid over the theme background, so it reads as pen work on paper in light mode and as light trails in dark mode, following the palette picker. It fills its positioned parent, pauses when off screen and renders a settled frame when the user prefers reduced motion. Ported from ThreeUI Community's Flow Field (MIT).
+
+<ComponentPreview name="drift-lines" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add drift-lines
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/drift-lines.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DriftLines } from "@/components/ui/drift-lines";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DriftLines />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type       | Default          | Description                                              |
+| :---------------- | :--------- | :--------------- | :------------------------------------------------------- |
+| `speed`           | `number`   | `1`              | Animation speed multiplier.                              |
+| `size`            | `number`   | `1`              | Stroke width multiplier.                                 |
+| `length`          | `number`   | `1`              | Noise scale; higher values give longer, smoother curves. |
+| `density`         | `number`   | `1`              | Particle count multiplier (2500 at 1).                   |
+| `opacity`         | `number`   | `1`              | Canvas opacity.                                          |
+| `hue`             | `number`   | `0`              | Hue rotation in degrees.                                 |
+| `saturation`      | `number`   | `1`              | Saturation multiplier.                                   |
+| `brightness`      | `number`   | `1`              | Brightness multiplier.                                   |
+| `colors`          | `string[]` | theme inks       | Palette mapped across the noise field.                   |
+| `backgroundColor` | `string`   | theme background | Background and trail fade colour.                        |

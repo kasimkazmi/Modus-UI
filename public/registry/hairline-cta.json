@@ -1,0 +1,17 @@
+{
+  "name": "hairline-cta",
+  "title": "Hairline CTA",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/hairline-cta.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Tideform Outline (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface HairlineCtaProps {\n  /** Button text. */\n  label?: string;\n  type?: \"button\" | \"submit\" | \"reset\";\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\n/** A mono, uppercase hairline button whose ink floods up from the baseline on hover. */\nexport function HairlineCta({\n  label = \"Read the index\",\n  type = \"button\",\n  onClick,\n  className,\n}: HairlineCtaProps) {\n  const still = useReducedMotion();\n  return (\n    <div className={cn(\"relative grid h-full min-h-[240px] w-full place-items-center\", className)}>\n      <button\n        type={type}\n        onClick={onClick}\n        className={cn(\n          \"group relative isolate inline-flex items-center gap-5 overflow-hidden border border-[hsl(var(--foreground)/0.35)] px-6 py-4 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-foreground\",\n          \"transition-colors duration-300 hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary-foreground))]\",\n          \"focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--ring))]\",\n          \"before:absolute before:inset-0 before:-z-10 before:origin-bottom before:scale-y-0 before:bg-[hsl(var(--primary))] before:transition-transform before:duration-300 before:ease-[cubic-bezier(.2,.8,.2,1)] hover:before:scale-y-100\",\n          still && \"transition-none before:transition-none\",\n        )}\n      >\n        <span className=\"text-[hsl(var(--muted-foreground))] transition-colors group-hover:text-[hsl(var(--primary-foreground)/0.7)]\">\n          01\n        </span>\n        <span>{label}</span>\n        <svg\n          viewBox=\"0 0 12 12\"\n          aria-hidden=\"true\"\n          className={cn(\n            \"h-3 w-3 fill-none stroke-current stroke-[1.4] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5\",\n            still && \"transition-none\",\n          )}\n        >\n          <path d=\"M2 10 10 2M4 2h6v6\" />\n        </svg>\n      </button>\n    </div>\n  );\n}\n"
+    }
+  ]
+}

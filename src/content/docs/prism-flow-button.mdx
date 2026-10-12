@@ -1,0 +1,49 @@
+---
+title: Prism Flow Button
+description: A WebGL2 button whose face pours into prismatic ribbons on hover, set on a soft theme-coloured pool.
+---
+
+A dispersion shader paints laminar prismatic ribbons inside the pill on hover, a travelling chromatic rim runs round the outline, the cursor drags the ribbons and each press throws a faceted ripple. The plate is a deep shade of the theme's primary colour resting on a soft pool of the page background. Comes as a labelled pill, an icon circle or a larger play circle. Pauses when off screen; with reduced motion the surface holds still. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="prism-flow-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add prism-flow-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/prism-flow-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { PrismFlowButton } from "@/components/ui/prism-flow-button";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <PrismFlowButton text="Get the build" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                           | Default                                     | Description                                             |
+| :------------ | :----------------------------- | :------------------------------------------ | :------------------------------------------------------ |
+| `variant`     | `"pill" \| "circle" \| "play"` | `"pill"`                                    | Labelled pill, icon-only circle, or larger play circle. |
+| `rendering`   | `"colored" \| "monotone"`      | `"colored"`                                 | Play variant only: full colour or greyscale.            |
+| `diameter`    | `number`                       | `88`                                        | Play variant only: diameter in px (72 to 160).          |
+| `strokeWidth` | `number`                       | `3`                                         | Play variant only: rim stroke width in px (1 to 8).     |
+| `text`        | `string`                       | "Get the build", "Add" or "Play" by variant | Pill label, or the accessible name.                     |
+| `embedded`    | `boolean`                      | `false`                                     | Use a flat card ground instead of the soft theme pool.  |
+| `onClick`     | `() => void`                   | —                                           | Click handler.                                          |

@@ -1,0 +1,50 @@
+---
+title: Arc Halo Button
+description: A WebGL card button traced by crawling ink arcs that multiply on hover and discharge on click.
+---
+
+A raw-WebGL card-toned plate on a dotted paper field, its rounded edge traced by noisy arcs drawn in the theme's primary ink. Hover adds more arcs and clicking sends a discharge around the edge. Colours come from the theme tokens and update when the theme or palette changes. It fills its positioned parent, pauses when off screen or when the tab is hidden, and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="arc-halo-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add arc-halo-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/arc-halo-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { ArcHaloButton } from "@/components/ui/arc-halo-button";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <ArcHaloButton />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                   | Default              | Description                                       |
+| :------------- | :------------------------------------- | :------------------- | :------------------------------------------------ |
+| `label`        | `string`                               | `"Charge the field"` | Button text.                                      |
+| `onClick`      | `ButtonHTMLAttributes["onClick"]`      | -                    | Called after the button's own click effect.       |
+| `onMouseEnter` | `ButtonHTMLAttributes["onMouseEnter"]` | -                    | Called after the button's own mouse enter effect. |
+| `onMouseLeave` | `ButtonHTMLAttributes["onMouseLeave"]` | -                    | Called after the button's own mouse leave effect. |
+| `onFocus`      | `ButtonHTMLAttributes["onFocus"]`      | -                    | Called after the button's own focus effect.       |
+| `onBlur`       | `ButtonHTMLAttributes["onBlur"]`       | -                    | Called after the button's own blur effect.        |
+
+Any other `<button>` attribute is passed through to the inner button.

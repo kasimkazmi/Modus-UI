@@ -1,0 +1,17 @@
+{
+  "name": "ink-endcap-button",
+  "title": "Ink Endcap Button",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/ink-endcap-button.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Halvorsen Arrow Pill (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface InkEndcapButtonProps {\n  /** Button text. */\n  label?: string;\n  /** `solid` is ink on paper; `outline` is a hairline ring with an ink endcap. */\n  variant?: \"solid\" | \"outline\";\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function InkEndcapButton({\n  label = \"Open the archive\",\n  variant = \"outline\",\n  onClick,\n  className,\n}: InkEndcapButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const solid = variant === \"solid\";\n  return (\n    <button\n      type=\"button\"\n      onClick={onClick}\n      className={cn(\n        \"group inline-flex h-14 items-center gap-5 rounded-full pl-8 pr-2 font-serif text-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))] focus-visible:ring-offset-4 focus-visible:ring-offset-background\",\n        solid\n          ? \"bg-[hsl(var(--primary))] text-primary-foreground shadow-[0_14px_30px_-12px_hsl(var(--primary)/0.6)]\"\n          : \"border border-[hsl(var(--foreground)/0.25)] bg-transparent text-foreground hover:border-[hsl(var(--primary))]\",\n        !prefersReducedMotion &&\n          \"transition-[transform,border-color] duration-300 hover:-translate-y-0.5\",\n        className,\n      )}\n    >\n      <span className=\"italic\">{label}</span>\n      <span\n        aria-hidden\n        className={cn(\n          \"relative grid h-10 w-10 place-items-center overflow-hidden rounded-full\",\n          solid\n            ? \"bg-[hsl(var(--background))] text-foreground\"\n            : \"bg-[hsl(var(--primary))] text-primary-foreground\",\n        )}\n      >\n        <svg\n          viewBox=\"0 0 12 12\"\n          className={cn(\n            \"h-3 w-3 fill-none stroke-current [stroke-width:1.75]\",\n            !prefersReducedMotion &&\n              \"transition-transform duration-300 group-hover:translate-x-0.5\",\n          )}\n        >\n          <path d=\"M1.5 6h8M6 2.5 9.5 6 6 9.5\" />\n        </svg>\n      </span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

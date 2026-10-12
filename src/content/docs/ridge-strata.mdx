@@ -1,0 +1,49 @@
+---
+title: Ridge Strata
+description: Layered ink-wash ridges drifting in parallax, rimmed in the theme's primary.
+---
+
+Five parallax ridges in an ink-wash ramp from the theme background to its foreground, each rimmed with a hairline of primary, with faint primary stars and an occasional streak above. The ridges drift and follow the pointer. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ridge-strata" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ridge-strata
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ridge-strata.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RidgeStrata } from "@/components/ui/ridge-strata";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <RidgeStrata />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default     | Description                                                         |
+| :---------------- | :------- | :---------- | :------------------------------------------------------------------ |
+| `speed`           | `number` | `1`         | Animation speed multiplier.                                         |
+| `hue`             | `number` | `0`         | Hue rotation in degrees.                                            |
+| `saturation`      | `number` | `1`         | Saturation multiplier.                                              |
+| `brightness`      | `number` | `1`         | Brightness multiplier.                                              |
+| `backgroundColor` | `string` | `undefined` | CSS background behind the canvas. Defaults to the theme background. |

@@ -1,0 +1,83 @@
+{
+  "name": "stipple-tide",
+  "title": "Stipple Tide",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/stipple-tide.tsx",
+      "content": "\"use client\";\n\n// Ported from ThreeUI Community's Dot Matrix (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ntype Tokens = {\n  primary: string;\n  foreground: string;\n  muted: string;\n  background: string;\n  card: string;\n  border: string;\n  dark: boolean;\n};\n\n/** Reads the Modus theme tokens (bare HSL channels) as comma `hsl()` strings canvas and three.js both parse. */\nfunction readTokens(): Tokens {\n  const root = document.documentElement;\n  const cs = getComputedStyle(root);\n  const hsl = (name: string) =>\n    `hsl(${cs\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,]+/)\n      .filter(Boolean)\n      .join(\", \")})`;\n  return {\n    primary: hsl(\"--primary\"),\n    foreground: hsl(\"--foreground\"),\n    muted: hsl(\"--muted-foreground\"),\n    background: hsl(\"--background\"),\n    card: hsl(\"--card\"),\n    border: hsl(\"--border\"),\n    dark: root.classList.contains(\"dark\") || root.dataset.theme === \"dark\",\n  };\n}\n\n/** The current theme tokens, re-read whenever the mode or palette on <html> changes. */\nfunction useTokens() {\n  const [tokens, setTokens] = useState<Tokens | null>(null);\n  useEffect(() => {\n    const update = () => setTokens(readTokens());\n    update();\n    const observer = new MutationObserver(update);\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return tokens;\n}\n\nexport interface StippleTideProps {\n  speed?: number;\n  gridScale?: number;\n  mouseAmount?: number;\n  pulseSpeed?: number;\n  radius?: number;\n  opacity?: number;\n  hue?: number;\n  /** Dot colour at the crest of a ripple. Defaults to the theme's `--primary`. */\n  color?: string;\n  /** Background behind the dots. Defaults to the theme's `--background`. */\n  backgroundColor?: string;\n  className?: string;\n}\n\nconst VERTEX_SHADER = `\nvarying vec2 vUv;\nvoid main() {\n  vUv = uv;\n  gl_Position = vec4(position, 1.0);\n}\n`;\n\nconst FRAGMENT_SHADER = `\nuniform float uTime;\nuniform vec2 uResolution;\nuniform vec2 uMouse;\nuniform float uGridScale;\nuniform float uMouseAmount;\nuniform float uPulseSpeed;\nuniform float uRadius;\nuniform float uOpacity;\nuniform vec3 uColor;\nuniform vec3 uBase;\nvarying vec2 vUv;\nvoid main() {\n  vec2 uv = gl_FragCoord.xy / uResolution.xy;\n  float aspect = uResolution.x / uResolution.y;\n  uv.x *= aspect;\n  uv += uMouse * uMouseAmount;\n  vec2 grid = fract(uv * uGridScale);\n  vec2 id = floor(uv * uGridScale);\n  float dist = length(grid - vec2(0.5));\n  vec2 center = vec2(0.5 * aspect, 0.5);\n  float ring = length(id - center * uGridScale);\n  float pulse = sin(uTime * uPulseSpeed * 6.2831 - ring * 0.32) * 0.5 + 0.5;\n  pulse = pow(pulse, 2.2);\n  float radius = 0.06 + pulse * uRadius;\n  float alpha = smoothstep(radius, radius - 0.05, dist);\n  float depthFade = smoothstep(1.05, 0.05, length(uv - center));\n  vec3 color = mix(uBase, uColor, pulse);\n  gl_FragColor = vec4(color, alpha * mix(0.35, 1.0, pulse) * depthFade * uOpacity);\n}\n`;\n\nexport function StippleTide({\n  speed = 1,\n  gridScale = 36,\n  mouseAmount = 0.03,\n  pulseSpeed = 0.25,\n  radius = 0.26,\n  opacity = 0.9,\n  hue = 0,\n  color,\n  backgroundColor,\n  className,\n}: StippleTideProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const tokens = useTokens();\n  const ink = color ?? tokens?.primary ?? \"currentColor\";\n  const base = tokens?.muted ?? ink;\n  const hostRef = useRef<HTMLDivElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const options = useRef({ speed, gridScale, mouseAmount, pulseSpeed, radius, opacity, ink, base });\n  options.current = { speed, gridScale, mouseAmount, pulseSpeed, radius, opacity, ink, base };\n  const redraw = useRef<() => void>(() => {});\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !canvas) return;\n\n    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    const scene = new THREE.Scene();\n    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);\n    camera.position.z = 1;\n    const uniforms = {\n      uTime: { value: 0 },\n      uResolution: { value: new THREE.Vector2() },\n      uMouse: { value: new THREE.Vector2() },\n      uGridScale: { value: 60 },\n      uMouseAmount: { value: 0.04 },\n      uPulseSpeed: { value: 0.4 },\n      uRadius: { value: 0.15 },\n      uOpacity: { value: 0.35 },\n      uColor: { value: new THREE.Color() },\n      uBase: { value: new THREE.Color() },\n    };\n    const geometry = new THREE.PlaneGeometry(2, 2);\n    const material = new THREE.ShaderMaterial({\n      uniforms,\n      vertexShader: VERTEX_SHADER,\n      fragmentShader: FRAGMENT_SHADER,\n      transparent: true,\n      depthWrite: false,\n    });\n    scene.add(new THREE.Mesh(geometry, material));\n\n    const mouse = new THREE.Vector2();\n    const target = new THREE.Vector2();\n    const startedAt = performance.now();\n    let frame = 0;\n    let visible = true;\n\n    // Listen on window so overlaid content does not block the pointer drift.\n    const onPointer = (event: PointerEvent) => {\n      const bounds = canvas.getBoundingClientRect();\n      target.x = ((event.clientX - bounds.left) / Math.max(1, bounds.width)) * 2 - 1;\n      target.y = -(((event.clientY - bounds.top) / Math.max(1, bounds.height)) * 2 - 1);\n    };\n    const draw = (now: number) => {\n      const o = options.current;\n      mouse.lerp(target, 0.05);\n      uniforms.uTime.value = (now - startedAt) * 0.001 * o.speed;\n      uniforms.uMouse.value = mouse;\n      uniforms.uGridScale.value = o.gridScale;\n      uniforms.uMouseAmount.value = o.mouseAmount;\n      uniforms.uPulseSpeed.value = o.pulseSpeed;\n      uniforms.uRadius.value = o.radius;\n      uniforms.uOpacity.value = o.opacity;\n      if (o.ink !== \"currentColor\") {\n        uniforms.uColor.value.setStyle(o.ink, THREE.LinearSRGBColorSpace);\n        uniforms.uBase.value.setStyle(o.base, THREE.LinearSRGBColorSpace);\n      }\n      renderer.render(scene, camera);\n    };\n    const tick = (now: number) => {\n      draw(now);\n      frame = visible && !document.hidden ? requestAnimationFrame(tick) : 0;\n    };\n    const start = () => {\n      if (!prefersReducedMotion && visible && !frame) frame = requestAnimationFrame(tick);\n    };\n    const resize = () => {\n      const { width, height } = host.getBoundingClientRect();\n      renderer.setSize(width, height, false);\n      uniforms.uResolution.value.set(width, height);\n      if (prefersReducedMotion) draw(startedAt);\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry?.isIntersecting ?? true;\n      if (visible) start();\n      else if (frame) {\n        cancelAnimationFrame(frame);\n        frame = 0;\n      }\n    });\n    const onVisibility = () => !document.hidden && start();\n    document.addEventListener(\"visibilitychange\", onVisibility);\n    redraw.current = () => {\n      if (prefersReducedMotion) draw(startedAt);\n    };\n    resizeObserver.observe(host);\n    intersection.observe(host);\n    if (!prefersReducedMotion) window.addEventListener(\"pointermove\", onPointer, { passive: true });\n    resize();\n    start();\n\n    return () => {\n      if (frame) cancelAnimationFrame(frame);\n      resizeObserver.disconnect();\n      intersection.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibility);\n      window.removeEventListener(\"pointermove\", onPointer);\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n    };\n  }, [prefersReducedMotion]);\n\n  // A still frame has to be repainted when the theme changes under it.\n  useEffect(() => {\n    redraw.current();\n  }, [ink, base]);\n\n  return (\n    <div\n      ref={hostRef}\n      className={cn(\"absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor ?? \"hsl(var(--background))\" }}\n    >\n      <canvas\n        ref={canvasRef}\n        className=\"block h-full w-full\"\n        style={{ filter: `hue-rotate(${hue}deg)` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "gridScale",
+      "label": "Grid scale",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 60
+    },
+    {
+      "kind": "range",
+      "key": "mouseAmount",
+      "label": "Pointer",
+      "min": 0,
+      "max": 0.12,
+      "step": 0.005,
+      "default": 0.04
+    },
+    {
+      "kind": "range",
+      "key": "pulseSpeed",
+      "label": "Pulse",
+      "min": 0,
+      "max": 1.2,
+      "step": 0.01,
+      "default": 0.4
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "radius",
+      "label": "Radius",
+      "min": 0.03,
+      "max": 0.3,
+      "step": 0.005,
+      "default": 0.15
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.05,
+      "max": 1,
+      "step": 0.01,
+      "default": 0.35
+    }
+  ]
+}

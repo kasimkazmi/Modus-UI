@@ -1,0 +1,17 @@
+{
+  "name": "halo-trace",
+  "title": "Halo Trace",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/halo-trace.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Spinning Border Button (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface HaloTraceProps {\n  label?: string;\n  beamColor?: string;\n  speed?: number;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function HaloTrace({\n  label = \"Send for review\",\n  beamColor = \"hsl(var(--primary))\",\n  speed = 4,\n  onClick,\n  className,\n}: HaloTraceProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const t = prefersReducedMotion ? \"\" : \"transition-all duration-300\";\n  return (\n    <button\n      type=\"button\"\n      onClick={onClick}\n      className={cn(\n        \"group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1.5px] hover:shadow-[0_12px_30px_-12px_hsl(var(--primary)/0.5)]\",\n        \"focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[hsl(var(--primary))]\",\n        !prefersReducedMotion && \"transition-all duration-300 hover:-translate-y-0.5\",\n        className,\n      )}\n    >\n      <span className=\"absolute inset-0 rounded-full bg-[hsl(var(--border))]\" />\n      <span\n        className={cn(\n          \"absolute inset-[-100%] opacity-60 group-hover:opacity-100\",\n          t,\n          !prefersReducedMotion && \"animate-spin\",\n        )}\n        style={{\n          animationDuration: `${speed}s`,\n          background: `conic-gradient(from 0deg at 50% 50%, transparent 0%, transparent 62%, ${beamColor} 100%)`,\n        }}\n      />\n      <span\n        className={cn(\n          \"relative flex h-full w-full items-center justify-center gap-2.5 rounded-full bg-[hsl(var(--card))] px-6 py-3 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))] group-hover:text-foreground\",\n          t,\n        )}\n      >\n        <span\n          aria-hidden=\"true\"\n          className={cn(\n            \"h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary)/0.35)] group-hover:bg-[hsl(var(--primary))]\",\n            t,\n          )}\n        />\n        <span className=\"relative z-10\">{label}</span>\n        <svg\n          xmlns=\"http://www.w3.org/2000/svg\"\n          width=\"13\"\n          height=\"13\"\n          viewBox=\"0 0 24 24\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n          className={cn(\"relative z-10 group-hover:translate-x-0.5\", t)}\n          aria-hidden=\"true\"\n        >\n          <path d=\"M7 17 17 7\" />\n          <path d=\"M8 7h9v9\" />\n        </svg>\n      </span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

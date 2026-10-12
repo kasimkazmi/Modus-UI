@@ -1,0 +1,55 @@
+---
+title: Resonance Plate
+description: Chladni-style nodal lines shimmering across an off-centre plate, with drifting motes, in theme ink.
+---
+
+A WebGL shader draws the shifting nodal lines of a vibrating plate set off to the right, leaving the left side calm for copy. Nodal lines take the muted ink, antinodes and the periodic strike ring take the primary, and a few motes drift upward. Click to strike it. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="resonance-plate" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add resonance-plate
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/resonance-plate.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ResonancePlate } from "@/components/ui/resonance-plate";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <ResonancePlate />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type       | Default     | Description                                                                     |
+| :---------------- | :--------- | :---------- | :------------------------------------------------------------------------------ |
+| `speed`           | `number`   | `1`         | Animation speed multiplier.                                                     |
+| `pointerAmount`   | `number`   | `1`         | How far the pattern follows the pointer.                                        |
+| `strikeDuration`  | `number`   | `2400`      | Milliseconds a strike's ring takes to fade.                                     |
+| `emberAmount`     | `number`   | `1`         | Share of the 58 drifting motes to draw (0 to 1).                                |
+| `brightness`      | `number`   | `1`         | CSS brightness filter.                                                          |
+| `opacity`         | `number`   | `1`         | Overall opacity.                                                                |
+| `hue`             | `number`   | `0`         | Hue rotation in degrees.                                                        |
+| `saturation`      | `number`   | `1`         | CSS saturation filter.                                                          |
+| `backgroundColor` | `string`   | `undefined` | CSS background. Defaults to the theme background.                               |
+| `colors`          | `string[]` | `undefined` | Hex overrides for deep, node, antinode and highlight. Defaults to theme tokens. |
+| `emberColors`     | `string[]` | `undefined` | Hex overrides for hot and cool motes. Defaults to theme tokens.                 |

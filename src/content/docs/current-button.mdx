@@ -1,0 +1,53 @@
+---
+title: Current Button
+description: A WebGL pill filled with a slow ink current that quickens on hover and flares on press.
+---
+
+A raw-WebGL pill filled with a domain-warped current of ink, drawn from the theme's primary, foreground and background colours, over a faint paper-grain field. Hover quickens the current and pressing the button flares it toward the paper colour. The label is set in uppercase mono. Colours are re-read when the theme or palette changes, so it sits on paper in light mode and on the dark ground in dark mode. It fills its positioned parent, pauses when off screen or when the tab is hidden, and holds a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="current-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add current-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/current-button.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CurrentButton } from "@/components/ui/current-button";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <CurrentButton />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                   | Default           | Description                                       |
+| :------------- | :------------------------------------- | :---------------- | :------------------------------------------------ |
+| `label`        | `string`                               | `"Run the draft"` | Button text.                                      |
+| `hue`          | `number`                               | `0`               | Hue rotation in degrees (-180 to 180).            |
+| `saturation`   | `number`                               | `1`               | Saturation multiplier (0 to 2).                   |
+| `brightness`   | `number`                               | `1`               | Brightness multiplier (0.35 to 1.65).             |
+| `onMouseDown`  | `ButtonHTMLAttributes["onMouseDown"]`  | -                 | Called after the button's own mouse down effect.  |
+| `onKeyDown`    | `ButtonHTMLAttributes["onKeyDown"]`    | -                 | Called after the button's own key down effect.    |
+| `onMouseEnter` | `ButtonHTMLAttributes["onMouseEnter"]` | -                 | Called after the button's own mouse enter effect. |
+| `onMouseLeave` | `ButtonHTMLAttributes["onMouseLeave"]` | -                 | Called after the button's own mouse leave effect. |
+| `onFocus`      | `ButtonHTMLAttributes["onFocus"]`      | -                 | Called after the button's own focus effect.       |
+| `onBlur`       | `ButtonHTMLAttributes["onBlur"]`       | -                 | Called after the button's own blur effect.        |
+
+Any other `<button>` attribute is passed through to the inner button.

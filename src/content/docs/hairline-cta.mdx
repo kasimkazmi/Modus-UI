@@ -1,0 +1,45 @@
+---
+title: Hairline CTA
+description: A mono, uppercase hairline button whose primary ink floods up from the baseline on hover.
+---
+
+A mono, uppercase hairline button with an index number and a diagonal arrow. On hover the theme's primary colour floods up from the baseline and the arrow lifts. It follows the active theme and palette, and fills its parent so it can be centred in any container. Transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="hairline-cta" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hairline-cta
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/hairline-cta.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { HairlineCta } from "@/components/ui/hairline-cta";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <HairlineCta onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default            | Description         |
+| :-------- | :------------------------------------- | :----------------- | :------------------ |
+| `label`   | `string`                               | `"Read the index"` | Button text.        |
+| `type`    | `"button" \| "submit" \| "reset"`      | `"button"`         | Native button type. |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler.      |

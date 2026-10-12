@@ -1,0 +1,48 @@
+---
+title: Night Gate
+description: A serif link pill floating over a drifting field of ink specks and pulsing motes.
+---
+
+An italic serif link in a translucent pill with an inked arrow badge, floating over two canvas fields: a slow upward drift of ink specks and motes in the theme's primary and foreground colours that wander, bounce and pulse with a glow. Colours come from the theme tokens and are re-read when the theme or palette changes, so the field is ink on paper in light mode and light on dark in dark mode. It fills its positioned parent, pauses when off screen or the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="night-gate" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add night-gate
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/night-gate.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { NightGate } from "@/components/ui/night-gate";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full overflow-hidden">
+      <NightGate label="Begin the journey" href="/start" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                   | Default                                 | Description                                            |
+| :----------- | :------------------------------------- | :-------------------------------------- | :----------------------------------------------------- |
+| `label`      | `string`                               | `"Step inside"`                         | Button text.                                           |
+| `hue`        | `number`                               | `0`                                     | Hue rotation in degrees (-180 to 180).                 |
+| `saturation` | `number`                               | `1`                                     | Saturation multiplier (0 to 2).                        |
+| `brightness` | `number`                               | `1`                                     | Brightness multiplier (0.35 to 1.65).                  |
+| `starColors` | `string[]`                             | Theme primary, foreground and muted ink | CSS colours for the motes; alpha is applied per frame. |
+| `href`       | `string`                               | `"#"`                                   | Link target. `"#"` does not navigate.                  |
+| `onClick`    | `MouseEventHandler<HTMLAnchorElement>` | -                                       | Called when the link is clicked.                       |

@@ -1,0 +1,55 @@
+---
+title: Dot Screen
+description: A printed dot screen whose rings roll in from the lower-left corner, inked in theme colours.
+---
+
+A fine grid of round WebGL points whose size swells in rings rolling in from the lower-left corner, shaded diagonally from the theme's primary to its muted ink on the theme background. It fills its positioned parent, follows the active theme and palette in light and dark mode, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="dot-screen" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add dot-screen
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/dot-screen.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { DotScreen } from "@/components/ui/dot-screen";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <DotScreen />
+      <div className="relative z-10 p-8">
+        <h1>Content over the background</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default | Description                                                        |
+| :---------------- | :------- | :------ | :----------------------------------------------------------------- |
+| `speed`           | `number` | `0.6`   | Ripple time multiplier (0–3).                                      |
+| `size`            | `number` | `0.75`  | Point size multiplier.                                             |
+| `length`          | `number` | `1.4`   | Ripple wavelength multiplier; higher packs more rings.             |
+| `density`         | `number` | `1.5`   | Grid density; tightens point spacing (0.25–2.5).                   |
+| `color`           | `string` | —       | Primary gradient colour. Defaults to the theme primary.            |
+| `secondaryColor`  | `string` | —       | Secondary gradient colour. Defaults to the theme muted foreground. |
+| `backgroundColor` | `string` | —       | Clear colour. Defaults to the theme background.                    |
+| `hue`             | `number` | `0`     | Hue rotation of the final frame, in degrees.                       |
+| `saturation`      | `number` | `1`     | Saturation of the final frame.                                     |
+| `brightness`      | `number` | `1`     | Brightness of the final frame.                                     |

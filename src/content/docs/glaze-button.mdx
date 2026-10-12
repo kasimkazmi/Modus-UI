@@ -1,0 +1,40 @@
+---
+title: Glaze Button
+description: A glazed button in the theme's primary colour with a serif label and a sheen that sweeps across on hover.
+---
+
+A glazed button poured in the theme's primary colour: lighter at the top-left, deeper at the base, with an inset highlight and a coloured drop shadow. The label is set in the serif heading face beside a mono return glyph, and a diagonal sheen sweeps across on hover. Transitions are off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="glaze-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glaze-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/glaze-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { GlazeButton } from "@/components/ui/glaze-button";
+
+export default function Example() {
+  return <GlazeButton />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default            | Description    |
+| :-------- | :------------------------------------- | :----------------- | :------------- |
+| `label`   | `string`                               | `"Send the brief"` | Button text.   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`        | Click handler. |

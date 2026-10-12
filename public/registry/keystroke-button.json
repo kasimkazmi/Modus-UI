@@ -1,0 +1,17 @@
+{
+  "name": "keystroke-button",
+  "title": "Keystroke Button",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/keystroke-button.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Launch Button (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface KeystrokeButtonProps {\n  label?: string;\n  /** Key legend printed in the corner of the cap. */\n  keyHint?: string;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function KeystrokeButton({\n  label = \"Commit changes\",\n  keyHint = \"⌘ S\",\n  onClick,\n  className,\n}: KeystrokeButtonProps) {\n  const prefersReducedMotion = useReducedMotion();\n  return (\n    <button\n      type=\"button\"\n      onClick={onClick}\n      className={cn(\n        \"group/key relative rounded-[12px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))] focus-visible:ring-offset-4 focus-visible:ring-offset-background\",\n        className,\n      )}\n    >\n      <span\n        aria-hidden\n        className={cn(\n          \"absolute -inset-2 rounded-[16px] bg-[hsl(var(--primary)/0.25)] opacity-0 blur-lg group-hover/key:opacity-100\",\n          !prefersReducedMotion && \"transition-opacity duration-500\",\n        )}\n      />\n      <span\n        className={cn(\n          \"relative flex min-w-[220px] flex-col items-start gap-3 rounded-[12px] border border-[hsl(var(--border))] bg-[linear-gradient(180deg,hsl(var(--card)),hsl(var(--muted)))] px-5 pb-3.5 pt-3 text-left text-foreground shadow-[0_5px_0_hsl(var(--foreground)/0.75),0_14px_22px_-8px_hsl(var(--foreground)/0.4)] active:shadow-[0_2px_0_hsl(var(--foreground)/0.75),0_6px_10px_-6px_hsl(var(--foreground)/0.4)]\",\n          !prefersReducedMotion && \"transition-all duration-150 active:translate-y-[3px]\",\n        )}\n      >\n        <span className=\"flex w-full items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground\">\n          <span>{keyHint}</span>\n          <span className=\"h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))] shadow-[0_0_8px_hsl(var(--primary))]\" />\n        </span>\n        <span className=\"font-serif text-xl leading-none\">{label}</span>\n      </span>\n    </button>\n  );\n}\n"
+    }
+  ]
+}

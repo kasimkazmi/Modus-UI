@@ -1,0 +1,53 @@
+---
+title: Tide Line
+description: A slow band of ink-toned light rolling along the top edge, tinted from your theme.
+---
+
+A full-bleed Three.js shader of a soft band of light that hangs from the top edge and rolls in slow waves. Its two inks are derived from the theme's primary hue, so it sits on paper in light mode and glows on the dark background in dark mode, following the palette picker. It fills its positioned parent, pauses when off screen and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community's Emerald Horizon (MIT).
+
+<ComponentPreview name="tide-line" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tide-line
+```
+
+### Manual
+
+1. Install `three`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/tide-line.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { TideLine } from "@/components/ui/tide-line";
+
+export default function Example() {
+  return (
+    <div className="relative h-[500px] w-full overflow-hidden">
+      <TideLine />
+      <div className="relative z-10 p-8">
+        <h1>Content over the effect</h1>
+      </div>
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type               | Default            | Description                                             |
+| :---------------- | :----------------- | :----------------- | :------------------------------------------------------ |
+| `speed`           | `number`           | `1`                | Animation speed multiplier.                             |
+| `waveScale`       | `number`           | `1`                | Height of the horizon waves.                            |
+| `variation`       | `number`           | `1`                | Strength of the brightness variation along the horizon. |
+| `glow`            | `number`           | `1`                | Glow intensity.                                         |
+| `vignette`        | `number`           | `1`                | Vignette strength, from 0 (off) to 1.                   |
+| `hue`             | `number`           | `0`                | Hue rotation in degrees.                                |
+| `colors`          | `[string, string]` | theme primary ramp | The two glow colours blended across the band.           |
+| `backgroundColor` | `string`           | theme background   | Colour of the ground behind the glow.                   |

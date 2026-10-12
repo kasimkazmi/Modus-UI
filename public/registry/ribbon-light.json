@@ -1,0 +1,47 @@
+{
+  "name": "ribbon-light",
+  "title": "Ribbon Light",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "three",
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/ribbon-light.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Fluid Field (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport * as THREE from \"three\";\nimport { cn } from \"@/lib/utils\";\n\ninterface RibbonLightProps {\n  hue?: number;\n  saturation?: number;\n  brightness?: number;\n  /** First colour of the flowing light beams. */\n  primaryColor?: string;\n  /** Second colour of the flowing light beams. */\n  secondaryColor?: string;\n  /** Colour behind the ribbons; defaults to the theme background. */\n  backgroundColor?: string;\n  className?: string;\n}\n\ntype Hsl = [number, number, number];\n\n/** Theme tokens are bare HSL channels (\"24 8% 20%\"). */\nfunction readTheme() {\n  const style = getComputedStyle(document.documentElement);\n  const read = (name: string): Hsl => {\n    const [h = 0, s = 0, l = 0] = style\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,/%]+/)\n      .map(Number);\n    return [h, s, l];\n  };\n  const background = read(\"--background\");\n  return {\n    dark: background[2] < 50,\n    background,\n    foreground: read(\"--foreground\"),\n    primary: read(\"--primary\"),\n    muted: read(\"--muted-foreground\"),\n  };\n}\n\n/** Comma-separated hsl(), which both canvas and THREE.Color parse. */\nconst hsl = ([h, s, l]: Hsl, alpha = 1) =>\n  `hsla(${Math.round(h)}, ${Math.round(Math.min(100, Math.max(0, s)))}%, ${Math.round(Math.min(100, Math.max(0, l)))}%, ${alpha})`;\n\n/** Bumps on light/dark or palette changes so canvas colours re-resolve. */\nfunction useThemeVersion() {\n  const [version, setVersion] = useState(0);\n  useEffect(() => {\n    const observer = new MutationObserver(() => setVersion((v) => v + 1));\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return version;\n}\n\nconst clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));\n\n// The original shader writes raw colour values (three r128, no colour management).\nconst raw = (value: string) => new THREE.Color(value).convertLinearToSRGB();\n\nconst fragmentShader = /* glsl */ `\n  uniform float u_time;\n  uniform vec2 u_resolution;\n  uniform vec3 u_color1;\n  uniform vec3 u_color2;\n  uniform vec3 u_base;\n\n  // Compact 2D Simplex Noise\n  vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }\n  vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }\n  vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }\n  \n  float snoise(vec2 v) {\n      const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);\n      vec2 i  = floor(v + dot(v, C.yy));\n      vec2 x0 = v -   i + dot(i, C.xx);\n      vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\n      vec4 x12 = x0.xyxy + C.xxzz;\n      x12.xy -= i1;\n      i = mod289(i);\n      vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));\n      vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);\n      m = m*m;\n      m = m*m;\n      vec3 x = 2.0 * fract(p * C.www) - 1.0;\n      vec3 h = abs(x) - 0.5;\n      vec3 ox = floor(x + 0.5);\n      vec3 a0 = x - ox;\n      m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);\n      vec3 g;\n      g.x  = a0.x  * x0.x  + h.x  * x0.y;\n      g.yz = a0.yz * x12.xz + h.yz * x12.yw;\n      return 130.0 * dot(m, g);\n  }\n\n  void main() {\n      vec2 uv = gl_FragCoord.xy / u_resolution.xy;\n      uv.x *= u_resolution.x / u_resolution.y;\n\n      vec2 st = uv * 0.7;\n      st += vec2(snoise(st + u_time * 0.05), snoise(st - u_time * 0.05)) * 0.3;\n\n      float beam = smoothstep(0.1, 0.8, snoise(vec2(st.x * 1.8 - st.y - u_time * 0.12, u_time * 0.02)));\n      vec3 glow = mix(u_color1, u_color2, snoise(uv * 1.5 + u_time * 0.1) * 0.5 + 0.5);\n\n      gl_FragColor = vec4(mix(u_base, glow, clamp(beam * 0.85, 0.0, 1.0)), 1.0);\n  }\n        \n`;\n\nexport function RibbonLight({\n  hue = 0,\n  saturation = 1,\n  brightness = 1,\n  primaryColor,\n  secondaryColor,\n  backgroundColor = \"hsl(var(--background))\",\n  className,\n}: RibbonLightProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const hostRef = useRef<HTMLDivElement>(null);\n  const theme = useThemeVersion();\n\n  useEffect(() => {\n    const host = hostRef.current;\n    if (!host) return;\n\n    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });\n    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));\n    renderer.domElement.style.cssText =\n      \"position:absolute;inset:0;width:100%;height:100%;display:block\";\n    host.appendChild(renderer.domElement);\n\n    // Ribbons are two inks on the primary hue laid over the theme ground.\n    const { dark, primary, background } = readTheme();\n    const [h, s] = primary;\n    const sat = Math.max(s, 40);\n    const scene = new THREE.Scene();\n    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);\n    const uniforms = {\n      u_time: { value: 0 },\n      u_resolution: { value: new THREE.Vector2() },\n      u_color1: { value: raw(primaryColor ?? hsl([h, sat, dark ? 56 : 34])) },\n      u_color2: { value: raw(secondaryColor ?? hsl([h - 30, sat, dark ? 70 : 50])) },\n      u_base: { value: raw(hsl(background)) },\n    };\n    const geometry = new THREE.PlaneGeometry(2, 2);\n    const material = new THREE.ShaderMaterial({\n      uniforms,\n      vertexShader: \"void main(){ gl_Position = vec4(position, 1.0); }\",\n      fragmentShader,\n    });\n    scene.add(new THREE.Mesh(geometry, material));\n\n    let elapsed = 0;\n    const render = () => {\n      uniforms.u_time.value = elapsed;\n      renderer.render(scene, camera);\n    };\n\n    const resize = () => {\n      const width = Math.max(1, host.clientWidth);\n      const height = Math.max(1, host.clientHeight);\n      renderer.setSize(width, height, false);\n      // CSS pixels, exactly as the original.\n      uniforms.u_resolution.value.set(width, height);\n      if (prefersReducedMotion) render();\n    };\n\n    let last = performance.now();\n    let frame = 0;\n    let visible = true;\n    const loop = (now: number) => {\n      elapsed += (now - last) / 1000;\n      last = now;\n      render();\n      frame = requestAnimationFrame(loop);\n    };\n    const start = () => {\n      cancelAnimationFrame(frame);\n      if (prefersReducedMotion) render();\n      else if (visible && !document.hidden) {\n        last = performance.now();\n        frame = requestAnimationFrame(loop);\n      }\n    };\n\n    resize();\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(host);\n    const intersection = new IntersectionObserver(([entry]) => {\n      visible = entry.isIntersecting;\n      start();\n    });\n    intersection.observe(host);\n    document.addEventListener(\"visibilitychange\", start);\n    start();\n\n    return () => {\n      cancelAnimationFrame(frame);\n      intersection.disconnect();\n      resizeObserver.disconnect();\n      document.removeEventListener(\"visibilitychange\", start);\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n      renderer.domElement.remove();\n    };\n  }, [prefersReducedMotion, primaryColor, secondaryColor, theme]);\n\n  const safeHue = clamp(hue, -180, 180);\n  const safeSaturation = clamp(saturation, 0, 2);\n  const safeBrightness = clamp(brightness, 0.35, 1.65);\n  const filter =\n    safeHue === 0 && safeSaturation === 1 && safeBrightness === 1\n      ? undefined\n      : `hue-rotate(${safeHue}deg) saturate(${safeSaturation}) brightness(${safeBrightness})`;\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"absolute inset-0 overflow-hidden\", className)}\n      style={{ background: backgroundColor, filter }}\n    />\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.35,
+      "max": 1.65,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}

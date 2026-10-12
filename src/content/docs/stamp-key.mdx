@@ -1,0 +1,44 @@
+---
+title: Stamp Key
+description: A theme-inked key that presses into its base and lights its index tick on hover.
+---
+
+A key set on a darker plinth: on hover the face presses down into the base and its index tick lights up, and on press it bottoms out. The primary key is inked in the theme's primary colour; the secondary key is a paper card with a hairline. Labels are uppercase mono, and both keys follow the active palette in light and dark mode. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="stamp-key" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stamp-key
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/stamp-key.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StampKey } from "@/components/ui/stamp-key";
+
+export default function Example() {
+  return (
+    <div className="h-[400px] w-full">
+      <StampKey variant="secondary" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default                                           | Description                                    |
+| :-------- | :------------------------------------- | :------------------------------------------------ | :--------------------------------------------- |
+| `variant` | `"primary" \| "secondary"`             | `"primary"`                                       | Ink-filled primary key or paper secondary key. |
+| `label`   | `string`                               | "Commit" (primary) or "Save as draft" (secondary) | Button text.                                   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | —                                                 | Click handler for the button.                  |

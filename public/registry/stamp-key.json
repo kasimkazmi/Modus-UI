@@ -1,0 +1,35 @@
+{
+  "name": "stamp-key",
+  "title": "Stamp Key",
+  "category": "Actions",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/stamp-key.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Meridian Keycap (MIT, © 2026 Meng To).\n\nimport type { MouseEventHandler } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface StampKeyProps {\n  /** Ink-filled primary key or paper secondary key. */\n  variant?: \"primary\" | \"secondary\";\n  /** Button text. Defaults to \"Commit\" (primary) or \"Save as draft\" (secondary). */\n  label?: string;\n  onClick?: MouseEventHandler<HTMLButtonElement>;\n  className?: string;\n}\n\nexport function StampKey({ variant = \"primary\", label, onClick, className }: StampKeyProps) {\n  const prefersReducedMotion = useReducedMotion();\n  const primary = variant !== \"secondary\";\n  const motion = prefersReducedMotion ? \"transition-none\" : \"transition-all duration-150 ease-out\";\n  return (\n    <div\n      className={cn(\n        \"relative isolate grid h-full min-h-[240px] w-full place-items-center overflow-hidden\",\n        className,\n      )}\n    >\n      <button\n        type=\"button\"\n        onClick={onClick}\n        className={cn(\n          \"group relative inline-flex h-16 shrink-0 cursor-pointer items-end rounded-[6px] border-0 p-0 font-mono text-[12px] font-medium uppercase tracking-[0.2em]\",\n          \"focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--primary))]\",\n          primary\n            ? \"bg-[color-mix(in_oklab,hsl(var(--primary))_70%,hsl(var(--foreground)))]\"\n            : \"bg-[hsl(var(--border))]\",\n        )}\n      >\n        <span\n          className={cn(\n            \"relative mb-[6px] flex h-[58px] items-center gap-3 rounded-[6px] px-7 ring-1 ring-inset\",\n            motion,\n            \"-translate-y-0 group-hover:translate-y-[4px] group-active:translate-y-[6px]\",\n            primary\n              ? \"bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] ring-[hsl(var(--primary-foreground)/0.15)]\"\n              : \"bg-[hsl(var(--card))] text-foreground ring-[hsl(var(--border))]\",\n          )}\n        >\n          <span\n            aria-hidden\n            className={cn(\n              \"h-3 w-px\",\n              motion,\n              primary\n                ? \"bg-[hsl(var(--primary-foreground)/0.35)] group-hover:bg-[hsl(var(--primary-foreground))]\"\n                : \"bg-[hsl(var(--muted-foreground)/0.4)] group-hover:bg-[hsl(var(--primary))]\",\n            )}\n          />\n          {label ?? (primary ? \"Commit\" : \"Save as draft\")}\n        </span>\n      </button>\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "choice",
+      "key": "variant",
+      "label": "Variant",
+      "default": "primary",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ]
+    }
+  ]
+}

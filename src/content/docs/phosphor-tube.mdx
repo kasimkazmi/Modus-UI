@@ -1,0 +1,58 @@
+---
+title: Phosphor Tube
+description: A WebGL cathode-ray tube tinted with the theme tokens, showing a film countdown, a typing boot log, a fault report or a pixel-art title screen.
+---
+
+A WebGL cathode-ray tube. Each variant paints its picture into an offscreen 2D canvas, then a fragment shader adds barrel curvature, scanlines, an aperture grille, chromatic fringing, phosphor halation, a rolling bar, flicker, grain and a vignette. By default the tube's light is mapped through the theme tokens, so its phosphor takes on the active palette in both light and dark mode; set `palette="original"` for the source phosphor colours.
+
+- `countdown` (default) is a monochrome film leader: a sweeping 8 to 2 countdown, scrolling perforations, registration marks and a running timecode, then a title card set in the theme's heading font.
+- `terminal` types out the Modus studio boot log with a status column and a blinking block cursor.
+- `fault` is a fault report with analogue tracking jitter, a rolling dropout band and a head-switching scramble.
+- `arcade` is a 320x180 pixel-art title screen, sampled with nearest filtering, where a runner jumps crates under a sweeping wordmark.
+
+It pauses off screen. When the user prefers reduced motion it renders one still frame, with the terminal log fully typed. Ported from ThreeUI Community's CRT (MIT).
+
+<ComponentPreview name="phosphor-tube" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add phosphor-tube
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/phosphor-tube.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { PhosphorTube } from "@/components/ui/phosphor-tube";
+
+export default function Example() {
+  return (
+    <div className="relative h-[420px] w-full overflow-hidden">
+      <PhosphorTube variant="terminal" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                               | Default       | Description                                                                                 |
+| :----------- | :------------------------------------------------- | :------------ | :------------------------------------------------------------------------------------------ |
+| `variant`    | `"countdown" \| "terminal" \| "fault" \| "arcade"` | `"countdown"` | Which screen the tube shows.                                                                |
+| `palette`    | `"theme" \| "original"`                            | `"theme"`     | `theme` tints the tube with the theme tokens; `original` keeps the source phosphor colours. |
+| `speed`      | `number`                                           | `1`           | Time multiplier for the shader and animated screens.                                        |
+| `typeSpeed`  | `number`                                           | `1`           | Terminal typing speed multiplier.                                                           |
+| `motion`     | `number`                                           | `1`           | Strength of scanline drift, the rolling bar and flicker.                                    |
+| `brightness` | `number`                                           | `1`           | CSS brightness applied to the whole tube.                                                   |
+| `opacity`    | `number`                                           | `1`           | Opacity of the whole tube.                                                                  |
+| `hue`        | `number`                                           | `0`           | Hue rotation in degrees.                                                                    |
+| `saturation` | `number`                                           | `1`           | CSS saturation multiplier.                                                                  |

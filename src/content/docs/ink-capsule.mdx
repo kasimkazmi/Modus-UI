@@ -1,0 +1,40 @@
+---
+title: Ink Capsule
+description: An ink-filled capsule with a comet of light orbiting inside it and a serif label.
+---
+
+A capsule filled with the theme's primary ink, with a soft comet of light circling inside it. On hover the comet settles into a centred glow and a halo ring widens around the capsule. The label is set in the heading serif. Animations and transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="ink-capsule" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ink-capsule
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/ink-capsule.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { InkCapsule } from "@/components/ui/ink-capsule";
+
+export default function Example() {
+  return <InkCapsule onClick={() => console.log("clicked")} />;
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default           | Description    |
+| :-------- | :------------------------------------- | :---------------- | :------------- |
+| `label`   | `string`                               | `"Join the list"` | Button text.   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`       | Click handler. |

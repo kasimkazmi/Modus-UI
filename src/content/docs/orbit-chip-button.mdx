@@ -1,0 +1,44 @@
+---
+title: Orbit Chip Button
+description: A solid primary pill led by a paper chip whose arrow turns forward on hover.
+---
+
+A solid primary pill led by a paper chip. On hover the chip's diagonal arrow turns to point forward and the pill lifts. Colours come from the active theme and palette. Transitions are turned off when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+
+<ComponentPreview name="orbit-chip-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add orbit-chip-button
+```
+
+### Manual
+
+1. Install `framer-motion`.
+2. Copy the code from the component tab.
+3. Create a file at `components/ui/orbit-chip-button.tsx`.
+4. Paste the code.
+
+## Usage
+
+```tsx
+import { OrbitChipButton } from "@/components/ui/orbit-chip-button";
+
+export default function Example() {
+  return (
+    <div className="h-[300px] w-full">
+      <OrbitChipButton onClick={() => console.log("clicked")} />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                                   | Default           | Description    |
+| :-------- | :------------------------------------- | :---------------- | :------------- |
+| `label`   | `string`                               | `"Start a draft"` | Button text.   |
+| `onClick` | `MouseEventHandler<HTMLButtonElement>` | `undefined`       | Click handler. |

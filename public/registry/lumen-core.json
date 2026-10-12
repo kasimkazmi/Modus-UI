@@ -1,0 +1,136 @@
+{
+  "name": "lumen-core",
+  "title": "Lumen Core",
+  "category": "Backgrounds",
+  "type": "components:ui",
+  "dependencies": [
+    "framer-motion",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "registry/lumen-core.tsx",
+      "content": "\"use client\";\n// Ported from ThreeUI Community's Energy Orb (MIT, © 2026 Meng To).\n\nimport { useEffect, useRef, useState } from \"react\";\nimport { useReducedMotion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\ninterface LumenCoreProps {\n  speed?: number;\n  scale?: number;\n  smokeScale?: number;\n  smokeStrength?: number;\n  smokeSpeed?: number;\n  hue?: number;\n  saturation?: number;\n  glow?: number;\n  starDensity?: number;\n  starSpeed?: number;\n  starSize?: number;\n  brightness?: number;\n  opacity?: number;\n  /** Colour behind the core; defaults to the theme background. */\n  backgroundColor?: string;\n  className?: string;\n}\n\ntype Hsl = [number, number, number];\n\n/** Theme tokens are bare HSL channels (\"24 8% 20%\"). */\nfunction readTheme() {\n  const style = getComputedStyle(document.documentElement);\n  const read = (name: string): Hsl => {\n    const [h = 0, s = 0, l = 0] = style\n      .getPropertyValue(name)\n      .trim()\n      .split(/[\\s,/%]+/)\n      .map(Number);\n    return [h, s, l];\n  };\n  const background = read(\"--background\");\n  return {\n    dark: background[2] < 50,\n    background,\n    foreground: read(\"--foreground\"),\n    primary: read(\"--primary\"),\n    muted: read(\"--muted-foreground\"),\n  };\n}\n\n/** Comma-separated hsl(), which both canvas and THREE.Color parse. */\nconst hsl = ([h, s, l]: Hsl, alpha = 1) =>\n  `hsla(${Math.round(h)}, ${Math.round(Math.min(100, Math.max(0, s)))}%, ${Math.round(Math.min(100, Math.max(0, l)))}%, ${alpha})`;\n\n/** HSL channels to linear-free 0..1 RGB for shader uniforms. */\nfunction rgb([h, s, l]: Hsl) {\n  const sat = Math.min(100, Math.max(0, s)) / 100;\n  const light = Math.min(100, Math.max(0, l)) / 100;\n  const k = (n: number) => (n + h / 30) % 12;\n  const a = sat * Math.min(light, 1 - light);\n  const f = (n: number) => light - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));\n  return [f(0), f(8), f(4)];\n}\n\n/** Bumps on light/dark or palette changes so canvas colours re-resolve. */\nfunction useThemeVersion() {\n  const [version, setVersion] = useState(0);\n  useEffect(() => {\n    const observer = new MutationObserver(() => setVersion((v) => v + 1));\n    observer.observe(document.documentElement, {\n      attributes: true,\n      attributeFilter: [\"class\", \"data-theme\", \"data-palette\", \"style\"],\n    });\n    return () => observer.disconnect();\n  }, []);\n  return version;\n}\n\ntype Star = { x: number; y: number; depth: number; phase: number; drift: number; size: number };\n\nconst VERTEX_SHADER = \"attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}\";\n\nconst FRAGMENT_SHADER = [\n  \"precision highp float;\",\n  \"uniform float uT;uniform vec2 uR;\",\n  \"uniform float uSmokeScale;uniform float uSmokeStrength;uniform float uSmokeSpeed;\",\n  \"uniform float uHue;uniform float uSaturation;uniform float uGlow;\",\n  \"uniform vec3 uDeep;uniform vec3 uMid;uniform vec3 uBright;uniform vec3 uRim;\",\n  \"float hash(vec3 p){p=fract(p*0.3183099+vec3(0.1,0.2,0.3));p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}\",\n  \"float noise(vec3 x){vec3 i=floor(x);vec3 f=fract(x);f=f*f*(3.0-2.0*f);\",\n  \" return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),\",\n  \" mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}\",\n  \"float fbm(vec3 p){float v=0.0;float a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+vec3(1.7);a*=0.5;}return v;}\",\n  \"vec3 gradeColor(vec3 color){\",\n  \" float luminance=dot(color,vec3(0.2126,0.7152,0.0722));\",\n  \" color=mix(vec3(luminance),color,uSaturation);\",\n  \" vec3 axis=normalize(vec3(1.0));\",\n  \" return max(vec3(0.0),color*cos(uHue)+cross(axis,color)*sin(uHue)+axis*dot(axis,color)*(1.0-cos(uHue)));\",\n  \"}\",\n  \"void main(){\",\n  \" vec2 uv=(gl_FragCoord.xy-vec2(0.6,0.46)*uR)/min(uR.x,uR.y);\",\n  \" float r=length(uv);\",\n  \" float R=0.24;\",\n  \" vec3 col=vec3(0.0);float alpha=0.0;\",\n  \" if(r<R){\",\n  \"   float z=sqrt(R*R-r*r);\",\n  \"   vec3 n=normalize(vec3(uv,z));\",\n  \"   float ca=uT*0.15;\",\n  \"   mat3 rot=mat3(cos(ca),0.,sin(ca),0.,1.,0.,-sin(ca),0.,cos(ca));\",\n  \"   vec3 sp=rot*n;\",\n  \"   float smokeTime=uT*uSmokeSpeed;\",\n  \"   float f1=fbm(sp*(2.6*uSmokeScale)+vec3(0.0,smokeTime*0.12,0.0));\",\n  \"   float f2=fbm(sp*(4.5*uSmokeScale)-vec3(smokeTime*0.08,0.0,smokeTime*0.05)+f1*1.8);\",\n  \"   float veil=smoothstep(0.35,0.75,f2);\",\n  \"   col=mix(uDeep,uMid,f1*1.2);\",\n  \"   col=mix(col,uBright,clamp(veil*0.65*uSmokeStrength,0.0,1.0));\",\n  \"   float fres=pow(1.0-z/R,2.2);\",\n  \"   col=mix(col,uRim,clamp(fres*1.1*uGlow,0.0,1.0));\",\n  \"   float top=pow(max(dot(n,normalize(vec3(0.0,0.7,0.7))),0.0),3.0);\",\n  \"   col=mix(col,uBright,clamp(top*0.35*uGlow,0.0,1.0));\",\n  \"   alpha=1.0;\",\n  \" }\",\n  \" float glow=exp(-(r-R)*14.0);\",\n  \" if(r>=R){\",\n  \"   glow=clamp(glow,0.0,1.0);\",\n  \"   col=uRim;\",\n  \"   alpha=clamp(glow*0.7*uGlow,0.0,1.0);\",\n  \" } else {\",\n  \"   float rim=smoothstep(R-0.03,R,r);\",\n  \"   col=mix(col,uRim,clamp(rim*0.6*uGlow,0.0,1.0));\",\n  \" }\",\n  \" col=gradeColor(col);\",\n  \" gl_FragColor=vec4(col,alpha);\",\n  \"}\",\n].join(\"\\n\");\n\nfunction compile(gl: WebGLRenderingContext, type: number, source: string) {\n  const shader = gl.createShader(type);\n  if (!shader) throw new Error(\"Unable to create Lumen Core shader\");\n  gl.shaderSource(shader, source);\n  gl.compileShader(shader);\n  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {\n    throw new Error(gl.getShaderInfoLog(shader) ?? \"Lumen Core shader compilation failed\");\n  }\n  return shader;\n}\n\nfunction seeded(index: number, salt: number) {\n  return Math.abs(Math.sin(index * 91.173 + salt * 17.719) * 43758.5453) % 1;\n}\n\nfunction createStars(count: number): Star[] {\n  return Array.from({ length: count }, (_, index) => ({\n    x: seeded(index, 1),\n    y: seeded(index, 2),\n    depth: 0.25 + seeded(index, 3) * 0.75,\n    phase: seeded(index, 4) * Math.PI * 2,\n    drift: 0.35 + seeded(index, 5) * 0.65,\n    size: 0.45 + seeded(index, 6) * 1.15,\n  }));\n}\n\nfunction fract(value: number) {\n  return value - Math.floor(value);\n}\n\nexport function LumenCore({\n  speed = 1,\n  scale = 1,\n  smokeScale = 1,\n  smokeStrength = 1,\n  smokeSpeed = 1,\n  hue = 0,\n  saturation = 1,\n  glow = 1,\n  starDensity = 1,\n  starSpeed = 1,\n  starSize = 1,\n  brightness = 1,\n  opacity = 1,\n  backgroundColor = \"hsl(var(--background))\",\n  className,\n}: LumenCoreProps) {\n  const hostRef = useRef<HTMLDivElement>(null);\n  const starCanvasRef = useRef<HTMLCanvasElement>(null);\n  const canvasRef = useRef<HTMLCanvasElement>(null);\n  const prefersReducedMotion = useReducedMotion();\n  const theme = useThemeVersion();\n  const optionsRef = useRef({\n    speed,\n    smokeScale,\n    smokeStrength,\n    smokeSpeed,\n    hue,\n    saturation,\n    glow,\n    starDensity,\n    starSpeed,\n    starSize,\n  });\n  optionsRef.current = {\n    speed,\n    smokeScale,\n    smokeStrength,\n    smokeSpeed,\n    hue,\n    saturation,\n    glow,\n    starDensity,\n    starSpeed,\n    starSize,\n  };\n\n  useEffect(() => {\n    const host = hostRef.current;\n    const starCanvas = starCanvasRef.current;\n    const canvas = canvasRef.current;\n    if (!host || !starCanvas || !canvas) return;\n\n    // The core is shaded with a lightness ramp on the theme's primary hue.\n    const { dark, primary } = readTheme();\n    const [h, s] = primary;\n    const sat = Math.max(s, 36);\n    const ramp = dark\n      ? {\n          deep: rgb([h, sat, 7]),\n          mid: rgb([h, sat, 30]),\n          bright: rgb([h - 16, sat, 80]),\n          rim: rgb([h, sat * 0.7, 86]),\n        }\n      : {\n          deep: rgb([h, sat, 12]),\n          mid: rgb([h, sat, 30]),\n          bright: rgb([h - 16, sat, 66]),\n          rim: rgb([h, sat, 46]),\n        };\n\n    const starContext = starCanvas.getContext(\"2d\", { alpha: true });\n    const gl = canvas.getContext(\"webgl\", {\n      alpha: true,\n      premultipliedAlpha: false,\n      antialias: true,\n    });\n    if (!starContext || !gl) return;\n\n    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX_SHADER);\n    const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);\n    const program = gl.createProgram();\n    if (!program) {\n      gl.deleteShader(vertex);\n      gl.deleteShader(fragment);\n      return;\n    }\n    gl.attachShader(program, vertex);\n    gl.attachShader(program, fragment);\n    gl.linkProgram(program);\n    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {\n      throw new Error(gl.getProgramInfoLog(program) ?? \"Lumen Core program link failed\");\n    }\n    gl.useProgram(program);\n\n    const buffer = gl.createBuffer();\n    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);\n    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);\n    const position = gl.getAttribLocation(program, \"p\");\n    gl.enableVertexAttribArray(position);\n    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);\n\n    const uniforms = {\n      time: gl.getUniformLocation(program, \"uT\"),\n      resolution: gl.getUniformLocation(program, \"uR\"),\n      smokeScale: gl.getUniformLocation(program, \"uSmokeScale\"),\n      smokeStrength: gl.getUniformLocation(program, \"uSmokeStrength\"),\n      smokeSpeed: gl.getUniformLocation(program, \"uSmokeSpeed\"),\n      hue: gl.getUniformLocation(program, \"uHue\"),\n      saturation: gl.getUniformLocation(program, \"uSaturation\"),\n      glow: gl.getUniformLocation(program, \"uGlow\"),\n      deep: gl.getUniformLocation(program, \"uDeep\"),\n      mid: gl.getUniformLocation(program, \"uMid\"),\n      bright: gl.getUniformLocation(program, \"uBright\"),\n      rim: gl.getUniformLocation(program, \"uRim\"),\n    };\n    gl.enable(gl.BLEND);\n    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);\n    gl.clearColor(0, 0, 0, 0);\n\n    const stars = createStars(180);\n    let width = 1;\n    let height = 1;\n    let starDpr = 1;\n    let frame = 0;\n    let visible = true;\n    const startedAt = performance.now();\n\n    const drawStars = (elapsed: number) => {\n      const options = optionsRef.current;\n      starContext.setTransform(1, 0, 0, 1, 0, 0);\n      starContext.clearRect(0, 0, starCanvas.width, starCanvas.height);\n      const density = Math.max(0, options.starDensity);\n      const count = Math.min(stars.length, Math.round(((width * height) / 4_200) * density));\n      if (!count) return;\n\n      starContext.setTransform(starDpr, 0, 0, starDpr, 0, 0);\n      starContext.globalCompositeOperation = dark ? \"screen\" : \"multiply\";\n      const particleTime = prefersReducedMotion ? 0 : elapsed * Math.max(0, options.starSpeed);\n      const colorHue = fract((h + options.hue) / 360) * 360;\n      for (let index = 0; index < count; index += 1) {\n        const star = stars[index];\n        const x = fract(star.x + particleTime * 0.0022 * star.drift) * width;\n        const y = fract(star.y - particleTime * 0.0008 * star.depth + 1) * height;\n        const twinkle = prefersReducedMotion\n          ? 0.78\n          : 0.58 + Math.sin(particleTime * (0.8 + star.depth) + star.phase) * 0.24;\n        const alpha = Math.max(0.08, twinkle * (0.22 + star.depth * 0.48));\n        const radius = Math.max(0.35, star.size * star.depth * Math.max(0.25, options.starSize));\n        starContext.fillStyle = `hsla(${colorHue}, ${sat}%, ${dark ? 72 + star.depth * 20 : 40 - star.depth * 20}%, ${alpha})`;\n        starContext.beginPath();\n        starContext.arc(x, y, radius, 0, Math.PI * 2);\n        starContext.fill();\n      }\n      starContext.globalCompositeOperation = \"source-over\";\n    };\n\n    const draw = (elapsed: number) => {\n      const options = optionsRef.current;\n      drawStars(elapsed);\n      gl.uniform1f(uniforms.time, elapsed * options.speed);\n      gl.uniform1f(uniforms.smokeScale, Math.max(0.01, options.smokeScale));\n      gl.uniform1f(uniforms.smokeStrength, Math.max(0, options.smokeStrength));\n      gl.uniform1f(uniforms.smokeSpeed, Math.max(0, options.smokeSpeed));\n      gl.uniform1f(uniforms.hue, (options.hue * Math.PI) / 180);\n      gl.uniform1f(uniforms.saturation, Math.max(0, options.saturation));\n      gl.uniform1f(uniforms.glow, Math.max(0, options.glow));\n      gl.uniform3fv(uniforms.deep, ramp.deep);\n      gl.uniform3fv(uniforms.mid, ramp.mid);\n      gl.uniform3fv(uniforms.bright, ramp.bright);\n      gl.uniform3fv(uniforms.rim, ramp.rim);\n      gl.clear(gl.COLOR_BUFFER_BIT);\n      gl.drawArrays(gl.TRIANGLES, 0, 3);\n    };\n\n    const render = (now: number) => {\n      frame = 0;\n      draw((now - startedAt) * 0.001);\n      if (visible && !document.hidden) frame = requestAnimationFrame(render);\n    };\n\n    const resize = () => {\n      const bounds = host.getBoundingClientRect();\n      width = Math.max(1, bounds.width);\n      height = Math.max(1, bounds.height);\n      const dpr = Math.min(window.devicePixelRatio || 1, 2);\n      const bufferWidth = Math.max(1, Math.round(width * dpr));\n      const bufferHeight = Math.max(1, Math.round(height * dpr));\n      if (canvas.width !== bufferWidth || canvas.height !== bufferHeight) {\n        canvas.width = bufferWidth;\n        canvas.height = bufferHeight;\n      }\n      gl.viewport(0, 0, bufferWidth, bufferHeight);\n      gl.uniform2f(uniforms.resolution, bufferWidth, bufferHeight);\n\n      starDpr = Math.min(window.devicePixelRatio || 1, 1.5);\n      const starWidth = Math.max(1, Math.round(width * starDpr));\n      const starHeight = Math.max(1, Math.round(height * starDpr));\n      if (starCanvas.width !== starWidth || starCanvas.height !== starHeight) {\n        starCanvas.width = starWidth;\n        starCanvas.height = starHeight;\n      }\n      if (prefersReducedMotion) draw(4);\n    };\n\n    const start = () => {\n      if (!frame && visible && !document.hidden) frame = requestAnimationFrame(render);\n    };\n    const stop = () => {\n      if (frame) cancelAnimationFrame(frame);\n      frame = 0;\n    };\n    const onVisibilityChange = () => {\n      if (document.hidden) stop();\n      else start();\n    };\n\n    const resizeObserver = new ResizeObserver(resize);\n    resizeObserver.observe(host);\n    resize();\n\n    let intersection: IntersectionObserver | undefined;\n    if (!prefersReducedMotion) {\n      intersection = new IntersectionObserver(([entry]) => {\n        visible = entry?.isIntersecting ?? true;\n        if (visible) start();\n        else stop();\n      });\n      intersection.observe(host);\n      document.addEventListener(\"visibilitychange\", onVisibilityChange);\n      start();\n    }\n\n    return () => {\n      stop();\n      resizeObserver.disconnect();\n      intersection?.disconnect();\n      document.removeEventListener(\"visibilitychange\", onVisibilityChange);\n      gl.deleteBuffer(buffer);\n      gl.deleteShader(vertex);\n      gl.deleteShader(fragment);\n      gl.deleteProgram(program);\n    };\n  }, [prefersReducedMotion, theme]);\n\n  return (\n    <div\n      ref={hostRef}\n      aria-hidden=\"true\"\n      className={cn(\"pointer-events-none absolute inset-0 isolate overflow-hidden\", className)}\n      style={{ background: backgroundColor }}\n    >\n      <canvas ref={starCanvasRef} className=\"absolute inset-0 z-0 block h-full w-full\" />\n      <canvas\n        ref={canvasRef}\n        className=\"absolute inset-0 z-[1] block h-full w-full\"\n        style={{ opacity, filter: `brightness(${brightness})`, transform: `scale(${scale})` }}\n      />\n    </div>\n  );\n}\n"
+    }
+  ],
+  "controls": [
+    {
+      "kind": "range",
+      "key": "speed",
+      "label": "Orb speed",
+      "min": 0,
+      "max": 3,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "scale",
+      "label": "Orb scale",
+      "min": 0.5,
+      "max": 1.8,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "smokeScale",
+      "label": "Smoke scale",
+      "min": 0.35,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "smokeStrength",
+      "label": "Smoke strength",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "smokeSpeed",
+      "label": "Smoke speed",
+      "min": 0,
+      "max": 2.5,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "hue",
+      "label": "Orb hue",
+      "min": -180,
+      "max": 180,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "kind": "range",
+      "key": "saturation",
+      "label": "Saturation",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "glow",
+      "label": "Glow",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "starDensity",
+      "label": "Star density",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "starSpeed",
+      "label": "Star speed",
+      "min": 0,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "starSize",
+      "label": "Star size",
+      "min": 0.25,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "brightness",
+      "label": "Brightness",
+      "min": 0.4,
+      "max": 2,
+      "step": 0.01,
+      "default": 1
+    },
+    {
+      "kind": "range",
+      "key": "opacity",
+      "label": "Opacity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.01,
+      "default": 1
+    }
+  ]
+}
