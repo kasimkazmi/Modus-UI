@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { ModusStage } from "@/components/modus-stage";
 import { RECTANGLE_BUTTON_VARIANTS, RectangleButton } from "./rectangle-button";
 
 export default function RectangleButtonDemo(
@@ -8,22 +9,24 @@ export default function RectangleButtonDemo(
 ) {
   if (props.variant) {
     return (
-      <div className="relative flex min-h-[400px] w-full overflow-hidden rounded-xl border border-border">
-        <RectangleButton className="min-h-[400px]" {...props} />
-      </div>
+      <ModusStage caption="Rectangle Button" layout="center">
+        <RectangleButton className="min-h-[300px]" {...props} />
+      </ModusStage>
     );
   }
 
   return (
-    <div className="grid w-full grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-      {RECTANGLE_BUTTON_VARIANTS.map((variant) => (
-        <div key={variant} className="relative h-[160px]">
-          <RectangleButton {...props} variant={variant} />
-          <span className="pointer-events-none absolute left-3 top-2 font-mono text-[10px] text-white/50 mix-blend-difference">
-            {variant}
-          </span>
-        </div>
-      ))}
-    </div>
+    <ModusStage caption="Rectangle Button" layout="center">
+      <div className="grid w-full grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
+        {RECTANGLE_BUTTON_VARIANTS.map((variant, index) => (
+          <div key={variant} className="relative h-[150px] bg-background">
+            <RectangleButton {...props} variant={variant} />
+            <span className="pointer-events-none absolute left-3 top-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              {String(index + 1).padStart(2, "0")} / {variant}
+            </span>
+          </div>
+        ))}
+      </div>
+    </ModusStage>
   );
 }

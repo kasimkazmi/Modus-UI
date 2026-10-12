@@ -1,9 +1,9 @@
 ---
 title: Temple Night
-description: A Kyoto mountain temple after dark, with rain, mist, falling maple leaves and a blood moon.
+description: A mountain temple at the edge of night, graded into your theme's palette, with rain, mist and falling maple leaves.
 ---
 
-A Three.js world with a temple hall, a torii gate and lanterns up a stone flight, maples, rain, mist and drifting leaves, finished with bloom post-processing. The camera follows the pointer. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+A Three.js world with a temple hall, a torii gate and lanterns up a stone flight, maples, rain, mist and drifting leaves, finished with bloom and a colour grade that maps the moon, lantern light and fog onto the theme's primary hue, so it follows the palette picker and stays a night scene in light mode. It opens on a low, off-axis view up the stair. The camera follows the pointer. It fills its positioned parent, pauses when off screen or when the tab is hidden, and renders a still frame when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
 
 <ComponentPreview name="temple-night" />
 
@@ -38,7 +38,9 @@ export default function Example() {
 
 ## Props
 
-| Prop              | Type             | Default          | Description                                   |
-| :---------------- | :--------------- | :--------------- | :-------------------------------------------- |
-| `variant`         | `"temple-night"` | `"temple-night"` | Scene variant.                                |
-| `backgroundColor` | `string`         | `"#05070a"`      | Colour shown behind the canvas while loading. |
+| Prop              | Type                    | Default          | Description                                                                      |
+| :---------------- | :---------------------- | :--------------- | :------------------------------------------------------------------------------- |
+| `variant`         | `"temple-night"`        | `"temple-night"` | Scene variant.                                                                   |
+| `palette`         | `"modus" \| "original"` | `"modus"`        | `"modus"` grades the scene from theme tokens; `"original"` keeps the blood moon. |
+| `backgroundColor` | `string`                | —                | Colour shown behind the canvas while loading. Defaults to the theme background.  |
+| `className`       | `string`                | —                | Additional CSS classes.                                                          |

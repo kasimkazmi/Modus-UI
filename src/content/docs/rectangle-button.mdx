@@ -1,9 +1,9 @@
 ---
 title: Rectangle Button
-description: Twenty-two authored rectangle-button and animated CTA treatments collected into one component.
+description: Twenty-two rectangle buttons and animated CTAs, each drawn from your theme tokens and set in the Modus type.
 ---
 
-One button family with 22 treatments, from dark glass and amber launch keys to dashed dot borders, rotating beams, glass access buttons and tactile keycaps. Each variant draws on the ground it was authored for, supports a light and dark mode, and keeps its own hover, focus and press motion. Animations stop when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
+One button family with 22 treatments, from pressable keycaps and launch keys to dashed dot borders, rotating beams and glass pills. Every colour comes from the theme tokens (`--primary`, `--primary-foreground`, `--foreground`, `--card`, `--border`, `--muted`), so each button follows light and dark mode and the active palette without configuration. Labels use the Modus faces: mono caps, body sans and the italic heading serif. Each variant keeps its own hover, focus and press motion, and animations stop when the user prefers reduced motion. Ported from ThreeUI Community (MIT).
 
 <ComponentPreview name="rectangle-button" />
 
@@ -29,7 +29,7 @@ import { RectangleButton } from "@/components/ui/rectangle-button";
 export default function Example() {
   return (
     <div className="h-[300px] w-full">
-      <RectangleButton variant="meridian-keycap-primary" label="Start free" />
+      <RectangleButton variant="meridian-keycap-primary" label="Add to project" />
     </div>
   );
 }
@@ -41,16 +41,15 @@ export default function Example() {
 
 ## Props
 
-| Prop          | Type                             | Default                                                                               | Description                                          |
-| :------------ | :------------------------------- | :------------------------------------------------------------------------------------ | :--------------------------------------------------- |
-| `variant`     | `RectangleButtonVariant`         | `"dark-pill"`                                                                         | Which of the 22 treatments to render.                |
-| `mode`        | `"light" \| "dark"`              | `"dark"`                                                                              | Ground the button is drawn on.                       |
-| `label`       | `string`                         | Each variant's authored copy                                                          | Button text.                                         |
-| `activeLabel` | `string`                         | `"Generating"`                                                                        | Text the Generate variant resolves to while focused. |
-| `hue`         | `number`                         | `0`                                                                                   | Hue rotation in degrees (-180 to 180).               |
-| `saturation`  | `number`                         | `1`                                                                                   | Saturation multiplier (0 to 2).                      |
-| `brightness`  | `number`                         | `1`                                                                                   | Brightness multiplier (0.35 to 1.65).                |
-| `background`  | `string`                         | The variant's authored stage colour                                                   | Overrides the stage background behind the button.    |
-| `avatarSrc`   | `string`                         | `"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop"` | Portrait shown in the Glassmorphism CTA.             |
-| `avatarAlt`   | `string`                         | `"Advisor headshot"`                                                                  | Alt text for the portrait.                           |
-| `onClick`     | `MouseEventHandler<HTMLElement>` | `undefined`                                                                           | Click handler.                                       |
+| Prop          | Type                             | Default                                                                               | Description                                                         |
+| :------------ | :------------------------------- | :------------------------------------------------------------------------------------ | :------------------------------------------------------------------ |
+| `variant`     | `RectangleButtonVariant`         | `"meridian-keycap-primary"`                                                           | Which of the 22 treatments to render.                               |
+| `label`       | `string`                         | Each variant's default copy                                                           | Button text.                                                        |
+| `activeLabel` | `string`                         | `"Composing"`                                                                         | Text the Generate variant resolves to while focused.                |
+| `hue`         | `number`                         | `0`                                                                                   | Hue rotation in degrees (-180 to 180).                              |
+| `saturation`  | `number`                         | `1`                                                                                   | Saturation multiplier (0 to 2).                                     |
+| `brightness`  | `number`                         | `1`                                                                                   | Brightness multiplier (0.35 to 1.65).                               |
+| `background`  | `string`                         | `undefined`                                                                           | Stage background. Transparent by default, so it sits on its parent. |
+| `avatarSrc`   | `string`                         | `"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop"` | Portrait shown in the Glassmorphism CTA.                            |
+| `avatarAlt`   | `string`                         | `"Reviewer headshot"`                                                                 | Alt text for the portrait.                                          |
+| `onClick`     | `MouseEventHandler<HTMLElement>` | `undefined`                                                                           | Click handler.                                                      |

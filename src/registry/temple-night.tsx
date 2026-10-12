@@ -8,7 +8,9 @@ import { cn } from "@/lib/utils";
 export interface TempleNightProps {
   /** Scene variant. ThreeUI ships a single one. */
   variant?: "temple-night";
-  /** Colour shown behind the canvas while the scene loads. */
+  /** Colour grade: "modus" maps the night onto the theme's primary hue; "original" keeps ThreeUI's blood moon. */
+  palette?: "modus" | "original";
+  /** Colour shown behind the canvas while the scene loads. Defaults to the theme background. */
   backgroundColor?: string;
   className?: string;
 }
@@ -58,7 +60,33 @@ function withLegacyColor(fn?: any) {
   };
 }
 
-function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
+/* Theme tokens are bare HSL channels ("222 47% 11%"). */
+function readToken(name: string) {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const [h = 0, s = 0, l = 0] = raw.split(/[\s,/]+/).map((v) => parseFloat(v));
+  return { h: h / 360, s: s / 100, l: l / 100 };
+}
+
+function themeGrade(palette: "modus" | "original") {
+  const p = readToken("--primary");
+  const bg = readToken("--background");
+  const dark = bg.l < 0.5;
+  const sat = Math.min(p.s, 0.7);
+  return {
+    amount: palette === "original" ? 0 : 0.86,
+    /* light mode keeps the night, but lifts its floor into a dusk haze */
+    lo: new THREE.Color().setHSL(p.h, sat * 0.6, dark ? 0.004 : 0.012),
+    mid: new THREE.Color().setHSL(p.h, Math.max(sat, 0.25), dark ? 0.1 : 0.14),
+    hi: new THREE.Color().setHSL(p.h, Math.min(1, sat + 0.15), 0.9),
+  };
+}
+
+function createTempleNightRenderer(
+  canvas?: any,
+  reducedMotion?: any,
+  palette: "modus" | "original" = "modus",
+) {
+  const GRADE = themeGrade(palette);
   /* ------------------------------------------------------------ 0 · basics */
   const Q = new URLSearchParams();
   const qs = (k?: any, d?: any) => {
@@ -2275,7 +2303,7 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
    Hung well behind the hall so the roof crosses its lower left — near
    enough to the ridge to sit in the mist, far enough that it never moves
    against the buildings when the rig drifts.                             */
-  const MOON: any = { x: 17.9, y: 31.9, z: -72, r: 8.6 };
+  const MOON: any = { x: -21.0, y: 25.5, z: -72, r: 6.4 }; /* a low moon setting on the left */
   function buildMoon() {
     const disc = new THREE.Mesh(
       new THREE.PlaneGeometry(MOON.r * 2, MOON.r * 2),
@@ -3311,7 +3339,7 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
     /* moonlight: no shadow, no fill, purely a rim down the right-hand slope of
      every roof — without it the hall is a flat black cut-out against the sky */
     const moonKey = new THREE.DirectionalLight(0xff6a42, 0.52);
-    moonKey.position.set(26, 30, -60);
+    moonKey.position.set(-26, 26, -60);
     moonKey.target.position.set(0, 8, -40);
     scene.add(moonKey.target);
     scene.add(moonKey);
@@ -3332,7 +3360,7 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
     /* the moon throws almost nothing, but a trace of red high on the right
      keeps it attached to the scene instead of floating on top of it */
     const moonL = new THREE.PointLight(0xff3a1c, 3.0, 46, 2);
-    moonL.position.set(11.0, 17.0, -24.0);
+    moonL.position.set(-11.0, 15.0, -24.0);
     scene.add(moonL);
     WORLD.moonLight = moonL;
 
@@ -3431,11 +3459,16 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
         uExp: { value: 0.62 },
         uFade: { value: 1 },
         uSat: { value: 1.05 },
+        uMap: { value: GRADE.amount },
+        uLo: { value: GRADE.lo },
+        uMid: { value: GRADE.mid },
+        uHi: { value: GRADE.hi },
       },
       vertexShader: QUAD_VS,
       fragmentShader:
         "uniform sampler2D tS; uniform sampler2D tB; uniform vec2 uRes;\n" +
-        "uniform float uT, uBloom, uCA, uGrain, uVig, uExp, uFade, uSat;\n" +
+        "uniform float uT, uBloom, uCA, uGrain, uVig, uExp, uFade, uSat, uMap;\n" +
+        "uniform vec3 uLo, uMid, uHi;\n" +
         "varying vec2 vUv;\n" +
         "vec3 aces(vec3 x){ return clamp((x*(2.51*x+0.03))/(x*(2.43*x+0.59)+0.14), 0.0, 1.0); }\n" +
         "void main(){\n" +
@@ -3452,6 +3485,12 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
         " c = mix(vec3(l), c, uSat);\n" +
         " c = mix(c, c*vec3(0.74,1.03,1.11), smoothstep(0.55,0.0,l)*0.80);\n" /* teal shadows */ +
         " c = mix(c, c*vec3(1.035,0.995,0.968), smoothstep(0.50,1.0,l)*0.26);\n" /* warm highs   */ +
+        /* Modus grade: a three-stop gradient map built from the theme tokens,
+         keyed on perceptual luminance so the night's shape survives while the
+         moon, lanterns and fog all take the palette's hue. */
+        " float pl = pow(max(l,0.0), 1.0/2.2);\n" +
+        " vec3 gm = pl < 0.42 ? mix(uLo, uMid, smoothstep(0.0,0.42,pl)) : mix(uMid, uHi, smoothstep(0.42,0.95,pl));\n" +
+        " c = mix(c, gm * (0.8 + 0.2*min(c/max(l,1e-4), vec3(2.0))), uMap);\n" +
         " float v = smoothstep(1.22, 0.26, length(d*vec2(1.0,0.94))*1.42);\n" +
         " c *= mix(1.0, v, uVig);\n" +
         " float g = fract(sin(dot(vUv*uRes + uT*137.0, vec2(12.9898,78.233)))*43758.5453);\n" +
@@ -3504,7 +3543,7 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
 
   /* ================================================= 8 · the camera rig */
   const CAM = [
-    { p: [0.0, 4.05, 13.6], t: [0.0, 6.6, -18.0], fov: 36 } /* 0 hero        */,
+    { p: [3.6, 3.4, 11.0], t: [-1.6, 7.0, -18.0], fov: 44 } /* 0 hero: low, off-axis */,
     { p: [-5.6, 2.35, 11.6], t: [1.2, 5.6, -14.0], fov: 48 } /* 1 the sanmon  */,
     { p: [1.2, 3.6, 2.2], t: [-0.6, 7.5, -22.0], fov: 40 } /* 2 gardens     */,
     { p: [5.2, 2.1, -3.4], t: [-2.6, 7.0, -20.0], fov: 46 } /* 3 craft       */,
@@ -3855,12 +3894,21 @@ function createTempleNightRenderer(canvas?: any, reducedMotion?: any) {
       RIG.tmy = inside ? clamp(y, -1, 1) : 0;
     },
     dispose,
+    setPalette(next: "modus" | "original") {
+      const g = themeGrade(next);
+      GRADE.amount = g.amount;
+      GRADE.lo.copy(g.lo);
+      GRADE.mid.copy(g.mid);
+      GRADE.hi.copy(g.hi);
+      if (POST.comp) POST.comp.uniforms.uMap.value = g.amount;
+    },
   };
 }
 
 export function TempleNight({
   variant = "temple-night",
-  backgroundColor = "#05070a",
+  palette = "modus",
+  backgroundColor,
   className,
 }: TempleNightProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -3875,7 +3923,7 @@ export function TempleNight({
     if (!host || !canvas) return;
     let renderer;
     try {
-      renderer = createTempleNightRenderer(canvas, !!prefersReducedMotion);
+      renderer = createTempleNightRenderer(canvas, !!prefersReducedMotion, palette);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Unknown renderer error");
       setState("unavailable");
@@ -3921,6 +3969,14 @@ export function TempleNight({
         frame = 0;
       } else schedule();
     };
+    const themeObserver = new MutationObserver(() => {
+      renderer.setPalette(palette);
+      schedule();
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme", "style"],
+    });
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(host);
     const intersectionObserver = new IntersectionObserver(([entry]) => {
@@ -3940,6 +3996,7 @@ export function TempleNight({
     return () => {
       disposed = true;
       if (frame) cancelAnimationFrame(frame);
+      themeObserver.disconnect();
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       canvas.removeEventListener("pointermove", setPointer);
@@ -3949,15 +4006,15 @@ export function TempleNight({
       document.removeEventListener("visibilitychange", onVisibility);
       renderer.dispose();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, palette]);
 
   return (
     <div
       ref={hostRef}
       data-variant={variant}
       data-state={state}
-      className={cn("absolute inset-0 overflow-hidden", className)}
-      style={{ background: backgroundColor }}
+      className={cn("absolute inset-0 overflow-hidden bg-background", className)}
+      style={backgroundColor ? { background: backgroundColor } : undefined}
     >
       <canvas
         ref={canvasRef}
@@ -3968,8 +4025,7 @@ export function TempleNight({
       {state === "unavailable" ? (
         <p
           role="status"
-          className="absolute inset-0 m-0 grid place-items-center text-[#a9b2b7]"
-          style={{ background: backgroundColor }}
+          className="absolute inset-0 m-0 grid place-items-center bg-background font-mono text-xs uppercase tracking-widest text-muted-foreground"
         >
           WebGL is unavailable: {errorMessage || "unsupported context"}.
         </p>
