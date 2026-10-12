@@ -1,0 +1,64 @@
+---
+title: Chime Switch
+description: A square-shouldered subscribe switch whose bell chimes as it flips to the theme ink.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="chime-switch" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add chime-switch
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/chime-switch.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ChimeSwitch } from "@/components/ui/chime-switch";
+
+export default function Example() {
+  return <ChimeSwitch />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                                | Description |
+| :------------- | :------ | :------------------------------------- | :---------- |
+| offLabel       | string  | `"Keep me posted"`                     | -           |
+| onLabel        | string  | `"On the list"`                        | -           |
+| icon           | any     | -                                      | -           |
+| label          | any     | -                                      | -           |
+| color          | string  | `"hsl(var(--foreground))"`             | -           |
+| background     | string  | `"hsl(var(--muted))"`                  | -           |
+| onColor        | string  | `"hsl(var(--primary-foreground))"`     | -           |
+| onBackground   | string  | `"hsl(var(--primary))"`                | -           |
+| size           | string  | "md"                                   | -           |
+| radius         | number  | `8`                                    | -           |
+| ringAmplitude  | number  | 17                                     | -           |
+| ringPasses     | number  | 5                                      | -           |
+| ringDecay      | number  | 1                                      | -           |
+| ringDuration   | number  | 820                                    | -           |
+| ringPivot      | number  | 16                                     | -           |
+| crossfadeMs    | number  | 200                                    | -           |
+| revealBounce   | number  | 0                                      | -           |
+| count          | number  | `3`                                    | -           |
+| badge          | boolean | true                                   | -           |
+| badgeColor     | string  | `"hsl(var(--destructive))"`            | -           |
+| badgeTextColor | string  | `"hsl(var(--destructive-foreground))"` | -           |
+| waves          | boolean | true                                   | -           |
+| clapper        | boolean | `true`                                 | -           |
+| pressed        | any     | -                                      | -           |
+| defaultPressed | boolean | false                                  | -           |
+| onChange       | any     | -                                      | -           |
+| disabled       | boolean | false                                  | -           |

@@ -1,0 +1,67 @@
+---
+title: Ledger Row
+description: A list row that glides aside on a swipe to reveal a drawer of actions, set like an entry in a printed ledger.
+---
+
+Card-coloured rows with serif copy and mono action labels sit on the paper; the drawer is a muted tone and the action takes the theme's primary ink. Swipe past the commit point to fire the first action outright.
+
+<ComponentPreview name="glide-ledger-row" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glide-ledger-row
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glide-ledger-row.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlideLedgerRow } from "@/components/ui/glide-ledger-row";
+
+export default function Example() {
+  return (
+    <GlideLedgerRow label="Folio 12">
+      <span className="px-4 font-serif">Proof returned with notes</span>
+    </GlideLedgerRow>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type    | Default                  | Description |
+| :------------ | :------ | :----------------------- | :---------- |
+| children      | any     | -                        | -           |
+| actions       | any     | DEFAULT_ACTIONS          | -           |
+| actionColor   | string  | "hsl(var(--primary))"    | -           |
+| drawerColor   | string  | "hsl(var(--muted))"      | -           |
+| rowColor      | string  | "hsl(var(--card))"       | -           |
+| textColor     | string  | "hsl(var(--foreground))" | -           |
+| height        | number  | 64                       | -           |
+| radius        | number  | 16                       | -           |
+| actionWidth   | number  | 80                       | -           |
+| direction     | string  | "left"                   | -           |
+| snapBounce    | number  | 0.2                      | -           |
+| resistance    | number  | 0.55                     | -           |
+| collapseMs    | number  | 200                      | -           |
+| commitAt      | number  | 0.6                      | -           |
+| fullSwipe     | boolean | true                     | -           |
+| disabled      | boolean | false                    | -           |
+| open          | any     | -                        | -           |
+| onOpenChange  | any     | -                        | -           |
+| onAction      | any     | -                        | -           |
+| onCommit      | any     | -                        | -           |
+| closeOnAction | boolean | true                     | -           |
+| haptic        | boolean | true                     | -           |
+| label         | string  | "Ledger entry"           | -           |
+| style         | any     | -                        | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

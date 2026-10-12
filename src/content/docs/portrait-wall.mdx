@@ -1,0 +1,29 @@
+---
+title: Portrait Wall
+description: A wall of paper-toned portrait cards where colour returns only under the pointer.
+---
+
+A wall of paper-toned portrait cards with serif names; colour returns only under the pointer. Ported from React Bits and refactored from GSAP to Framer Motion.
+
+<ComponentPreview name="portrait-wall" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add portrait-wall
+```
+
+## Props
+
+| Prop      | Type               | Default      | Description                                |
+| :-------- | :----------------- | :----------- | :----------------------------------------- |
+| items     | PortraitWallItem[] | -            | Array of items to render.                  |
+| radius    | number             | 300          | Radius of the hover spotlight effect.      |
+| columns   | number             | 3            | Number of grid columns.                    |
+| rows      | number             | 2            | Number of grid rows.                       |
+| damping   | number             | 15           | Spring damping for the spotlight movement. |
+| fadeOut   | number             | 0.6          | Duration of the fade out effect on leave.  |
+| ease      | string             | "power3.out" | Easing function.                           |
+| className | string             | ""           | -                                          |

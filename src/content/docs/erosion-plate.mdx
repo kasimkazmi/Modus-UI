@@ -1,0 +1,49 @@
+---
+title: Erosion Plate
+description: A matted image plate that erodes under turbulence as the cursor moves.
+---
+
+Erosion Plate sets an image inside a bordered paper mat and follows the cursor with a gentle drift. The faster the pointer travels, the harder an `feTurbulence` displacement erodes the picture. Caption text sits on a theme-tinted fade. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="erosion-plate" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add erosion-plate
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/erosion-plate.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { ErosionPlate } from "@/components/ui/erosion-plate";
+
+export default function Example() {
+  return (
+    <ErosionPlate image="/your-image.jpg">
+      <h2>Hover Me</h2>
+    </ErosionPlate>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type     | Default                                                                                        | Description                                                      |
+| :---------------- | :------- | :--------------------------------------------------------------------------------------------- | :--------------------------------------------------------------- |
+| `width`           | `number` | `300`                                                                                          | Card width in pixels.                                            |
+| `height`          | `number` | `400`                                                                                          | Card height in pixels.                                           |
+| `image`           | `string` | "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=600&auto=format&fit=crop" | Image URL.                                                       |
+| `baseFrequency`   | `number` | 0.022                                                                                          | Base frequency of the turbulence filter.                         |
+| `numOctaves`      | `number` | 3                                                                                              | Octaves of the turbulence filter.                                |
+| `seed`            | `number` | 11                                                                                             | Seed of the turbulence filter.                                   |
+| `maxDisplacement` | `number` | 260                                                                                            | Maximum displacement of the distortion.                          |
+| `movementBound`   | `number` | `50`                                                                                           | Distance in pixels the card follows the cursor before resisting. |

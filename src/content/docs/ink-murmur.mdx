@@ -1,0 +1,61 @@
+---
+title: Ink Murmur
+description: A mono status line that breathes while work is in progress and settles into a timed summary.
+---
+
+Set in small uppercase mono with a pulsing dot, it sits under a heading like a typesetter's margin note. Expanding it reveals the steps taken so far.
+
+<ComponentPreview name="ink-murmur" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ink-murmur
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ink-murmur.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { InkMurmur } from "@/components/ui/ink-murmur";
+
+export default function Example() {
+  return <InkMurmur steps={["Reading the brief", "Pulling a proof"]} />;
+}
+```
+
+## Props
+
+| Prop             | Type    | Default        | Description |
+| :--------------- | :------ | :------------- | :---------- |
+| label            | string  | "Composing…"   | -           |
+| doneLabel        | string  | ""             | -           |
+| renderLabel      | any     | -              | -           |
+| glyph            | string  | "dot"          | -           |
+| steps            | any     | EMPTY_STEPS    | -           |
+| collapsible      | boolean | true           | -           |
+| collapseOnSettle | boolean | true           | -           |
+| color            | string  | "currentColor" | -           |
+| glyphColor       | string  | ""             | -           |
+| fontSize         | number  | 13             | -           |
+| breathPeriod     | number  | 1.6            | -           |
+| breathDepth      | number  | 0.45           | -           |
+| shimmer          | boolean | true           | -           |
+| shimmerDuration  | number  | 1.8            | -           |
+| settleDuration   | number  | 350            | -           |
+| settleBlur       | number  | 2              | -           |
+| working          | boolean | true           | -           |
+| settleAfter      | number  | 0              | -           |
+| elapsed          | any     | -              | -           |
+| showTimer        | boolean | true           | -           |
+| onSettle         | any     | -              | -           |
+| style            | any     | -              | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

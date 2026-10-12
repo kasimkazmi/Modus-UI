@@ -46,52 +46,52 @@ import BorderBeamDemo from "./border-beam-demo";
 import OrbitingElementsDemo from "./orbiting-elements-demo";
 import BentoGridDemo from "./bento-grid-demo";
 import FlipWordsDemo from "./flip-words-demo";
-import DecayCardDemo from "./decay-card-demo";
-import BlobCursorDemo from "./blob-cursor-demo";
-import FuzzyTextDemo from "./fuzzy-text-demo";
-import MagnetLinesDemo from "./magnet-lines-demo";
+import ErosionPlateDemo from "./erosion-plate-demo";
+import GloopTrailDemo from "./gloop-trail-demo";
+import StaticTypeDemo from "./static-type-demo";
+import IronFilingsDemo from "./iron-filings-demo";
 import ComparisonSliderDemo from "./comparison-slider-demo";
 import DockDemo from "./dock-demo";
 import ProgressRingDemo from "./progress-ring-demo";
 import MarqueeDemo from "./marquee-demo";
-import ReflectiveCardDemo from "./reflective-card-demo";
+import MirrorPlateDemo from "./mirror-plate-demo";
 import FluidGlassDemo from "./fluid-glass-demo";
 import DomeGalleryDemo from "./dome-gallery-demo";
-import ChromaGridDemo from "./chroma-grid-demo";
-import BellToggleDemo from "./bell-toggle-demo";
-import BranchedMenuDemo from "./branched-menu-demo";
-import CallChipDemo from "./call-chip-demo";
-import CodeSlotsDemo from "./code-slots-demo";
-import CometDialDemo from "./comet-dial-demo";
-import DodgeFieldDemo from "./dodge-field-demo";
-import FlipCardDemo from "./flip-card-demo";
-import FolderFloatDemo from "./folder-float-demo";
-import FuseButtonDemo from "./fuse-button-demo";
-import GlideSelectDemo from "./glide-select-demo";
-import HoldButtonDemo from "./hold-button-demo";
-import JellyRadioDemo from "./jelly-radio-demo";
-import LatticeLoaderDemo from "./lattice-loader-demo";
-import PaperCrumpleDemo from "./paper-crumple-demo";
-import PeekRatingDemo from "./peek-rating-demo";
-import PromptBarDemo from "./prompt-bar-demo";
-import PulseHeartDemo from "./pulse-heart-demo";
-import RefineFrameDemo from "./refine-frame-demo";
-import RubberSegmentDemo from "./rubber-segment-demo";
-import ScrubFieldDemo from "./scrub-field-demo";
-import ShredderDemo from "./shredder-demo";
-import SlideCommitDemo from "./slide-commit-demo";
-import SlingButtonDemo from "./sling-button-demo";
-import SloshGaugeDemo from "./slosh-gauge-demo";
-import SpringCheckDemo from "./spring-check-demo";
-import SquishSwitchDemo from "./squish-switch-demo";
-import StatusMarkDemo from "./status-mark-demo";
-import SwipeRowDemo from "./swipe-row-demo";
-import SwipeToastDemo from "./swipe-toast-demo";
-import TearTicketDemo from "./tear-ticket-demo";
-import ThoughtLineDemo from "./thought-line-demo";
-import VoicePillDemo from "./voice-pill-demo";
-import WakeSliderDemo from "./wake-slider-demo";
-import WarmTooltipDemo from "./warm-tooltip-demo";
+import PortraitWallDemo from "./portrait-wall-demo";
+import ChimeSwitchDemo from "./chime-switch-demo";
+import RootNavDemo from "./root-nav-demo";
+import RunTagDemo from "./run-tag-demo";
+import CipherReelDemo from "./cipher-reel-demo";
+import OrbitKnobDemo from "./orbit-knob-demo";
+import CoyKeyDemo from "./coy-key-demo";
+import TurnLeafDemo from "./turn-leaf-demo";
+import PaperStackDemo from "./paper-stack-demo";
+import CinderTriggerDemo from "./cinder-trigger-demo";
+import TrayPickerDemo from "./tray-picker-demo";
+import SteadyPressDemo from "./steady-press-demo";
+import BloomChoiceDemo from "./bloom-choice-demo";
+import TileWaitDemo from "./tile-wait-demo";
+import FolioCrushDemo from "./folio-crush-demo";
+import GlanceScoreDemo from "./glance-score-demo";
+import QueryWellDemo from "./query-well-demo";
+import BeatMarkDemo from "./beat-mark-demo";
+import PolishPaneDemo from "./polish-pane-demo";
+import StretchToggleDemo from "./stretch-toggle-demo";
+import DragNumberDemo from "./drag-number-demo";
+import PaperMillDemo from "./paper-mill-demo";
+import SwipeConfirmDemo from "./swipe-confirm-demo";
+import PullLaunchDemo from "./pull-launch-demo";
+import TideMeterDemo from "./tide-meter-demo";
+import TallyBoxDemo from "./tally-box-demo";
+import PressToggleDemo from "./press-toggle-demo";
+import StateGlyphDemo from "./state-glyph-demo";
+import GlideLedgerRowDemo from "./glide-ledger-row-demo";
+import FlickNoticeDemo from "./flick-notice-demo";
+import StubPassDemo from "./stub-pass-demo";
+import InkMurmurDemo from "./ink-murmur-demo";
+import HumCapsuleDemo from "./hum-capsule-demo";
+import RouseTrackDemo from "./rouse-track-demo";
+import EmberHintDemo from "./ember-hint-demo";
 import MoonLatticeDemo from "./moon-lattice-demo";
 import ResonancePlateDemo from "./resonance-plate-demo";
 import ConfluenceLinesDemo from "./confluence-lines-demo";
@@ -260,52 +260,52 @@ export const demos: Record<ComponentName, ComponentType> = {
   "orbiting-elements": OrbitingElementsDemo,
   "bento-grid": BentoGridDemo,
   "flip-words": FlipWordsDemo,
-  "decay-card": DecayCardDemo,
-  "blob-cursor": BlobCursorDemo,
-  "fuzzy-text": FuzzyTextDemo,
-  "magnet-lines": MagnetLinesDemo,
+  "erosion-plate": ErosionPlateDemo,
+  "gloop-trail": GloopTrailDemo,
+  "static-type": StaticTypeDemo,
+  "iron-filings": IronFilingsDemo,
   "comparison-slider": ComparisonSliderDemo,
   dock: DockDemo,
   "progress-ring": ProgressRingDemo,
   marquee: MarqueeDemo,
-  "reflective-card": ReflectiveCardDemo,
+  "mirror-plate": MirrorPlateDemo,
   "fluid-glass": FluidGlassDemo,
   "dome-gallery": DomeGalleryDemo,
-  "chroma-grid": ChromaGridDemo,
-  "bell-toggle": BellToggleDemo,
-  "branched-menu": BranchedMenuDemo,
-  "call-chip": CallChipDemo,
-  "code-slots": CodeSlotsDemo,
-  "comet-dial": CometDialDemo,
-  "dodge-field": DodgeFieldDemo,
-  "flip-card": FlipCardDemo,
-  "folder-float": FolderFloatDemo,
-  "fuse-button": FuseButtonDemo,
-  "glide-select": GlideSelectDemo,
-  "hold-button": HoldButtonDemo,
-  "jelly-radio": JellyRadioDemo,
-  "lattice-loader": LatticeLoaderDemo,
-  "paper-crumple": PaperCrumpleDemo,
-  "peek-rating": PeekRatingDemo,
-  "prompt-bar": PromptBarDemo,
-  "pulse-heart": PulseHeartDemo,
-  "refine-frame": RefineFrameDemo,
-  "rubber-segment": RubberSegmentDemo,
-  "scrub-field": ScrubFieldDemo,
-  shredder: ShredderDemo,
-  "slide-commit": SlideCommitDemo,
-  "sling-button": SlingButtonDemo,
-  "slosh-gauge": SloshGaugeDemo,
-  "spring-check": SpringCheckDemo,
-  "squish-switch": SquishSwitchDemo,
-  "status-mark": StatusMarkDemo,
-  "swipe-row": SwipeRowDemo,
-  "swipe-toast": SwipeToastDemo,
-  "tear-ticket": TearTicketDemo,
-  "thought-line": ThoughtLineDemo,
-  "voice-pill": VoicePillDemo,
-  "wake-slider": WakeSliderDemo,
-  "warm-tooltip": WarmTooltipDemo,
+  "portrait-wall": PortraitWallDemo,
+  "chime-switch": ChimeSwitchDemo,
+  "root-nav": RootNavDemo,
+  "run-tag": RunTagDemo,
+  "cipher-reel": CipherReelDemo,
+  "orbit-knob": OrbitKnobDemo,
+  "coy-key": CoyKeyDemo,
+  "turn-leaf": TurnLeafDemo,
+  "paper-stack": PaperStackDemo,
+  "cinder-trigger": CinderTriggerDemo,
+  "tray-picker": TrayPickerDemo,
+  "steady-press": SteadyPressDemo,
+  "bloom-choice": BloomChoiceDemo,
+  "tile-wait": TileWaitDemo,
+  "folio-crush": FolioCrushDemo,
+  "glance-score": GlanceScoreDemo,
+  "query-well": QueryWellDemo,
+  "beat-mark": BeatMarkDemo,
+  "polish-pane": PolishPaneDemo,
+  "stretch-toggle": StretchToggleDemo,
+  "drag-number": DragNumberDemo,
+  "paper-mill": PaperMillDemo,
+  "swipe-confirm": SwipeConfirmDemo,
+  "pull-launch": PullLaunchDemo,
+  "tide-meter": TideMeterDemo,
+  "tally-box": TallyBoxDemo,
+  "press-toggle": PressToggleDemo,
+  "state-glyph": StateGlyphDemo,
+  "glide-ledger-row": GlideLedgerRowDemo,
+  "flick-notice": FlickNoticeDemo,
+  "stub-pass": StubPassDemo,
+  "ink-murmur": InkMurmurDemo,
+  "hum-capsule": HumCapsuleDemo,
+  "rouse-track": RouseTrackDemo,
+  "ember-hint": EmberHintDemo,
   "moon-lattice": MoonLatticeDemo,
   "resonance-plate": ResonancePlateDemo,
   "confluence-lines": ConfluenceLinesDemo,

@@ -1,0 +1,57 @@
+---
+title: Coy Key
+description: A dashed mono key that edges away from the cursor until it relents.
+---
+
+Coy Key backs away from an approaching pointer inside its field, swapping its mono caption with every near miss, then gives in after a set patience. Ink and contrast follow the Modus theme. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="coy-key" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add coy-key
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/coy-key.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CoyKey } from "@/components/ui/coy-key";
+
+export default function Example() {
+  return <CoyKey />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                                                            | Description |
+| :------------- | :------ | :----------------------------------------------------------------- | :---------- |
+| children       | any     | -                                                                  | -           |
+| taunts         | any     | ["Reach for it", "Not quite", "Closer", "Patience", "Fine, yours"] | -           |
+| notice         | string  | ""                                                                 | -           |
+| inkColor       | string  | "hsl(var(--foreground))"                                           | -           |
+| contrastColor  | string  | "hsl(var(--background))"                                           | -           |
+| fieldHeight    | number  | 240                                                                | -           |
+| reach          | number  | 72                                                                 | -           |
+| radius         | number  | 120                                                                | -           |
+| falloff        | number  | 2                                                                  | -           |
+| fleeDuration   | number  | 130                                                                | -           |
+| returnDuration | number  | 620                                                                | -           |
+| returnBounce   | number  | 0.1                                                                | -           |
+| axis           | string  | "both"                                                             | -           |
+| wall           | string  | "clamp"                                                            | -           |
+| patience       | number  | 4                                                                  | -           |
+| disabled       | boolean | false                                                              | -           |
+| onDodge        | any     | -                                                                  | -           |
+| onRelent       | any     | -                                                                  | -           |
+| onCatch        | any     | -                                                                  | -           |
+| style          | any     | -                                                                  | -           |

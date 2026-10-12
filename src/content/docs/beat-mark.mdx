@@ -1,0 +1,57 @@
+---
+title: Beat Mark
+description: A like button whose icon bursts and whose counter rolls on press.
+---
+
+The default is a squared mono pill with a star mark on the muted surface.
+
+<ComponentPreview name="beat-mark" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add beat-mark
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/beat-mark.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BeatMark } from "@/components/ui/beat-mark";
+
+export default function Example() {
+  return <BeatMark />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                        | Description |
+| :----------- | :------ | :----------------------------- | :---------- |
+| liked        | any     | -                              | -           |
+| defaultLiked | boolean | false                          | -           |
+| count        | number  | 128                            | -           |
+| onChange     | any     | -                              | -           |
+| showCount    | boolean | true                           | -           |
+| icon         | string  | "star"                         | -           |
+| idleOutline  | boolean | true                           | -           |
+| size         | number  | 40                             | -           |
+| corner       | number  | 10                             | -           |
+| likedColor   | string  | "hsl(var(--primary))"          | -           |
+| idleColor    | string  | "hsl(var(--muted-foreground))" | -           |
+| pillColor    | string  | "hsl(var(--muted))"            | -           |
+| textColor    | string  | "hsl(var(--foreground))"       | -           |
+| duration     | number  | 560                            | -           |
+| dotSize      | number  | 0.3                            | -           |
+| overshoot    | number  | 1.7                            | -           |
+| beat         | number  | 3                              | -           |
+| rollDuration | number  | 350                            | -           |
+| disabled     | boolean | false                          | -           |
+| label        | string  | "Like"                         | -           |

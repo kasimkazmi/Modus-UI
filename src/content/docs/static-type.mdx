@@ -1,0 +1,47 @@
+---
+title: Static Type
+description: Serif display type that tears into horizontal static, harder when you hover it.
+---
+
+Drawn on a canvas in the Modus heading face and the foreground ink, each frame shifts pixel rows sideways like a weak broadcast signal. Reduced motion draws a single still frame.
+
+<ComponentPreview name="static-type" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add static-type
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/static-type.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StaticType } from "@/components/ui/static-type";
+
+export default function Example() {
+  return <StaticType>Modus</StaticType>;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                  | Description |
+| :------------- | :------ | :----------------------- | :---------- |
+| children       | any     | -                        | -           |
+| fontSize       | string  | "clamp(3rem, 8vw, 6rem)" | -           |
+| fontWeight     | number  | 400                      | -           |
+| fontFamily     | string  | ""                       | -           |
+| color          | string  | "hsl(var(--foreground))" | -           |
+| enableHover    | boolean | true                     | -           |
+| baseIntensity  | number  | 0.12                     | -           |
+| hoverIntensity | number  | 0.6                      | -           |
+
+Ported from React Bits' Fuzzy Text (MIT).

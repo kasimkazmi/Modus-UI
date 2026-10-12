@@ -1,0 +1,51 @@
+---
+title: Polish Pane
+description: A frame that resolves an image from pixel mosaic to sharp as generation progresses.
+---
+
+Status prints in a mono pill and the frame rests on the muted surface with tight corners.
+
+<ComponentPreview name="polish-pane" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add polish-pane
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/polish-pane.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PolishPane } from "@/components/ui/polish-pane";
+
+export default function Example() {
+  return <PolishPane />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default                  | Description |
+| :------------ | :------ | :----------------------- | :---------- |
+| status        | string  | "generating"             | -           |
+| children      | any     | -                        | -           |
+| aspectRatio   | string  | "1 / 1"                  | -           |
+| width         | number  | 320                      | -           |
+| radius        | number  | 6                        | -           |
+| background    | string  | "hsl(var(--muted))"      | -           |
+| color         | string  | "hsl(var(--foreground))" | -           |
+| stageDuration | number  | 400                      | -           |
+| sweep         | boolean | true                     | -           |
+| showStatus    | boolean | true                     | -           |
+| hideAfter     | number  | 1200                     | -           |
+| labels        | any     | DEFAULT_LABELS           | -           |
+| retryLabel    | string  | "Retry"                  | -           |
+| onRetry       | any     | -                        | -           |

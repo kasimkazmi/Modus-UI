@@ -1,0 +1,60 @@
+---
+title: Drag Number
+description: A compact number chip you scrub sideways to change, with a rubber-band edge and a delta tag.
+---
+
+Labels sit in mono caps on a muted chip; the fill and change tag follow your theme's primary colour. Hold Shift for coarse steps, Alt for fine ones, or click to type a value.
+
+<ComponentPreview name="drag-number" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add drag-number
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/drag-number.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { DragNumber } from "@/components/ui/drag-number";
+
+export default function Example() {
+  return <DragNumber />;
+}
+```
+
+## Props
+
+| Prop             | Type    | Default               | Description |
+| :--------------- | :------ | :-------------------- | :---------- |
+| label            | string  | "Weight"              | -           |
+| suffix           | string  | "pt"                  | -           |
+| value            | any     | -                     | -           |
+| defaultValue     | number  | 42                    | -           |
+| min              | number  | 0                     | -           |
+| max              | number  | 100                   | -           |
+| step             | number  | 1                     | -           |
+| size             | string  | "md"                  | -           |
+| sensitivity      | number  | 2                     | -           |
+| rubberReach      | number  | 8                     | -           |
+| returnDuration   | number  | 300                   | -           |
+| coarseMultiplier | number  | 10                    | -           |
+| fineMultiplier   | number  | 0.1                   | -           |
+| showDelta        | boolean | true                  | -           |
+| showDirty        | boolean | true                  | -           |
+| showFill         | boolean | true                  | -           |
+| accent           | string  | "hsl(var(--primary))" | -           |
+| chipColor        | string  | "hsl(var(--muted))"   | -           |
+| disabled         | boolean | false                 | -           |
+| onChange         | any     | -                     | -           |
+| onCommit         | any     | -                     | -           |
+
+Ported from React Bits.

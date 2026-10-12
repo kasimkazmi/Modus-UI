@@ -1,0 +1,79 @@
+---
+title: Stub Pass
+description: A perforated card with a primary-ink stub you can drag and tear clean off.
+---
+
+The body takes the card token and the stub is printed in the theme's primary, so the perforation reads as a clear seam in any palette. The card tilts toward the pointer and the stub resists before it rips.
+
+<ComponentPreview name="stub-pass" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stub-pass
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/stub-pass.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StubPass } from "@/components/ui/stub-pass";
+
+export default function Example() {
+  return (
+    <StubPass stub={<span className="font-serif">14C</span>}>
+      <span className="font-serif">The Quiet Press</span>
+    </StubPass>
+  );
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                  | Description |
+| :------------- | :------ | :----------------------- | :---------- |
+| children       | any     | null                     | -           |
+| stub           | any     | null                     | -           |
+| image          | string  | ""                       | -           |
+| imageAlt       | string  | ""                       | -           |
+| scrim          | boolean | true                     | -           |
+| imageRadius    | number  | 8                        | -           |
+| orientation    | string  | "horizontal"             | -           |
+| torn           | any     | -                        | -           |
+| defaultTorn    | boolean | false                    | -           |
+| onTear         | any     | -                        | -           |
+| width          | number  | 460                      | -           |
+| height         | number  | 250                      | -           |
+| stubSize       | number  | 150                      | -           |
+| radius         | number  | 16                       | -           |
+| holes          | number  | 12                       | -           |
+| holeSize       | number  | 6                        | -           |
+| notch          | number  | 3                        | -           |
+| roughness      | number  | 0                        | -           |
+| tearAngle      | number  | 30                       | -           |
+| stretch        | number  | 30                       | -           |
+| resistance     | number  | 0.45                     | -           |
+| rotate         | number  | 4                        | -           |
+| tilt           | boolean | true                     | -           |
+| tiltMax        | number  | 9                        | -           |
+| tiltReach      | number  | 260                      | -           |
+| parallax       | number  | 6                        | -           |
+| perspective    | number  | 1000                     | -           |
+| background     | string  | "hsl(var(--card))"       | -           |
+| color          | string  | "hsl(var(--foreground))" | -           |
+| border         | boolean | true                     | -           |
+| borderColor    | string  | ""                       | -           |
+| borderWidth    | number  | 1                        | -           |
+| stubBackground | string  | "hsl(var(--primary))"    | -           |
+| recenter       | boolean | true                     | -           |
+| disabled       | boolean | false                    | -           |
+| ariaLabel      | string  | "Tear off the stub"      | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

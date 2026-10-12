@@ -1,0 +1,55 @@
+---
+title: Run Tag
+description: A monospace run tag that fills with theme ink while a command runs, then settles to done or retry.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="run-tag" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add run-tag
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/run-tag.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RunTag } from "@/components/ui/run-tag";
+
+export default function Example() {
+  return <RunTag />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default                     | Description |
+| :-------------- | :------ | :-------------------------- | :---------- |
+| icon            | string  | "terminal"                  | -           |
+| name            | string  | `"pnpm"`                    | -           |
+| argument        | string  | `"build --filter docs"`     | -           |
+| status          | string  | "running"                   | -           |
+| expectedMs      | number  | 2500                        | -           |
+| size            | number  | 34                          | -           |
+| radius          | number  | `6`                         | -           |
+| color           | string  | `"hsl(var(--foreground))"`  | -           |
+| surfaceColor    | string  | `"hsl(var(--muted))"`       | -           |
+| progressColor   | string  | `"hsl(var(--primary))"`     | -           |
+| progressOpacity | number  | `0.16`                      | -           |
+| doneColor       | string  | `"hsl(var(--primary))"`     | -           |
+| errorColor      | string  | `"hsl(var(--destructive))"` | -           |
+| washOpacity     | number  | 0.14                        | -           |
+| shake           | number  | 6                           | -           |
+| showTimer       | boolean | true                        | -           |
+| onRetry         | any     | -                           | -           |
+| style           | any     | -                           | -           |

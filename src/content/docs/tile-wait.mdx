@@ -1,0 +1,57 @@
+---
+title: Tile Wait
+description: A dot-grid progress indicator with a ticking timer and a mono caption.
+---
+
+Tiles ripple outward from the centre while work runs, then resolve into a check or a cross with the elapsed time. Colours follow `currentColor` and the Modus theme tokens.
+
+<ComponentPreview name="tile-wait" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tile-wait
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tile-wait.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TileWait } from "@/components/ui/tile-wait";
+
+export default function Example() {
+  return <TileWait />;
+}
+```
+
+## Props
+
+| Prop        | Type    | Default                   | Description |
+| :---------- | :------ | :------------------------ | :---------- |
+| label       | string  | "Composing"               | -           |
+| doneLabel   | string  | "Done in"                 | -           |
+| errorLabel  | string  | "Failed after"            | -           |
+| status      | string  | "working"                 | -           |
+| pattern     | string  | "ripple"                  | -           |
+| grid        | number  | 3                         | -           |
+| shape       | string  | "square"                  | -           |
+| color       | string  | "currentColor"            | -           |
+| doneColor   | string  | "hsl(var(--primary))"     | -           |
+| errorColor  | string  | "hsl(var(--destructive))" | -           |
+| cellSize    | number  | 5                         | -           |
+| gap         | number  | 3                         | -           |
+| fontSize    | number  | 12                        | -           |
+| step        | number  | 90                        | -           |
+| idleOpacity | number  | 0.15                      | -           |
+| glow        | boolean | false                     | -           |
+| glowColor   | string  | ""                        | -           |
+| showTimer   | boolean | true                      | -           |
+| elapsed     | any     | -                         | -           |
+| style       | any     | -                         | -           |

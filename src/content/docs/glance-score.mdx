@@ -1,0 +1,59 @@
+---
+title: Glance Score
+description: A rating row whose icons lift as you hover, with a mono label tip.
+---
+
+Unset marks sit in the border tone, filled marks take the primary colour and the tip prints in inverted ink.
+
+<ComponentPreview name="glance-score" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glance-score
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glance-score.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GlanceScore } from "@/components/ui/glance-score";
+
+export default function Example() {
+  return <GlanceScore />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                  | Description |
+| :----------- | :------ | :----------------------- | :---------- |
+| value        | any     | -                        | -           |
+| defaultValue | number  | 0                        | -           |
+| onChange     | any     | -                        | -           |
+| onPreview    | any     | -                        | -           |
+| count        | number  | 5                        | -           |
+| shape        | string  | "star"                   | -           |
+| icon         | any     | -                        | -           |
+| labels       | any     | []                       | -           |
+| activeColor  | string  | "hsl(var(--primary))"    | -           |
+| idleColor    | string  | "hsl(var(--border))"     | -           |
+| tipColor     | string  | "hsl(var(--foreground))" | -           |
+| tipTextColor | string  | "hsl(var(--background))" | -           |
+| size         | number  | 26                       | -           |
+| lift         | number  | 4                        | -           |
+| magnify      | number  | 1.25                     | -           |
+| riseDuration | number  | 320                      | -           |
+| popScale     | number  | 1.3                      | -           |
+| showTip      | boolean | true                     | -           |
+| allowClear   | boolean | true                     | -           |
+| readOnly     | boolean | false                    | -           |
+| disabled     | boolean | false                    | -           |
+| ariaLabel    | string  | "Rating"                 | -           |

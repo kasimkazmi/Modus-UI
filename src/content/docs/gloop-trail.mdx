@@ -1,0 +1,43 @@
+---
+title: Gloop Trail
+description: A pooled ink trail that follows the pointer, shading from the theme ink toward muted grey.
+---
+
+An ink trail that follows the pointer, ported from React Bits (MIT). Each step of the trail shades from your theme ink toward the muted token. It uses a custom SVG `feGaussianBlur` and `feColorMatrix` filter to blend multiple trailing DOM elements into a single fluid "pool" that follows your cursor physics.
+
+<ComponentPreview name="gloop-trail" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add gloop-trail
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/gloop-trail.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { GloopTrail } from "@/components/ui/gloop-trail";
+
+export default function Example() {
+  return (
+    <div className="relative h-[400px] w-full cursor-none overflow-hidden">
+      <GloopTrail fillColor="hsl(var(--primary))" />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                               | Default                 | Description                          |
+| :---------- | :--------------------------------- | :---------------------- | :----------------------------------- |
+| `blobType`  | `"circle" \| "square" \| "almond"` | `"circle"`              | Shape of the trailing drops.         |
+| `fillColor` | `string`                           | `"hsl(var(--primary))"` | Ink colour at the head of the trail. |

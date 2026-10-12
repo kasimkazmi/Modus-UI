@@ -1,0 +1,60 @@
+---
+title: Flick Notice
+description: A card-stock notice that slides in, burns down a thin primary fuse and flicks away under a swipe.
+---
+
+The surface follows the theme's card and border tokens with a serif title, so it reads as a slip of paper rather than a system pill. Drag it past the swipe distance to dismiss, or hover to pause the fuse.
+
+<ComponentPreview name="flick-notice" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add flick-notice
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/flick-notice.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { FlickNotice } from "@/components/ui/flick-notice";
+
+export default function Example() {
+  return <FlickNotice title="Draft filed to the folio" />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default                    | Description |
+| :------------ | :------ | :------------------------- | :---------- |
+| title         | string  | "Draft filed to the folio" | -           |
+| description   | string  | ""                         | -           |
+| icon          | any     | -                          | -           |
+| actionLabel   | string  | ""                         | -           |
+| onAction      | any     | -                          | -           |
+| open          | boolean | true                       | -           |
+| onClose       | any     | -                          | -           |
+| background    | string  | "hsl(var(--card))"         | -           |
+| color         | string  | "hsl(var(--foreground))"   | -           |
+| fuseColor     | string  | "hsl(var(--primary))"      | -           |
+| width         | number  | 356                        | -           |
+| radius        | number  | 12                         | -           |
+| slideMs       | number  | 400                        | -           |
+| settleBounce  | number  | 0.2                        | -           |
+| swipeDistance | number  | 40                         | -           |
+| duration      | number  | 4000                       | -           |
+| fuse          | string  | "bottom"                   | -           |
+| pauseOnHover  | boolean | true                       | -           |
+| closeButton   | boolean | false                      | -           |
+| inline        | boolean | false                      | -           |
+| dismissible   | boolean | true                       | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

@@ -1,0 +1,62 @@
+---
+title: Query Well
+description: A composer for AI requests with sources, commands, model and effort menus.
+---
+
+It sits on the card surface with a hairline ring, and its send spark tints from the primary token.
+
+<ComponentPreview name="query-well" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add query-well
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/query-well.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { QueryWell } from "@/components/ui/query-well";
+
+export default function Example() {
+  return <QueryWell />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                  | Description |
+| :------------- | :------ | :----------------------- | :---------- |
+| placeholder    | string  | "Draft a request"        | -           |
+| sources        | any     | DEFAULT_SOURCES          | -           |
+| commands       | any     | DEFAULT_COMMANDS         | -           |
+| models         | any     | DEFAULT_MODELS           | -           |
+| defaultModel   | string  | ""                       | -           |
+| efforts        | any     | DEFAULT_EFFORTS          | -           |
+| defaultEffort  | string  | ""                       | -           |
+| onEffortChange | any     | -                        | -           |
+| busy           | boolean | false                    | -           |
+| onSend         | any     | -                        | -           |
+| onStop         | any     | -                        | -           |
+| onAttach       | any     | -                        | -           |
+| onDictate      | any     | -                        | -           |
+| background     | string  | "hsl(var(--card))"       | -           |
+| color          | string  | "hsl(var(--foreground))" | -           |
+| menuBackground | string  | "hsl(var(--popover))"    | -           |
+| sparkColor     | string  | "hsl(var(--primary))"    | -           |
+| sparkBoost     | number  | 1                        | -           |
+| width          | number  | 440                      | -           |
+| radius         | number  | 12                       | -           |
+| maxRows        | number  | 5                        | -           |
+| morphDuration  | number  | 240                      | -           |
+| squash         | number  | 0.12                     | -           |
+| tilt           | number  | 8                        | -           |
+| pressScale     | number  | 0.96                     | -           |

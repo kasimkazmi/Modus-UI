@@ -280,10 +280,10 @@
       ]
     },
     {
-      "name": "blob-cursor",
-      "title": "Blob Cursor",
+      "name": "gloop-trail",
+      "title": "Gloop Trail",
       "category": "Backgrounds",
-      "description": "A morphing gelatinous blob that trails your mouse cursor.",
+      "description": "A pooled ink trail that follows the pointer, shading from the theme ink toward muted grey.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -291,10 +291,10 @@
       ]
     },
     {
-      "name": "magnet-lines",
-      "title": "Magnet Lines",
+      "name": "iron-filings",
+      "title": "Iron Filings",
       "category": "Backgrounds",
-      "description": "A grid of lines that mathematically rotate to point towards your cursor.",
+      "description": "A field of fine ink filings that turn to face the pointer, like iron around a lodestone.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -573,10 +573,10 @@
       ]
     },
     {
-      "name": "fuzzy-text",
-      "title": "Fuzzy Text",
+      "name": "static-type",
+      "title": "Static Type",
       "category": "Typography",
-      "description": "Typography rendered with dynamic, animated noise and grain displacement.",
+      "description": "Serif display type that tears into horizontal static, harder when you hover it.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -716,10 +716,10 @@
       ]
     },
     {
-      "name": "decay-card",
-      "title": "Decay Card",
+      "name": "erosion-plate",
+      "title": "Erosion Plate",
       "category": "Components",
-      "description": "A 3D interactive card that decays and shatters its visual elements when hovered.",
+      "description": "A matted image plate that erodes under turbulence as the cursor moves.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -860,10 +860,10 @@
       ]
     },
     {
-      "name": "reflective-card",
-      "title": "Reflective Card",
+      "name": "mirror-plate",
+      "title": "Mirror Plate",
       "category": "Components",
-      "description": "A shiny, reflective glass card with distorted background.",
+      "description": "A member pass whose surface mirrors the webcam through a metallic glass filter.",
       "dependencies": [
         "lucide-react",
         "framer-motion",
@@ -895,10 +895,10 @@
       ]
     },
     {
-      "name": "chroma-grid",
-      "title": "Chroma Grid",
+      "name": "portrait-wall",
+      "title": "Portrait Wall",
       "category": "Components",
-      "description": "A smooth, animated grid of glowing spotlight cards.",
+      "description": "A wall of paper-toned portrait cards where colour returns only under the pointer.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -906,49 +906,10 @@
       ]
     },
     {
-      "name": "bell-toggle",
-      "title": "Bell Toggle",
+      "name": "chime-switch",
+      "title": "Chime Switch",
       "category": "Components",
-      "description": "TODO one sentence on what Bell Toggle does.",
-      "dependencies": [
-        "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "branched-menu",
-      "title": "Branched Menu",
-      "category": "Components",
-      "description": "TODO one sentence on what Branched Menu does.",
-      "dependencies": [
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "call-chip",
-      "title": "Call Chip",
-      "category": "Components",
-      "description": "TODO one sentence on what Call Chip does.",
-      "dependencies": [
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "code-slots",
-      "title": "Code Slots",
-      "category": "Components",
-      "description": "TODO one sentence on what Code Slots does.",
+      "description": "A square-shouldered subscribe switch whose bell chimes as it flips to the theme ink.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -958,10 +919,49 @@
       ]
     },
     {
-      "name": "comet-dial",
-      "title": "Comet Dial",
+      "name": "root-nav",
+      "title": "Root Nav",
       "category": "Components",
-      "description": "TODO one sentence on what Comet Dial does.",
+      "description": "A docs-style navigation tree whose hairline roots draw out to each open chapter.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "run-tag",
+      "title": "Run Tag",
+      "category": "Components",
+      "description": "A monospace run tag that fills with theme ink while a command runs, then settles to done or retry.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "cipher-reel",
+      "title": "Cipher Reel",
+      "category": "Components",
+      "description": "A one-time code field of paper slots with serif numerals that drop in and seal on success.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "orbit-knob",
+      "title": "Orbit Knob",
+      "category": "Components",
+      "description": "A flickable rotary knob with a tracer tail in theme ink and a serif readout.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -969,10 +969,10 @@
       ]
     },
     {
-      "name": "dodge-field",
-      "title": "Dodge Field",
+      "name": "coy-key",
+      "title": "Coy Key",
       "category": "Components",
-      "description": "TODO one sentence on what Dodge Field does.",
+      "description": "A dashed mono key that edges away from the cursor until it relents.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -980,10 +980,10 @@
       ]
     },
     {
-      "name": "flip-card",
-      "title": "Flip Card",
+      "name": "turn-leaf",
+      "title": "Turn Leaf",
       "category": "Components",
-      "description": "TODO one sentence on what Flip Card does.",
+      "description": "A paper leaf you drag, click or key-press to turn over, with a soft tilt and sheen.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -991,10 +991,10 @@
       ]
     },
     {
-      "name": "folder-float",
-      "title": "Folder Float",
+      "name": "paper-stack",
+      "title": "Paper Stack",
       "category": "Components",
-      "description": "TODO one sentence on what Folder Float does.",
+      "description": "A paper sleeve that fans out draggable note slips when opened.",
       "dependencies": [
         "matter-js",
         "framer-motion",
@@ -1003,10 +1003,10 @@
       ]
     },
     {
-      "name": "fuse-button",
-      "title": "Fuse Button",
+      "name": "cinder-trigger",
+      "title": "Cinder Trigger",
       "category": "Components",
-      "description": "TODO one sentence on what Fuse Button does.",
+      "description": "A commit button that burns down an undo window along its edge before it settles.",
       "dependencies": [
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
@@ -1016,10 +1016,10 @@
       ]
     },
     {
-      "name": "glide-select",
-      "title": "Glide Select",
+      "name": "tray-picker",
+      "title": "Tray Picker",
       "category": "Components",
-      "description": "TODO one sentence on what Glide Select does.",
+      "description": "A compact select whose tray slides open from its chip with serif options.",
       "dependencies": [
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
@@ -1029,10 +1029,10 @@
       ]
     },
     {
-      "name": "hold-button",
-      "title": "Hold Button",
+      "name": "steady-press",
+      "title": "Steady Press",
       "category": "Components",
-      "description": "TODO one sentence on what Hold Button does.",
+      "description": "A press-and-hold confirm button that fills from below with a wavy crest.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1040,10 +1040,10 @@
       ]
     },
     {
-      "name": "jelly-radio",
-      "title": "Jelly Radio",
+      "name": "bloom-choice",
+      "title": "Bloom Choice",
       "category": "Components",
-      "description": "TODO one sentence on what Jelly Radio does.",
+      "description": "A row of mono chips where the chosen one swells with a springy pop.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1051,10 +1051,10 @@
       ]
     },
     {
-      "name": "lattice-loader",
-      "title": "Lattice Loader",
+      "name": "tile-wait",
+      "title": "Tile Wait",
       "category": "Components",
-      "description": "TODO one sentence on what Lattice Loader does.",
+      "description": "A dot-grid progress indicator with a ticking timer and a mono caption.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1062,10 +1062,10 @@
       ]
     },
     {
-      "name": "paper-crumple",
-      "title": "Paper Crumple",
+      "name": "folio-crush",
+      "title": "Folio Crush",
       "category": "Components",
-      "description": "An interactive paper that crumples and folds on drag.",
+      "description": "A WebGL print you can hold to crush into a ball and drag around.",
       "dependencies": [
         "three",
         "framer-motion",
@@ -1074,10 +1074,10 @@
       ]
     },
     {
-      "name": "peek-rating",
-      "title": "Peek Rating",
+      "name": "glance-score",
+      "title": "Glance Score",
       "category": "Components",
-      "description": "TODO one sentence on what Peek Rating does.",
+      "description": "A rating row whose icons lift as you hover, with a mono label tip.",
       "dependencies": [
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
@@ -1087,10 +1087,10 @@
       ]
     },
     {
-      "name": "prompt-bar",
-      "title": "Prompt Bar",
+      "name": "query-well",
+      "title": "Query Well",
       "category": "Components",
-      "description": "TODO one sentence on what Prompt Bar does.",
+      "description": "A composer for AI requests with sources, commands, model and effort menus.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -1100,10 +1100,10 @@
       ]
     },
     {
-      "name": "pulse-heart",
-      "title": "Pulse Heart",
+      "name": "beat-mark",
+      "title": "Beat Mark",
       "category": "Components",
-      "description": "TODO one sentence on what Pulse Heart does.",
+      "description": "A like button whose icon bursts and whose counter rolls on press.",
       "dependencies": [
         "@hugeicons/core-free-icons",
         "framer-motion",
@@ -1112,10 +1112,10 @@
       ]
     },
     {
-      "name": "refine-frame",
-      "title": "Refine Frame",
+      "name": "polish-pane",
+      "title": "Polish Pane",
       "category": "Components",
-      "description": "TODO one sentence on what Refine Frame does.",
+      "description": "A frame that resolves an image from pixel mosaic to sharp as generation progresses.",
       "dependencies": [
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
@@ -1125,10 +1125,10 @@
       ]
     },
     {
-      "name": "rubber-segment",
-      "title": "Rubber Segment",
+      "name": "stretch-toggle",
+      "title": "Stretch Toggle",
       "category": "Components",
-      "description": "TODO one sentence on what Rubber Segment does.",
+      "description": "A segmented control whose thumb stretches and squashes as it travels.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1136,10 +1136,10 @@
       ]
     },
     {
-      "name": "scrub-field",
-      "title": "Scrub Field",
+      "name": "drag-number",
+      "title": "Drag Number",
       "category": "Components",
-      "description": "TODO one sentence on what Scrub Field does.",
+      "description": "A compact number chip you scrub sideways to change, with a rubber-band edge and a delta tag.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1147,10 +1147,10 @@
       ]
     },
     {
-      "name": "shredder",
-      "title": "Shredder",
+      "name": "paper-mill",
+      "title": "Paper Mill",
       "category": "Components",
-      "description": "TODO one sentence on what Shredder does.",
+      "description": "A list of cards you drag into a slot that cuts them into falling strips.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1158,23 +1158,10 @@
       ]
     },
     {
-      "name": "slide-commit",
-      "title": "Slide Commit",
+      "name": "swipe-confirm",
+      "title": "Swipe Confirm",
       "category": "Components",
-      "description": "TODO one sentence on what Slide Commit does.",
-      "dependencies": [
-        "framer-motion",
-        "@hugeicons/react",
-        "@hugeicons/core-free-icons",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "sling-button",
-      "title": "Sling Button",
-      "category": "Components",
-      "description": "TODO one sentence on what Sling Button does.",
+      "description": "A drag-to-confirm track for actions that should not happen by accident.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -1184,55 +1171,10 @@
       ]
     },
     {
-      "name": "slosh-gauge",
-      "title": "Slosh Gauge",
+      "name": "pull-launch",
+      "title": "Pull Launch",
       "category": "Components",
-      "description": "TODO one sentence on what Slosh Gauge does.",
-      "dependencies": [
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "spring-check",
-      "title": "Spring Check",
-      "category": "Components",
-      "description": "TODO one sentence on what Spring Check does.",
-      "dependencies": [
-        "framer-motion",
-        "@hugeicons/core-free-icons",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "squish-switch",
-      "title": "Squish Switch",
-      "category": "Components",
-      "description": "TODO one sentence on what Squish Switch does.",
-      "dependencies": [
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "status-mark",
-      "title": "Status Mark",
-      "category": "Components",
-      "description": "TODO one sentence on what Status Mark does.",
-      "dependencies": [
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "swipe-row",
-      "title": "Swipe Row",
-      "category": "Components",
-      "description": "TODO one sentence on what Swipe Row does.",
+      "description": "A send button you can pull back like a slingshot and release.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -1242,10 +1184,55 @@
       ]
     },
     {
-      "name": "swipe-toast",
-      "title": "Swipe Toast",
+      "name": "tide-meter",
+      "title": "Tide Meter",
       "category": "Components",
-      "description": "TODO one sentence on what Swipe Toast does.",
+      "description": "A vertical level meter whose fill sloshes as it moves.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "tally-box",
+      "title": "Tally Box",
+      "category": "Components",
+      "description": "A checkbox whose box springs full and strikes through its label.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "press-toggle",
+      "title": "Press Toggle",
+      "category": "Components",
+      "description": "A switch whose thumb squashes and stretches as you drag or tap it.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "state-glyph",
+      "title": "State Glyph",
+      "category": "Components",
+      "description": "A small ring that shows pending, running, done, failed or cancelled with drawn transitions.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "glide-ledger-row",
+      "title": "Ledger Row",
+      "category": "Components",
+      "description": "A list row that glides aside on a swipe to reveal a drawer of actions, set like an entry in a printed ledger.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -1255,21 +1242,10 @@
       ]
     },
     {
-      "name": "tear-ticket",
-      "title": "Tear Ticket",
+      "name": "flick-notice",
+      "title": "Flick Notice",
       "category": "Components",
-      "description": "TODO one sentence on what Tear Ticket does.",
-      "dependencies": [
-        "framer-motion",
-        "clsx",
-        "tailwind-merge"
-      ]
-    },
-    {
-      "name": "thought-line",
-      "title": "Thought Line",
-      "category": "Components",
-      "description": "TODO one sentence on what Thought Line does.",
+      "description": "A card-stock notice that slides in, burns down a thin primary fuse and flicks away under a swipe.",
       "dependencies": [
         "framer-motion",
         "@hugeicons/react",
@@ -1279,10 +1255,34 @@
       ]
     },
     {
-      "name": "voice-pill",
-      "title": "Voice Pill",
+      "name": "stub-pass",
+      "title": "Stub Pass",
       "category": "Components",
-      "description": "TODO one sentence on what Voice Pill does.",
+      "description": "A perforated card with a primary-ink stub you can drag and tear clean off.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "ink-murmur",
+      "title": "Ink Murmur",
+      "category": "Components",
+      "description": "A mono status line that breathes while work is in progress and settles into a timed summary.",
+      "dependencies": [
+        "framer-motion",
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "hum-capsule",
+      "title": "Hum Capsule",
+      "category": "Components",
+      "description": "A dictation button that opens into a capsule with a live level meter and a running clock.",
       "dependencies": [
         "@hugeicons/react",
         "@hugeicons/core-free-icons",
@@ -1292,10 +1292,10 @@
       ]
     },
     {
-      "name": "wake-slider",
-      "title": "Wake Slider",
+      "name": "rouse-track",
+      "title": "Rouse Track",
       "category": "Components",
-      "description": "TODO one sentence on what Wake Slider does.",
+      "description": "A range input drawn as a field of bars that rise into a crest around the thumb.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -1303,10 +1303,10 @@
       ]
     },
     {
-      "name": "warm-tooltip",
-      "title": "Warm Tooltip",
+      "name": "ember-hint",
+      "title": "Ember Hint",
       "category": "Components",
-      "description": "TODO one sentence on what Warm Tooltip does.",
+      "description": "An inverted ink tooltip that stays warm, so moving between triggers glides from one label to the next.",
       "dependencies": [
         "framer-motion",
         "clsx",

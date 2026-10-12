@@ -1,0 +1,64 @@
+---
+title: Paper Stack
+description: A paper sleeve that fans out draggable note slips when opened.
+---
+
+Paper Stack holds a set of short notes behind a serif-labelled sleeve. Hover or click to open it and the slips rise out as mono-set tags that can be dragged and picked. Every surface comes from the Modus theme tokens. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="paper-stack" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add paper-stack
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/paper-stack.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PaperStack } from "@/components/ui/paper-stack";
+
+export default function Example() {
+  return <PaperStack />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default                  | Description |
+| :------------ | :------ | :----------------------- | :---------- |
+| items         | any     | DEFAULT_ITEMS            | -           |
+| label         | string  | "Margin notes"           | -           |
+| sublabel      | string  | ""                       | -           |
+| trigger       | string  | "hover"                  | -           |
+| defaultOpen   | boolean | false                    | -           |
+| closeOnSelect | boolean | true                     | -           |
+| physics       | boolean | true                     | -           |
+| drift         | number  | 0.5                      | -           |
+| onSelect      | any     | -                        | -           |
+| onOpenChange  | any     | -                        | -           |
+| folderColor   | string  | "hsl(var(--muted))"      | -           |
+| frontColor    | string  | "hsl(var(--card))"       | -           |
+| paperColor    | string  | "hsl(var(--background))" | -           |
+| itemColor     | string  | "hsl(var(--foreground))" | -           |
+| itemTextColor | string  | "hsl(var(--background))" | -           |
+| labelColor    | string  | "hsl(var(--foreground))" | -           |
+| width         | number  | 200                      | -           |
+| height        | number  | 148                      | -           |
+| radius        | number  | 14                       | -           |
+| spread        | number  | 180                      | -           |
+| lift          | number  | 26                       | -           |
+| tilt          | number  | 8                        | -           |
+| flapAngle     | number  | 34                       | -           |
+| restAngle     | number  | 16                       | -           |
+| openDuration  | number  | 520                      | -           |
+| stagger       | number  | 45                       | -           |
+| bounce        | number  | 0.3                      | -           |

@@ -1,0 +1,56 @@
+---
+title: Stretch Toggle
+description: A segmented control whose thumb stretches and squashes as it travels.
+---
+
+Mono uppercase labels sit on the muted track, and the thumb takes the page background.
+
+<ComponentPreview name="stretch-toggle" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stretch-toggle
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/stretch-toggle.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StretchToggle } from "@/components/ui/stretch-toggle";
+
+export default function Example() {
+  return <StretchToggle items={["Draft", "Review", "Publish"]} />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default                        | Description |
+| :-------------- | :------ | :----------------------------- | :---------- |
+| items           | any     | -                              | -           |
+| value           | any     | -                              | -           |
+| defaultValue    | any     | -                              | -           |
+| onChange        | any     | -                              | -           |
+| trackColor      | string  | "hsl(var(--muted))"            | -           |
+| thumbColor      | string  | "hsl(var(--background))"       | -           |
+| textColor       | string  | "hsl(var(--muted-foreground))" | -           |
+| activeTextColor | string  | "hsl(var(--foreground))"       | -           |
+| size            | string  | "md"                           | -           |
+| radius          | number  | 6                              | -           |
+| inset           | number  | 3                              | -           |
+| equalSlots      | boolean | true                           | -           |
+| stretch         | number  | 100                            | -           |
+| squash          | number  | 3                              | -           |
+| speed           | number  | 1                              | -           |
+| glide           | number  | 75                             | -           |
+| draggable       | boolean | true                           | -           |
+| disabled        | boolean | false                          | -           |
+| ariaLabel       | string  | "Toggle group"                 | -           |

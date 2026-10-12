@@ -1,0 +1,59 @@
+---
+title: Pull Launch
+description: A send button you can pull back like a slingshot and release.
+---
+
+A squircle pad in the primary colour stretches a band across a muted well, then fires a burst of particles when sent. Tapping or Enter sends too.
+
+<ComponentPreview name="pull-launch" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pull-launch
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pull-launch.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PullLaunch } from "@/components/ui/pull-launch";
+
+export default function Example() {
+  return <PullLaunch />;
+}
+```
+
+## Props
+
+| Prop        | Type    | Default                          | Description |
+| :---------- | :------ | :------------------------------- | :---------- |
+| children    | any     | -                                | -           |
+| onSend      | any     | -                                | -           |
+| padColor    | string  | "hsl(var(--primary))"            | -           |
+| iconColor   | string  | "hsl(var(--primary-foreground))" | -           |
+| accentColor | string  | "hsl(var(--primary))"            | -           |
+| wellColor   | string  | "hsl(var(--muted))"              | -           |
+| bandColor   | string  | "hsl(var(--muted-foreground))"   | -           |
+| size        | number  | 56                               | -           |
+| strokeWidth | number  | 3                                | -           |
+| armAt       | number  | 48                               | -           |
+| maxPull     | number  | 160                              | -           |
+| launchSpeed | number  | 2600                             | -           |
+| recoil      | number  | 0.2                              | -           |
+| flight      | number  | 120                              | -           |
+| particles   | number  | 14                               | -           |
+| spread      | number  | 60                               | -           |
+| axis        | string  | "any"                            | -           |
+| tapSends    | boolean | true                             | -           |
+| disabled    | boolean | false                            | -           |
+| ariaLabel   | string  | "Send"                           | -           |
+
+Ported from React Bits.

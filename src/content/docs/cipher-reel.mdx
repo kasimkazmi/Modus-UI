@@ -1,0 +1,60 @@
+---
+title: Cipher Reel
+description: A one-time code field of paper slots with serif numerals that drop in and seal on success.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="cipher-reel" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add cipher-reel
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/cipher-reel.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CipherReel } from "@/components/ui/cipher-reel";
+
+export default function Example() {
+  return <CipherReel />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                     | Description |
+| :----------- | :------ | :-------------------------- | :---------- |
+| length       | number  | 6                           | -           |
+| value        | any     | -                           | -           |
+| defaultValue | string  | ""                          | -           |
+| onChange     | any     | -                           | -           |
+| onComplete   | any     | -                           | -           |
+| status       | string  | "idle"                      | -           |
+| mask         | boolean | false                       | -           |
+| caret        | boolean | true                        | -           |
+| disabled     | boolean | false                       | -           |
+| autoFocus    | boolean | false                       | -           |
+| accentColor  | string  | `"hsl(var(--primary))"`     | -           |
+| inkColor     | string  | `"hsl(var(--foreground))"`  | -           |
+| slotColor    | string  | `"hsl(var(--muted))"`       | -           |
+| digitColor   | string  | `"hsl(var(--foreground))"`  | -           |
+| dangerColor  | string  | `"hsl(var(--destructive))"` | -           |
+| slotSize     | number  | `48`                        | -           |
+| gap          | number  | `10`                        | -           |
+| radius       | number  | `6`                         | -           |
+| bounce       | number  | 0.2                         | -           |
+| settle       | number  | 0.3                         | -           |
+| rise         | number  | 8                           | -           |
+| cascade      | number  | 20                          | -           |
+| ariaLabel    | string  | "One-time code"             | -           |

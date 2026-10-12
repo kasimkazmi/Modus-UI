@@ -1,0 +1,56 @@
+---
+title: State Glyph
+description: A small ring that shows pending, running, done, failed or cancelled with drawn transitions.
+---
+
+Marks take the foreground ink, turn to the primary colour when done and the destructive colour on failure, with mono labels that strike through on completion.
+
+<ComponentPreview name="state-glyph" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add state-glyph
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/state-glyph.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { StateGlyph } from "@/components/ui/state-glyph";
+
+export default function Example() {
+  return <StateGlyph />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                   | Description |
+| :----------- | :------ | :------------------------ | :---------- |
+| status       | string  | "pending"                 | -           |
+| progress     | any     | -                         | -           |
+| label        | any     | -                         | -           |
+| color        | string  | "hsl(var(--foreground))"  | -           |
+| doneColor    | string  | "hsl(var(--primary))"     | -           |
+| errorColor   | string  | "hsl(var(--destructive))" | -           |
+| size         | number  | 20                        | -           |
+| strokeWidth  | number  | 2                         | -           |
+| dashes       | number  | 12                        | -           |
+| fontSize     | number  | 14                        | -           |
+| spinDuration | number  | 1100                      | -           |
+| arcLength    | number  | 0.68                      | -           |
+| drawDuration | number  | 240                       | -           |
+| fillOpacity  | number  | 0.14                      | -           |
+| strike       | boolean | true                      | -           |
+| strikeDelay  | number  | 60                        | -           |
+| style        | any     | -                         | -           |
+
+Ported from React Bits.

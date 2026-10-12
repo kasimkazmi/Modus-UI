@@ -1,0 +1,59 @@
+---
+title: Cinder Trigger
+description: A commit button that burns down an undo window along its edge before it settles.
+---
+
+Cinder Trigger commits an action and then offers a short recall window, drawn as a line burning along the bottom edge. Hover pauses it and Escape recalls. Label type is mono uppercase, colours come from primary tokens. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="cinder-trigger" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add cinder-trigger
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/cinder-trigger.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CinderTrigger } from "@/components/ui/cinder-trigger";
+
+export default function Example() {
+  return <CinderTrigger />;
+}
+```
+
+## Props
+
+| Prop          | Type    | Default                          | Description |
+| :------------ | :------ | :------------------------------- | :---------- |
+| label         | string  | "Send proof"                     | -           |
+| undoLabel     | string  | "Recall"                         | -           |
+| doneLabel     | string  | "Sent"                           | -           |
+| icon          | any     | -                                | -           |
+| color         | string  | "hsl(var(--primary-foreground))" | -           |
+| background    | string  | "hsl(var(--primary))"            | -           |
+| fuseColor     | string  | "hsl(var(--primary-foreground))" | -           |
+| size          | string  | "md"                             | -           |
+| radius        | number  | 8                                | -           |
+| undoWindow    | number  | 4000                             | -           |
+| fuse          | string  | "bottom"                         | -           |
+| fuseThickness | number  | 1.5                              | -           |
+| crossfadeMs   | number  | 200                              | -           |
+| commitOn      | string  | "press"                          | -           |
+| pauseOnHover  | boolean | true                             | -           |
+| settle        | string  | "reset"                          | -           |
+| disabled      | boolean | false                            | -           |
+| onCommit      | any     | -                                | -           |
+| onUndo        | any     | -                                | -           |
+| onFuseEnd     | any     | -                                | -           |
+| onPhaseChange | any     | -                                | -           |
+| type          | string  | "button"                         | -           |

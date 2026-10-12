@@ -1,0 +1,58 @@
+---
+title: Orbit Knob
+description: A flickable rotary knob with a tracer tail in theme ink and a serif readout.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="orbit-knob" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add orbit-knob
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/orbit-knob.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { OrbitKnob } from "@/components/ui/orbit-knob";
+
+export default function Example() {
+  return <OrbitKnob />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                    | Description |
+| :----------- | :------ | :------------------------- | :---------- |
+| value        | any     | -                          | -           |
+| defaultValue | number  | `38`                       | -           |
+| min          | number  | 0                          | -           |
+| max          | number  | 100                        | -           |
+| step         | number  | 1                          | -           |
+| unit         | string  | "%"                        | -           |
+| label        | string  | `"Gain"`                   | -           |
+| accent       | string  | `"hsl(var(--primary))"`    | -           |
+| ink          | string  | `"hsl(var(--foreground))"` | -           |
+| size         | number  | 250                        | -           |
+| sweep        | number  | `270`                      | -           |
+| thickness    | number  | `3`                        | -           |
+| speed        | number  | 25                         | -           |
+| tapBounce    | number  | 0.2                        | -           |
+| flickBounce  | number  | 0.1                        | -           |
+| momentum     | number  | 1                          | -           |
+| cometReach   | number  | 180                        | -           |
+| cometWidth   | number  | 12                         | -           |
+| disabled     | boolean | false                      | -           |
+| onChange     | any     | -                          | -           |
+| onChangeEnd  | any     | -                          | -           |

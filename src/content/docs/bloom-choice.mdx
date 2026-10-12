@@ -1,0 +1,57 @@
+---
+title: Bloom Choice
+description: A row of mono chips where the chosen one swells with a springy pop.
+---
+
+Bloom Choice is a single-choice radio group of mono uppercase chips. Picking one makes it swell softly into the primary colour while its neighbours yield. Arrow keys, Home and End all work. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="bloom-choice" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add bloom-choice
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bloom-choice.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { BloomChoice } from "@/components/ui/bloom-choice";
+
+export default function Example() {
+  return <BloomChoice />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default                          | Description |
+| :-------------- | :------ | :------------------------------- | :---------- |
+| items           | any     | DEFAULT_ITEMS                    | -           |
+| value           | any     | -                                | -           |
+| defaultValue    | any     | -                                | -           |
+| onChange        | any     | -                                | -           |
+| chipColor       | string  | "hsl(var(--muted))"              | -           |
+| activeColor     | string  | "hsl(var(--primary))"            | -           |
+| textColor       | string  | "hsl(var(--muted-foreground))"   | -           |
+| activeTextColor | string  | "hsl(var(--primary-foreground))" | -           |
+| size            | string  | "md"                             | -           |
+| gap             | number  | 8                                | -           |
+| radius          | number  | 18                               | -           |
+| swell           | number  | 0.2                              | -           |
+| barge           | number  | 6                                | -           |
+| shrink          | number  | 0.05                             | -           |
+| jelly           | number  | 1                                | -           |
+| bounce          | number  | 0.25                             | -           |
+| stagger         | number  | 22                               | -           |
+| stiffness       | number  | 580                              | -           |
+| disabled        | boolean | false                            | -           |
+| ariaLabel       | string  | "Options"                        | -           |

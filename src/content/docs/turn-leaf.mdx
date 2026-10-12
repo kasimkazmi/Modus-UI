@@ -1,0 +1,64 @@
+---
+title: Turn Leaf
+description: A paper leaf you drag, click or key-press to turn over, with a soft tilt and sheen.
+---
+
+Turn Leaf presents two faces, recto and verso, on a bordered card-coloured sheet. It tilts toward the pointer, turns with spring physics when dragged or pressed, and fades instead of rotating under reduced motion. Ported from React Bits and restyled for Modus.
+
+<ComponentPreview name="turn-leaf" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add turn-leaf
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/turn-leaf.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TurnLeaf } from "@/components/ui/turn-leaf";
+
+export default function Example() {
+  return <TurnLeaf />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                  | Description |
+| :------------- | :------ | :----------------------- | :---------- |
+| front          | any     | null                     | -           |
+| back           | any     | null                     | -           |
+| flipped        | any     | -                        | -           |
+| defaultFlipped | boolean | false                    | -           |
+| onFlipChange   | any     | -                        | -           |
+| axis           | string  | "y"                      | -           |
+| flipOnClick    | boolean | true                     | -           |
+| draggable      | boolean | true                     | -           |
+| dragDistance   | number  | 0                        | -           |
+| tilt           | boolean | true                     | -           |
+| tiltMax        | number  | 8                        | -           |
+| glare          | boolean | true                     | -           |
+| glareOpacity   | number  | 0.22                     | -           |
+| hoverScale     | number  | 1.03                     | -           |
+| perspective    | number  | 1100                     | -           |
+| stiffness      | number  | 170                      | -           |
+| damping        | number  | 20                       | -           |
+| width          | number  | 280                      | -           |
+| height         | number  | 380                      | -           |
+| radius         | number  | 10                       | -           |
+| background     | string  | "hsl(var(--card))"       | -           |
+| color          | string  | "hsl(var(--foreground))" | -           |
+| shadow         | boolean | true                     | -           |
+| shadowColor    | string  | "hsl(var(--foreground))" | -           |
+| shadowOpacity  | number  | 0.3                      | -           |
+| disabled       | boolean | false                    | -           |
+| ariaLabel      | string  | "Turn leaf"              | -           |

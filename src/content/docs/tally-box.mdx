@@ -1,0 +1,55 @@
+---
+title: Tally Box
+description: A checkbox whose box springs full and strikes through its label.
+---
+
+Labels are set in the heading serif, the box is a near-square in the primary colour. Good for checklists where finishing an item should feel satisfying.
+
+<ComponentPreview name="tally-box" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tally-box
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tally-box.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TallyBox } from "@/components/ui/tally-box";
+
+export default function Example() {
+  return <TallyBox />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                          | Description |
+| :------------- | :------ | :------------------------------- | :---------- |
+| label          | string  | "Proof the galleys"              | -           |
+| checked        | any     | -                                | -           |
+| defaultChecked | boolean | false                            | -           |
+| onChange       | any     | -                                | -           |
+| disabled       | boolean | false                            | -           |
+| color          | string  | "hsl(var(--foreground))"         | -           |
+| fillColor      | string  | "hsl(var(--primary))"            | -           |
+| checkColor     | string  | "hsl(var(--primary-foreground))" | -           |
+| boxSize        | number  | 28                               | -           |
+| boxRadius      | number  | 4                                | -           |
+| fontSize       | number  | 20                               | -           |
+| bounce         | number  | 0.2                              | -           |
+| strikeLag      | number  | 0.12                             | -           |
+| doneOpacity    | number  | 0.42                             | -           |
+| strike         | string  | "left"                           | -           |
+| ariaLabel      | any     | -                                | -           |
+
+Ported from React Bits.

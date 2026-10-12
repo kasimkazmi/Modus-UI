@@ -1,0 +1,62 @@
+---
+title: Hum Capsule
+description: A dictation button that opens into a capsule with a live level meter and a running clock.
+---
+
+At rest it is a soft muted square in foreground ink; while listening it widens and its meter and timer take the primary token. Slide left to cancel, or hold to talk.
+
+<ComponentPreview name="hum-capsule" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hum-capsule
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hum-capsule.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { HumCapsule } from "@/components/ui/hum-capsule";
+
+export default function Example() {
+  return <HumCapsule />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default                  | Description |
+| :------------- | :------ | :----------------------- | :---------- |
+| accentColor    | string  | "hsl(var(--primary))"    | -           |
+| iconColor      | string  | "hsl(var(--foreground))" | -           |
+| background     | string  | "hsl(var(--muted))"      | -           |
+| size           | number  | 28                       | -           |
+| shape          | string  | "rounded"                | -           |
+| reach          | number  | 8                        | -           |
+| showTime       | boolean | true                     | -           |
+| waveform       | boolean | true                     | -           |
+| slideToCancel  | boolean | true                     | -           |
+| cancelDistance | number  | 64                       | -           |
+| attack         | number  | 40                       | -           |
+| release        | number  | 240                      | -           |
+| sensitivity    | number  | 1                        | -           |
+| floor          | number  | 0.1                      | -           |
+| openDuration   | number  | 200                      | -           |
+| pressScale     | number  | 0.95                     | -           |
+| mode           | string  | "auto"                   | -           |
+| holdAfter      | number  | 300                      | -           |
+| reactive       | string  | "simulated"              | -           |
+| disabled       | boolean | false                    | -           |
+| ariaLabel      | string  | "Dictate"                | -           |
+| onStart        | any     | -                        | -           |
+| onStop         | any     | -                        | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

@@ -1,0 +1,48 @@
+---
+title: Mirror Plate
+description: A member pass whose surface mirrors the webcam through a metallic glass filter.
+---
+
+The plate is tinted from the theme background, with a serif name and mono meta lines. Ported from React Bits.
+
+<ComponentPreview name="mirror-plate" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mirror-plate
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mirror-plate.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { MirrorPlate } from "@/components/ui/mirror-plate";
+
+export default function Example() {
+  return <MirrorPlate />;
+}
+```
+
+## Props
+
+| Prop                 | Type   | Default                         | Description                                 |
+| :------------------- | :----- | :------------------------------ | :------------------------------------------ |
+| blurStrength         | number | 12                              | The strength of the blur effect.            |
+| color                | string | "hsl(var(--foreground))"        | Text color overlay.                         |
+| metalness            | number | 1                               | The metallic effect intensity.              |
+| roughness            | number | 0.4                             | The roughness of the reflection.            |
+| overlayColor         | string | "hsl(var(--background) / 0.35)" | Background overlay color.                   |
+| displacementStrength | number | 20                              | How much the glass distorts the background. |
+| noiseScale           | number | 1                               | The scale of the noise filter.              |
+| specularConstant     | number | 1.2                             | The shininess of the reflection.            |
+| grayscale            | number | 1                               | Grayscale strength of the webcam feed.      |
+| glassDistortion      | number | 0                               | The glass displacement effect.              |
+| className            | string | -                               | -                                           |

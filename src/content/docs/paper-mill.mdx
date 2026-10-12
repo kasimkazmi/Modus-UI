@@ -1,0 +1,62 @@
+---
+title: Paper Mill
+description: A list of cards you drag into a slot that cuts them into falling strips.
+---
+
+Built for discarding drafts with a little ceremony: the slot and strips take the foreground ink, and the cards are whatever you render. Reordering and keyboard delete are built in.
+
+<ComponentPreview name="paper-mill" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add paper-mill
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/paper-mill.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PaperMill } from "@/components/ui/paper-mill";
+
+export default function Example() {
+  return <PaperMill />;
+}
+```
+
+## Props
+
+| Prop            | Type    | Default                  | Description |
+| :-------------- | :------ | :----------------------- | :---------- |
+| items           | any     | []                       | -           |
+| renderItem      | any     | -                        | -           |
+| onShred         | any     | -                        | -           |
+| onReorder       | any     | -                        | -           |
+| width           | number  | 340                      | -           |
+| height          | number  | 460                      | -           |
+| inset           | number  | 14                       | -           |
+| gap             | number  | 10                       | -           |
+| slitHeight      | number  | 4                        | -           |
+| fallHeight      | number  | 140                      | -           |
+| feedSpeed       | number  | 180                      | -           |
+| bite            | number  | 18                       | -           |
+| autoFeed        | boolean | true                     | -           |
+| stripWidth      | number  | 10                       | -           |
+| curl            | number  | 1                        | -           |
+| autoAnimate     | boolean | false                    | -           |
+| loop            | boolean | false                    | -           |
+| loopAfterDelete | boolean | false                    | -           |
+| dragTilt        | number  | 6                        | -           |
+| lift            | number  | 1.02                     | -           |
+| slitColor       | string  | "hsl(var(--foreground))" | -           |
+| color           | string  | "hsl(var(--foreground))" | -           |
+| disabled        | boolean | false                    | -           |
+
+Ported from React Bits.

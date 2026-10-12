@@ -1,0 +1,58 @@
+---
+title: Swipe Confirm
+description: A drag-to-confirm track for actions that should not happen by accident.
+---
+
+The track sits on muted paper with a hairline border and mono caps. Return a promise from onConfirm to show a pending state, then a signed or failed state.
+
+<ComponentPreview name="swipe-confirm" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swipe-confirm
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swipe-confirm.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { SwipeConfirm } from "@/components/ui/swipe-confirm";
+
+export default function Example() {
+  return <SwipeConfirm />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                         | Description |
+| :----------- | :------ | :------------------------------ | :---------- |
+| label        | string  | "Slide to sign"                 | -           |
+| doneLabel    | string  | "Signed"                        | -           |
+| errorLabel   | string  | "Could not sign"                | -           |
+| onConfirm    | any     | -                               | -           |
+| onDone       | any     | -                               | -           |
+| onError      | any     | -                               | -           |
+| trackColor   | string  | "hsl(var(--muted))"             | -           |
+| handleColor  | string  | "hsl(var(--primary))"           | -           |
+| successColor | string  | "hsl(var(--accent-foreground))" | -           |
+| dangerColor  | string  | "hsl(var(--destructive))"       | -           |
+| width        | number  | 280                             | -           |
+| height       | number  | 56                              | -           |
+| radius       | number  | 10                              | -           |
+| speed        | number  | 50                              | -           |
+| returnBounce | number  | 0.38                            | -           |
+| landingDip   | number  | 0.026                           | -           |
+| holdMs       | number  | 1500                            | -           |
+| disabled     | boolean | false                           | -           |
+| icon         | any     | -                               | -           |
+
+Ported from React Bits.

@@ -1,0 +1,61 @@
+---
+title: Rouse Track
+description: A range input drawn as a field of bars that rise into a crest around the thumb.
+---
+
+Bars rest on the border token and fill with the primary ink up to the value, which is printed alongside. The crest follows the pointer and glides as you drag.
+
+<ComponentPreview name="rouse-track" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add rouse-track
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/rouse-track.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RouseTrack } from "@/components/ui/rouse-track";
+
+export default function Example() {
+  return <RouseTrack ariaLabel="Leading" />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 50                    | -           |
+| onChange     | any     | -                     | -           |
+| min          | number  | 0                     | -           |
+| max          | number  | 100                   | -           |
+| step         | number  | 1                     | -           |
+| bars         | number  | 48                    | -           |
+| height       | number  | 56                    | -           |
+| restHeight   | number  | 12                    | -           |
+| gap          | number  | 4                     | -           |
+| fillColor    | string  | "hsl(var(--primary))" | -           |
+| trackColor   | string  | "hsl(var(--border))"  | -           |
+| crestColor   | string  | ""                    | -           |
+| sensitivity  | number  | 1                     | -           |
+| reach        | number  | 6                     | -           |
+| skew         | number  | 0.6                   | -           |
+| glide        | number  | 0.3                   | -           |
+| smoothing    | number  | 100                   | -           |
+| showValue    | boolean | true                  | -           |
+| formatValue  | any     | -                     | -           |
+| disabled     | boolean | false                 | -           |
+| ariaLabel    | string  | "Value"               | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

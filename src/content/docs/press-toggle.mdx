@@ -1,0 +1,57 @@
+---
+title: Press Toggle
+description: A switch whose thumb squashes and stretches as you drag or tap it.
+---
+
+A rounded-rectangle track on muted paper fills with the primary colour when on; the label is set in mono caps.
+
+<ComponentPreview name="press-toggle" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add press-toggle
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/press-toggle.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { PressToggle } from "@/components/ui/press-toggle";
+
+export default function Example() {
+  return <PressToggle />;
+}
+```
+
+## Props
+
+| Prop           | Type    | Default               | Description |
+| :------------- | :------ | :-------------------- | :---------- |
+| checked        | any     | -                     | -           |
+| defaultChecked | boolean | false                 | -           |
+| onChange       | any     | -                     | -           |
+| label          | string  | "Draft mode"          | -           |
+| disabled       | boolean | false                 | -           |
+| trackColor     | string  | "hsl(var(--muted))"   | -           |
+| trackOnColor   | string  | "hsl(var(--primary))" | -           |
+| thumbColor     | string  | ""                    | -           |
+| thumbOnColor   | string  | ""                    | -           |
+| width          | number  | 76                    | -           |
+| height         | number  | 38                    | -           |
+| radius         | number  | 10                    | -           |
+| speed          | number  | 50                    | -           |
+| stretch        | number  | 36                    | -           |
+| hoverScale     | number  | 1.035                 | -           |
+| colorDuration  | number  | 320                   | -           |
+| ariaLabel      | any     | -                     | -           |
+| id             | any     | -                     | -           |
+
+Ported from React Bits.

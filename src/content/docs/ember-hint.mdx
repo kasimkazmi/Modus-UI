@@ -1,0 +1,61 @@
+---
+title: Ember Hint
+description: An inverted ink tooltip that stays warm, so moving between triggers glides from one label to the next.
+---
+
+Labels are small uppercase mono on a foreground slab, matching the theme in light and dark. After the first one opens, neighbours show instantly and the tooltip travels across. Wrap triggers in `EmberHintGroup` to share that warm state.
+
+<ComponentPreview name="ember-hint" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ember-hint
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ember-hint.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { EmberHint } from "@/components/ui/ember-hint";
+
+export default function Example() {
+  return (
+    <EmberHint content="Bold">
+      <button>Bold</button>
+    </EmberHint>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type    | Default                  | Description |
+| :----------- | :------ | :----------------------- | :---------- |
+| content      | any     | -                        | -           |
+| shortcut     | any     | -                        | -           |
+| children     | any     | -                        | -           |
+| side         | string  | "top"                    | -           |
+| delay        | any     | -                        | -           |
+| warmWindow   | any     | -                        | -           |
+| surfaceColor | string  | "hsl(var(--foreground))" | -           |
+| inkColor     | string  | "hsl(var(--background))" | -           |
+| size         | string  | "md"                     | -           |
+| radius       | number  | 3                        | -           |
+| gap          | number  | 8                        | -           |
+| arrow        | boolean | true                     | -           |
+| popDuration  | number  | 160                      | -           |
+| popScale     | number  | 0.94                     | -           |
+| popBlur      | number  | 4                        | -           |
+| showFuse     | boolean | false                    | -           |
+| longPress    | number  | 500                      | -           |
+| disabled     | boolean | false                    | -           |
+
+Ported from React Bits(MIT, © 2026 Meng To).

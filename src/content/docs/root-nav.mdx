@@ -1,0 +1,54 @@
+---
+title: Root Nav
+description: A docs-style navigation tree whose hairline roots draw out to each open chapter.
+---
+
+TODO 2-3 sentences on why this component is useful.
+
+<ComponentPreview name="root-nav" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add root-nav
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/root-nav.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { RootNav } from "@/components/ui/root-nav";
+
+export default function Example() {
+  return <RootNav />;
+}
+```
+
+## Props
+
+| Prop          | Type   | Default                    | Description |
+| :------------ | :----- | :------------------------- | :---------- |
+| items         | any    | DEFAULT_ITEMS              | -           |
+| defaultOpen   | number | 0                          | -           |
+| defaultActive | string | ""                         | -           |
+| onSelect      | any    | -                          | -           |
+| onToggle      | any    | -                          | -           |
+| color         | string | `"hsl(var(--foreground))"` | -           |
+| accentColor   | string | `"hsl(var(--primary))"`    | -           |
+| lineColor     | string | `"hsl(var(--border))"`     | -           |
+| width         | number | 240                        | -           |
+| rowHeight     | number | 36                         | -           |
+| indent        | number | `36`                       | -           |
+| trunk         | number | 14                         | -           |
+| radius        | number | `4`                        | -           |
+| lineWidth     | number | 1.5                        | -           |
+| fontSize      | number | 14                         | -           |
+| drawDuration  | number | 400                        | -           |
+| foldDuration  | number | 300                        | -           |

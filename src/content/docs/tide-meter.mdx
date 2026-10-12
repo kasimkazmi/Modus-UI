@@ -1,0 +1,56 @@
+---
+title: Tide Meter
+description: A vertical level meter whose fill sloshes as it moves.
+---
+
+The vessel is a muted column with a hairline edge, filled with the primary colour and read out in mono numerals. Drag or use arrow keys to set the level.
+
+<ComponentPreview name="tide-meter" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tide-meter
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tide-meter.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { TideMeter } from "@/components/ui/tide-meter";
+
+export default function Example() {
+  return <TideMeter />;
+}
+```
+
+## Props
+
+| Prop         | Type    | Default               | Description |
+| :----------- | :------ | :-------------------- | :---------- |
+| value        | any     | -                     | -           |
+| defaultValue | number  | 60                    | -           |
+| onChange     | any     | -                     | -           |
+| interactive  | boolean | true                  | -           |
+| showValue    | boolean | true                  | -           |
+| disabled     | boolean | false                 | -           |
+| liquidColor  | string  | "hsl(var(--primary))" | -           |
+| glassColor   | string  | "hsl(var(--muted))"   | -           |
+| width        | number  | 76                    | -           |
+| height       | number  | 200                   | -           |
+| radius       | number  | 12                    | -           |
+| ticks        | number  | 4                     | -           |
+| viscosity    | number  | 0.15                  | -           |
+| tilt         | number  | 0.45                  | -           |
+| splash       | number  | 0.42                  | -           |
+| unit         | string  | "%"                   | -           |
+| ariaLabel    | string  | "Level"               | -           |
+
+Ported from React Bits.

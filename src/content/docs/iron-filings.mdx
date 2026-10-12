@@ -1,0 +1,54 @@
+---
+title: Iron Filings
+description: A field of fine ink filings that turn to face the pointer, like iron around a lodestone.
+---
+
+A field of fine filings in alternating ink and accent, ported from React Bits (MIT). It renders a CSS grid of simple `<span>` elements and uses a single window event listener to calculate the geometric angle (using `Math.acos()`) from each line to your mouse, applying the rotation via CSS custom properties.
+
+<ComponentPreview name="iron-filings" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add iron-filings
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/iron-filings.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { IronFilings } from "@/components/ui/iron-filings";
+
+export default function Example() {
+  return (
+    <div className="flex h-screen w-full items-center justify-center bg-background">
+      <IronFilings
+        rows={9}
+        columns={9}
+        lineColor="hsl(var(--primary))"
+        lineWidth="2px"
+        lineHeight="40px"
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop            | Type     | Default                    | Description                               |
+| :-------------- | :------- | :------------------------- | :---------------------------------------- |
+| `rows`          | `number` | `13`                       | Number of rows of lines.                  |
+| `columns`       | `number` | `13`                       | Number of columns of lines.               |
+| `containerSize` | `string` | `"70vmin"`                 | CSS size of the square container.         |
+| `lineColor`     | `string` | `"hsl(var(--foreground))"` | Colour of the lines.                      |
+| `lineWidth`     | `string` | `"0.4vmin"`                | CSS width of each line.                   |
+| `lineHeight`    | `string` | `"3.6vmin"`                | CSS length of each line.                  |
+| `baseAngle`     | `number` | `45`                       | Resting rotation of the lines in degrees. |
