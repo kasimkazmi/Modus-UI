@@ -288,7 +288,12 @@ export function PolishPane({
 
   useEffect(() => {
     const s = sim.current;
-    return () => cancelAnimationFrame(s.raf);
+    return () => {
+      cancelAnimationFrame(s.raf);
+      // Reset so a remount (e.g. React Strict Mode) can schedule frames again.
+      s.raf = 0;
+      s.last = 0;
+    };
   }, []);
 
   return (

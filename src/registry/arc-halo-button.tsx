@@ -40,7 +40,6 @@ uniform float u_arcs;
 uniform float u_flash;
 uniform vec3 u_ink;
 uniform vec3 u_card;
-uniform vec3 u_paper;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
 float noise(vec2 p){
   vec2 i=floor(p), f=fract(p);
@@ -64,11 +63,13 @@ void main(){
   float d = sdRBox(p, hs, 0.14);
   float t = u_time;
   float hover = clamp(u_arcs / 6.0, 0.0, 1.0);
-  vec3 col = u_paper;
+  // Premultiplied output: everything outside the plate stays transparent so
+  // the dotted field shows through instead of a flat rectangle.
   float plate = 1.0 - smoothstep(-0.004, 0.004, d);
   vec3 plateCol = u_card * (0.94 + 0.08 * fbm(p * 9.0));
   plateCol = mix(plateCol, u_ink, exp(d * 9.0) * (0.12 + hover * 0.25));
-  col = mix(col, plateCol, plate);
+  vec3 col = plateCol * plate;
+  float alpha = plate;
 
   float a = atan(p.y, p.x);
   vec3 arcCol = vec3(0.0);
@@ -84,10 +85,13 @@ void main(){
   }
   float outerMask = 1.0 - smoothstep(0.04, 0.15, d);
   float ink = clamp(arcCol.x * (0.55 + 0.45 * hover), 0.0, 1.0) * outerMask;
-  col = mix(col, u_ink, ink);
+  col = col * (1.0 - ink) + u_ink * ink;
+  alpha = alpha * (1.0 - ink) + ink;
   float ring = 0.006 / (abs(d) + 0.006);
-  col = mix(col, u_ink, clamp(ring * u_flash, 0.0, 1.0) * outerMask);
-  gl_FragColor = vec4(col, 1.0);
+  float flash = clamp(ring * u_flash, 0.0, 1.0) * outerMask;
+  col = col * (1.0 - flash) + u_ink * flash;
+  alpha = alpha * (1.0 - flash) + flash;
+  gl_FragColor = vec4(col, alpha);
 }
 `;
 
@@ -160,7 +164,7 @@ export function ArcHaloButton({
     const btnCanvas = glRef.current;
     if (!root || !bgCanvas || !btnCanvas) return;
     const bg = bgCanvas.getContext("webgl", { alpha: false, antialias: false });
-    const gl = btnCanvas.getContext("webgl", { alpha: false, antialias: true });
+    const gl = btnCanvas.getContext("webgl", { alpha: true, antialias: true });
     if (!bg || !gl) return;
     const bgProg = createProgram(bg, BG_FS);
     const btnProg = createProgram(gl, BTN_FS);
@@ -174,7 +178,6 @@ export function ArcHaloButton({
     const bgInk = bg.getUniformLocation(bgProg, "u_ink");
     const uInk = gl.getUniformLocation(btnProg, "u_ink");
     const uCard = gl.getUniformLocation(btnProg, "u_card");
-    const uPaper = gl.getUniformLocation(btnProg, "u_paper");
     const applyTheme = () => {
       const paper = readToken("--background");
       bg.useProgram(bgProg);
@@ -183,7 +186,6 @@ export function ArcHaloButton({
       gl.useProgram(btnProg);
       gl.uniform3fv(uInk, readToken("--primary"));
       gl.uniform3fv(uCard, readToken("--card"));
-      gl.uniform3fv(uPaper, paper);
     };
     applyTheme();
     const themeObserver = new MutationObserver(() => {

@@ -33,25 +33,25 @@ export default function Example() {
 
 ## Props
 
-| Prop            | Type    | Default                          | Description |
-| :-------------- | :------ | :------------------------------- | :---------- |
-| items           | any     | DEFAULT_ITEMS                    | -           |
-| value           | any     | -                                | -           |
-| defaultValue    | any     | -                                | -           |
-| onChange        | any     | -                                | -           |
-| chipColor       | string  | "hsl(var(--muted))"              | -           |
-| activeColor     | string  | "hsl(var(--primary))"            | -           |
-| textColor       | string  | "hsl(var(--muted-foreground))"   | -           |
-| activeTextColor | string  | "hsl(var(--primary-foreground))" | -           |
-| size            | string  | "md"                             | -           |
-| gap             | number  | 8                                | -           |
-| radius          | number  | 18                               | -           |
-| swell           | number  | 0.2                              | -           |
-| barge           | number  | 6                                | -           |
-| shrink          | number  | 0.05                             | -           |
-| jelly           | number  | 1                                | -           |
-| bounce          | number  | 0.25                             | -           |
-| stagger         | number  | 22                               | -           |
-| stiffness       | number  | 580                              | -           |
-| disabled        | boolean | false                            | -           |
-| ariaLabel       | string  | "Options"                        | -           |
+| Prop            | Type    | Default                          | Description                                        |
+| :-------------- | :------ | :------------------------------- | :------------------------------------------------- |
+| items           | any     | DEFAULT_ITEMS                    | Choices, as strings or item objects.               |
+| value           | any     | -                                | Controlled selected value.                         |
+| defaultValue    | any     | -                                | Initial value when uncontrolled.                   |
+| onChange        | any     | -                                | Called with the new value and index.               |
+| chipColor       | string  | "hsl(var(--muted))"              | Chip background colour.                            |
+| activeColor     | string  | "hsl(var(--primary))"            | Selected chip colour.                              |
+| textColor       | string  | "hsl(var(--muted-foreground))"   | Chip text colour.                                  |
+| activeTextColor | string  | "hsl(var(--primary-foreground))" | Selected chip text colour.                         |
+| size            | string  | "md"                             | Chip size: "sm", "md" or "lg".                     |
+| gap             | number  | 8                                | Space between chips in pixels.                     |
+| radius          | number  | 18                               | Chip corner radius in pixels.                      |
+| swell           | number  | 0.2                              | How much the chosen chip grows.                    |
+| barge           | number  | 6                                | How far neighbours are pushed aside, in pixels.    |
+| shrink          | number  | 0.05                             | How much neighbours shrink.                        |
+| jelly           | number  | 1                                | Strength of the wobble.                            |
+| bounce          | number  | 0.25                             | Spring bounce.                                     |
+| stagger         | number  | 22                               | Delay between neighbour reactions in milliseconds. |
+| stiffness       | number  | 580                              | Spring stiffness.                                  |
+| disabled        | boolean | false                            | Disables selection.                                |
+| ariaLabel       | string  | "Options"                        | Accessible label for the group.                    |

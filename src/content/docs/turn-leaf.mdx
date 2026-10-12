@@ -33,32 +33,32 @@ export default function Example() {
 
 ## Props
 
-| Prop           | Type    | Default                  | Description |
-| :------------- | :------ | :----------------------- | :---------- |
-| front          | any     | null                     | -           |
-| back           | any     | null                     | -           |
-| flipped        | any     | -                        | -           |
-| defaultFlipped | boolean | false                    | -           |
-| onFlipChange   | any     | -                        | -           |
-| axis           | string  | "y"                      | -           |
-| flipOnClick    | boolean | true                     | -           |
-| draggable      | boolean | true                     | -           |
-| dragDistance   | number  | 0                        | -           |
-| tilt           | boolean | true                     | -           |
-| tiltMax        | number  | 8                        | -           |
-| glare          | boolean | true                     | -           |
-| glareOpacity   | number  | 0.22                     | -           |
-| hoverScale     | number  | 1.03                     | -           |
-| perspective    | number  | 1100                     | -           |
-| stiffness      | number  | 170                      | -           |
-| damping        | number  | 20                       | -           |
-| width          | number  | 280                      | -           |
-| height         | number  | 380                      | -           |
-| radius         | number  | 10                       | -           |
-| background     | string  | "hsl(var(--card))"       | -           |
-| color          | string  | "hsl(var(--foreground))" | -           |
-| shadow         | boolean | true                     | -           |
-| shadowColor    | string  | "hsl(var(--foreground))" | -           |
-| shadowOpacity  | number  | 0.3                      | -           |
-| disabled       | boolean | false                    | -           |
-| ariaLabel      | string  | "Turn leaf"              | -           |
+| Prop           | Type    | Default                  | Description                                                      |
+| :------------- | :------ | :----------------------- | :--------------------------------------------------------------- |
+| front          | any     | null                     | Content of the front face.                                       |
+| back           | any     | null                     | Content of the back face.                                        |
+| flipped        | any     | -                        | Controlled flipped state.                                        |
+| defaultFlipped | boolean | false                    | Initial flipped state when uncontrolled.                         |
+| onFlipChange   | any     | -                        | Called with the new flipped state.                               |
+| axis           | string  | "y"                      | Axis the leaf turns around: "x" or "y".                          |
+| flipOnClick    | boolean | true                     | Turn the leaf on click.                                          |
+| draggable      | boolean | true                     | Allow turning the leaf by dragging.                              |
+| dragDistance   | number  | 0                        | Drag distance in pixels to commit a turn; 0 uses half the width. |
+| tilt           | boolean | true                     | Tilt the leaf toward the pointer on hover.                       |
+| tiltMax        | number  | 8                        | Maximum hover tilt in degrees.                                   |
+| glare          | boolean | true                     | Show a moving glare highlight.                                   |
+| glareOpacity   | number  | 0.22                     | Opacity of the glare highlight.                                  |
+| hoverScale     | number  | 1.03                     | Scale applied on hover.                                          |
+| perspective    | number  | 1100                     | CSS perspective in pixels.                                       |
+| stiffness      | number  | 170                      | Spring stiffness of the turn.                                    |
+| damping        | number  | 20                       | Spring damping of the turn.                                      |
+| width          | number  | 280                      | Leaf width in pixels.                                            |
+| height         | number  | 380                      | Leaf height in pixels.                                           |
+| radius         | number  | 10                       | Corner radius in pixels.                                         |
+| background     | string  | "hsl(var(--card))"       | Face background colour.                                          |
+| color          | string  | "hsl(var(--foreground))" | Face text colour.                                                |
+| shadow         | boolean | true                     | Show a drop shadow.                                              |
+| shadowColor    | string  | "hsl(var(--foreground))" | Drop shadow colour.                                              |
+| shadowOpacity  | number  | 0.3                      | Drop shadow opacity.                                             |
+| disabled       | boolean | false                    | Disables turning and tilt.                                       |
+| ariaLabel      | string  | "Turn leaf"              | Accessible label for the leaf.                                   |

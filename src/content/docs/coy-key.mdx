@@ -33,25 +33,25 @@ export default function Example() {
 
 ## Props
 
-| Prop           | Type    | Default                                                            | Description |
-| :------------- | :------ | :----------------------------------------------------------------- | :---------- |
-| children       | any     | -                                                                  | -           |
-| taunts         | any     | ["Reach for it", "Not quite", "Closer", "Patience", "Fine, yours"] | -           |
-| notice         | string  | ""                                                                 | -           |
-| inkColor       | string  | "hsl(var(--foreground))"                                           | -           |
-| contrastColor  | string  | "hsl(var(--background))"                                           | -           |
-| fieldHeight    | number  | 240                                                                | -           |
-| reach          | number  | 72                                                                 | -           |
-| radius         | number  | 120                                                                | -           |
-| falloff        | number  | 2                                                                  | -           |
-| fleeDuration   | number  | 130                                                                | -           |
-| returnDuration | number  | 620                                                                | -           |
-| returnBounce   | number  | 0.1                                                                | -           |
-| axis           | string  | "both"                                                             | -           |
-| wall           | string  | "clamp"                                                            | -           |
-| patience       | number  | 4                                                                  | -           |
-| disabled       | boolean | false                                                              | -           |
-| onDodge        | any     | -                                                                  | -           |
-| onRelent       | any     | -                                                                  | -           |
-| onCatch        | any     | -                                                                  | -           |
-| style          | any     | -                                                                  | -           |
+| Prop           | Type    | Default                                                            | Description                                                   |
+| :------------- | :------ | :----------------------------------------------------------------- | :------------------------------------------------------------ |
+| children       | any     | -                                                                  | Key label, or a render function receiving the dodge state.    |
+| taunts         | any     | ["Reach for it", "Not quite", "Closer", "Patience", "Fine, yours"] | Labels shown in turn as the key dodges.                       |
+| notice         | string  | ""                                                                 | Caption shown beneath the field.                              |
+| inkColor       | string  | "hsl(var(--foreground))"                                           | Key fill colour.                                              |
+| contrastColor  | string  | "hsl(var(--background))"                                           | Key text colour.                                              |
+| fieldHeight    | number  | 240                                                                | Height of the play field in pixels.                           |
+| reach          | number  | 72                                                                 | Distance the key flees per dodge, in pixels.                  |
+| radius         | number  | 120                                                                | Pointer distance at which the key starts fleeing.             |
+| falloff        | number  | 2                                                                  | How sharply the flee strength drops with distance.            |
+| fleeDuration   | number  | 130                                                                | Duration of a dodge in milliseconds.                          |
+| returnDuration | number  | 620                                                                | Duration of the return to rest in milliseconds.               |
+| returnBounce   | number  | 0.1                                                                | Spring bounce on the return to rest.                          |
+| axis           | string  | "both"                                                             | Axes the key may move along: "x", "y" or "both".              |
+| wall           | string  | "clamp"                                                            | Edge behaviour: "clamp" stops at the edge, "bounce" rebounds. |
+| patience       | number  | 4                                                                  | Dodges before the key gives in and can be caught.             |
+| disabled       | boolean | false                                                              | Disables dodging and clicks.                                  |
+| onDodge        | any     | -                                                                  | Called with the dodge count after each dodge.                 |
+| onRelent       | any     | -                                                                  | Called when the key gives in.                                 |
+| onCatch        | any     | -                                                                  | Called when the key is clicked.                               |
+| style          | any     | -                                                                  | Inline styles for the root.                                   |

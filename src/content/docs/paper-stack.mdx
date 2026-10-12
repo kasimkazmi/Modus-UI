@@ -33,32 +33,32 @@ export default function Example() {
 
 ## Props
 
-| Prop          | Type    | Default                  | Description |
-| :------------ | :------ | :----------------------- | :---------- |
-| items         | any     | DEFAULT_ITEMS            | -           |
-| label         | string  | "Margin notes"           | -           |
-| sublabel      | string  | ""                       | -           |
-| trigger       | string  | "hover"                  | -           |
-| defaultOpen   | boolean | false                    | -           |
-| closeOnSelect | boolean | true                     | -           |
-| physics       | boolean | true                     | -           |
-| drift         | number  | 0.5                      | -           |
-| onSelect      | any     | -                        | -           |
-| onOpenChange  | any     | -                        | -           |
-| folderColor   | string  | "hsl(var(--muted))"      | -           |
-| frontColor    | string  | "hsl(var(--card))"       | -           |
-| paperColor    | string  | "hsl(var(--background))" | -           |
-| itemColor     | string  | "hsl(var(--foreground))" | -           |
-| itemTextColor | string  | "hsl(var(--background))" | -           |
-| labelColor    | string  | "hsl(var(--foreground))" | -           |
-| width         | number  | 200                      | -           |
-| height        | number  | 148                      | -           |
-| radius        | number  | 14                       | -           |
-| spread        | number  | 180                      | -           |
-| lift          | number  | 26                       | -           |
-| tilt          | number  | 8                        | -           |
-| flapAngle     | number  | 34                       | -           |
-| restAngle     | number  | 16                       | -           |
-| openDuration  | number  | 520                      | -           |
-| stagger       | number  | 45                       | -           |
-| bounce        | number  | 0.3                      | -           |
+| Prop          | Type    | Default                  | Description                                       |
+| :------------ | :------ | :----------------------- | :------------------------------------------------ |
+| items         | any     | DEFAULT_ITEMS            | Papers in the stack, as strings or item objects.  |
+| label         | string  | "Margin notes"           | Folder label.                                     |
+| sublabel      | string  | ""                       | Secondary line under the label.                   |
+| trigger       | string  | "hover"                  | Opens on "hover" or "click".                      |
+| defaultOpen   | boolean | false                    | Start with the folder open.                       |
+| closeOnSelect | boolean | true                     | Close the folder after a paper is chosen.         |
+| physics       | boolean | true                     | Let open papers sway with the pointer.            |
+| drift         | number  | 0.5                      | Strength of the idle drift of the papers.         |
+| onSelect      | any     | -                        | Called with the chosen value and index.           |
+| onOpenChange  | any     | -                        | Called with the new open state.                   |
+| folderColor   | string  | "hsl(var(--muted))"      | Back panel colour.                                |
+| frontColor    | string  | "hsl(var(--card))"       | Front flap colour.                                |
+| paperColor    | string  | "hsl(var(--background))" | Paper colour inside the folder.                   |
+| itemColor     | string  | "hsl(var(--foreground))" | Fanned paper colour.                              |
+| itemTextColor | string  | "hsl(var(--background))" | Fanned paper text colour.                         |
+| labelColor    | string  | "hsl(var(--foreground))" | Label text colour.                                |
+| width         | number  | 200                      | Folder width in pixels.                           |
+| height        | number  | 148                      | Folder height in pixels.                          |
+| radius        | number  | 14                       | Corner radius in pixels.                          |
+| spread        | number  | 180                      | Horizontal spread of the fanned papers in pixels. |
+| lift          | number  | 26                       | How far papers rise when open, in pixels.         |
+| tilt          | number  | 8                        | Maximum paper rotation in degrees.                |
+| flapAngle     | number  | 34                       | Front flap angle when open, in degrees.           |
+| restAngle     | number  | 16                       | Front flap angle at rest, in degrees.             |
+| openDuration  | number  | 520                      | Open animation duration in milliseconds.          |
+| stagger       | number  | 45                       | Delay between papers in milliseconds.             |
+| bounce        | number  | 0.3                      | Spring bounce of the open animation.              |

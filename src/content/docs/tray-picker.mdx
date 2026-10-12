@@ -33,25 +33,25 @@ export default function Example() {
 
 ## Props
 
-| Prop             | Type    | Default                  | Description |
-| :--------------- | :------ | :----------------------- | :---------- |
-| options          | any     | DEFAULT_OPTIONS          | -           |
-| value            | any     | -                        | -           |
-| defaultValue     | any     | -                        | -           |
-| onChange         | any     | -                        | -           |
-| placeholder      | string  | "Choose a face…"         | -           |
-| showTags         | boolean | true                     | -           |
-| accentColor      | string  | "hsl(var(--foreground))" | -           |
-| surfaceColor     | string  | "hsl(var(--card))"       | -           |
-| highlightColor   | string  | "hsl(var(--muted))"      | -           |
-| textColor        | string  | "hsl(var(--foreground))" | -           |
-| size             | string  | "md"                     | -           |
-| radius           | number  | 10                       | -           |
-| menuWidth        | number  | 176                      | -           |
-| placement        | string  | "bottom"                 | -           |
-| align            | string  | "left"                   | -           |
-| popDuration      | number  | 180                      | -           |
-| glideDuration    | number  | 220                      | -           |
-| rememberPosition | boolean | true                     | -           |
-| disabled         | boolean | false                    | -           |
-| ariaLabel        | string  | "Choose"                 | -           |
+| Prop             | Type    | Default                  | Description                                    |
+| :--------------- | :------ | :----------------------- | :--------------------------------------------- |
+| options          | any     | DEFAULT_OPTIONS          | Options, as strings or option objects.         |
+| value            | any     | -                        | Controlled selected value.                     |
+| defaultValue     | any     | -                        | Initial value when uncontrolled.               |
+| onChange         | any     | -                        | Called with the new value and option.          |
+| placeholder      | string  | "Choose a face…"         | Text shown when nothing is selected.           |
+| showTags         | boolean | true                     | Show option tags in the menu.                  |
+| accentColor      | string  | "hsl(var(--foreground))" | Accent colour for the selection.               |
+| surfaceColor     | string  | "hsl(var(--card))"       | Trigger and menu surface colour.               |
+| highlightColor   | string  | "hsl(var(--muted))"      | Colour of the gliding highlight.               |
+| textColor        | string  | "hsl(var(--foreground))" | Text colour.                                   |
+| size             | string  | "md"                     | Trigger size: "sm", "md" or "lg".              |
+| radius           | number  | 10                       | Corner radius in pixels.                       |
+| menuWidth        | number  | 176                      | Menu width in pixels.                          |
+| placement        | string  | "bottom"                 | Open the menu "bottom" or "top".               |
+| align            | string  | "left"                   | Align the menu "left" or "right".              |
+| popDuration      | number  | 180                      | Menu open duration in milliseconds.            |
+| glideDuration    | number  | 220                      | Highlight glide duration in milliseconds.      |
+| rememberPosition | boolean | true                     | Keep the highlight on the last hovered option. |
+| disabled         | boolean | false                    | Disables the picker.                           |
+| ariaLabel        | string  | "Choose"                 | Accessible label for the trigger.              |

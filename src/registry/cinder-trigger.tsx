@@ -253,11 +253,13 @@ export function CinderTrigger({
       onKeyDown={handleKeyDown}
     >
       <button
-        ref={idleRef}
         type={type}
         className="fb-idle group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=idle]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] focus-visible:outline-none disabled:cursor-default group-data-[phase=idle]:visible group-data-[phase=idle]:opacity-100 group-data-[phase=idle]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)] [@media(hover:hover)_and_(pointer:fine)]:enabled:hover:[background:color-mix(in_srgb,var(--fb-ink)_7%,transparent)]"
         disabled={disabled}
-        inert={phase !== "idle"}
+        ref={(el) => {
+          idleRef.current = el;
+          if (el) el.inert = phase !== "idle";
+        }}
         onClick={arm}
       >
         <span
@@ -269,12 +271,14 @@ export function CinderTrigger({
         {label}
       </button>
       <button
-        ref={undoRef}
         type="button"
         className="group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=armed]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] focus-visible:outline-none group-data-[phase=armed]:visible group-data-[phase=armed]:opacity-100 group-data-[phase=armed]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)] [@media(hover:hover)_and_(pointer:fine)]:hover:[background:color-mix(in_srgb,var(--fb-ink)_7%,transparent)]"
         aria-describedby={statusId}
         aria-keyshortcuts="Escape"
-        inert={phase !== "armed"}
+        ref={(el) => {
+          undoRef.current = el;
+          if (el) el.inert = phase !== "armed";
+        }}
         onClick={undo}
       >
         <span
@@ -288,7 +292,9 @@ export function CinderTrigger({
       </button>
       <span
         className="group-data-[instant]:[transition-duration motion-reduce:transition-none:0s] group-data-[phase=settled]:[transition-delay motion-reduce:transition-none:0s] invisible relative m-0 inline-flex h-full w-full min-w-0 cursor-default cursor-pointer items-center justify-center gap-2 whitespace-nowrap border-0 bg-transparent px-[var(--fb-px)] opacity-0 [color:inherit] [filter:blur(2px)] [font:inherit] [grid-area:1/1] [letter-spacing:inherit] [transition:opacity_var(--fb-fade)_ease,filter_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade),background-color_160ms_ease] group-data-[phase=settled]:visible group-data-[phase=settled]:opacity-100 group-data-[phase=settled]:[filter:blur(0)] motion-reduce:[filter:none] motion-reduce:[transition:opacity_var(--fb-fade)_ease,visibility_0s_linear_var(--fb-fade)]"
-        inert={phase !== "settled"}
+        ref={(el) => {
+          if (el) el.inert = phase !== "settled";
+        }}
       >
         <span
           className="inline-flex h-[var(--fb-icon)] w-[var(--fb-icon)] [&>svg]:h-full [&>svg]:w-full"

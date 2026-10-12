@@ -50,8 +50,9 @@ void main(){
   vec2 sc = gl_FragCoord.xy / u_res;
   vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
   float t = u_time;
-  vec3 deep = u_ink * 0.22;
-  vec3 col = deep + u_ink * 0.18 * noise(uv * vec2(1.5, 5.0) + vec2(t * 0.3, 0.0));
+  // Keep the field dark in both themes so the white label stays legible.
+  vec3 deep = u_ink * 0.06;
+  vec3 col = deep + u_ink * 0.06 * noise(uv * vec2(1.5, 5.0) + vec2(t * 0.3, 0.0));
   vec3 star = mix(u_ink, vec3(1.0), 0.72);
   for (int i = 0; i < 3; i++) {
     float fi = float(i);
@@ -66,7 +67,7 @@ void main(){
     float sx = mix(90.0, 3.0, u_warp);
     float s = on * exp(-(d.x * d.x * sx + d.y * d.y * 260.0));
     float tw = mix(0.65 + 0.35 * sin(h * 81.0 + t * 7.0), 1.0, u_warp);
-    col += star * s * tw * (0.8 + 0.9 * u_warp) * (0.5 + fi * 0.25);
+    col += star * s * tw * (0.5 + 0.7 * u_warp) * (0.4 + fi * 0.2);
   }
   col += star * u_warp * 0.18 * exp(-abs(uv.y) * 6.0);
   vec2 e = sc * (1.0 - sc);

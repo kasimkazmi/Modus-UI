@@ -321,7 +321,9 @@ export function TurnLeaf({
         <div
           className="group-data-[fade=front]:opacity-100! absolute inset-0 overflow-hidden border border-border [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [background:var(--fc-bg)] [border-radius:var(--fc-radius)] [color:var(--fc-ink)] group-data-[fade]:opacity-0 group-data-[fade]:[-webkit-backface-visibility:visible] group-data-[fade]:[backface-visibility:visible] group-data-[fade]:[transition:opacity_200ms_ease] [&_img]:[-webkit-user-drag:none]"
           aria-hidden={shown}
-          inert={shown}
+          ref={(el) => {
+            if (el) el.inert = shown;
+          }}
         >
           {front}
           {glare ? (
@@ -334,7 +336,9 @@ export function TurnLeaf({
         <div
           className="group-data-[fade]:[transform:none]! group-data-[fade=back]:opacity-100! absolute inset-0 overflow-hidden border border-border [-webkit-backface-visibility:hidden] [backface-visibility:hidden] [background:var(--fc-bg)] [border-radius:var(--fc-radius)] [color:var(--fc-ink)] [transform:rotateY(180deg)] group-data-[fade]:opacity-0 group-data-[fade]:[-webkit-backface-visibility:visible] group-data-[fade]:[backface-visibility:visible] group-data-[axis=x]:[transform:rotateX(180deg)] group-data-[fade]:[transition:opacity_200ms_ease] [&_img]:[-webkit-user-drag:none]"
           aria-hidden={!shown}
-          inert={!shown}
+          ref={(el) => {
+            if (el) el.inert = !shown;
+          }}
         >
           {back}
           {glare ? (

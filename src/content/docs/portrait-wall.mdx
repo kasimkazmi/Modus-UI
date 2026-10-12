@@ -17,13 +17,11 @@ npx @modus-ui/cli add portrait-wall
 
 ## Props
 
-| Prop      | Type               | Default      | Description                                |
-| :-------- | :----------------- | :----------- | :----------------------------------------- |
-| items     | PortraitWallItem[] | -            | Array of items to render.                  |
-| radius    | number             | 300          | Radius of the hover spotlight effect.      |
-| columns   | number             | 3            | Number of grid columns.                    |
-| rows      | number             | 2            | Number of grid rows.                       |
-| damping   | number             | 15           | Spring damping for the spotlight movement. |
-| fadeOut   | number             | 0.6          | Duration of the fade out effect on leave.  |
-| ease      | string             | "power3.out" | Easing function.                           |
-| className | string             | ""           | -                                          |
+| Prop      | Type               | Default | Description                                                      |
+| :-------- | :----------------- | :------ | :--------------------------------------------------------------- |
+| items     | PortraitWallItem[] | -       | Array of items to render.                                        |
+| radius    | number             | 300     | Radius of the hover spotlight effect.                            |
+| columns   | number             | 3       | Maximum number of grid columns; narrow containers wrap to fewer. |
+| rows      | number             | 2       | Number of grid rows; items beyond columns × rows are not shown.  |
+| damping   | number             | 15      | Spring damping for the spotlight movement.                       |
+| className | string             | -       | Classes merged onto the grid root.                               |

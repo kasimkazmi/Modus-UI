@@ -28,8 +28,6 @@ interface PortraitWallProps {
   columns?: number;
   rows?: number;
   damping?: number;
-  fadeOut?: number;
-  ease?: string;
 }
 
 export function PortraitWall({
@@ -120,7 +118,7 @@ export function PortraitWall({
     },
   ];
 
-  const data = items?.length ? items : defaultItems;
+  const data = (items?.length ? items : defaultItems).slice(0, columns * rows);
 
   useEffect(() => {
     const el = rootRef.current;
@@ -163,8 +161,9 @@ export function PortraitWall({
       className={cn("relative grid w-full gap-3", className)}
       style={
         {
-          gridTemplateColumns: `repeat(${columns}, 320px)`,
-          gridAutoRows: "auto",
+          // Up to `columns` tracks; narrow containers wrap to fewer, never overflow.
+          gridTemplateColumns: `repeat(auto-fill, minmax(max(100px, calc((100% - ${columns - 1} * 0.75rem) / ${columns})), 1fr))`,
+          maxWidth: `${columns * 240}px`,
         } as React.CSSProperties
       }
     >
@@ -173,7 +172,7 @@ export function PortraitWall({
           key={i}
           onMouseMove={handleCardMove}
           onClick={() => handleCardClick(c.url)}
-          className="group relative flex w-[300px] cursor-pointer flex-col overflow-hidden rounded-md border border-border transition-colors duration-300"
+          className="group relative flex w-full min-w-0 cursor-pointer flex-col overflow-hidden rounded-md border border-border transition-colors duration-300"
           style={
             {
               "--card-border": c.borderColor || "transparent",
@@ -194,18 +193,16 @@ export function PortraitWall({
               src={c.image}
               alt={c.title}
               loading="lazy"
-              className="h-64 w-full rounded-sm object-cover grayscale-[35%]"
+              className="aspect-[4/5] w-full rounded-sm object-cover grayscale-[35%]"
             />
           </div>
-          <footer className="relative z-10 grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 p-3 font-sans text-foreground">
-            <h3 className="m-0 font-serif text-[1.15rem] font-normal">{c.title}</h3>
-            {c.handle && <span className="text-right text-[0.95rem] opacity-80">{c.handle}</span>}
+          <footer className="relative z-10 flex min-w-0 flex-col gap-1 p-3 font-sans text-foreground">
+            <h3 className="m-0 truncate font-serif text-[1.05rem] font-normal">{c.title}</h3>
+            {c.handle && <span className="truncate text-[0.8rem] opacity-80">{c.handle}</span>}
             <p className="m-0 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
               {c.subtitle}
             </p>
-            {c.location && (
-              <span className="text-right text-[0.85rem] opacity-85">{c.location}</span>
-            )}
+            {c.location && <span className="truncate text-[0.85rem] opacity-85">{c.location}</span>}
           </footer>
         </article>
       ))}

@@ -33,27 +33,27 @@ export default function Example() {
 
 ## Props
 
-| Prop          | Type    | Default                          | Description |
-| :------------ | :------ | :------------------------------- | :---------- |
-| label         | string  | "Send proof"                     | -           |
-| undoLabel     | string  | "Recall"                         | -           |
-| doneLabel     | string  | "Sent"                           | -           |
-| icon          | any     | -                                | -           |
-| color         | string  | "hsl(var(--primary-foreground))" | -           |
-| background    | string  | "hsl(var(--primary))"            | -           |
-| fuseColor     | string  | "hsl(var(--primary-foreground))" | -           |
-| size          | string  | "md"                             | -           |
-| radius        | number  | 8                                | -           |
-| undoWindow    | number  | 4000                             | -           |
-| fuse          | string  | "bottom"                         | -           |
-| fuseThickness | number  | 1.5                              | -           |
-| crossfadeMs   | number  | 200                              | -           |
-| commitOn      | string  | "press"                          | -           |
-| pauseOnHover  | boolean | true                             | -           |
-| settle        | string  | "reset"                          | -           |
-| disabled      | boolean | false                            | -           |
-| onCommit      | any     | -                                | -           |
-| onUndo        | any     | -                                | -           |
-| onFuseEnd     | any     | -                                | -           |
-| onPhaseChange | any     | -                                | -           |
-| type          | string  | "button"                         | -           |
+| Prop          | Type    | Default                          | Description                                                 |
+| :------------ | :------ | :------------------------------- | :---------------------------------------------------------- |
+| label         | string  | "Send proof"                     | Label before committing.                                    |
+| undoLabel     | string  | "Recall"                         | Label while the undo window is open.                        |
+| doneLabel     | string  | "Sent"                           | Label after the fuse burns out.                             |
+| icon          | any     | -                                | Optional leading icon.                                      |
+| color         | string  | "hsl(var(--primary-foreground))" | Text colour.                                                |
+| background    | string  | "hsl(var(--primary))"            | Button background colour.                                   |
+| fuseColor     | string  | "hsl(var(--primary-foreground))" | Colour of the burning fuse.                                 |
+| size          | string  | "md"                             | Button size: "sm", "md" or "lg".                            |
+| radius        | number  | 8                                | Corner radius in pixels.                                    |
+| undoWindow    | number  | 4000                             | Time to undo in milliseconds.                               |
+| fuse          | string  | "bottom"                         | Where the fuse burns: "outline", "top" or "bottom".         |
+| fuseThickness | number  | 1.5                              | Fuse stroke width in pixels.                                |
+| crossfadeMs   | number  | 200                              | Label crossfade duration in milliseconds.                   |
+| commitOn      | string  | "press"                          | Fire onCommit on "press" or when the fuse ends ("fuseEnd"). |
+| pauseOnHover  | boolean | true                             | Pause the fuse while hovered.                               |
+| settle        | string  | "reset"                          | After finishing, "reset" to idle or "stay" done.            |
+| disabled      | boolean | false                            | Disables the button.                                        |
+| onCommit      | any     | -                                | Called when the action commits.                             |
+| onUndo        | any     | -                                | Called when the action is undone.                           |
+| onFuseEnd     | any     | -                                | Called when the fuse burns out.                             |
+| onPhaseChange | any     | -                                | Called with each new phase.                                 |
+| type          | string  | "button"                         | Native button type.                                         |
