@@ -38,3 +38,9 @@ test-results
 
 # workspace packages
 packages/*/dist
+
+# Local secrets (service-account keys, tokens)
+.env
+.env.*
+!.env.example
+secrets/
