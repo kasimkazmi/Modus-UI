@@ -149,7 +149,7 @@ vec3 accent(float baseHue, float saturationScale) {
   return hsv2rgb(vec3(hue, clamp(u_saturation * saturationScale, 0.0, 1.0), 1.0));
 }
 
-vec2 light-cutProfile(float distanceToLine, float coreWidth, float glowWidth) {
+vec2 beamProfile(float distanceToLine, float coreWidth, float glowWidth) {
   float core = exp(-pow(distanceToLine / max(coreWidth, 0.0002), 2.0));
   float glow = exp(-pow(distanceToLine / max(glowWidth, 0.001), 1.25));
   return vec2(core, glow);
@@ -161,7 +161,7 @@ vec3 atmosphericBlade(vec2 p) {
   float tilt = u_pointer.x * 0.055 + sin(u_time * 0.13) * 0.018;
   float distanceToBeam = abs(p.x - center - p.y * tilt);
   float verticalMask = 1.0 - smoothstep(0.68 * u_length, 1.35 * u_length, abs(p.y));
-  vec2 beam = light-cutProfile(distanceToBeam, 0.0028 * u_size, 0.052 * u_size);
+  vec2 beam = beamProfile(distanceToBeam, 0.0028 * u_size, 0.052 * u_size);
 
   vec2 fogUv = vec2(p.x * 3.4, p.y * 2.15 - u_time * 0.075);
   fogUv.x += sin(p.y * 3.2 - u_time * 0.17) * 0.18;
@@ -170,7 +170,7 @@ vec3 atmosphericBlade(vec2 p) {
   float fog = smoothstep(0.34, 0.78, fogNoise) * fogEnvelope * u_density * verticalMask;
 
   float mirageDistance = abs(abs(p.x - center + p.y * tilt * 0.35) - 0.105 * u_length);
-  vec2 mirage = light-cutProfile(mirageDistance, 0.0011 * u_size, 0.016 * u_size);
+  vec2 mirage = beamProfile(mirageDistance, 0.0011 * u_size, 0.016 * u_size);
   float mirageMask = (1.0 - smoothstep(0.08, 1.2, abs(p.y))) * (0.35 + 0.65 * fogNoise);
 
   vec3 tint = accent(0.43, 0.82);
@@ -227,8 +227,8 @@ vec3 prismAperture(vec2 p) {
   float warp = (fbm(q * 3.2 + vec2(0.0, -u_time * 0.08)) - 0.5) * 0.025 * u_density;
   float diamond = abs(q.x * 0.82) + abs(q.y) - breathing - warp;
   float innerDiamond = abs(q.x * 0.82) + abs(q.y) - breathing * 0.66 + warp * 0.45;
-  vec2 outer = light-cutProfile(abs(diamond), 0.0024 * u_size, 0.046 * u_size);
-  vec2 inner = light-cutProfile(abs(innerDiamond), 0.0012 * u_size, 0.018 * u_size);
+  vec2 outer = beamProfile(abs(diamond), 0.0024 * u_size, 0.046 * u_size);
+  vec2 inner = beamProfile(abs(innerDiamond), 0.0012 * u_size, 0.018 * u_size);
 
   float edgeMask = 1.0 - smoothstep(0.25, 1.18, length(q));
   float perimeterPhase = sin((q.x - q.y) * 15.0 - u_time * 3.3);
@@ -257,8 +257,8 @@ vec3 halftoneRelay(vec2 p) {
   float bend = sin(p.y * 2.1 - u_time * 0.25) * 0.018;
   float mainDistance = abs(p.x - center - bend);
   float relayDistance = abs(p.x - center + 0.075 * u_length + bend * 0.45);
-  vec2 mainBeam = light-cutProfile(mainDistance, 0.0022 * u_size, 0.072 * u_size);
-  vec2 relayBeam = light-cutProfile(relayDistance, 0.0012 * u_size, 0.025 * u_size);
+  vec2 mainBeam = beamProfile(mainDistance, 0.0022 * u_size, 0.072 * u_size);
+  vec2 relayBeam = beamProfile(relayDistance, 0.0012 * u_size, 0.025 * u_size);
 
   vec2 fogUv = vec2(p.x * 3.0, p.y * 2.5 - u_time * 0.1);
   float fogNoise = fbm(fogUv + vec2(sin(u_time * 0.16), 0.0));

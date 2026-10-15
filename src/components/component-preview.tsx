@@ -1,8 +1,8 @@
 import React from "react";
 import { getRegistryComponent } from "@/lib/registry";
-import { getDemo } from "@/registry/demos";
 import { ComponentPreviewClient } from "./component-preview-client";
 import { CodeBlock } from "./code-block";
+import { RegistryDemo } from "./registry-demo";
 
 interface ComponentPreviewProps {
   name: string;
@@ -10,9 +10,7 @@ interface ComponentPreviewProps {
 
 export const ComponentPreview = async ({ name }: ComponentPreviewProps) => {
   const component = getRegistryComponent(name);
-  const Preview = getDemo(name);
-
-  if (!component || !Preview) {
+  if (!component) {
     return (
       <div className="rounded-2xl border border-red-200 bg-red-50/50 p-8 text-sm font-medium text-red-500">
         Component &quot;{name}&quot; not found in the registry map.
@@ -25,7 +23,7 @@ export const ComponentPreview = async ({ name }: ComponentPreviewProps) => {
   return (
     <ComponentPreviewClient
       name={name}
-      preview={<Preview />}
+      preview={<RegistryDemo name={name} />}
       code={component.content}
       filePath={filePath}
       highlightedCode={<CodeBlock code={component.content} lang="tsx" minimal={true} />}

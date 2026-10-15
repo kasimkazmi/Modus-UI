@@ -1,428 +1,225 @@
+import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
-import { MagicButtonDemo } from "./magic-button-demo";
-import { MorphingNavbarDemo } from "./morphing-navbar-demo";
-import { AnimatedButtonDemo } from "./animated-button-demo";
-import { PulseButtonDemo } from "./pulse-button-demo";
-import { RotatingCardDemo } from "./rotating-card-demo";
-import { FloatingTextDemo } from "./floating-text-demo";
-import { NotchFooterDemo } from "./notch-footer-demo";
-import { TiltCardDemo } from "./tilt-card-demo";
-import { FloatingDockDemo } from "./floating-dock-demo";
-import { CircuitBackgroundDemo } from "./circuit-background-demo";
-import FocusCardDemo from "./focus-card-demo";
-import ExpandableShowcaseDemo from "./expandable-showcase-demo";
-import ShimmerTextDemo from "./shimmer-text-demo";
-import KineticCarouselDemo from "./kinetic-carousel-demo";
-import ProcessStepperDemo from "./process-stepper-demo";
-import AnimatedListDemo from "./animated-list-demo";
-import MasonryGridDemo from "./masonry-grid-demo";
-import AuroraBackgroundDemo from "./aurora-background-demo";
-import GridMotionDemo from "./grid-motion-demo";
-import BlurTextDemo from "./blur-text-demo";
-import SplitTextDemo from "./split-text-demo";
-import DecryptedTextDemo from "./decrypted-text-demo";
-import BounceCardsDemo from "./bounce-cards-demo";
-import FlowingMenuDemo from "./flowing-menu-demo";
-import TrueFocusDemo from "./true-focus-demo";
-import BorderGlowDemo from "./border-glow-demo";
-import GradientTextDemo from "./gradient-text-demo";
-import ClickSparkDemo from "./click-spark-demo";
-import SpotlightCardDemo from "./spotlight-card-demo";
-import TextPressureDemo from "./text-pressure-demo";
-import WavesDemo from "./waves-demo";
-import LetterGlitchDemo from "./letter-glitch-demo";
-import PixelCardDemo from "./pixel-card-demo";
-import TiltedCardDemo from "./tilted-card-demo";
-import MagnetDemo from "./magnet-demo";
-import StackDemo from "./stack-demo";
-import StarBorderDemo from "./star-border-demo";
-import CursorGridDemo from "./cursor-grid-demo";
-import ScrollVelocityDemo from "./scroll-velocity-demo";
-import LiquidTabsDemo from "./liquid-tabs-demo";
-import ScratchToRevealDemo from "./scratch-to-reveal-demo";
-import AnimatedBeamDemo from "./animated-beam-demo";
-import GravityTextSwapDemo from "./gravity-text-swap-demo";
-import BorderBeamDemo from "./border-beam-demo";
-import OrbitingElementsDemo from "./orbiting-elements-demo";
-import BentoGridDemo from "./bento-grid-demo";
-import FlipWordsDemo from "./flip-words-demo";
-import ErosionPlateDemo from "./erosion-plate-demo";
-import GloopTrailDemo from "./gloop-trail-demo";
-import StaticTypeDemo from "./static-type-demo";
-import IronFilingsDemo from "./iron-filings-demo";
-import ComparisonSliderDemo from "./comparison-slider-demo";
-import DockDemo from "./dock-demo";
-import ProgressRingDemo from "./progress-ring-demo";
-import MarqueeDemo from "./marquee-demo";
-import MirrorPlateDemo from "./mirror-plate-demo";
-import FluidGlassDemo from "./fluid-glass-demo";
-import DomeGalleryDemo from "./dome-gallery-demo";
-import PortraitWallDemo from "./portrait-wall-demo";
-import ChimeSwitchDemo from "./chime-switch-demo";
-import RootNavDemo from "./root-nav-demo";
-import RunTagDemo from "./run-tag-demo";
-import CipherReelDemo from "./cipher-reel-demo";
-import OrbitKnobDemo from "./orbit-knob-demo";
-import CoyKeyDemo from "./coy-key-demo";
-import TurnLeafDemo from "./turn-leaf-demo";
-import PaperStackDemo from "./paper-stack-demo";
-import CinderTriggerDemo from "./cinder-trigger-demo";
-import TrayPickerDemo from "./tray-picker-demo";
-import SteadyPressDemo from "./steady-press-demo";
-import BloomChoiceDemo from "./bloom-choice-demo";
-import TileWaitDemo from "./tile-wait-demo";
-import FolioCrushDemo from "./folio-crush-demo";
-import GlanceScoreDemo from "./glance-score-demo";
-import QueryWellDemo from "./query-well-demo";
-import BeatMarkDemo from "./beat-mark-demo";
-import PolishPaneDemo from "./polish-pane-demo";
-import StretchToggleDemo from "./stretch-toggle-demo";
-import DragNumberDemo from "./drag-number-demo";
-import PaperMillDemo from "./paper-mill-demo";
-import SwipeConfirmDemo from "./swipe-confirm-demo";
-import PullLaunchDemo from "./pull-launch-demo";
-import TideMeterDemo from "./tide-meter-demo";
-import TallyBoxDemo from "./tally-box-demo";
-import PressToggleDemo from "./press-toggle-demo";
-import StateGlyphDemo from "./state-glyph-demo";
-import GlideLedgerRowDemo from "./glide-ledger-row-demo";
-import FlickNoticeDemo from "./flick-notice-demo";
-import StubPassDemo from "./stub-pass-demo";
-import InkMurmurDemo from "./ink-murmur-demo";
-import HumCapsuleDemo from "./hum-capsule-demo";
-import RouseTrackDemo from "./rouse-track-demo";
-import EmberHintDemo from "./ember-hint-demo";
-import MoonLatticeDemo from "./moon-lattice-demo";
-import ResonancePlateDemo from "./resonance-plate-demo";
-import ConfluenceLinesDemo from "./confluence-lines-demo";
-import SilkBandsDemo from "./silk-bands-demo";
-import MercuryBloomDemo from "./mercury-bloom-demo";
-import LumenCoreDemo from "./lumen-core-demo";
-import LightCutDemo from "./light-cut-demo";
-import StippleTideDemo from "./stipple-tide-demo";
-import TideLineDemo from "./tide-line-demo";
-import LatticeDriftDemo from "./lattice-drift-demo";
-import StarTunnelDemo from "./star-tunnel-demo";
-import PlateWheelDemo from "./plate-wheel-demo";
-import NodeWeaveDemo from "./node-weave-demo";
-import ApertureBloomDemo from "./aperture-bloom-demo";
-import MosaicCrestDemo from "./mosaic-crest-demo";
-import ForecastCurveDemo from "./forecast-curve-demo";
-import DewPaneDemo from "./dew-pane-demo";
-import InkPillDemo from "./ink-pill-demo";
-import GlyphEddyDemo from "./glyph-eddy-demo";
-import PhosphorTubeDemo from "./phosphor-tube-demo";
-import FolioTitleDemo from "./folio-title-demo";
-import BoughStudyDemo from "./bough-study-demo";
-import SigilWeatherDemo from "./sigil-weather-demo";
-import CrownBarDemo from "./crown-bar-demo";
-import MoteBeaconDemo from "./mote-beacon-demo";
-import InkRushDemo from "./ink-rush-demo";
-import ArchCurrentDemo from "./arch-current-demo";
-import InkFountainDemo from "./ink-fountain-demo";
-import WireLedgerDemo from "./wire-ledger-demo";
-import RisingStrokesDemo from "./rising-strokes-demo";
-import ContourSheetDemo from "./contour-sheet-demo";
-import NightGateDemo from "./night-gate-demo";
-import StarstreamButtonDemo from "./starstream-button-demo";
-import ArcHaloButtonDemo from "./arc-halo-button-demo";
-import CurrentButtonDemo from "./current-button-demo";
-import InkwellDemo from "./inkwell-demo";
-import MuseButtonDemo from "./muse-button-demo";
-import PulseDustDemo from "./pulse-dust-demo";
-import SignalTilesDemo from "./signal-tiles-demo";
-import HollowBloomDemo from "./hollow-bloom-demo";
-import GrainSwellDemo from "./grain-swell-demo";
-import RidgeStrataDemo from "./ridge-strata-demo";
-import DriftLinesDemo from "./drift-lines-demo";
-import LoomFieldDemo from "./loom-field-demo";
-import WordSwarmDemo from "./word-swarm-demo";
-import OrbLetteringDemo from "./orb-lettering-demo";
-import ContourStreamDemo from "./contour-stream-demo";
-import ShiftingSwarmDemo from "./shifting-swarm-demo";
-import DrapeTypeDemo from "./drape-type-demo";
-import GlyphSurgeDemo from "./glyph-surge-demo";
-import SphereSketchDemo from "./sphere-sketch-demo";
-import EmblemGlobeDemo from "./emblem-globe-demo";
-import AuroraVeilDemo from "./aurora-veil-demo";
-import SilkMeshDemo from "./silk-mesh-demo";
-import LiquidChromeOrbDemo from "./liquid-chrome-orb-demo";
-import PlasmaGlowDemo from "./plasma-glow-demo";
-import NebulaOrbDemo from "./nebula-orb-demo";
-import GodrayHazeDemo from "./godray-haze-demo";
-import InkCanvasDemo from "./ink-canvas-demo";
-import HoloFoilDemo from "./holo-foil-demo";
-import CrystalCellsDemo from "./crystal-cells-demo";
-import FlutedGradientDemo from "./fluted-gradient-demo";
-import RipplePoolDemo from "./ripple-pool-demo";
-import AsciiFlowDemo from "./ascii-flow-demo";
-import HerbariumStudyDemo from "./herbarium-study-demo";
-import WinterPagodaDemo from "./winter-pagoda-demo";
-import SurveyReliefDemo from "./survey-relief-demo";
-import FormFoundryDemo from "./form-foundry-demo";
-import SpecimenDeskDemo from "./specimen-desk-demo";
-import DotScreenDemo from "./dot-screen-demo";
-import TubelightDemo from "./tubelight-demo";
-import SalonBannerDemo from "./salon-banner-demo";
-import ButtonAtlasDemo from "./button-atlas-demo";
-import FolioOpeningDemo from "./folio-opening-demo";
-import DispatchColophonDemo from "./dispatch-colophon-demo";
-import VitalsBoardDemo from "./vitals-board-demo";
-import TactileSwitchDemo from "./tactile-switch-demo";
-import DraftFormDemo from "./draft-form-demo";
-import PaceDialDemo from "./pace-dial-demo";
-import ConjureButtonDemo from "./conjure-button-demo";
-import HaloTraceDemo from "./halo-trace-demo";
-import GlazeButtonDemo from "./glaze-button-demo";
-import SheenCtaDemo from "./sheen-cta-demo";
-import KilnButtonDemo from "./kiln-button-demo";
-import HairlineCtaDemo from "./hairline-cta-demo";
-import HaloInviteDemo from "./halo-invite-demo";
-import TerraceDuskDemo from "./terrace-dusk-demo";
-import CircuitHeartDemo from "./circuit-heart-demo";
-import LensDriftDemo from "./lens-drift-demo";
-import ThreadSwellDemo from "./thread-swell-demo";
-import ReliefMeshDemo from "./relief-mesh-demo";
-import DustVeilDemo from "./dust-veil-demo";
-import RibbonLightDemo from "./ribbon-light-demo";
-import AshSpiralDemo from "./ash-spiral-demo";
-import DotWhirlDemo from "./dot-whirl-demo";
-import OrbitChipButtonDemo from "./orbit-chip-button-demo";
-import StampKeyDemo from "./stamp-key-demo";
-import InkEndcapButtonDemo from "./ink-endcap-button-demo";
-import PrismKeyDemo from "./prism-key-demo";
-import RoundGlyphDemo from "./round-glyph-demo";
-import PrismFlowButtonDemo from "./prism-flow-button-demo";
-import EmberTagDemo from "./ember-tag-demo";
-import DraftFolioDemo from "./draft-folio-demo";
-import InkCapsuleDemo from "./ink-capsule-demo";
-import KeystrokeButtonDemo from "./keystroke-button-demo";
-import StitchFrameButtonDemo from "./stitch-frame-button-demo";
-import RisingMotesDemo from "./rising-motes-demo";
-import RollLabelDemo from "./roll-label-demo";
-import CometRingButtonDemo from "./comet-ring-button-demo";
-import SatinCapsuleDemo from "./satin-capsule-demo";
-import OpeningMarkDemo from "./opening-mark-demo";
-import DustSignatureDemo from "./dust-signature-demo";
-import EchoLettersDemo from "./echo-letters-demo";
-import CastReelDemo from "./cast-reel-demo";
-import SignalRelayDemo from "./signal-relay-demo";
-import IntaglioDeedDemo from "./intaglio-deed-demo";
-import PondGlideDemo from "./pond-glide-demo";
 import type { ComponentName } from "./index";
 
-/** The demo rendered for each component in docs and standalone previews. */
+// Each demo loads as its own chunk, so a page ships only the demo it renders.
 export const demos: Record<ComponentName, ComponentType> = {
-  "magic-button": MagicButtonDemo,
-  "morphing-navbar": MorphingNavbarDemo,
-  "animated-button": AnimatedButtonDemo,
-  "pulse-button": PulseButtonDemo,
-  "rotating-card": RotatingCardDemo,
-  "floating-text": FloatingTextDemo,
-  "notch-footer": NotchFooterDemo,
-  "tilt-card": TiltCardDemo,
-  "floating-dock": FloatingDockDemo,
-  "circuit-background": CircuitBackgroundDemo,
-  "focus-card": FocusCardDemo,
-  "expandable-showcase": ExpandableShowcaseDemo,
-  "shimmer-text": ShimmerTextDemo,
-  "kinetic-carousel": KineticCarouselDemo,
-  "process-stepper": ProcessStepperDemo,
-  "animated-list": AnimatedListDemo,
-  "masonry-grid": MasonryGridDemo,
-  "aurora-background": AuroraBackgroundDemo,
-  "grid-motion": GridMotionDemo,
-  "blur-text": BlurTextDemo,
-  "split-text": SplitTextDemo,
-  "decrypted-text": DecryptedTextDemo,
-  "bounce-cards": BounceCardsDemo,
-  "flowing-menu": FlowingMenuDemo,
-  "true-focus": TrueFocusDemo,
-  "border-glow": BorderGlowDemo,
-  "gradient-text": GradientTextDemo,
-  "click-spark": ClickSparkDemo,
-  "spotlight-card": SpotlightCardDemo,
-  "text-pressure": TextPressureDemo,
-  waves: WavesDemo,
-  "letter-glitch": LetterGlitchDemo,
-  "pixel-card": PixelCardDemo,
-  "tilted-card": TiltedCardDemo,
-  magnet: MagnetDemo,
-  stack: StackDemo,
-  "star-border": StarBorderDemo,
-  "cursor-grid": CursorGridDemo,
-  "scroll-velocity": ScrollVelocityDemo,
-  "liquid-tabs": LiquidTabsDemo,
-  "scratch-to-reveal": ScratchToRevealDemo,
-  "animated-beam": AnimatedBeamDemo,
-  "gravity-text-swap": GravityTextSwapDemo,
-  "border-beam": BorderBeamDemo,
-  "orbiting-elements": OrbitingElementsDemo,
-  "bento-grid": BentoGridDemo,
-  "flip-words": FlipWordsDemo,
-  "erosion-plate": ErosionPlateDemo,
-  "gloop-trail": GloopTrailDemo,
-  "static-type": StaticTypeDemo,
-  "iron-filings": IronFilingsDemo,
-  "comparison-slider": ComparisonSliderDemo,
-  dock: DockDemo,
-  "progress-ring": ProgressRingDemo,
-  marquee: MarqueeDemo,
-  "mirror-plate": MirrorPlateDemo,
-  "fluid-glass": FluidGlassDemo,
-  "dome-gallery": DomeGalleryDemo,
-  "portrait-wall": PortraitWallDemo,
-  "chime-switch": ChimeSwitchDemo,
-  "root-nav": RootNavDemo,
-  "run-tag": RunTagDemo,
-  "cipher-reel": CipherReelDemo,
-  "orbit-knob": OrbitKnobDemo,
-  "coy-key": CoyKeyDemo,
-  "turn-leaf": TurnLeafDemo,
-  "paper-stack": PaperStackDemo,
-  "cinder-trigger": CinderTriggerDemo,
-  "tray-picker": TrayPickerDemo,
-  "steady-press": SteadyPressDemo,
-  "bloom-choice": BloomChoiceDemo,
-  "tile-wait": TileWaitDemo,
-  "folio-crush": FolioCrushDemo,
-  "glance-score": GlanceScoreDemo,
-  "query-well": QueryWellDemo,
-  "beat-mark": BeatMarkDemo,
-  "polish-pane": PolishPaneDemo,
-  "stretch-toggle": StretchToggleDemo,
-  "drag-number": DragNumberDemo,
-  "paper-mill": PaperMillDemo,
-  "swipe-confirm": SwipeConfirmDemo,
-  "pull-launch": PullLaunchDemo,
-  "tide-meter": TideMeterDemo,
-  "tally-box": TallyBoxDemo,
-  "press-toggle": PressToggleDemo,
-  "state-glyph": StateGlyphDemo,
-  "glide-ledger-row": GlideLedgerRowDemo,
-  "flick-notice": FlickNoticeDemo,
-  "stub-pass": StubPassDemo,
-  "ink-murmur": InkMurmurDemo,
-  "hum-capsule": HumCapsuleDemo,
-  "rouse-track": RouseTrackDemo,
-  "ember-hint": EmberHintDemo,
-  "moon-lattice": MoonLatticeDemo,
-  "resonance-plate": ResonancePlateDemo,
-  "confluence-lines": ConfluenceLinesDemo,
-  "silk-bands": SilkBandsDemo,
-  "mercury-bloom": MercuryBloomDemo,
-  "lumen-core": LumenCoreDemo,
-  "light-cut": LightCutDemo,
-  "stipple-tide": StippleTideDemo,
-  "tide-line": TideLineDemo,
-  "lattice-drift": LatticeDriftDemo,
-  "star-tunnel": StarTunnelDemo,
-  "plate-wheel": PlateWheelDemo,
-  "node-weave": NodeWeaveDemo,
-  "aperture-bloom": ApertureBloomDemo,
-  "mosaic-crest": MosaicCrestDemo,
-  "forecast-curve": ForecastCurveDemo,
-  "dew-pane": DewPaneDemo,
-  "ink-pill": InkPillDemo,
-  "glyph-eddy": GlyphEddyDemo,
-  "phosphor-tube": PhosphorTubeDemo,
-  "folio-title": FolioTitleDemo,
-  "bough-study": BoughStudyDemo,
-  "sigil-weather": SigilWeatherDemo,
-  "crown-bar": CrownBarDemo,
-  "mote-beacon": MoteBeaconDemo,
-  "ink-rush": InkRushDemo,
-  "arch-current": ArchCurrentDemo,
-  "ink-fountain": InkFountainDemo,
-  "wire-ledger": WireLedgerDemo,
-  "rising-strokes": RisingStrokesDemo,
-  "contour-sheet": ContourSheetDemo,
-  "night-gate": NightGateDemo,
-  "starstream-button": StarstreamButtonDemo,
-  "arc-halo-button": ArcHaloButtonDemo,
-  "current-button": CurrentButtonDemo,
-  inkwell: InkwellDemo,
-  "muse-button": MuseButtonDemo,
-  "pulse-dust": PulseDustDemo,
-  "signal-tiles": SignalTilesDemo,
-  "hollow-bloom": HollowBloomDemo,
-  "grain-swell": GrainSwellDemo,
-  "ridge-strata": RidgeStrataDemo,
-  "drift-lines": DriftLinesDemo,
-  "loom-field": LoomFieldDemo,
-  "word-swarm": WordSwarmDemo,
-  "orb-lettering": OrbLetteringDemo,
-  "contour-stream": ContourStreamDemo,
-  "shifting-swarm": ShiftingSwarmDemo,
-  "drape-type": DrapeTypeDemo,
-  "glyph-surge": GlyphSurgeDemo,
-  "sphere-sketch": SphereSketchDemo,
-  "emblem-globe": EmblemGlobeDemo,
-  "aurora-veil": AuroraVeilDemo,
-  "silk-mesh": SilkMeshDemo,
-  "liquid-chrome-orb": LiquidChromeOrbDemo,
-  "plasma-glow": PlasmaGlowDemo,
-  "nebula-orb": NebulaOrbDemo,
-  "godray-haze": GodrayHazeDemo,
-  "ink-canvas": InkCanvasDemo,
-  "holo-foil": HoloFoilDemo,
-  "crystal-cells": CrystalCellsDemo,
-  "fluted-gradient": FlutedGradientDemo,
-  "ripple-pool": RipplePoolDemo,
-  "ascii-flow": AsciiFlowDemo,
-  "herbarium-study": HerbariumStudyDemo,
-  "winter-pagoda": WinterPagodaDemo,
-  "survey-relief": SurveyReliefDemo,
-  "form-foundry": FormFoundryDemo,
-  "specimen-desk": SpecimenDeskDemo,
-  "dot-screen": DotScreenDemo,
-  tubelight: TubelightDemo,
-  "salon-banner": SalonBannerDemo,
-  "button-atlas": ButtonAtlasDemo,
-  "folio-opening": FolioOpeningDemo,
-  "dispatch-colophon": DispatchColophonDemo,
-  "vitals-board": VitalsBoardDemo,
-  "tactile-switch": TactileSwitchDemo,
-  "draft-form": DraftFormDemo,
-  "pace-dial": PaceDialDemo,
-  "conjure-button": ConjureButtonDemo,
-  "halo-trace": HaloTraceDemo,
-  "glaze-button": GlazeButtonDemo,
-  "sheen-cta": SheenCtaDemo,
-  "kiln-button": KilnButtonDemo,
-  "hairline-cta": HairlineCtaDemo,
-  "halo-invite": HaloInviteDemo,
-  "terrace-dusk": TerraceDuskDemo,
-  "circuit-heart": CircuitHeartDemo,
-  "lens-drift": LensDriftDemo,
-  "thread-swell": ThreadSwellDemo,
-  "relief-mesh": ReliefMeshDemo,
-  "dust-veil": DustVeilDemo,
-  "ribbon-light": RibbonLightDemo,
-  "ash-spiral": AshSpiralDemo,
-  "dot-whirl": DotWhirlDemo,
-  "orbit-chip-button": OrbitChipButtonDemo,
-  "stamp-key": StampKeyDemo,
-  "ink-endcap-button": InkEndcapButtonDemo,
-  "prism-key": PrismKeyDemo,
-  "round-glyph": RoundGlyphDemo,
-  "prism-flow-button": PrismFlowButtonDemo,
-  "ember-tag": EmberTagDemo,
-  "draft-folio": DraftFolioDemo,
-  "ink-capsule": InkCapsuleDemo,
-  "keystroke-button": KeystrokeButtonDemo,
-  "stitch-frame-button": StitchFrameButtonDemo,
-  "rising-motes": RisingMotesDemo,
-  "roll-label": RollLabelDemo,
-  "comet-ring-button": CometRingButtonDemo,
-  "satin-capsule": SatinCapsuleDemo,
-  "opening-mark": OpeningMarkDemo,
-  "dust-signature": DustSignatureDemo,
-  "echo-letters": EchoLettersDemo,
-  "cast-reel": CastReelDemo,
-  "signal-relay": SignalRelayDemo,
-  "intaglio-deed": IntaglioDeedDemo,
-  "pond-glide": PondGlideDemo,
+  "magic-button": dynamic(() => import("./magic-button-demo").then((m) => m.MagicButtonDemo)),
+  "morphing-navbar": dynamic(() =>
+    import("./morphing-navbar-demo").then((m) => m.MorphingNavbarDemo),
+  ),
+  "animated-button": dynamic(() =>
+    import("./animated-button-demo").then((m) => m.AnimatedButtonDemo),
+  ),
+  "pulse-button": dynamic(() => import("./pulse-button-demo").then((m) => m.PulseButtonDemo)),
+  "rotating-card": dynamic(() => import("./rotating-card-demo").then((m) => m.RotatingCardDemo)),
+  "floating-text": dynamic(() => import("./floating-text-demo").then((m) => m.FloatingTextDemo)),
+  "notch-footer": dynamic(() => import("./notch-footer-demo").then((m) => m.NotchFooterDemo)),
+  "tilt-card": dynamic(() => import("./tilt-card-demo").then((m) => m.TiltCardDemo)),
+  "floating-dock": dynamic(() => import("./floating-dock-demo").then((m) => m.FloatingDockDemo)),
+  "circuit-background": dynamic(() =>
+    import("./circuit-background-demo").then((m) => m.CircuitBackgroundDemo),
+  ),
+  "focus-card": dynamic(() => import("./focus-card-demo")),
+  "expandable-showcase": dynamic(() => import("./expandable-showcase-demo")),
+  "shimmer-text": dynamic(() => import("./shimmer-text-demo")),
+  "kinetic-carousel": dynamic(() => import("./kinetic-carousel-demo")),
+  "process-stepper": dynamic(() => import("./process-stepper-demo")),
+  "animated-list": dynamic(() => import("./animated-list-demo")),
+  "masonry-grid": dynamic(() => import("./masonry-grid-demo")),
+  "aurora-background": dynamic(() => import("./aurora-background-demo")),
+  "grid-motion": dynamic(() => import("./grid-motion-demo")),
+  "blur-text": dynamic(() => import("./blur-text-demo")),
+  "split-text": dynamic(() => import("./split-text-demo")),
+  "decrypted-text": dynamic(() => import("./decrypted-text-demo")),
+  "bounce-cards": dynamic(() => import("./bounce-cards-demo")),
+  "flowing-menu": dynamic(() => import("./flowing-menu-demo")),
+  "true-focus": dynamic(() => import("./true-focus-demo")),
+  "border-glow": dynamic(() => import("./border-glow-demo")),
+  "gradient-text": dynamic(() => import("./gradient-text-demo")),
+  "click-spark": dynamic(() => import("./click-spark-demo")),
+  "spotlight-card": dynamic(() => import("./spotlight-card-demo")),
+  "text-pressure": dynamic(() => import("./text-pressure-demo")),
+  waves: dynamic(() => import("./waves-demo")),
+  "letter-glitch": dynamic(() => import("./letter-glitch-demo")),
+  "pixel-card": dynamic(() => import("./pixel-card-demo")),
+  "tilted-card": dynamic(() => import("./tilted-card-demo")),
+  magnet: dynamic(() => import("./magnet-demo")),
+  stack: dynamic(() => import("./stack-demo")),
+  "star-border": dynamic(() => import("./star-border-demo")),
+  "cursor-grid": dynamic(() => import("./cursor-grid-demo")),
+  "scroll-velocity": dynamic(() => import("./scroll-velocity-demo")),
+  "liquid-tabs": dynamic(() => import("./liquid-tabs-demo")),
+  "scratch-to-reveal": dynamic(() => import("./scratch-to-reveal-demo")),
+  "animated-beam": dynamic(() => import("./animated-beam-demo")),
+  "gravity-text-swap": dynamic(() => import("./gravity-text-swap-demo")),
+  "border-beam": dynamic(() => import("./border-beam-demo")),
+  "orbiting-elements": dynamic(() => import("./orbiting-elements-demo")),
+  "bento-grid": dynamic(() => import("./bento-grid-demo")),
+  "flip-words": dynamic(() => import("./flip-words-demo")),
+  "erosion-plate": dynamic(() => import("./erosion-plate-demo")),
+  "gloop-trail": dynamic(() => import("./gloop-trail-demo")),
+  "static-type": dynamic(() => import("./static-type-demo")),
+  "iron-filings": dynamic(() => import("./iron-filings-demo")),
+  "comparison-slider": dynamic(() => import("./comparison-slider-demo")),
+  dock: dynamic(() => import("./dock-demo")),
+  "progress-ring": dynamic(() => import("./progress-ring-demo")),
+  marquee: dynamic(() => import("./marquee-demo")),
+  "mirror-plate": dynamic(() => import("./mirror-plate-demo")),
+  "fluid-glass": dynamic(() => import("./fluid-glass-demo")),
+  "dome-gallery": dynamic(() => import("./dome-gallery-demo")),
+  "portrait-wall": dynamic(() => import("./portrait-wall-demo")),
+  "chime-switch": dynamic(() => import("./chime-switch-demo")),
+  "root-nav": dynamic(() => import("./root-nav-demo")),
+  "run-tag": dynamic(() => import("./run-tag-demo")),
+  "cipher-reel": dynamic(() => import("./cipher-reel-demo")),
+  "orbit-knob": dynamic(() => import("./orbit-knob-demo")),
+  "coy-key": dynamic(() => import("./coy-key-demo")),
+  "turn-leaf": dynamic(() => import("./turn-leaf-demo")),
+  "paper-stack": dynamic(() => import("./paper-stack-demo")),
+  "cinder-trigger": dynamic(() => import("./cinder-trigger-demo")),
+  "tray-picker": dynamic(() => import("./tray-picker-demo")),
+  "steady-press": dynamic(() => import("./steady-press-demo")),
+  "bloom-choice": dynamic(() => import("./bloom-choice-demo")),
+  "tile-wait": dynamic(() => import("./tile-wait-demo")),
+  "folio-crush": dynamic(() => import("./folio-crush-demo")),
+  "glance-score": dynamic(() => import("./glance-score-demo")),
+  "query-well": dynamic(() => import("./query-well-demo")),
+  "beat-mark": dynamic(() => import("./beat-mark-demo")),
+  "polish-pane": dynamic(() => import("./polish-pane-demo")),
+  "stretch-toggle": dynamic(() => import("./stretch-toggle-demo")),
+  "drag-number": dynamic(() => import("./drag-number-demo")),
+  "paper-mill": dynamic(() => import("./paper-mill-demo")),
+  "swipe-confirm": dynamic(() => import("./swipe-confirm-demo")),
+  "pull-launch": dynamic(() => import("./pull-launch-demo")),
+  "tide-meter": dynamic(() => import("./tide-meter-demo")),
+  "tally-box": dynamic(() => import("./tally-box-demo")),
+  "press-toggle": dynamic(() => import("./press-toggle-demo")),
+  "state-glyph": dynamic(() => import("./state-glyph-demo")),
+  "glide-ledger-row": dynamic(() => import("./glide-ledger-row-demo")),
+  "flick-notice": dynamic(() => import("./flick-notice-demo")),
+  "stub-pass": dynamic(() => import("./stub-pass-demo")),
+  "ink-murmur": dynamic(() => import("./ink-murmur-demo")),
+  "hum-capsule": dynamic(() => import("./hum-capsule-demo")),
+  "rouse-track": dynamic(() => import("./rouse-track-demo")),
+  "ember-hint": dynamic(() => import("./ember-hint-demo")),
+  "moon-lattice": dynamic(() => import("./moon-lattice-demo")),
+  "resonance-plate": dynamic(() => import("./resonance-plate-demo")),
+  "confluence-lines": dynamic(() => import("./confluence-lines-demo")),
+  "silk-bands": dynamic(() => import("./silk-bands-demo")),
+  "mercury-bloom": dynamic(() => import("./mercury-bloom-demo")),
+  "lumen-core": dynamic(() => import("./lumen-core-demo")),
+  "light-cut": dynamic(() => import("./light-cut-demo")),
+  "stipple-tide": dynamic(() => import("./stipple-tide-demo")),
+  "tide-line": dynamic(() => import("./tide-line-demo")),
+  "lattice-drift": dynamic(() => import("./lattice-drift-demo")),
+  "star-tunnel": dynamic(() => import("./star-tunnel-demo")),
+  "plate-wheel": dynamic(() => import("./plate-wheel-demo")),
+  "node-weave": dynamic(() => import("./node-weave-demo")),
+  "aperture-bloom": dynamic(() => import("./aperture-bloom-demo")),
+  "mosaic-crest": dynamic(() => import("./mosaic-crest-demo")),
+  "forecast-curve": dynamic(() => import("./forecast-curve-demo")),
+  "dew-pane": dynamic(() => import("./dew-pane-demo")),
+  "ink-pill": dynamic(() => import("./ink-pill-demo")),
+  "glyph-eddy": dynamic(() => import("./glyph-eddy-demo")),
+  "phosphor-tube": dynamic(() => import("./phosphor-tube-demo")),
+  "folio-title": dynamic(() => import("./folio-title-demo")),
+  "bough-study": dynamic(() => import("./bough-study-demo")),
+  "sigil-weather": dynamic(() => import("./sigil-weather-demo")),
+  "crown-bar": dynamic(() => import("./crown-bar-demo")),
+  "mote-beacon": dynamic(() => import("./mote-beacon-demo")),
+  "ink-rush": dynamic(() => import("./ink-rush-demo")),
+  "arch-current": dynamic(() => import("./arch-current-demo")),
+  "ink-fountain": dynamic(() => import("./ink-fountain-demo")),
+  "wire-ledger": dynamic(() => import("./wire-ledger-demo")),
+  "rising-strokes": dynamic(() => import("./rising-strokes-demo")),
+  "contour-sheet": dynamic(() => import("./contour-sheet-demo")),
+  "night-gate": dynamic(() => import("./night-gate-demo")),
+  "starstream-button": dynamic(() => import("./starstream-button-demo")),
+  "arc-halo-button": dynamic(() => import("./arc-halo-button-demo")),
+  "current-button": dynamic(() => import("./current-button-demo")),
+  inkwell: dynamic(() => import("./inkwell-demo")),
+  "muse-button": dynamic(() => import("./muse-button-demo")),
+  "pulse-dust": dynamic(() => import("./pulse-dust-demo")),
+  "signal-tiles": dynamic(() => import("./signal-tiles-demo")),
+  "hollow-bloom": dynamic(() => import("./hollow-bloom-demo")),
+  "grain-swell": dynamic(() => import("./grain-swell-demo")),
+  "ridge-strata": dynamic(() => import("./ridge-strata-demo")),
+  "drift-lines": dynamic(() => import("./drift-lines-demo")),
+  "loom-field": dynamic(() => import("./loom-field-demo")),
+  "word-swarm": dynamic(() => import("./word-swarm-demo")),
+  "orb-lettering": dynamic(() => import("./orb-lettering-demo")),
+  "contour-stream": dynamic(() => import("./contour-stream-demo")),
+  "shifting-swarm": dynamic(() => import("./shifting-swarm-demo")),
+  "drape-type": dynamic(() => import("./drape-type-demo")),
+  "glyph-surge": dynamic(() => import("./glyph-surge-demo")),
+  "sphere-sketch": dynamic(() => import("./sphere-sketch-demo")),
+  "emblem-globe": dynamic(() => import("./emblem-globe-demo")),
+  "aurora-veil": dynamic(() => import("./aurora-veil-demo")),
+  "silk-mesh": dynamic(() => import("./silk-mesh-demo")),
+  "liquid-chrome-orb": dynamic(() => import("./liquid-chrome-orb-demo")),
+  "plasma-glow": dynamic(() => import("./plasma-glow-demo")),
+  "nebula-orb": dynamic(() => import("./nebula-orb-demo")),
+  "godray-haze": dynamic(() => import("./godray-haze-demo")),
+  "ink-canvas": dynamic(() => import("./ink-canvas-demo")),
+  "holo-foil": dynamic(() => import("./holo-foil-demo")),
+  "crystal-cells": dynamic(() => import("./crystal-cells-demo")),
+  "fluted-gradient": dynamic(() => import("./fluted-gradient-demo")),
+  "ripple-pool": dynamic(() => import("./ripple-pool-demo")),
+  "ascii-flow": dynamic(() => import("./ascii-flow-demo")),
+  "herbarium-study": dynamic(() => import("./herbarium-study-demo")),
+  "winter-pagoda": dynamic(() => import("./winter-pagoda-demo")),
+  "survey-relief": dynamic(() => import("./survey-relief-demo")),
+  "form-foundry": dynamic(() => import("./form-foundry-demo")),
+  "specimen-desk": dynamic(() => import("./specimen-desk-demo")),
+  "dot-screen": dynamic(() => import("./dot-screen-demo")),
+  tubelight: dynamic(() => import("./tubelight-demo")),
+  "salon-banner": dynamic(() => import("./salon-banner-demo")),
+  "button-atlas": dynamic(() => import("./button-atlas-demo")),
+  "folio-opening": dynamic(() => import("./folio-opening-demo")),
+  "dispatch-colophon": dynamic(() => import("./dispatch-colophon-demo")),
+  "vitals-board": dynamic(() => import("./vitals-board-demo")),
+  "tactile-switch": dynamic(() => import("./tactile-switch-demo")),
+  "draft-form": dynamic(() => import("./draft-form-demo")),
+  "pace-dial": dynamic(() => import("./pace-dial-demo")),
+  "conjure-button": dynamic(() => import("./conjure-button-demo")),
+  "halo-trace": dynamic(() => import("./halo-trace-demo")),
+  "glaze-button": dynamic(() => import("./glaze-button-demo")),
+  "sheen-cta": dynamic(() => import("./sheen-cta-demo")),
+  "kiln-button": dynamic(() => import("./kiln-button-demo")),
+  "hairline-cta": dynamic(() => import("./hairline-cta-demo")),
+  "halo-invite": dynamic(() => import("./halo-invite-demo")),
+  "terrace-dusk": dynamic(() => import("./terrace-dusk-demo")),
+  "circuit-heart": dynamic(() => import("./circuit-heart-demo")),
+  "lens-drift": dynamic(() => import("./lens-drift-demo")),
+  "thread-swell": dynamic(() => import("./thread-swell-demo")),
+  "relief-mesh": dynamic(() => import("./relief-mesh-demo")),
+  "dust-veil": dynamic(() => import("./dust-veil-demo")),
+  "ribbon-light": dynamic(() => import("./ribbon-light-demo")),
+  "ash-spiral": dynamic(() => import("./ash-spiral-demo")),
+  "dot-whirl": dynamic(() => import("./dot-whirl-demo")),
+  "orbit-chip-button": dynamic(() => import("./orbit-chip-button-demo")),
+  "stamp-key": dynamic(() => import("./stamp-key-demo")),
+  "ink-endcap-button": dynamic(() => import("./ink-endcap-button-demo")),
+  "prism-key": dynamic(() => import("./prism-key-demo")),
+  "round-glyph": dynamic(() => import("./round-glyph-demo")),
+  "prism-flow-button": dynamic(() => import("./prism-flow-button-demo")),
+  "ember-tag": dynamic(() => import("./ember-tag-demo")),
+  "draft-folio": dynamic(() => import("./draft-folio-demo")),
+  "ink-capsule": dynamic(() => import("./ink-capsule-demo")),
+  "keystroke-button": dynamic(() => import("./keystroke-button-demo")),
+  "stitch-frame-button": dynamic(() => import("./stitch-frame-button-demo")),
+  "rising-motes": dynamic(() => import("./rising-motes-demo")),
+  "roll-label": dynamic(() => import("./roll-label-demo")),
+  "comet-ring-button": dynamic(() => import("./comet-ring-button-demo")),
+  "satin-capsule": dynamic(() => import("./satin-capsule-demo")),
+  "opening-mark": dynamic(() => import("./opening-mark-demo")),
+  "dust-signature": dynamic(() => import("./dust-signature-demo")),
+  "echo-letters": dynamic(() => import("./echo-letters-demo")),
+  "cast-reel": dynamic(() => import("./cast-reel-demo")),
+  "signal-relay": dynamic(() => import("./signal-relay-demo")),
+  "intaglio-deed": dynamic(() => import("./intaglio-deed-demo")),
+  "pond-glide": dynamic(() => import("./pond-glide-demo")),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

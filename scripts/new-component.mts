@@ -170,11 +170,7 @@ fs.writeFileSync(indexPath, index.slice(0, insertAt) + entry + index.slice(inser
 
 const demosPath = path.join(REGISTRY_DIR, "demos.ts");
 let demos = fs.readFileSync(demosPath, "utf8");
-demos = demos.replace(
-  'import type { ComponentName } from "./index";',
-  `import ${Component}Demo from "./${name}-demo";\nimport type { ComponentName } from "./index";`,
-);
-demos = demos.replace(/\n};\n/, `\n  "${name}": ${Component}Demo,\n};\n`);
+demos = demos.replace(/\n};\n/, `\n  "${name}": dynamic(() => import("./${name}-demo")),\n};\n`);
 fs.writeFileSync(demosPath, demos);
 
 // Leave every touched file exactly as the pre-commit hook would.
