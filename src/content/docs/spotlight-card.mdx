@@ -28,7 +28,7 @@ import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 export default function Example() {
   return (
-    <SpotlightCard className="max-w-sm" spotlightColor="rgba(255, 255, 255, 0.2)">
+    <SpotlightCard className="max-w-sm">
       <h3 className="text-xl font-semibold">Hover me</h3>
     </SpotlightCard>
   );
@@ -37,6 +37,6 @@ export default function Example() {
 
 ## Props
 
-| Prop             | Type     | Default                      | Description                                      |
-| :--------------- | :------- | :--------------------------- | :----------------------------------------------- |
-| `spotlightColor` | `string` | `"rgba(255, 255, 255, 0.2)"` | Colour of the spotlight that follows the cursor. |
+| Prop             | Type     | Default                        | Description                                                                                                                         |
+| :--------------- | :------- | :----------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `spotlightColor` | `string` | `"hsl(var(--primary) / 0.14)"` | Colour of the spotlight that follows the cursor. Defaults to a soft tint of the theme primary, so it shows on light and dark cards. |
