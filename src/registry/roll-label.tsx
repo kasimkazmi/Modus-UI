@@ -2,6 +2,7 @@
 // Ported from ThreeUI Community's Sliding Text CTA (MIT, © 2026 Meng To).
 
 import type { MouseEventHandler } from "react";
+import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +30,10 @@ export function RollLabel({
   className,
   label = "Open the archive",
 }: RollLabelProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => setPrefersReducedMotion(Boolean(prefersReduced)), [prefersReduced]);
   const filter = `hue-rotate(${clamp(hue, -180, 180)}deg) saturate(${clamp(saturation, 0, 2)}) brightness(${clamp(brightness, 0.35, 1.65)})`;
 
   return (

@@ -10,15 +10,17 @@ export default function BounceCardsDemo() {
   ];
 
   return (
-    <div className="flex min-h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted p-12">
-      <BounceCards
-        images={images}
-        containerWidth={500}
-        containerHeight={400}
-        animationDelay={0.2}
-        animationStagger={0.08}
-        enableHover={true}
-      />
+    <div className="flex min-h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted p-4 sm:p-12">
+      <div className="origin-center scale-[0.55] sm:scale-100">
+        <BounceCards
+          images={images}
+          containerWidth={500}
+          containerHeight={400}
+          animationDelay={0.2}
+          animationStagger={0.08}
+          enableHover={true}
+        />
+      </div>
     </div>
   );
 }

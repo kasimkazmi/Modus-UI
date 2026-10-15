@@ -65,7 +65,10 @@ export function SteadyPress({
   onTap,
   className,
 }: SteadyPressProps) {
-  const reduced = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => setReduced(Boolean(prefersReduced)), [prefersReduced]);
   const level = useMotionValue(0); // 0–100
   const run = useRef<AnimationPlaybackControls | null>(null);
   const pressedAt = useRef(0);

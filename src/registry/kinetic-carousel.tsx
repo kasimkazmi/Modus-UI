@@ -68,7 +68,9 @@ export function KineticCarousel({
   ...props
 }: KineticCarouselProps) {
   const containerPadding = 16;
-  const itemWidth = baseWidth - containerPadding * 2;
+  // Never wider than the space it is given, so cards stay whole on narrow screens.
+  const [width, setWidth] = useState(baseWidth);
+  const itemWidth = width - containerPadding * 2;
   const trackItemOffset = itemWidth + GAP;
 
   const itemsForRender = useMemo(() => {
@@ -83,6 +85,16 @@ export function KineticCarousel({
   const [isJumping, setIsJumping] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const parent = containerRef.current?.parentElement;
+    if (!parent) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setWidth(Math.min(baseWidth, entry.contentRect.width || baseWidth));
+    });
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [baseWidth]);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -209,7 +221,7 @@ export function KineticCarousel({
         "relative overflow-hidden rounded-[24px] border border-border bg-background p-4",
         className,
       )}
-      style={{ width: baseWidth }}
+      style={{ width }}
       {...props}
     >
       <motion.div

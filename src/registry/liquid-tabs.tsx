@@ -117,7 +117,7 @@ export function LiquidTabs({
       aria-orientation="horizontal"
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative isolate inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 p-1",
+        "relative isolate inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-border bg-muted/50 p-1 [scrollbar-width:none]",
         className,
       )}
     >

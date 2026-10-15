@@ -32,7 +32,10 @@ export function MirrorPlate({
   glassDistortion = 0,
   className,
 }: MirrorPlateProps) {
-  const reduce = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => setReduce(Boolean(prefersReduced)), [prefersReduced]);
   const filterId = `mirror-${useId().replace(/:/g, "")}`;
   const video = useRef<HTMLVideoElement>(null);
   const [live, setLive] = useState(false);

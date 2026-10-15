@@ -5,7 +5,8 @@ import { OrbitingElements } from "./orbiting-elements";
 export default function OrbitingElementsDemo() {
   return (
     <div className="relative flex min-h-[400px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
-      <div className="relative flex items-center justify-center">
+      {/* Scaled down on phones so the outer orbit stays inside the frame. */}
+      <div className="relative flex scale-[0.8] items-center justify-center sm:scale-100">
         {/* Core Node */}
         <div className="z-10 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-card text-3xl shadow-sm">
           ☀️

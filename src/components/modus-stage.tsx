@@ -30,7 +30,7 @@ export function ModusStage({ caption, layout = "center", children, className }: 
       <div
         className={cn(
           "relative min-h-[360px] flex-1 overflow-hidden rounded-xl bg-background",
-          layout === "center" && "flex items-center justify-center p-10",
+          layout === "center" && "flex items-center justify-center p-4 sm:p-10",
         )}
       >
         {children}

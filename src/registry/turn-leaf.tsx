@@ -79,7 +79,10 @@ export function TurnLeaf({
   ariaLabel = "Turn leaf",
   className,
 }: TurnLeafProps) {
-  const reduce = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => setReduce(Boolean(prefersReduced)), [prefersReduced]);
   const [ownFlipped, setOwnFlipped] = useState(defaultFlipped);
   const isFlipped = flipped ?? ownFlipped;
   const turn = useMotionValue(isFlipped ? 180 : 0);

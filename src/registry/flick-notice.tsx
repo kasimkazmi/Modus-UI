@@ -122,7 +122,13 @@ export function FlickNotice({
             !inline && "fixed bottom-6 right-6 z-50",
             className,
           )}
-          style={{ width, maxWidth: "calc(100vw - 32px)", borderRadius: radius, background, color }}
+          style={{
+            width,
+            maxWidth: inline ? "100%" : "calc(100vw - 32px)",
+            borderRadius: radius,
+            background,
+            color,
+          }}
         >
           {icon && <span className="shrink-0">{icon}</span>}
           <div className="min-w-0 flex-1">

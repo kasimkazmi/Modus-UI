@@ -32,7 +32,7 @@ export default function StackDemo() {
 
   return (
     <div className="relative flex min-h-[500px] w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
-      <div className="h-[400px] w-[300px]">
+      <div className="h-[300px] w-[210px] sm:h-[400px] sm:w-[300px]">
         <Stack cards={cards} randomRotation={true} sensitivity={150} sendToBackOnClick={true} />
       </div>
     </div>

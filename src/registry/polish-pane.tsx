@@ -60,7 +60,10 @@ export function PolishPane({
   onRetry,
   className,
 }: PolishPaneProps) {
-  const reduce = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => setReduce(Boolean(prefersReduced)), [prefersReduced]);
   const state = (status in RANGE ? status : "generating") as Status;
   const [from, to] = RANGE[state];
   const [step, setStep] = useState(from);

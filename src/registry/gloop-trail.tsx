@@ -1,6 +1,6 @@
 "use client";
 // Drops that chase the pointer at different speeds and melt into one pool through a goo filter.
-import { useEffect, useId, useRef } from "react";
+import { useState, useEffect, useId, useRef } from "react";
 import {
   motion,
   useMotionValue,
@@ -60,7 +60,10 @@ export function GloopTrail({
   blobType = "circle",
   fillColor = "hsl(var(--primary))",
 }: GloopTrailProps) {
-  const reduce = useReducedMotion();
+  const prefersReduced = useReducedMotion();
+  // Follow the setting only after hydration, so the first render matches the server's.
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => setReduce(Boolean(prefersReduced)), [prefersReduced]);
   const filterId = `gloop-${useId().replace(/:/g, "")}`;
   const layer = useRef<HTMLDivElement>(null);
   const x = useMotionValue(-200);

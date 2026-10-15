@@ -214,7 +214,8 @@ export function DomeGallery({
       let radius = basis * fit;
       const heightGuard = h * 1.35;
       radius = Math.min(radius, heightGuard);
-      radius = clamp(radius, minRadius, maxRadius);
+      // The minimum never exceeds what the container can show, so small screens still see the dome.
+      radius = clamp(radius, Math.min(minRadius, basis * 1.2), maxRadius);
       lockedRadiusRef.current = Math.round(radius) as any;
 
       const viewerPad = Math.max(8, Math.round(minDim * padFactor));
