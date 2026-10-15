@@ -44,7 +44,7 @@ describe("createCatalogue", () => {
     expect(await client.markdown(catalogue.components[0]!)).toBe("# Blur Text from the site");
   });
 
-  it("builds markdown from the registry item when /docs/<name>.md is missing", async () => {
+  it("builds markdown from the registry item when /components/<name>.md is missing", async () => {
     mockFetch({ docs: false });
     const md = await createCatalogue(ORIGIN).markdown(catalogue.components[0]!);
     expect(md).toContain("# Blur Text");

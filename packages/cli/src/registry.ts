@@ -12,6 +12,8 @@ export interface Catalogue {
   count: number;
   categories: string[];
   components: CatalogueEntry[];
+  /** Old component name -> current name. */
+  renamed?: Record<string, string>;
 }
 
 export interface RegistryComponent {

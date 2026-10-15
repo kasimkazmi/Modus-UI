@@ -74,7 +74,7 @@ export function createServer(origin: string): McpServer {
       `### ${e.title} (\`${e.name}\`)`,
       `- Category: ${e.category}`,
       `- ${e.description}`,
-      `- Docs: ${base}/docs/${e.name}`,
+      `- Docs: ${base}/components/${e.name}`,
       `- Install: \`${installCommand(e.name)}\``,
     ].join("\n");
 
@@ -183,7 +183,7 @@ export function createServer(origin: string): McpServer {
             entry.dependencies.length
               ? `npm dependencies: ${entry.dependencies.join(", ")}`
               : "No extra npm dependencies.",
-            `Docs: ${base}/docs/${entry.name}`,
+            `Docs: ${base}/components/${entry.name}`,
           ].join("\n"),
         );
       }),

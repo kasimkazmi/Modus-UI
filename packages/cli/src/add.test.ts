@@ -10,6 +10,7 @@ const catalogue = {
   homepage: "https://example.test",
   count: 2,
   categories: ["Text"],
+  renamed: { "fuzzy-text": "blur-text" },
   components: [
     {
       name: "blur-text",
@@ -70,6 +71,14 @@ afterEach(async () => {
 });
 
 describe("add", () => {
+  it("resolves a renamed component to its current name", async () => {
+    await project();
+    const lines: string[] = [];
+    await add(["fuzzy-text"], { cwd: dir, run, log: (line) => lines.push(line) });
+    expect(existsSync(join(dir, "components/ui/blur-text.tsx"))).toBe(true);
+    expect(lines).toContain("fuzzy-text is now called blur-text.");
+  });
+
   it("writes the component and creates lib/utils.ts without src/", async () => {
     await project();
     await add(["blur-text"], { cwd: dir, run, log });

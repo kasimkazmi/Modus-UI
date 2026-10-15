@@ -38,7 +38,7 @@ export const item = {
   files: [{ path: "registry/blur-text.tsx", content: "export function BlurText() {}\n" }],
 };
 
-/** Mock global fetch with a route table; `docs` controls whether /docs/*.md exists. */
+/** Mock global fetch with a route table; `docs` controls whether /components/*.md exists. */
 export function mockFetch(options: { docs?: boolean; fail?: boolean } = {}) {
   const fn = vi.fn(async (input: string | URL | Request) => {
     if (options.fail) throw new TypeError("fetch failed");
@@ -46,7 +46,7 @@ export function mockFetch(options: { docs?: boolean; fail?: boolean } = {}) {
     const json = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
     if (path === "/registry/index.json") return json(catalogue);
     if (path === "/registry/blur-text.json") return json(item);
-    if (path === "/docs/blur-text.md" && options.docs) {
+    if (path === "/components/blur-text.md" && options.docs) {
       return new Response("# Blur Text from the site", { status: 200 });
     }
     return new Response("not found", { status: 404, statusText: "Not Found" });

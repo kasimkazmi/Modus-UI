@@ -1,6 +1,6 @@
 /**
  * A cached client over the static registry the Modus UI site publishes:
- * `/registry/index.json`, `/registry/<name>.json` and `/docs/<name>.md`.
+ * `/registry/index.json`, `/registry/<name>.json` and `/components/<name>.md`.
  */
 
 export const DEFAULT_ORIGIN = "https://modusui.kasimkazmi.com";
@@ -67,13 +67,13 @@ export function createCatalogue(origin: string) {
 
   /** The site's markdown page, or one built from the registry item if that route is missing. */
   async function markdown(entry: CatalogueComponent): Promise<string> {
-    const response = await fetch(`${origin}/docs/${entry.name}.md`, {
+    const response = await fetch(`${origin}/components/${entry.name}.md`, {
       headers: { accept: "text/markdown" },
     });
     if (response.ok) return response.text();
     if (response.status !== 404) {
       throw new Error(
-        `GET ${origin}/docs/${entry.name}.md failed: ${response.status} ${response.statusText}`,
+        `GET ${origin}/components/${entry.name}.md failed: ${response.status} ${response.statusText}`,
       );
     }
     const item = (await (
@@ -97,7 +97,7 @@ export function fallbackMarkdown(
     "",
     entry.description,
     "",
-    `Category: ${entry.category}. Docs: ${origin}/docs/${entry.name}`,
+    `Category: ${entry.category}. Docs: ${origin}/components/${entry.name}`,
     "",
     "## Installation",
     "",

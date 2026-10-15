@@ -40,7 +40,7 @@ describe("modus-ui MCP server", () => {
     const call = await connect();
     const hit = await call("search_components", { query: "text animation" });
     expect(hit.text).toContain("Blur Text (`blur-text`)");
-    expect(hit.text).toContain(`${ORIGIN}/docs/blur-text`);
+    expect(hit.text).toContain(`${ORIGIN}/components/blur-text`);
     const bad = await call("search_components", { query: "x", category: "Nope" });
     expect(bad.isError).toBe(true);
     expect(bad.text).toContain("Typography, Actions, Backgrounds");
@@ -80,7 +80,7 @@ describe("modus-ui MCP server", () => {
     expect(result.text).toContain("npx @modus-ui/cli add magnet");
     expect(result.text).toContain("components/ui/magnet.tsx");
     expect(result.text).toContain("npm dependencies: framer-motion");
-    expect(result.text).toContain(`${ORIGIN}/docs/magnet`);
+    expect(result.text).toContain(`${ORIGIN}/components/magnet`);
   });
 
   it("turns network failures into tool errors", async () => {

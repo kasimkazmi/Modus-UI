@@ -51,6 +51,13 @@ export async function add(names: string[], options: AddOptions): Promise<void> {
   const pkg = await readPackageJson(cwd);
   const catalogue = await fetchCatalogue();
   const known = catalogue.components.map((c) => c.name);
+  const renamed = catalogue.renamed ?? {};
+  names = names.map((n) => {
+    const current = renamed[n];
+    if (!current) return n;
+    log(`${n} is now called ${current}.`);
+    return current;
+  });
 
   const unknown = names.filter((n) => !known.includes(n));
   if (unknown.length > 0) {

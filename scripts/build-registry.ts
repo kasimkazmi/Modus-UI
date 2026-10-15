@@ -41,6 +41,10 @@ const catalogue = {
     description: readComponentDoc(item.name).description,
     dependencies: item.dependencies,
   })),
+  // Old slug -> current slug, so the CLI can still resolve names from before a rename.
+  renamed: JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "component-redirects.json"), "utf8"),
+  ),
 };
 fs.writeFileSync(path.join(REGISTRY_PATH, "index.json"), JSON.stringify(catalogue, null, 2));
 

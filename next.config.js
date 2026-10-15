@@ -17,6 +17,8 @@ const nextConfig = {
       { source: `/components/${from}.md`, destination: `/components/${to}.md`, permanent: true },
       { source: `/preview/${from}`, destination: `/preview/${to}`, permanent: true },
       { source: `/docs/${from}`, destination: `/components/${to}`, permanent: true },
+      // The CLI and MCP server fetch component source from here.
+      { source: `/registry/${from}.json`, destination: `/registry/${to}.json`, permanent: true },
     ]);
     // The docs moved from /docs to /components.
     return [
