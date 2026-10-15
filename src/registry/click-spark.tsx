@@ -1,19 +1,33 @@
 "use client";
+// Wrapper that bursts radiating spark lines from every click.
 
-import { useRef, useEffect, useCallback, ReactNode } from "react";
+import * as React from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface ClickSparkProps {
+type Easing = "linear" | "ease-in" | "ease-out" | "ease-in-out";
+
+export interface ClickSparkProps extends React.HTMLAttributes<HTMLDivElement> {
   sparkColor?: string;
   sparkSize?: number;
   sparkRadius?: number;
   sparkCount?: number;
   duration?: number;
-  easing?: "linear" | "ease-in" | "ease-out" | "ease-in-out";
+  easing?: Easing;
   extraScale?: number;
-  children?: ReactNode;
-  className?: string;
+}
+
+const EASE: Record<Easing, (t: number) => number> = {
+  linear: (t) => t,
+  "ease-in": (t) => t * t,
+  "ease-out": (t) => 1 - (1 - t) * (1 - t),
+  "ease-in-out": (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2),
+};
+
+interface Burst {
+  x: number;
+  y: number;
+  born: number;
 }
 
 export function ClickSpark({
@@ -23,145 +37,75 @@ export function ClickSpark({
   sparkCount = 8,
   duration = 500,
   easing = "ease-out",
-  extraScale = 1.0,
-  children,
+  extraScale = 1,
   className,
+  children,
+  ...props
 }: ClickSparkProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sparksRef = useRef<Array<{ x: number; y: number; angle: number; startTime: number }>>([]);
-  const startTimeRef = useRef<number | null>(null);
-  // Reduced motion: no sparks and no draw loop; clicks still reach the children.
-  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const bursts = React.useRef<Burst[]>([]);
+  const frame = React.useRef(0);
 
-  useEffect(() => {
+  React.useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  const render = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    let resizeTimeout: NodeJS.Timeout;
-
-    const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-      }
-    };
-
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    };
-
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
-    resizeCanvas();
-
-    return () => {
-      ro.disconnect();
-      clearTimeout(resizeTimeout);
-    };
-  }, []);
-
-  const easeFunc = useCallback(
-    (t: number) => {
-      switch (easing) {
-        case "linear":
-          return t;
-        case "ease-in":
-          return t * t;
-        case "ease-in-out":
-          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        default:
-          return t * (2 - t);
-      }
-    },
-    [easing],
-  );
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx || prefersReducedMotion) return;
-
-    // Canvas cannot resolve CSS variables; let the browser compute the color.
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    const { width, height } = canvas.getBoundingClientRect();
+    if (canvas.width !== Math.round(width * dpr)) canvas.width = Math.round(width * dpr);
+    if (canvas.height !== Math.round(height * dpr)) canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+    // The canvas cannot read CSS variables, so let the browser resolve the colour.
     canvas.style.color = sparkColor;
-    const stroke = getComputedStyle(canvas).color;
-
-    let animationId: number;
-
-    const draw = (timestamp: number) => {
-      if (!startTimeRef.current) startTimeRef.current = timestamp;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      sparksRef.current = sparksRef.current.filter((spark) => {
-        const elapsed = timestamp - spark.startTime;
-        if (elapsed >= duration) return false;
-
-        const progress = elapsed / duration;
-        const eased = easeFunc(progress);
-        const distance = eased * sparkRadius * extraScale;
-        const lineLength = sparkSize * (1 - eased);
-
-        const x1 = spark.x + distance * Math.cos(spark.angle);
-        const y1 = spark.y + distance * Math.sin(spark.angle);
-        const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
-        const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
-
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = 2;
-        ctx.lineCap = "round";
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-
-        return true;
-      });
-
-      animationId = requestAnimationFrame(draw);
-    };
-
-    animationId = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(animationId);
-  }, [
-    sparkColor,
-    sparkSize,
-    sparkRadius,
-    sparkCount,
-    duration,
-    easeFunc,
-    extraScale,
-    prefersReducedMotion,
-  ]);
-
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas || prefersReducedMotion) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    ctx.strokeStyle = getComputedStyle(canvas).color;
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
 
     const now = performance.now();
-    const newSparks = Array.from({ length: sparkCount }, (_, i) => ({
-      x,
-      y,
-      angle: (2 * Math.PI * i) / sparkCount,
-      startTime: now,
-    }));
-
-    sparksRef.current.push(...newSparks);
+    bursts.current = bursts.current.filter((b) => now - b.born < duration);
+    for (const burst of bursts.current) {
+      const t = EASE[easing]((now - burst.born) / duration);
+      const reach = t * sparkRadius * extraScale;
+      const length = (1 - t) * sparkSize * extraScale;
+      for (let i = 0; i < sparkCount; i++) {
+        const angle = (i / sparkCount) * Math.PI * 2;
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        ctx.beginPath();
+        ctx.moveTo(burst.x + cos * reach, burst.y + sin * reach);
+        ctx.lineTo(burst.x + cos * (reach + length), burst.y + sin * (reach + length));
+        ctx.stroke();
+      }
+    }
+    frame.current = bursts.current.length ? requestAnimationFrame(render) : 0;
   };
 
   return (
-    <div className={cn("relative h-full w-full", className)} onClick={handleClick}>
+    <div
+      {...props}
+      className={cn("relative", className)}
+      onClick={(event) => {
+        props.onClick?.(event);
+        if (reduceMotion) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        bursts.current.push({
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+          born: performance.now(),
+        });
+        if (!frame.current) frame.current = requestAnimationFrame(render);
+      }}
+    >
+      {children}
       <canvas
         ref={canvasRef}
-        className="pointer-events-none absolute left-0 top-0 z-50 block h-full w-full select-none"
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full"
       />
-      {children}
     </div>
   );
 }

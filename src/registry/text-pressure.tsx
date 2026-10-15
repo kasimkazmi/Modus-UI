@@ -1,10 +1,11 @@
 "use client";
+// Variable-font letters that swell in width, weight and slant near the cursor.
 
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useReducedMotion } from "framer-motion";
+import * as React from "react";
+import { useAnimationFrame, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface TextPressureProps {
+export interface TextPressureProps extends React.HTMLAttributes<HTMLDivElement> {
   text?: string;
   fontFamily?: string;
   fontUrl?: string;
@@ -18,30 +19,8 @@ interface TextPressureProps {
   textColor?: string;
   strokeColor?: string;
   strokeWidth?: number;
-  className?: string;
   minFontSize?: number;
 }
-
-const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  return Math.sqrt(dx * dx + dy * dy);
-};
-
-const getAttr = (distance: number, maxDist: number, minVal: number, maxVal: number) => {
-  const val = maxVal - Math.abs((maxVal * distance) / maxDist);
-  return Math.max(minVal, val + minVal);
-};
-
-const debounce = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout;
-  return (...args: any[]) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
 
 export function TextPressure({
   text = "Pressure",
@@ -57,199 +36,113 @@ export function TextPressure({
   textColor = "hsl(var(--foreground))",
   strokeColor = "hsl(var(--foreground))",
   strokeWidth = 2,
-  className = "",
   minFontSize = 24,
+  className,
+  ...props
 }: TextPressureProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const spansRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const reduceMotion = useReducedMotion();
+  const boxRef = React.useRef<HTMLDivElement>(null);
+  const lineRef = React.useRef<HTMLDivElement>(null);
+  const letters = React.useRef<(HTMLSpanElement | null)[]>([]);
+  const target = React.useRef<{ x: number; y: number } | null>(null);
+  const cursor = React.useRef({ x: 0, y: 0 });
+  const [fontSize, setFontSize] = React.useState(minFontSize);
+  const [stretch, setStretch] = React.useState(1);
+  const chars = Array.from(text);
 
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const cursorRef = useRef({ x: 0, y: 0 });
+  React.useEffect(() => {
+    if (document.querySelector(`link[href="${fontUrl}"]`)) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = fontUrl;
+    document.head.appendChild(link);
+  }, [fontUrl]);
 
-  const [fontSize, setFontSize] = useState(minFontSize);
-  const [scaleY, setScaleY] = useState(1);
-  const [lineHeight, setLineHeight] = useState(1);
-
-  const chars = text.split("");
-  const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      cursorRef.current.x = e.clientX;
-      cursorRef.current.y = e.clientY;
+  React.useEffect(() => {
+    const box = boxRef.current!;
+    const fit = () => {
+      const rect = box.getBoundingClientRect();
+      setFontSize(
+        Math.max(minFontSize, Math.min(rect.width / (chars.length / 2), rect.height || Infinity)),
+      );
+      cursor.current = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
     };
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        cursorRef.current.x = e.touches[0].clientX;
-        cursorRef.current.y = e.touches[0].clientY;
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
-
-    if (containerRef.current) {
-      const { left, top, width, height } = containerRef.current.getBoundingClientRect();
-      mouseRef.current.x = left + width / 2;
-      mouseRef.current.y = top + height / 2;
-      cursorRef.current.x = mouseRef.current.x;
-      cursorRef.current.y = mouseRef.current.y;
-    }
-
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(box);
+    const track = (e: PointerEvent) => (target.current = { x: e.clientX, y: e.clientY });
+    window.addEventListener("pointermove", track);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchmove", handleTouchMove);
+      observer.disconnect();
+      window.removeEventListener("pointermove", track);
     };
-  }, []);
+  }, [chars.length, minFontSize]);
 
-  const setSize = useCallback(() => {
-    if (!containerRef.current || !titleRef.current) return;
+  React.useLayoutEffect(() => {
+    if (!scale) return setStretch(1);
+    const lineHeight = lineRef.current!.getBoundingClientRect().height / stretch;
+    setStretch(boxRef.current!.clientHeight / lineHeight || 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scale, fontSize, text]);
 
-    const { width: containerW, height: containerH } = containerRef.current.getBoundingClientRect();
+  useAnimationFrame(() => {
+    const box = boxRef.current;
+    if (!box) return;
+    const goal = target.current ?? cursor.current;
+    const ease = reduceMotion ? 1 : 0.12;
+    cursor.current.x += (goal.x - cursor.current.x) * ease;
+    cursor.current.y += (goal.y - cursor.current.y) * ease;
+    const reach = box.getBoundingClientRect().width / 2 || 1;
 
-    let newFontSize = containerW / (chars.length / 2);
-    newFontSize = Math.max(newFontSize, minFontSize);
-
-    setFontSize(newFontSize);
-    setScaleY(1);
-    setLineHeight(1);
-
-    requestAnimationFrame(() => {
-      if (!titleRef.current) return;
-      const textRect = titleRef.current.getBoundingClientRect();
-
-      if (scale && textRect.height > 0) {
-        const yRatio = containerH / textRect.height;
-        setScaleY(yRatio);
-        setLineHeight(yRatio);
-      }
-    });
-  }, [chars.length, minFontSize, scale]);
-
-  useEffect(() => {
-    const debouncedSetSize = debounce(setSize, 100);
-    debouncedSetSize();
-    window.addEventListener("resize", debouncedSetSize);
-    return () => window.removeEventListener("resize", debouncedSetSize);
-  }, [setSize]);
-
-  useEffect(() => {
-    // Reduced motion: no pointer-driven loop; every glyph gets the same settled axes.
-    if (prefersReducedMotion) {
-      spansRef.current.forEach((span) => {
-        if (!span) return;
-        span.style.fontVariationSettings = `'wght' ${weight ? 600 : 400}, 'wdth' 100, 'ital' 0`;
-        span.style.opacity = "1";
-      });
-      return;
+    for (const el of letters.current) {
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      const d = Math.hypot(
+        cursor.current.x - (r.left + r.width / 2),
+        cursor.current.y - (r.top + r.height / 2),
+      );
+      const pull = Math.max(0, 1 - d / reach);
+      const wdth = width ? 25 + pull * 125 : 100;
+      const wght = weight ? 100 + pull * 800 : 400;
+      el.style.fontVariationSettings = `"wdth" ${wdth.toFixed(0)}, "wght" ${wght.toFixed(0)}, "ital" ${italic ? pull.toFixed(2) : 0}`;
+      el.style.opacity = alpha ? pull.toFixed(2) : "1";
     }
-
-    let rafId: number;
-    const animate = () => {
-      mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
-      mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15;
-
-      if (titleRef.current) {
-        const titleRect = titleRef.current.getBoundingClientRect();
-        const maxDist = titleRect.width / 2;
-
-        spansRef.current.forEach((span) => {
-          if (!span) return;
-
-          const rect = span.getBoundingClientRect();
-          const charCenter = {
-            x: rect.x + rect.width / 2,
-            y: rect.y + rect.height / 2,
-          };
-
-          const d = dist(mouseRef.current, charCenter);
-
-          const wdth = width ? Math.floor(getAttr(d, maxDist, 5, 200)) : 100;
-          const wght = weight ? Math.floor(getAttr(d, maxDist, 100, 900)) : 400;
-          const italVal = italic ? getAttr(d, maxDist, 0, 1).toFixed(2) : 0;
-          const alphaVal = alpha ? getAttr(d, maxDist, 0, 1).toFixed(2) : 1;
-
-          const newFontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}, 'ital' ${italVal}`;
-
-          if (span.style.fontVariationSettings !== newFontVariationSettings) {
-            span.style.fontVariationSettings = newFontVariationSettings;
-          }
-          if (alpha && span.style.opacity !== alphaVal.toString()) {
-            span.style.opacity = alphaVal.toString();
-          }
-        });
-      }
-
-      rafId = requestAnimationFrame(animate);
-    };
-
-    animate();
-    return () => cancelAnimationFrame(rafId);
-  }, [width, weight, italic, alpha, prefersReducedMotion]);
-
-  const styleElement = useMemo(() => {
-    return (
-      <style
-        // Raw CSS: React 18 escapes quotes in text children during SSR, causing a hydration mismatch.
-        dangerouslySetInnerHTML={{
-          __html: `
-        @import url('${fontUrl}');
-        .stroke span {
-          position: relative;
-          color: ${textColor};
-        }
-        .stroke span::after {
-          content: attr(data-char);
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: transparent;
-          z-index: -1;
-          -webkit-text-stroke-width: ${strokeWidth}px;
-          -webkit-text-stroke-color: ${strokeColor};
-        }
-      `,
-        }}
-      />
-    );
-  }, [fontUrl, textColor, strokeColor, strokeWidth]);
+  });
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-hidden bg-transparent">
-      {styleElement}
-      <h1
-        ref={titleRef}
-        className={cn(
-          "text-pressure-title text-center uppercase",
-          flex ? "flex justify-between" : "",
-          stroke ? "stroke" : "",
-          className,
-        )}
+    <div
+      ref={boxRef}
+      className={cn("relative h-full w-full overflow-hidden", className)}
+      {...props}
+    >
+      <div
+        ref={lineRef}
+        aria-label={text}
+        role="img"
+        className={cn("select-none whitespace-nowrap uppercase", flex && "flex justify-between")}
         style={{
           fontFamily,
-          fontSize: fontSize,
-          lineHeight,
-          transform: `scale(1, ${scaleY})`,
-          transformOrigin: "center top",
-          margin: 0,
-          fontWeight: 100,
-          color: stroke ? undefined : textColor,
+          fontSize,
+          lineHeight: 1,
+          color: textColor,
+          transform: `scaleY(${stretch})`,
+          transformOrigin: "top center",
+          WebkitTextStroke: stroke ? `${strokeWidth}px ${strokeColor}` : undefined,
         }}
       >
         {chars.map((char, i) => (
           <span
             key={i}
+            aria-hidden
             ref={(el) => {
-              spansRef.current[i] = el;
+              letters.current[i] = el;
             }}
-            data-char={char}
             className="inline-block"
           >
-            {char}
+            {char === " " ? " " : char}
           </span>
         ))}
-      </h1>
+      </div>
     </div>
   );
 }

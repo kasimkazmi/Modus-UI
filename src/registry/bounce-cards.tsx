@@ -1,11 +1,27 @@
 "use client";
+// A fanned stack of photo cards that springs in and parts around the hovered card.
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface BounceCardsProps {
-  className?: string;
+const DEFAULT_TRANSFORMS = [
+  "rotate(10deg) translate(-170px)",
+  "rotate(5deg) translate(-85px)",
+  "rotate(-3deg)",
+  "rotate(-10deg) translate(85px)",
+  "rotate(2deg) translate(170px)",
+];
+
+const PUSH = 140;
+
+function parsePose(transform: string) {
+  const rotate = Number(transform.match(/rotate\((-?[\d.]+)deg\)/)?.[1] ?? 0);
+  const x = Number(transform.match(/translate(?:X)?\((-?[\d.]+)px/)?.[1] ?? 0);
+  return { rotate, x };
+}
+
+export interface BounceCardsProps {
   images?: string[];
   containerWidth?: number | string;
   containerHeight?: number | string;
@@ -13,96 +29,67 @@ interface BounceCardsProps {
   animationStagger?: number;
   enableHover?: boolean;
   transformStyles?: string[];
+  className?: string;
 }
 
 export function BounceCards({
-  className,
   images = [],
   containerWidth = 400,
   containerHeight = 400,
   animationDelay = 0.5,
   animationStagger = 0.06,
   enableHover = false,
-  transformStyles = [
-    "rotate(10deg) translate(-170px)",
-    "rotate(5deg) translate(-85px)",
-    "rotate(-3deg)",
-    "rotate(-10deg) translate(85px)",
-    "rotate(2deg) translate(170px)",
-  ],
+  transformStyles = DEFAULT_TRANSFORMS,
+  className,
 }: BounceCardsProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  // Reduced motion: cards start in place and hover rearrangements snap instantly.
-  const prefersReducedMotion = useReducedMotion();
-
-  const getTransform = (index: number, baseTransform: string) => {
-    if (!enableHover || hoveredIndex === null) return baseTransform;
-
-    if (hoveredIndex === index) {
-      // Straighten out the hovered card
-      return baseTransform.replace(/rotate\([\s\S]*?\)/, "rotate(0deg)");
-    }
-
-    // Push sibling cards away
-    const pushOffset = index < hoveredIndex ? -160 : 160;
-    const translateRegex = /translate\(([-0-9.]+)px\)/;
-    const match = baseTransform.match(translateRegex);
-
-    if (match) {
-      const currentX = parseFloat(match[1]);
-      return baseTransform.replace(translateRegex, `translate(${currentX + pushOffset}px)`);
-    }
-
-    return baseTransform === "none"
-      ? `translate(${pushOffset}px)`
-      : `${baseTransform} translate(${pushOffset}px)`;
-  };
+  const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState<number | null>(null);
 
   return (
     <div
       className={cn("relative flex items-center justify-center", className)}
-      style={{
-        width: containerWidth,
-        height: containerHeight,
-      }}
+      style={{ width: containerWidth, height: containerHeight }}
+      onMouseLeave={() => setActive(null)}
     >
-      {images.map((src, idx) => {
-        const baseTransform = transformStyles[idx] || "none";
-        const currentTransform = getTransform(idx, baseTransform);
-        // Calculate dynamic delay based on distance from hovered item
-        const distance = hoveredIndex !== null ? Math.abs(hoveredIndex - idx) : 0;
-        const pushDelay = distance * 0.05;
+      {images.map((src, i) => {
+        const pose = parsePose(transformStyles[i] ?? "");
+        const focused = active === i;
+        const shift = active === null || focused ? 0 : i < active ? -PUSH : PUSH;
 
         return (
           <motion.div
-            key={idx}
-            className="absolute aspect-square w-[200px] overflow-hidden rounded-[30px] border-8 border-background shadow-xl"
-            initial={prefersReducedMotion ? false : { scale: 0 }}
+            key={i}
+            className="absolute aspect-square w-[200px] overflow-hidden rounded-[28px] border-8 border-card bg-muted shadow-xl"
+            initial={reduceMotion ? false : { scale: 0, rotate: pose.rotate, x: pose.x }}
             animate={{
               scale: 1,
-              transform: currentTransform,
+              rotate: focused ? 0 : pose.rotate,
+              x: pose.x + shift,
+              zIndex: focused ? images.length : i,
             }}
             transition={
-              prefersReducedMotion
+              reduceMotion
                 ? { duration: 0 }
                 : {
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 14,
                     scale: {
                       type: "spring",
-                      bounce: 0.5,
-                      delay: animationDelay + idx * animationStagger,
-                    },
-                    transform: {
-                      type: "spring",
-                      bounce: 0.4,
-                      delay: hoveredIndex !== null ? pushDelay : 0,
+                      stiffness: 300,
+                      damping: 11,
+                      delay: animationDelay + i * animationStagger,
                     },
                   }
             }
-            onMouseEnter={() => setHoveredIndex(idx)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            onMouseEnter={enableHover ? () => setActive(i) : undefined}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="h-full w-full object-cover" src={src} alt={`card-${idx}`} />
+            <img
+              src={src}
+              alt=""
+              draggable={false}
+              className="m-0 block h-full w-full object-cover"
+            />
           </motion.div>
         );
       })}

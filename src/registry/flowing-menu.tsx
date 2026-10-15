@@ -1,148 +1,91 @@
 "use client";
+// Full-height menu rows; hovering one slides in a looping marquee from the edge the cursor entered.
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useAnimation, useReducedMotion, type Transition } from "framer-motion";
+import { useState } from "react";
+import type React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface MenuItemProps {
+export interface MenuItemProps {
   link: string;
   text: string;
   image: string;
-  speed?: number;
-  isFirst?: boolean;
 }
 
-interface FlowingMenuProps {
-  items: MenuItemProps[];
+export interface FlowingMenuProps {
+  items?: MenuItemProps[];
   speed?: number;
   className?: string;
 }
 
-function findClosestEdge(mouseX: number, mouseY: number, width: number, height: number) {
-  const topEdgeDist = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY, 2);
-  const bottomEdgeDist = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY - height, 2);
-  return topEdgeDist < bottomEdgeDist ? "top" : "bottom";
+type Edge = "top" | "bottom";
+
+function edgeOf(e: React.MouseEvent<HTMLElement>): Edge {
+  const rect = e.currentTarget.getBoundingClientRect();
+  return e.clientY - rect.top < rect.height / 2 ? "top" : "bottom";
 }
 
-function MenuItem({ link, text, image, speed = 15, isFirst }: MenuItemProps) {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const [repetitions, setRepetitions] = useState(4);
-  const marqueeControls = useAnimation();
-  const innerControls = useAnimation();
-  const prefersReducedMotion = useReducedMotion();
-  // Reduced motion: the hover reveal is instant and the marquee stays still.
-  const revealTransition: Transition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 0.6, ease: [0.25, 1, 0.5, 1] as const };
-
-  useEffect(() => {
-    const calculateRepetitions = () => {
-      const viewportWidth = window.innerWidth;
-      const contentWidth = 400; // Estimated width of a single part
-      const needed = Math.ceil(viewportWidth / contentWidth) + 2;
-      setRepetitions(Math.max(4, needed));
-    };
-
-    calculateRepetitions();
-    window.addEventListener("resize", calculateRepetitions);
-    return () => window.removeEventListener("resize", calculateRepetitions);
-  }, [text, image]);
-
-  const handleMouseEnter = (ev: React.MouseEvent) => {
-    if (!itemRef.current) return;
-    const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(
-      ev.clientX - rect.left,
-      ev.clientY - rect.top,
-      rect.width,
-      rect.height,
-    );
-
-    // Initial setup before animating in
-    marqueeControls.set({ y: edge === "top" ? "-101%" : "101%" });
-    innerControls.set({ y: edge === "top" ? "101%" : "-101%" });
-
-    // Animate to center
-    marqueeControls.start({ y: "0%", transition: revealTransition });
-    innerControls.start({ y: "0%", transition: revealTransition });
-  };
-
-  const handleMouseLeave = (ev: React.MouseEvent) => {
-    if (!itemRef.current) return;
-    const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(
-      ev.clientX - rect.left,
-      ev.clientY - rect.top,
-      rect.width,
-      rect.height,
-    );
-
-    // Animate out
-    marqueeControls.start({ y: edge === "top" ? "-101%" : "101%", transition: revealTransition });
-    innerControls.start({ y: edge === "top" ? "101%" : "-101%", transition: revealTransition });
-  };
+function Row({ item, speed }: { item: MenuItemProps; speed: number }) {
+  const reduceMotion = useReducedMotion();
+  const [edge, setEdge] = useState<Edge | null>(null);
+  const [exitEdge, setExitEdge] = useState<Edge>("top");
+  const offset = (side: Edge) => (side === "top" ? "-101%" : "101%");
+  const strip = Array.from({ length: 4 }, (_, i) => (
+    <span key={i} className="flex shrink-0 items-center gap-6 pr-6">
+      <span className="font-display text-3xl uppercase sm:text-4xl">{item.text}</span>
+      <span
+        className="h-12 w-28 shrink-0 rounded-full bg-cover bg-center"
+        style={{ backgroundImage: `url(${item.image})` }}
+      />
+    </span>
+  ));
 
   return (
-    <div
-      className={cn(
-        "relative flex-1 overflow-hidden text-center",
-        !isFirst && "border-t border-border",
-      )}
-      ref={itemRef}
+    <a
+      href={item.link}
+      className="relative flex flex-1 items-center justify-center overflow-hidden border-t border-border first:border-t-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[hsl(var(--ring))]"
+      onMouseEnter={(e) => setEdge(edgeOf(e))}
+      onMouseLeave={(e) => {
+        setExitEdge(edgeOf(e));
+        setEdge(null);
+      }}
+      onFocus={() => setEdge("top")}
+      onBlur={() => setEdge(null)}
     >
-      <a
-        className="relative flex h-full cursor-pointer items-center justify-center text-3xl font-semibold uppercase text-foreground no-underline md:text-5xl"
-        href={link}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {text}
-      </a>
-      <motion.div
-        className="pointer-events-none absolute left-0 top-0 h-full w-full translate-y-[101%] overflow-hidden bg-foreground text-background"
-        animate={marqueeControls}
-      >
-        <motion.div className="flex h-full w-fit" animate={innerControls}>
-          <motion.div
-            className="flex h-full w-fit"
-            animate={prefersReducedMotion ? { x: "0%" } : { x: ["0%", "-50%"] }}
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : { duration: speed, ease: "linear", repeat: Infinity }
-            }
+      <span className="font-display text-3xl uppercase text-foreground sm:text-4xl">
+        {item.text}
+      </span>
+      <AnimatePresence>
+        {edge && (
+          <motion.span
+            aria-hidden
+            className="absolute inset-0 flex items-center overflow-hidden bg-foreground text-background"
+            initial={reduceMotion ? { opacity: 0 } : { y: offset(edge) }}
+            animate={reduceMotion ? { opacity: 1 } : { y: "0%" }}
+            exit={reduceMotion ? { opacity: 0 } : { y: offset(exitEdge) }}
+            transition={{ duration: reduceMotion ? 0.15 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Render 2 sets of repetitions to create seamless infinite loop */}
-            {[...Array(2)].map((_, setIdx) => (
-              <div key={setIdx} className="flex">
-                {[...Array(repetitions)].map((_, idx) => (
-                  <div className="flex flex-shrink-0 items-center" key={`${setIdx}-${idx}`}>
-                    <span className="whitespace-nowrap px-4 text-3xl font-normal uppercase leading-none md:text-5xl">
-                      {text}
-                    </span>
-                    <div
-                      className="mx-4 my-4 h-[5vh] w-[150px] rounded-full bg-cover bg-center md:h-[7vh] md:w-[200px]"
-                      style={{ backgroundImage: `url(${image})` }}
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </div>
+            <motion.span
+              className="flex w-max"
+              animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }}
+              transition={{ duration: speed, ease: "linear", repeat: Infinity }}
+            >
+              {strip}
+              {strip}
+            </motion.span>
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </a>
   );
 }
 
 export function FlowingMenu({ items = [], speed = 15, className }: FlowingMenuProps) {
   return (
-    <div className={cn("h-full w-full overflow-hidden bg-background", className)}>
-      <nav className="m-0 flex h-full flex-col p-0">
-        {items.map((item, idx) => (
-          <MenuItem key={idx} {...item} speed={speed} isFirst={idx === 0} />
-        ))}
-      </nav>
-    </div>
+    <nav className={cn("flex h-full w-full flex-col bg-background", className)}>
+      {items.map((item, i) => (
+        <Row key={i} item={item} speed={speed} />
+      ))}
+    </nav>
   );
 }

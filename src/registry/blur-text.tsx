@@ -1,7 +1,7 @@
 "use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState, useMemo } from "react";
+// Words or letters sharpen out of a blur as the text scrolls into view.
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion, type Easing } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BlurTextProps {
@@ -19,20 +19,10 @@ interface BlurTextProps {
   stepDuration?: number;
 }
 
-const buildKeyframes = (from: Record<string, any>, steps: Record<string, any>[]) => {
-  const keys = new Set([...Object.keys(from), ...steps.flatMap((s) => Object.keys(s))]);
-
-  const keyframes: Record<string, any[]> = {};
-  keys.forEach((k) => {
-    keyframes[k] = [from[k], ...steps.map((s) => s[k])];
-  });
-  return keyframes;
-};
-
 export function BlurText({
   text = "",
   delay = 200,
-  className = "",
+  className,
   animateBy = "words",
   direction = "top",
   threshold = 0.1,
@@ -43,90 +33,56 @@ export function BlurText({
   onAnimationComplete,
   stepDuration = 0.35,
 }: BlurTextProps) {
-  const elements = animateBy === "words" ? text.split(" ") : text.split("");
-  const [inView, setInView] = useState(false);
+  const reduce = useReducedMotion();
   const ref = useRef<HTMLParagraphElement>(null);
-  // Reduced motion: text renders in its settled final state from the first frame.
-  const prefersReducedMotion = useReducedMotion();
+  const inView = useInView(ref, {
+    once: true,
+    amount: threshold,
+    margin: rootMargin as NonNullable<Parameters<typeof useInView>[1]>["margin"],
+  });
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.unobserve(ref.current!);
-        }
-      },
-      { threshold, rootMargin },
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold, rootMargin]);
-
-  const defaultFrom = useMemo(
-    () =>
-      direction === "top"
-        ? { filter: "blur(10px)", opacity: 0, y: -50 }
-        : { filter: "blur(10px)", opacity: 0, y: 50 },
-    [direction],
+  const offset = direction === "top" ? -1 : 1;
+  const from = animationFrom ?? { filter: "blur(10px)", opacity: 0, y: 40 * offset };
+  const steps = animationTo ?? [
+    { filter: "blur(4px)", opacity: 0.5, y: 6 * offset },
+    { filter: "blur(0px)", opacity: 1, y: 0 },
+  ];
+  // Merge the start state and each step into per-property keyframe arrays.
+  const keyframes = Object.fromEntries(
+    Object.keys(from).map((key) => [key, [from[key], ...steps.map((s) => s[key] ?? from[key])]]),
   );
+  const times = keyframes[Object.keys(from)[0]]?.map((_: unknown, i: number) => i / steps.length);
 
-  const defaultTo = useMemo(
-    () => [
-      {
-        filter: "blur(5px)",
-        opacity: 0.5,
-        y: direction === "top" ? 5 : -5,
-      },
-      { filter: "blur(0px)", opacity: 1, y: 0 },
-    ],
-    [direction],
-  );
-
-  const fromSnapshot = animationFrom ?? defaultFrom;
-  const toSnapshots = animationTo ?? defaultTo;
-
-  const stepCount = toSnapshots.length + 1;
-  const totalDuration = stepDuration * (stepCount - 1);
-  const times = Array.from({ length: stepCount }, (_, i) =>
-    stepCount === 1 ? 0 : i / (stepCount - 1),
-  );
+  const parts = animateBy === "words" ? text.split(" ") : [...text];
+  // Reduced motion jumps straight to the final state; the start state stays the same so the
+  // first render matches the server's.
+  const settled = steps[steps.length - 1];
 
   return (
-    <p ref={ref} className={cn("flex flex-wrap", className)}>
-      {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
-
-        const spanTransition: any = prefersReducedMotion
-          ? { duration: 0 }
-          : {
-              duration: totalDuration,
-              times,
-              delay: (index * delay) / 1000,
-              ease: easing,
-            };
-
-        return (
-          <motion.span
-            className="inline-block will-change-[transform,filter,opacity]"
-            key={index}
-            initial={prefersReducedMotion ? false : fromSnapshot}
-            animate={
-              prefersReducedMotion
-                ? toSnapshots[toSnapshots.length - 1]
-                : inView
-                  ? animateKeyframes
-                  : fromSnapshot
-            }
-            transition={spanTransition}
-            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
-          >
-            {segment === " " ? "\u00A0" : segment}
-            {animateBy === "words" && index < elements.length - 1 && "\u00A0"}
-          </motion.span>
-        );
-      })}
+    <p ref={ref} className={cn("flex flex-wrap", className)} aria-label={text}>
+      {parts.map((part, i) => (
+        <motion.span
+          key={i}
+          aria-hidden
+          className="inline-block whitespace-pre will-change-[transform,filter,opacity]"
+          initial={from}
+          animate={reduce ? settled : inView ? keyframes : undefined}
+          transition={
+            reduce
+              ? { duration: 0 }
+              : {
+                  duration: stepDuration * steps.length,
+                  times,
+                  delay: (i * delay) / 1000,
+                  ease: easing as Easing,
+                }
+          }
+          onAnimationComplete={i === parts.length - 1 ? onAnimationComplete : undefined}
+        >
+          {part}
+          {animateBy === "words" && i < parts.length - 1 ? " " : ""}
+        </motion.span>
+      ))}
     </p>
   );
 }

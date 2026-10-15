@@ -1,7 +1,7 @@
 "use client";
-
-import { useEffect, useState, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+// Scrambles text with random glyphs, then resolves it on hover or when in view.
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface DecryptedTextProps {
@@ -33,134 +33,77 @@ export function DecryptedText({
   animateOn = "hover",
   delay = 0,
 }: DecryptedTextProps) {
-  const [displayText, setDisplayText] = useState(text);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isDecrypted, setIsDecrypted] = useState(true); // Start fully decrypted unless view mode
-  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(
-    new Set(text.split("").map((_, i) => i)),
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const [active, setActive] = useState(false);
+  // Frames elapsed since the run started; -1 means idle (plain text shown).
+  const [frame, setFrame] = useState(-1);
+
+  const pool = useMemo(
+    () => (useOriginalCharsOnly ? [...new Set(text.replace(/\s/g, ""))].join("") : characters),
+    [useOriginalCharsOnly, text, characters],
   );
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const containerRef = useRef<HTMLSpanElement>(null);
-  const prefersReducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      // Show the final readable text immediately.
-      setDisplayText(text);
-      setIsDecrypted(true);
-      setRevealedIndices(new Set(text.split("").map((_, i) => i)));
-    } else if (animateOn === "view") {
-      setIsDecrypted(false);
-      setRevealedIndices(new Set());
+  // Indices in the order they resolve during a sequential reveal.
+  const order = useMemo(() => {
+    const idx = [...text].map((_, i) => i);
+    if (revealDirection === "end") return idx.reverse();
+    if (revealDirection === "center") {
+      const mid = (text.length - 1) / 2;
+      return idx.sort((a, b) => Math.abs(a - mid) - Math.abs(b - mid));
     }
-  }, [animateOn, prefersReducedMotion, text]);
+    return idx;
+  }, [text, revealDirection]);
+
+  const totalFrames = sequential ? text.length : maxIterations;
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    let interval: NodeJS.Timeout;
+    if (animateOn === "view" && inView) setActive(true);
+  }, [animateOn, inView]);
 
-    const startAnimation = () => {
-      let currentIteration = 0;
-      let currentRevealed = new Set<number>();
-      setIsDecrypted(false);
-
-      interval = setInterval(() => {
-        if (sequential) {
-          const nextIndex =
-            revealDirection === "start"
-              ? currentRevealed.size
-              : revealDirection === "end"
-                ? text.length - 1 - currentRevealed.size
-                : Math.floor(text.length / 2) +
-                  (currentRevealed.size % 2 === 0
-                    ? currentRevealed.size / 2
-                    : -(currentRevealed.size + 1) / 2);
-
-          if (currentRevealed.size < text.length) {
-            currentRevealed.add(nextIndex);
-          } else {
-            clearInterval(interval);
-            setIsDecrypted(true);
-          }
-        } else {
-          currentIteration++;
-          if (currentIteration >= maxIterations) {
-            clearInterval(interval);
-            setIsDecrypted(true);
-            currentRevealed = new Set(text.split("").map((_, i) => i));
-          }
-        }
-
-        setRevealedIndices(new Set(currentRevealed));
-
-        setDisplayText(
-          text
-            .split("")
-            .map((char, index) => {
-              if (currentRevealed.has(index)) return text[index];
-              if (useOriginalCharsOnly) {
-                const randomChar = text[Math.floor(Math.random() * text.length)];
-                return randomChar === " " ? " " : randomChar;
-              }
-              const randomChar = characters[Math.floor(Math.random() * characters.length)];
-              return text[index] === " " ? " " : randomChar;
-            })
-            .join(""),
-        );
+  useEffect(() => {
+    if (!active || reduce) return setFrame(-1);
+    let tick: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      setFrame(0);
+      tick = setInterval(() => {
+        setFrame((f) => {
+          if (f + 1 < totalFrames) return f + 1;
+          clearInterval(tick);
+          return -1;
+        });
       }, speed);
+    }, delay);
+    return () => {
+      clearTimeout(start);
+      clearInterval(tick);
     };
+  }, [active, reduce, speed, delay, totalFrames]);
 
-    if (animateOn === "hover" && isHovering) {
-      startAnimation();
-    } else if (animateOn === "view" && !hasAnimated) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setTimeout(startAnimation, delay);
-            setHasAnimated(true);
-            observer.disconnect();
-          }
-        },
-        { threshold: 0.1 },
-      );
-      if (containerRef.current) observer.observe(containerRef.current);
-      return () => observer.disconnect();
-    }
-
-    return () => clearInterval(interval);
-  }, [
-    isHovering,
-    prefersReducedMotion,
-    animateOn,
-    hasAnimated,
-    text,
-    speed,
-    maxIterations,
-    sequential,
-    revealDirection,
-    useOriginalCharsOnly,
-    characters,
-    delay,
-  ]);
+  const resolved = useMemo(
+    () => new Set(sequential && frame >= 0 ? order.slice(0, frame) : []),
+    [sequential, frame, order],
+  );
 
   return (
-    <motion.span
-      ref={containerRef}
+    <span
+      ref={ref}
       className={cn("inline-block whitespace-pre-wrap", parentClassName)}
-      onMouseEnter={() => animateOn === "hover" && setIsHovering(true)}
-      onMouseLeave={() => animateOn === "hover" && setIsHovering(false)}
+      onMouseEnter={animateOn === "hover" ? () => setActive(true) : undefined}
+      onMouseLeave={animateOn === "hover" ? () => setActive(false) : undefined}
     >
       <span className="sr-only">{text}</span>
-      <span aria-hidden="true">
-        {displayText.split("").map((char, index) => {
-          const isRevealed = revealedIndices.has(index) || isDecrypted;
+      <span aria-hidden className={className}>
+        {[...text].map((char, i) => {
+          const scrambled = frame >= 0 && char.trim() !== "" && !resolved.has(i);
           return (
-            <span key={index} className={isRevealed ? className : encryptedClassName}>
-              {char}
+            <span key={i} className={scrambled ? encryptedClassName : undefined}>
+              {scrambled ? pool[Math.floor(Math.random() * pool.length)] : char}
             </span>
           );
         })}
       </span>
-    </motion.span>
+    </span>
   );
 }

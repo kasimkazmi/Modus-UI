@@ -1,197 +1,140 @@
 "use client";
-
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+// Scrollable list whose rows rise into view, with keyboard selection.
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface AnimatedItemProps {
-  children: React.ReactNode;
-  delay?: number;
-  index: number;
-  onMouseEnter: () => void;
-  onClick: () => void;
-}
-
-const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }: AnimatedItemProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.5, once: false });
-  const prefersReducedMotion = useReducedMotion();
-
-  return (
-    <motion.div
-      ref={ref}
-      data-index={index}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-      initial={prefersReducedMotion ? false : { scale: 0.8, opacity: 0 }}
-      animate={
-        prefersReducedMotion || inView ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }
-      }
-      transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2, delay }}
-      className="mb-4 cursor-pointer"
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-export interface AnimatedListProps {
-  items?: React.ReactNode[] | string[];
+interface AnimatedListProps {
+  items?: ReactNode[] | string[];
   onItemSelect?: (item: any, index: number) => void;
-  showGradients?: boolean;
-  enableArrowNavigation?: boolean;
   className?: string;
   itemClassName?: string;
+  showGradients?: boolean;
+  enableArrowNavigation?: boolean;
   displayScrollbar?: boolean;
   initialSelectedIndex?: number;
 }
 
+const SAMPLE = Array.from({ length: 12 }, (_, i) => `Item ${i + 1}`);
+
 export function AnimatedList({
-  items = [
-    "Item 1",
-    "Item 2",
-    "Item 3",
-    "Item 4",
-    "Item 5",
-    "Item 6",
-    "Item 7",
-    "Item 8",
-    "Item 9",
-    "Item 10",
-  ],
+  items = SAMPLE,
   onItemSelect,
-  showGradients = true,
-  enableArrowNavigation = true,
   className,
   itemClassName,
+  showGradients = true,
+  enableArrowNavigation = true,
   displayScrollbar = true,
   initialSelectedIndex = -1,
 }: AnimatedListProps) {
-  const listRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex);
-  const [keyboardNav, setKeyboardNav] = useState(false);
-  const [topGradientOpacity, setTopGradientOpacity] = useState(0);
-  const [bottomGradientOpacity, setBottomGradientOpacity] = useState(1);
+  const reduce = useReducedMotion();
+  const scroller = useRef<HTMLDivElement>(null);
+  const rows = useRef<(HTMLLIElement | null)[]>([]);
+  const [active, setActive] = useState(initialSelectedIndex);
+  const [edges, setEdges] = useState({ top: false, bottom: false });
 
-  const handleItemMouseEnter = useCallback((index: number) => {
-    setSelectedIndex(index);
-  }, []);
+  const measure = () => {
+    const el = scroller.current;
+    if (!el) return;
+    setEdges({
+      top: el.scrollTop > 4,
+      bottom: el.scrollTop + el.clientHeight < el.scrollHeight - 4,
+    });
+  };
 
-  const handleItemClick = useCallback(
-    (item: any, index: number) => {
-      setSelectedIndex(index);
-      if (onItemSelect) {
-        onItemSelect(item, index);
-      }
-    },
-    [onItemSelect],
-  );
-
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    setTopGradientOpacity(Math.min(scrollTop / 50, 1));
-    const bottomDistance = scrollHeight - (scrollTop + clientHeight);
-    setBottomGradientOpacity(scrollHeight <= clientHeight ? 0 : Math.min(bottomDistance / 50, 1));
-  }, []);
+  useEffect(measure, [items]);
 
   useEffect(() => {
+    rows.current[active]?.scrollIntoView({
+      block: "nearest",
+      behavior: reduce ? "auto" : "smooth",
+    });
+  }, [active, reduce]);
+
+  const select = (index: number) => {
+    setActive(index);
+    onItemSelect?.(items[index], index);
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
     if (!enableArrowNavigation) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey)) {
-        e.preventDefault();
-        setKeyboardNav(true);
-        setSelectedIndex((prev) => Math.min(prev + 1, items.length - 1));
-      } else if (e.key === "ArrowUp" || (e.key === "Tab" && e.shiftKey)) {
-        e.preventDefault();
-        setKeyboardNav(true);
-        setSelectedIndex((prev) => Math.max(prev - 1, 0));
-      } else if (e.key === "Enter") {
-        if (selectedIndex >= 0 && selectedIndex < items.length) {
-          e.preventDefault();
-          if (onItemSelect) {
-            onItemSelect(items[selectedIndex], selectedIndex);
-          }
-        }
+    const step =
+      e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey)
+        ? 1
+        : e.key === "ArrowUp" || (e.key === "Tab" && e.shiftKey)
+          ? -1
+          : 0;
+    if (step) {
+      const next = active + step;
+      // Let Tab leave the list at either end.
+      if (next < 0 || next >= items.length) {
+        if (e.key !== "Tab") e.preventDefault();
+        return;
       }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [items, selectedIndex, onItemSelect, enableArrowNavigation]);
-
-  useEffect(() => {
-    if (!keyboardNav || selectedIndex < 0 || !listRef.current) return;
-    const container = listRef.current;
-    const selectedItem = container.querySelector(`[data-index="${selectedIndex}"]`) as HTMLElement;
-    if (selectedItem) {
-      const extraMargin = 50;
-      const containerScrollTop = container.scrollTop;
-      const containerHeight = container.clientHeight;
-      const itemTop = selectedItem.offsetTop;
-      const itemBottom = itemTop + selectedItem.offsetHeight;
-      if (itemTop < containerScrollTop + extraMargin) {
-        container.scrollTo({
-          top: itemTop - extraMargin,
-          behavior: prefersReducedMotion ? "auto" : "smooth",
-        });
-      } else if (itemBottom > containerScrollTop + containerHeight - extraMargin) {
-        container.scrollTo({
-          top: itemBottom - containerHeight + extraMargin,
-          behavior: prefersReducedMotion ? "auto" : "smooth",
-        });
-      }
+      e.preventDefault();
+      setActive(next);
+    } else if (e.key === "Enter" && active >= 0) {
+      e.preventDefault();
+      select(active);
     }
-    setKeyboardNav(false);
-  }, [selectedIndex, keyboardNav, prefersReducedMotion]);
+  };
 
   return (
-    <div className={cn("relative mx-auto w-full max-w-md", className)}>
+    <div className={cn("relative w-full max-w-md", className)}>
       <div
-        ref={listRef}
+        ref={scroller}
+        onScroll={measure}
+        onKeyDown={onKeyDown}
+        tabIndex={0}
+        role="listbox"
+        aria-activedescendant={active >= 0 ? `al-${active}` : undefined}
         className={cn(
-          "max-h-[400px] overflow-y-auto p-4",
-          displayScrollbar
-            ? "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted"
-            : "scrollbar-hide",
+          "max-h-[400px] overflow-y-auto rounded-xl p-1 outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))]",
+          !displayScrollbar && "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
-        onScroll={handleScroll}
-        style={{
-          scrollbarWidth: displayScrollbar ? "thin" : "none",
-        }}
       >
-        {items.map((item, index) => (
-          <AnimatedItem
-            key={index}
-            delay={0.05}
-            index={index}
-            onMouseEnter={() => handleItemMouseEnter(index)}
-            onClick={() => handleItemClick(item, index)}
-          >
-            <div
+        <ul className="flex list-none flex-col gap-3 p-0">
+          {items.map((item, i) => (
+            <motion.li
+              key={i}
+              id={`al-${i}`}
+              role="option"
+              aria-selected={i === active}
+              ref={(node) => {
+                rows.current[i] = node;
+              }}
+              initial={reduce ? false : { opacity: 0, y: 16, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ root: scroller, amount: 0.4 }}
+              transition={{ type: "spring", stiffness: 320, damping: 28 }}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => select(i)}
               className={cn(
-                "rounded-xl border p-4 transition-all duration-200 motion-reduce:transition-none",
-                selectedIndex === index
-                  ? "border-border bg-accent text-accent-foreground shadow-sm"
-                  : "border-transparent bg-card text-muted-foreground hover:text-foreground",
+                "cursor-pointer rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 text-[hsl(var(--card-foreground))] transition-colors",
+                i === active && "border-[hsl(var(--ring))] bg-[hsl(var(--accent))]",
                 itemClassName,
               )}
             >
-              {typeof item === "string" ? <p className="m-0 font-medium">{item}</p> : item}
-            </div>
-          </AnimatedItem>
-        ))}
+              {item}
+            </motion.li>
+          ))}
+        </ul>
       </div>
-
       {showGradients && (
         <>
           <div
-            className="ease pointer-events-none absolute left-0 right-0 top-0 h-12 bg-gradient-to-b from-background to-transparent transition-opacity duration-300"
-            style={{ opacity: topGradientOpacity }}
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[hsl(var(--background))] to-transparent transition-opacity",
+              edges.top ? "opacity-100" : "opacity-0",
+            )}
           />
           <div
-            className="ease pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent transition-opacity duration-300"
-            style={{ opacity: bottomGradientOpacity }}
+            aria-hidden
+            className={cn(
+              "pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[hsl(var(--background))] to-transparent transition-opacity",
+              edges.bottom ? "opacity-100" : "opacity-0",
+            )}
           />
         </>
       )}

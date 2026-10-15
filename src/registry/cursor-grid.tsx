@@ -1,14 +1,17 @@
 "use client";
+// Canvas grid whose cells glow near the cursor and ripple outward on click.
 
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import * as React from "react";
+import { useAnimationFrame, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface CursorGridProps {
+type Falloff = "linear" | "exponential" | "gaussian";
+
+export interface CursorGridProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: string;
   cellSize?: number;
   radius?: number;
-  falloff?: "linear" | "exponential" | "gaussian";
+  falloff?: Falloff;
   holdTime?: number;
   fadeDuration?: number;
   lineWidth?: number;
@@ -18,20 +21,21 @@ interface CursorGridProps {
   cellRadius?: number;
   clickPulse?: boolean;
   pulseSpeed?: number;
-  className?: string;
 }
 
-const FALLOFF_CURVES = {
-  linear: (x: number) => x,
-  exponential: (x: number) => x * x,
-  gaussian: (x: number) => Math.exp(-Math.pow(1 - x, 2) * 5),
+const strength = (d: number, radius: number, falloff: Falloff) => {
+  const t = d / radius;
+  if (t >= 1) return 0;
+  if (falloff === "linear") return 1 - t;
+  if (falloff === "exponential") return Math.exp(-4 * t);
+  return Math.exp(-(t * t) * 4);
 };
 
-// Canvas cannot resolve CSS variables; let the browser compute the color.
-function resolveRgb(el: HTMLElement, color: string) {
-  el.style.color = color;
-  const [r = 0, g = 0, b = 0] = (getComputedStyle(el).color.match(/[\d.]+/g) ?? []).map(Number);
-  return [r, g, b];
+interface Field {
+  cols: number;
+  rows: number;
+  heat: Float32Array;
+  litAt: Float64Array;
 }
 
 export function CursorGrid({
@@ -49,290 +53,130 @@ export function CursorGrid({
   clickPulse = true,
   pulseSpeed = 800,
   className,
+  ...props
 }: CursorGridProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const wakeRef = useRef<(() => void) | null>(null);
-  // Reduced motion: the static grid is drawn, but cursor glow and click pulses are off.
-  const prefersReducedMotion = useReducedMotion();
-
-  const propsRef = useRef({
-    color,
-    cellSize,
-    radius,
-    falloff,
-    holdTime,
-    fadeDuration,
-    lineWidth,
-    maxOpacity,
-    fillOpacity,
-    gridOpacity,
-    cellRadius,
-    clickPulse,
-    pulseSpeed,
+  const reduceMotion = useReducedMotion();
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const pointer = React.useRef<{ x: number; y: number } | null>(null);
+  const pulses = React.useRef<{ x: number; y: number; start: number }[]>([]);
+  const field = React.useRef<Field>({
+    cols: 0,
+    rows: 0,
+    heat: new Float32Array(),
+    litAt: new Float64Array(),
   });
+  const rgb = React.useRef("0, 0, 0");
 
-  useEffect(() => {
-    propsRef.current = {
-      color,
-      cellSize,
-      radius,
-      falloff,
-      holdTime,
-      fadeDuration,
-      lineWidth,
-      maxOpacity,
-      fillOpacity,
-      gridOpacity,
-      cellRadius,
-      clickPulse,
-      pulseSpeed,
+  React.useEffect(() => {
+    const canvas = canvasRef.current!;
+    const probe = document.createElement("span");
+    probe.style.color = color;
+    canvas.parentElement!.appendChild(probe);
+    rgb.current = getComputedStyle(probe)
+      .color.replace(/rgba?\(|\)/g, "")
+      .split(",")
+      .slice(0, 3)
+      .join(",");
+    probe.remove();
+  }, [color]);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current!;
+    const resize = () => {
+      const { width, height } = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.getContext("2d")!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cols = Math.ceil(width / cellSize);
+      const rows = Math.ceil(height / cellSize);
+      field.current = {
+        cols,
+        rows,
+        heat: new Float32Array(cols * rows),
+        litAt: new Float64Array(cols * rows),
+      };
     };
-  }, [
-    color,
-    cellSize,
-    radius,
-    falloff,
-    holdTime,
-    fadeDuration,
-    lineWidth,
-    maxOpacity,
-    fillOpacity,
-    gridOpacity,
-    cellRadius,
-    clickPulse,
-    pulseSpeed,
-  ]);
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, [cellSize]);
 
-  useEffect(() => {
-    const container = containerRef.current;
+  useAnimationFrame((_, delta) => {
+    const now = performance.now();
     const canvas = canvasRef.current;
-    if (!container || !canvas) return;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    const { cols, rows, heat, litAt } = field.current;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
+    const ringWidth = cellSize * 1.5;
+    const reach = Math.hypot(w, h);
+    pulses.current = pulses.current.filter((p) => now - p.start < pulseSpeed);
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = lineWidth;
+    const inset = lineWidth / 2;
+    const size = cellSize - lineWidth;
 
-    let cols = 0;
-    let rows = 0;
-    let offX = 0;
-    let offY = 0;
-    let alphas = new Float32Array(0);
-    let touched = new Float64Array(0);
-    let w = 0;
-    let h = 0;
-    const pulses: { x: number; y: number; t0: number }[] = [];
-    let raf = 0;
-    let running = false;
-    let lastFrame = 0;
-    let rgbFor = "";
-    let rgb = [0, 0, 0];
-
-    const rebuild = () => {
-      const p = propsRef.current;
-      w = container.offsetWidth;
-      h = container.offsetHeight;
-      canvas.width = Math.max(1, Math.round(w * dpr));
-      canvas.height = Math.max(1, Math.round(h * dpr));
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.ceil(w / p.cellSize) + 1;
-      rows = Math.ceil(h / p.cellSize) + 1;
-      offX = (w - cols * p.cellSize) / 2;
-      offY = (h - rows * p.cellSize) / 2;
-      alphas = new Float32Array(cols * rows);
-      touched = new Float64Array(cols * rows);
-    };
-
-    const cellCenter = (i: number) => {
-      const p = propsRef.current;
-      const cx = offX + (i % cols) * p.cellSize + p.cellSize / 2;
-      const cy = offY + Math.floor(i / cols) * p.cellSize + p.cellSize / 2;
-      return [cx, cy];
-    };
-
-    const energize = (x: number, y: number, boost?: number) => {
-      const p = propsRef.current;
-      const r = Math.max(p.radius, 1);
-      const ease = FALLOFF_CURVES[p.falloff] ?? FALLOFF_CURVES.linear;
-      const now = performance.now();
-      const minCol = Math.max(0, Math.floor((x - r - offX) / p.cellSize));
-      const maxCol = Math.min(cols - 1, Math.floor((x + r - offX) / p.cellSize));
-      const minRow = Math.max(0, Math.floor((y - r - offY) / p.cellSize));
-      const maxRow = Math.min(rows - 1, Math.floor((y + r - offY) / p.cellSize));
-
-      for (let cRow = minRow; cRow <= maxRow; cRow++) {
-        for (let cCol = minCol; cCol <= maxCol; cCol++) {
-          const i = cRow * cols + cCol;
-          const [cx, cy] = cellCenter(i);
-          const dist = Math.hypot(cx - x, cy - y);
-          if (dist > r) continue;
-          const level = ease(1 - dist / r) * p.maxOpacity * (boost ?? 1);
-          if (level > alphas[i]) {
-            alphas[i] = level;
-            touched[i] = now;
-          } else if (level > 0) {
-            touched[i] = now;
-          }
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const i = row * cols + col;
+        const cx = col * cellSize + cellSize / 2;
+        const cy = row * cellSize + cellSize / 2;
+        let target = 0;
+        if (pointer.current) {
+          target = strength(
+            Math.hypot(cx - pointer.current.x, cy - pointer.current.y),
+            radius,
+            falloff,
+          );
         }
-      }
-    };
+        for (const p of pulses.current) {
+          const ring = ((now - p.start) / pulseSpeed) * reach;
+          const off = Math.abs(Math.hypot(cx - p.x, cy - p.y) - ring);
+          if (off < ringWidth)
+            target = Math.max(target, (1 - off / ringWidth) * (1 - ring / reach));
+        }
+        if (target >= heat[i]) {
+          heat[i] = target;
+          litAt[i] = now;
+        } else if (reduceMotion || fadeDuration <= 0) {
+          heat[i] = target;
+        } else if (now - litAt[i] > holdTime) {
+          heat[i] = Math.max(target, heat[i] - delta / fadeDuration);
+        }
 
-    const draw = (now: number) => {
-      const p = propsRef.current;
-      const dt = Math.min(now - lastFrame, 50);
-      lastFrame = now;
-      ctx.clearRect(0, 0, w, h);
-      if (rgbFor !== p.color) {
-        rgb = resolveRgb(canvas, p.color);
-        rgbFor = p.color;
-      }
-      const [cr, cg, cb] = rgb;
-
-      if (p.gridOpacity > 0) {
-        ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${p.gridOpacity})`;
-        ctx.lineWidth = 1;
+        const level = heat[i] * maxOpacity;
         ctx.beginPath();
-        for (let cCol = 0; cCol <= cols; cCol++) {
-          const x = Math.round(offX + cCol * p.cellSize) + 0.5;
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, h);
-        }
-        for (let cRow = 0; cRow <= rows; cRow++) {
-          const y = Math.round(offY + cRow * p.cellSize) + 0.5;
-          ctx.moveTo(0, y);
-          ctx.lineTo(w, y);
-        }
+        ctx.roundRect(col * cellSize + inset, row * cellSize + inset, size, size, cellRadius);
+        ctx.strokeStyle = `rgba(${rgb.current}, ${Math.max(gridOpacity, level)})`;
         ctx.stroke();
-      }
-
-      for (let pi = pulses.length - 1; pi >= 0; pi--) {
-        const pulse = pulses[pi];
-        const age = (now - pulse.t0) / 1000;
-        const ringR = age * p.pulseSpeed;
-        if (ringR > Math.hypot(w, h)) {
-          pulses.splice(pi, 1);
-          continue;
-        }
-        const band = p.cellSize;
-        const minCol = Math.max(0, Math.floor((pulse.x - ringR - band - offX) / p.cellSize));
-        const maxCol = Math.min(cols - 1, Math.floor((pulse.x + ringR + band - offX) / p.cellSize));
-        const minRow = Math.max(0, Math.floor((pulse.y - ringR - band - offY) / p.cellSize));
-        const maxRow = Math.min(rows - 1, Math.floor((pulse.y + ringR + band - offY) / p.cellSize));
-
-        for (let cRow = minRow; cRow <= maxRow; cRow++) {
-          for (let cCol = minCol; cCol <= maxCol; cCol++) {
-            const i = cRow * cols + cCol;
-            const [cx, cy] = cellCenter(i);
-            const dist = Math.hypot(cx - pulse.x, cy - pulse.y);
-            if (Math.abs(dist - ringR) < band / 2 && p.maxOpacity > alphas[i]) {
-              alphas[i] = p.maxOpacity;
-              touched[i] = now;
-            }
-          }
-        }
-      }
-
-      let anyVisible = pulses.length > 0;
-      const fadeStep = dt / Math.max(p.fadeDuration, 16);
-      const half = p.cellSize / 2;
-
-      for (let i = 0; i < alphas.length; i++) {
-        let a = alphas[i];
-        if (a <= 0) continue;
-        if (now - touched[i] > p.holdTime) {
-          a = Math.max(0, a - fadeStep);
-          alphas[i] = a;
-          if (a <= 0) continue;
-        }
-        anyVisible = true;
-
-        const [cx, cy] = cellCenter(i);
-        const gradient = ctx.createRadialGradient(cx, cy, half * 0.1, cx, cy, p.cellSize);
-        gradient.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${a})`);
-        gradient.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
-
-        const x = cx - half + 0.5;
-        const y = cy - half + 0.5;
-        const s = p.cellSize - 1;
-
-        ctx.beginPath();
-        if (p.cellRadius > 0) {
-          ctx.roundRect(x, y, s, s, p.cellRadius);
-        } else {
-          ctx.rect(x, y, s, s);
-        }
-        if (p.fillOpacity > 0) {
-          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${a * p.fillOpacity})`;
+        if (level > 0.01) {
+          ctx.fillStyle = `rgba(${rgb.current}, ${level * fillOpacity})`;
           ctx.fill();
         }
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = p.lineWidth;
-        ctx.stroke();
       }
-
-      if (anyVisible) {
-        raf = requestAnimationFrame(draw);
-      } else {
-        running = false;
-        if (propsRef.current.gridOpacity <= 0) ctx.clearRect(0, 0, w, h);
-      }
-    };
-
-    const wake = () => {
-      if (running) return;
-      running = true;
-      lastFrame = performance.now();
-      raf = requestAnimationFrame(draw);
-    };
-    wakeRef.current = wake;
-
-    const toLocal = (e: MouseEvent | PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      return [e.clientX - rect.left, e.clientY - rect.top];
-    };
-
-    const onPointerMove = (e: PointerEvent) => {
-      const [x, y] = toLocal(e);
-      energize(x, y);
-      wake();
-    };
-
-    const onPointerDown = (e: PointerEvent) => {
-      if (!propsRef.current.clickPulse) return;
-      const [x, y] = toLocal(e);
-      pulses.push({ x, y, t0: performance.now() });
-      wake();
-    };
-
-    const ro = new ResizeObserver(() => {
-      rebuild();
-      wake();
-    });
-    ro.observe(container);
-    rebuild();
-    wake();
-
-    if (!prefersReducedMotion) {
-      container.addEventListener("pointermove", onPointerMove as EventListener);
-      container.addEventListener("pointerdown", onPointerDown as EventListener);
     }
+  });
 
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      container.removeEventListener("pointermove", onPointerMove as EventListener);
-      container.removeEventListener("pointerdown", onPointerDown as EventListener);
-    };
-  }, [cellSize, prefersReducedMotion]);
-
-  useEffect(() => {
-    wakeRef.current?.();
-  }, [gridOpacity, color, lineWidth, maxOpacity, fillOpacity, cellRadius]);
+  const local = (e: React.PointerEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
 
   return (
-    <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden", className)}>
+    <div
+      className={cn("absolute inset-0 overflow-hidden", className)}
+      onPointerMove={(e) => (pointer.current = local(e))}
+      onPointerLeave={() => (pointer.current = null)}
+      onPointerDown={(e) => {
+        if (clickPulse && !reduceMotion)
+          pulses.current.push({ ...local(e), start: performance.now() });
+      }}
+      {...props}
+    >
       <canvas ref={canvasRef} className="block h-full w-full" />
     </div>
   );

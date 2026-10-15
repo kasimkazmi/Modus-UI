@@ -1,6 +1,6 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+// Moves a corner-bracket focus frame between words, blurring the rest.
+import { useEffect, useId, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +16,13 @@ interface TrueFocusProps {
   className?: string;
 }
 
+const CORNERS = [
+  "left-0 top-0 border-l-[3px] border-t-[3px]",
+  "right-0 top-0 border-r-[3px] border-t-[3px]",
+  "bottom-0 left-0 border-b-[3px] border-l-[3px]",
+  "bottom-0 right-0 border-b-[3px] border-r-[3px]",
+];
+
 export function TrueFocus({
   sentence = "True Focus",
   separator = " ",
@@ -27,136 +34,60 @@ export function TrueFocus({
   pauseBetweenAnimations = 1,
   className,
 }: TrueFocusProps) {
+  const reduce = useReducedMotion();
+  const frameId = useId();
   const words = sentence.split(separator);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const [focusRect, setFocusRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  const prefersReducedMotion = useReducedMotion();
-  // Reduced motion: auto mode stops cycling and leaves every word sharp; manual mode moves focus instantly.
-  const staticFrame = !!prefersReducedMotion && !manualMode;
+  const [focus, setFocus] = useState(0);
+  const duration = reduce ? 0 : animationDuration;
 
   useEffect(() => {
-    if (!manualMode && !prefersReducedMotion) {
-      const interval = setInterval(
-        () => {
-          setCurrentIndex((prev) => (prev + 1) % words.length);
-        },
-        (animationDuration + pauseBetweenAnimations) * 1000,
-      );
-
-      return () => clearInterval(interval);
-    }
-  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length, prefersReducedMotion]);
-
-  useEffect(() => {
-    if (currentIndex === null || currentIndex === -1) return;
-    if (!wordRefs.current[currentIndex] || !containerRef.current) return;
-
-    const parentRect = containerRef.current.getBoundingClientRect();
-    const activeRect = wordRefs.current[currentIndex]!.getBoundingClientRect();
-
-    setFocusRect({
-      x: activeRect.left - parentRect.left,
-      y: activeRect.top - parentRect.top,
-      width: activeRect.width,
-      height: activeRect.height,
-    });
-  }, [currentIndex, words.length]);
-
-  const handleMouseEnter = (index: number) => {
-    if (manualMode) {
-      setLastActiveIndex(index);
-      setCurrentIndex(index);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (manualMode && lastActiveIndex !== null) {
-      setCurrentIndex(lastActiveIndex);
-    }
-  };
+    if (manualMode) return;
+    const id = setInterval(
+      () => setFocus((f) => (f + 1) % words.length),
+      (animationDuration + pauseBetweenAnimations) * 1000,
+    );
+    return () => clearInterval(id);
+  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
 
   return (
-    <div
-      className={cn("relative flex flex-wrap items-center justify-center gap-4", className)}
-      ref={containerRef}
-      style={{ outline: "none", userSelect: "none" }}
+    <p
+      className={cn(
+        "flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-5xl font-bold text-[hsl(var(--foreground))]",
+        className,
+      )}
+      aria-label={sentence}
     >
-      {words.map((word, index) => {
-        const isActive = index === currentIndex;
-        return (
-          <span
-            key={index}
-            ref={(el) => {
-              wordRefs.current[index] = el;
-            }}
-            className="relative cursor-pointer text-5xl font-black text-foreground md:text-7xl"
-            style={{
-              filter: isActive || staticFrame ? "blur(0px)" : `blur(${blurAmount}px)`,
-              transition: prefersReducedMotion ? "none" : `filter ${animationDuration}s ease`,
-              outline: "none",
-              userSelect: "none",
-            }}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
+      {words.map((word, i) => (
+        <span
+          key={i}
+          aria-hidden
+          className="relative px-2 py-1"
+          onMouseEnter={manualMode ? () => setFocus(i) : undefined}
+        >
+          <motion.span
+            className="block"
+            animate={{ filter: `blur(${i === focus ? 0 : blurAmount}px)` }}
+            transition={{ duration }}
           >
             {word}
-          </span>
-        );
-      })}
-
-      <motion.div
-        className="pointer-events-none absolute left-0 top-0 box-border border-0"
-        animate={{
-          x: focusRect.x,
-          y: focusRect.y,
-          width: focusRect.width,
-          height: focusRect.height,
-          opacity: currentIndex >= 0 ? 1 : 0,
-        }}
-        transition={
-          prefersReducedMotion
-            ? { duration: 0 }
-            : { duration: animationDuration, ease: "easeInOut" }
-        }
-        style={
-          {
-            "--border-color": borderColor,
-            "--glow-color": glowColor,
-          } as React.CSSProperties
-        }
-      >
-        <span
-          className="absolute left-[-12px] top-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-b-0 border-r-0"
-          style={{
-            borderColor: "var(--border-color)",
-            filter: "drop-shadow(0 0 6px var(--border-color))",
-          }}
-        />
-        <span
-          className="absolute right-[-12px] top-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-b-0 border-l-0"
-          style={{
-            borderColor: "var(--border-color)",
-            filter: "drop-shadow(0 0 6px var(--border-color))",
-          }}
-        />
-        <span
-          className="absolute bottom-[-12px] left-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-r-0 border-t-0"
-          style={{
-            borderColor: "var(--border-color)",
-            filter: "drop-shadow(0 0 6px var(--border-color))",
-          }}
-        />
-        <span
-          className="absolute bottom-[-12px] right-[-12px] h-5 w-5 rounded-[4px] border-[4px] border-l-0 border-t-0"
-          style={{
-            borderColor: "var(--border-color)",
-            filter: "drop-shadow(0 0 6px var(--border-color))",
-          }}
-        />
-      </motion.div>
-    </div>
+          </motion.span>
+          {i === focus && (
+            <motion.span
+              layoutId={frameId}
+              transition={{ duration, ease: "easeInOut" }}
+              className="pointer-events-none absolute -inset-1"
+            >
+              {CORNERS.map((pos) => (
+                <span
+                  key={pos}
+                  className={cn("absolute h-4 w-4 rounded-[3px]", pos)}
+                  style={{ borderColor, filter: `drop-shadow(0 0 4px ${glowColor})` }}
+                />
+              ))}
+            </motion.span>
+          )}
+        </span>
+      ))}
+    </p>
   );
 }

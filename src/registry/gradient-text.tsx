@@ -1,150 +1,87 @@
 "use client";
+// Text filled with a gradient that sweeps continuously, with an optional matching border.
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import {
   motion,
-  useMotionValue,
   useAnimationFrame,
+  useMotionValue,
   useReducedMotion,
   useTransform,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface GradientTextProps {
-  children: React.ReactNode;
+type Direction = "horizontal" | "vertical" | "diagonal";
+
+export interface GradientTextProps {
+  children: ReactNode;
   className?: string;
   colors?: string[];
   animationSpeed?: number;
   showBorder?: boolean;
-  direction?: "horizontal" | "vertical" | "diagonal";
+  direction?: Direction;
   pauseOnHover?: boolean;
   yoyo?: boolean;
 }
 
+const SWEEP: Record<Direction, { angle: string; size: string; at: (p: number) => string }> = {
+  horizontal: { angle: "to right", size: "200% 100%", at: (p) => `${p}% 50%` },
+  vertical: { angle: "to bottom", size: "100% 200%", at: (p) => `50% ${p}%` },
+  diagonal: { angle: "135deg", size: "200% 200%", at: (p) => `${p}% ${p}%` },
+};
+
 export function GradientText({
   children,
   className,
-  colors = ["#38bdf8", "#818cf8", "#c084fc", "#e879f9", "#34d399"],
+  colors = [
+    "hsl(var(--primary))",
+    "hsl(var(--primary))",
+    "hsl(var(--primary))",
+    "hsl(var(--primary))",
+    "hsl(var(--primary))",
+  ],
   animationSpeed = 8,
   showBorder = false,
   direction = "horizontal",
   pauseOnHover = false,
   yoyo = true,
 }: GradientTextProps) {
-  const [isPaused, setIsPaused] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
+  const [hovered, setHovered] = useState(false);
+  const elapsed = useRef(0);
   const progress = useMotionValue(0);
-  const elapsedRef = useRef(0);
-  const lastTimeRef = useRef<number | null>(null);
+  const sweep = SWEEP[direction];
 
-  const animationDuration = animationSpeed * 1000;
-
-  useAnimationFrame((time) => {
-    // Reduced motion: hold the gradient still at its starting position.
-    if (isPaused || prefersReducedMotion) {
-      lastTimeRef.current = null;
-      return;
-    }
-
-    if (lastTimeRef.current === null) {
-      lastTimeRef.current = time;
-      return;
-    }
-
-    const deltaTime = time - lastTimeRef.current;
-    lastTimeRef.current = time;
-    elapsedRef.current += deltaTime;
-
-    if (yoyo) {
-      const fullCycle = animationDuration * 2;
-      const cycleTime = elapsedRef.current % fullCycle;
-
-      if (cycleTime < animationDuration) {
-        progress.set((cycleTime / animationDuration) * 100);
-      } else {
-        progress.set(100 - ((cycleTime - animationDuration) / animationDuration) * 100);
-      }
-    } else {
-      progress.set((elapsedRef.current / animationDuration) * 100);
-    }
+  useAnimationFrame((_, delta) => {
+    if (reduceMotion || (pauseOnHover && hovered)) return;
+    elapsed.current += delta / 1000 / animationSpeed;
+    const cycle = elapsed.current % (yoyo ? 2 : 1);
+    progress.set(cycle > 1 ? 2 - cycle : cycle);
   });
 
-  useEffect(() => {
-    elapsedRef.current = 0;
-    progress.set(0);
-  }, [animationSpeed, progress, yoyo]);
-
-  const backgroundPosition = useTransform(progress, (p) => {
-    if (direction === "horizontal") {
-      return `${p}% 50%`;
-    } else if (direction === "vertical") {
-      return `50% ${p}%`;
-    } else {
-      return `${p}% 50%`;
-    }
-  });
-
-  const handleMouseEnter = useCallback(() => {
-    if (pauseOnHover) setIsPaused(true);
-  }, [pauseOnHover]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (pauseOnHover) setIsPaused(false);
-  }, [pauseOnHover]);
-
-  const gradientAngle =
-    direction === "horizontal"
-      ? "to right"
-      : direction === "vertical"
-        ? "to bottom"
-        : "to bottom right";
-
-  const gradientColors = [...colors, colors[0]].join(", ");
-
-  const gradientStyle = {
-    backgroundImage: `linear-gradient(${gradientAngle}, ${gradientColors})`,
-    backgroundSize:
-      direction === "horizontal"
-        ? "300% 100%"
-        : direction === "vertical"
-          ? "100% 300%"
-          : "300% 300%",
-    backgroundRepeat: "repeat",
+  const backgroundPosition = useTransform(progress, (p) => sweep.at(p * 100));
+  // The palette is laid out twice so the end of a loop lines up with its start.
+  const stops = [...colors, ...colors, colors[0]].join(", ");
+  const fill = {
+    backgroundImage: `linear-gradient(${sweep.angle}, ${stops})`,
+    backgroundSize: sweep.size,
+    backgroundPosition,
   };
 
+  const text = (
+    <motion.span className="bg-clip-text text-transparent" style={fill}>
+      {children}
+    </motion.span>
+  );
+
   return (
-    <motion.div
-      className={cn(
-        "relative mx-auto flex max-w-fit flex-row items-center justify-center overflow-hidden rounded-[1.25rem] font-medium backdrop-blur transition-shadow duration-500",
-        showBorder ? "px-2 py-1" : "",
-        className,
-      )}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <motion.span
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className={cn("inline-flex max-w-full", showBorder && "rounded-full p-px", className)}
+      style={showBorder ? fill : undefined}
     >
-      {showBorder && (
-        <motion.div
-          className="pointer-events-none absolute inset-0 z-0 rounded-[inherit]"
-          style={{ ...gradientStyle, backgroundPosition }}
-        >
-          <div
-            className="absolute -z-10 rounded-[inherit] bg-background"
-            style={{
-              width: "calc(100% - 2px)",
-              height: "calc(100% - 2px)",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        </motion.div>
-      )}
-      <motion.div
-        className="relative z-10 inline-block bg-clip-text px-4 py-2 text-transparent"
-        style={{ ...gradientStyle, backgroundPosition, WebkitBackgroundClip: "text" }}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
+      {showBorder ? <span className="rounded-full bg-background px-5 py-2">{text}</span> : text}
+    </motion.span>
   );
 }

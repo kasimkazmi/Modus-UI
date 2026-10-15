@@ -1,11 +1,12 @@
 "use client";
+// Pulls its child toward the cursor once the cursor comes within `padding` pixels.
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface MagnetProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+export interface MagnetProps {
+  children: ReactNode;
   padding?: number;
   disabled?: boolean;
   magnetStrength?: number;
@@ -24,57 +25,46 @@ export function Magnet({
   inactiveTransition = "transform 0.5s ease-in-out",
   wrapperClassName = "",
   innerClassName = "",
-  ...props
 }: MagnetProps) {
-  const [isActive, setIsActive] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const magnetRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const [pull, setPull] = useState<{ x: number; y: number } | null>(null);
+  const off = disabled || reduceMotion;
 
   useEffect(() => {
-    if (disabled || prefersReducedMotion) {
-      setIsActive(false);
-      setPosition({ x: 0, y: 0 });
+    if (off) {
+      setPull(null);
       return;
     }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!magnetRef.current) return;
-
-      const { left, top, width, height } = magnetRef.current.getBoundingClientRect();
-      const centerX = left + width / 2;
-      const centerY = top + height / 2;
-
-      const distX = Math.abs(centerX - e.clientX);
-      const distY = Math.abs(centerY - e.clientY);
-
-      if (distX < width / 2 + padding && distY < height / 2 + padding) {
-        setIsActive(true);
-
-        const offsetX = (e.clientX - centerX) / magnetStrength;
-        const offsetY = (e.clientY - centerY) / magnetStrength;
-        setPosition({ x: offsetX, y: offsetY });
-      } else {
-        setIsActive(false);
-        setPosition({ x: 0, y: 0 });
-      }
+    const onMove = (event: PointerEvent) => {
+      const el = ref.current;
+      if (!el) return;
+      const box = el.getBoundingClientRect();
+      const inRange =
+        event.clientX > box.left - padding &&
+        event.clientX < box.right + padding &&
+        event.clientY > box.top - padding &&
+        event.clientY < box.bottom + padding;
+      setPull(
+        inRange
+          ? {
+              x: (event.clientX - (box.left + box.width / 2)) / magnetStrength,
+              y: (event.clientY - (box.top + box.height / 2)) / magnetStrength,
+            }
+          : null,
+      );
     };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [padding, disabled, magnetStrength, prefersReducedMotion]);
-
-  const transitionStyle = isActive ? activeTransition : inactiveTransition;
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [off, padding, magnetStrength]);
 
   return (
-    <div ref={magnetRef} className={cn("relative inline-block", wrapperClassName)} {...props}>
+    <div ref={ref} className={cn("relative inline-block", wrapperClassName)}>
       <div
         className={cn("will-change-transform", innerClassName)}
         style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-          transition: transitionStyle,
+          transform: `translate3d(${pull?.x ?? 0}px, ${pull?.y ?? 0}px, 0)`,
+          transition: pull ? activeTransition : inactiveTransition,
         }}
       >
         {children}

@@ -1,12 +1,11 @@
 "use client";
+// Canvas grid of characters that keep scrambling and shifting colour.
 
-import { useRef, useEffect } from "react";
-import { useReducedMotion } from "framer-motion";
+import * as React from "react";
+import { useAnimationFrame, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-const FALLBACK_RGB = { r: 255, g: 255, b: 255 };
-
-interface LetterGlitchProps {
+export interface LetterGlitchProps extends React.HTMLAttributes<HTMLDivElement> {
   glitchColors?: string[];
   glitchSpeed?: number;
   centerVignette?: boolean;
@@ -14,240 +13,132 @@ interface LetterGlitchProps {
   smooth?: boolean;
   lightMode?: boolean;
   backgroundColor?: string;
-  className?: string;
   characters?: string;
 }
 
+const CELL_W = 10;
+const CELL_H = 20;
+const SHARE = 0.05;
+
+type RGB = [number, number, number];
+
+interface Cell {
+  char: string;
+  color: RGB;
+  target: RGB;
+}
+
+const pick = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
+
 export function LetterGlitch({
-  glitchColors = ["#38bdf8", "#818cf8", "#34d399"],
+  glitchColors = ["hsl(var(--primary))", "hsl(var(--primary))", "hsl(var(--primary))"],
   glitchSpeed = 50,
   centerVignette = true,
   outerVignette = true,
   smooth = true,
   lightMode = false,
   backgroundColor,
-  className = "",
   characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>.,0123456789",
+  className,
+  ...props
 }: LetterGlitchProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const letters = useRef<any[]>([]);
-  const grid = useRef({ columns: 0, rows: 0 });
-  const context = useRef<CanvasRenderingContext2D | null>(null);
-  const lastGlitchTime = useRef(Date.now());
-  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const cells = React.useRef<Cell[]>([]);
+  const cols = React.useRef(0);
+  const palette = React.useRef<RGB[]>([[255, 255, 255]]);
+  const lastGlitch = React.useRef(0);
+  const glyphs = React.useMemo(() => Array.from(characters), [characters]);
+  const shade = lightMode ? "255,255,255" : "0,0,0";
+  const colorKey = glitchColors.join("|");
 
-  const lettersAndSymbols = Array.from(characters);
-
-  const fontSize = 16;
-  const charWidth = 10;
-  const charHeight = 20;
-
-  const getRandomChar = () => {
-    return lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)];
-  };
-
-  const getRandomColor = () => {
-    return glitchColors[Math.floor(Math.random() * glitchColors.length)];
-  };
-
-  const hexToRgb = (hex: string) => {
-    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, (m, r, g, b) => {
-      return r + r + g + g + b + b;
+  const draw = React.useCallback(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = `${CELL_H * 0.8}px ui-monospace, monospace`;
+    ctx.textBaseline = "top";
+    cells.current.forEach((cell, i) => {
+      ctx.fillStyle = `rgb(${cell.color.map(Math.round).join(",")})`;
+      ctx.fillText(cell.char, (i % cols.current) * CELL_W, Math.floor(i / cols.current) * CELL_H);
     });
+  }, []);
 
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
-      : null;
-  };
+  React.useEffect(() => {
+    const canvas = canvasRef.current!;
+    const probe = document.createElement("span");
+    canvas.parentElement!.appendChild(probe);
+    palette.current = glitchColors.map((c) => {
+      probe.style.color = c;
+      return getComputedStyle(probe)
+        .color.match(/[\d.]+/g)!
+        .slice(0, 3)
+        .map(Number) as RGB;
+    });
+    probe.remove();
 
-  const mixRgb = (start: any, end: any, factor: number) => ({
-    r: Math.round(start.r + (end.r - start.r) * factor),
-    g: Math.round(start.g + (end.g - start.g) * factor),
-    b: Math.round(start.b + (end.b - start.b) * factor),
+    const resize = () => {
+      const { width, height } = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.getContext("2d")!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols.current = Math.ceil(width / CELL_W);
+      cells.current = Array.from({ length: cols.current * Math.ceil(height / CELL_H) }, () => {
+        const color = pick(palette.current);
+        return { char: pick(glyphs), color: [...color], target: color };
+      });
+      draw();
+    };
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(canvas);
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colorKey, glyphs, draw]);
+
+  useAnimationFrame((time) => {
+    if (reduceMotion) return;
+    if (time - lastGlitch.current >= glitchSpeed) {
+      lastGlitch.current = time;
+      const count = Math.max(1, Math.floor(cells.current.length * SHARE));
+      for (let n = 0; n < count; n++) {
+        const cell = pick(cells.current);
+        if (!cell) break;
+        cell.char = pick(glyphs);
+        cell.target = pick(palette.current);
+        if (!smooth) cell.color = [...cell.target];
+      }
+    }
+    if (smooth) {
+      for (const cell of cells.current) {
+        for (let k = 0; k < 3; k++) cell.color[k] += (cell.target[k] - cell.color[k]) * 0.08;
+      }
+    }
+    draw();
   });
 
-  const rgbToCss = ({ r, g, b }: { r: number; g: number; b: number }) => `rgb(${r}, ${g}, ${b})`;
-
-  const getRandomRgb = () => hexToRgb(getRandomColor()) || FALLBACK_RGB;
-
-  const calculateGrid = (width: number, height: number) => {
-    const columns = Math.ceil(width / charWidth);
-    const rows = Math.ceil(height / charHeight);
-    return { columns, rows };
-  };
-
-  const initializeLetters = (columns: number, rows: number) => {
-    grid.current = { columns, rows };
-    const totalLetters = columns * rows;
-    letters.current = Array.from({ length: totalLetters }, () => {
-      const rgb = getRandomRgb();
-      return {
-        char: getRandomChar(),
-        rgb,
-        fromRgb: rgb,
-        targetRgb: getRandomRgb(),
-        colorProgress: 1,
-      };
-    });
-  };
-
-  const resizeCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const rect = parent.getBoundingClientRect();
-
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-
-    if (context.current) {
-      context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    const { columns, rows } = calculateGrid(rect.width, rect.height);
-    initializeLetters(columns, rows);
-
-    drawLetters();
-  };
-
-  const drawLetters = () => {
-    if (!context.current || letters.current.length === 0 || !canvasRef.current) return;
-    const ctx = context.current;
-    const { width, height } = canvasRef.current.getBoundingClientRect();
-    ctx.clearRect(0, 0, width, height);
-    ctx.font = `${fontSize}px monospace`;
-    ctx.textBaseline = "top";
-
-    letters.current.forEach((letter, index) => {
-      const x = (index % grid.current.columns) * charWidth;
-      const y = Math.floor(index / grid.current.columns) * charHeight;
-      ctx.fillStyle = rgbToCss(letter.rgb);
-      ctx.fillText(letter.char, x, y);
-    });
-  };
-
-  const updateLetters = () => {
-    if (!letters.current || letters.current.length === 0) return;
-
-    const updateCount = Math.max(1, Math.floor(letters.current.length * 0.05));
-
-    for (let i = 0; i < updateCount; i++) {
-      const index = Math.floor(Math.random() * letters.current.length);
-      if (!letters.current[index]) continue;
-
-      letters.current[index].char = getRandomChar();
-      letters.current[index].fromRgb = letters.current[index].rgb;
-      letters.current[index].targetRgb = getRandomRgb();
-
-      if (!smooth) {
-        letters.current[index].rgb = letters.current[index].targetRgb;
-        letters.current[index].colorProgress = 1;
-      } else {
-        letters.current[index].colorProgress = 0;
-      }
-    }
-  };
-
-  const handleSmoothTransitions = () => {
-    let needsRedraw = false;
-    letters.current.forEach((letter) => {
-      if (letter.colorProgress < 1) {
-        letter.colorProgress += 0.05;
-        if (letter.colorProgress > 1) letter.colorProgress = 1;
-
-        letter.rgb = mixRgb(letter.fromRgb, letter.targetRgb, letter.colorProgress);
-        needsRedraw = true;
-      }
-    });
-
-    if (needsRedraw) {
-      drawLetters();
-    }
-  };
-
-  const animate = () => {
-    const now = Date.now();
-    if (now - lastGlitchTime.current >= glitchSpeed) {
-      updateLetters();
-      drawLetters();
-      lastGlitchTime.current = now;
-    }
-
-    if (smooth) {
-      handleSmoothTransitions();
-    }
-
-    animationRef.current = requestAnimationFrame(animate);
-  };
-
-  // Reduced motion: resizeCanvas() draws one static frame; never start the loop.
-  const start = () => {
-    if (!prefersReducedMotion) animate();
-  };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    context.current = canvas.getContext("2d");
-    resizeCanvas();
-    start();
-
-    let resizeTimeout: NodeJS.Timeout;
-
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        if (animationRef.current) cancelAnimationFrame(animationRef.current);
-        resizeCanvas();
-        start();
-      }, 100);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [glitchSpeed, smooth, prefersReducedMotion]);
-
   return (
-    <div
-      className={cn("relative h-full w-full overflow-hidden", className)}
-      style={{ backgroundColor: backgroundColor || (lightMode ? "#ffffff" : "#09090b") }}
-    >
-      <canvas ref={canvasRef} className="block h-full w-full" />
+    <div className={cn("relative h-full w-full overflow-hidden", className)} {...props}>
+      <canvas
+        ref={canvasRef}
+        className="block h-full w-full"
+        style={{ backgroundColor: backgroundColor ?? (lightMode ? "#ffffff" : "#000000") }}
+      />
       {outerVignette && (
         <div
-          className="pointer-events-none absolute left-0 top-0 h-full w-full"
+          className="pointer-events-none absolute inset-0"
           style={{
-            background: lightMode
-              ? "radial-gradient(circle, rgba(255,255,255,0) 58%, rgba(255,255,255,0.96) 100%)"
-              : "radial-gradient(circle, rgba(9,9,11,0) 60%, rgba(9,9,11,1) 100%)",
+            background: `radial-gradient(circle, rgba(${shade},0) 55%, rgba(${shade},1) 100%)`,
           }}
         />
       )}
       {centerVignette && (
         <div
-          className="pointer-events-none absolute left-0 top-0 h-full w-full"
+          className="pointer-events-none absolute inset-0"
           style={{
-            background: lightMode
-              ? "radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 60%)"
-              : "radial-gradient(circle, rgba(9,9,11,0.8) 0%, rgba(9,9,11,0) 60%)",
+            background: `radial-gradient(circle, rgba(${shade},0.75) 0%, rgba(${shade},0) 60%)`,
           }}
         />
       )}

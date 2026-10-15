@@ -1,66 +1,11 @@
 "use client";
+// Canvas line field bent by gradient noise and pushed around by the cursor.
 
-import { useRef, useEffect } from "react";
+import * as React from "react";
 import { useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-class Noise {
-  p: Uint8Array;
-  perm: Uint8Array;
-  gradP: Float64Array;
-
-  constructor(seed = 0) {
-    this.p = new Uint8Array(256);
-    this.perm = new Uint8Array(512);
-    this.gradP = new Float64Array(512);
-    this.seed(seed);
-  }
-
-  seed(seed: number) {
-    if (seed > 0 && seed < 1) seed *= 65536;
-    seed = Math.floor(seed);
-    if (seed < 256) seed |= seed << 8;
-    for (let i = 0; i < 256; i++) {
-      let v = i & 1 ? seed & 255 : (seed >> 8) & 255;
-      this.p[i] = v ^ Math.floor(Math.random() * 256);
-      this.perm[i] = this.perm[i + 256] = this.p[i];
-      this.gradP[i] = this.gradP[i + 256] = (this.p[i] % 12) - 6;
-    }
-  }
-
-  fade(t: number) {
-    return t * t * t * (t * (t * 6 - 15) + 10);
-  }
-
-  lerp(a: number, b: number, t: number) {
-    return (1 - t) * a + t * b;
-  }
-
-  perlin2(x: number, y: number) {
-    let X = Math.floor(x),
-      Y = Math.floor(y);
-    x -= X;
-    y -= Y;
-    X &= 255;
-    Y &= 255;
-
-    // Fast dot product
-    const dot2 = (hash: number, x: number, y: number) => {
-      // Simplistic gradient fallback
-      return x * ((hash % 12) - 6) + y * (((hash >> 1) % 12) - 6);
-    };
-
-    const n00 = dot2(this.perm[X + this.perm[Y]], x, y);
-    const n01 = dot2(this.perm[X + this.perm[Y + 1]], x, y - 1);
-    const n10 = dot2(this.perm[X + 1 + this.perm[Y]], x - 1, y);
-    const n11 = dot2(this.perm[X + 1 + this.perm[Y + 1]], x - 1, y - 1);
-
-    const u = this.fade(x);
-    return this.lerp(this.lerp(n00, n10, u), this.lerp(n01, n11, u), this.fade(y));
-  }
-}
-
-interface WavesProps {
+export interface WavesProps {
   lineColor?: string;
   backgroundColor?: string;
   waveSpeedX?: number;
@@ -74,6 +19,44 @@ interface WavesProps {
   maxCursorMove?: number;
   style?: React.CSSProperties;
   className?: string;
+}
+
+// Small seeded 2D gradient noise in roughly [-1, 1].
+const PERM = (() => {
+  const p = Array.from({ length: 256 }, (_, i) => i);
+  let seed = 1337;
+  for (let i = 255; i > 0; i--) {
+    seed = (seed * 16807) % 2147483647;
+    const j = seed % (i + 1);
+    [p[i], p[j]] = [p[j], p[i]];
+  }
+  return [...p, ...p];
+})();
+
+function noise(x: number, y: number) {
+  const xi = Math.floor(x);
+  const yi = Math.floor(y);
+  const fx = x - xi;
+  const fy = y - yi;
+  const corner = (cx: number, cy: number) => {
+    const angle = (PERM[(PERM[(xi + cx) & 255] + yi + cy) & 511] / 256) * Math.PI * 2;
+    return Math.cos(angle) * (fx - cx) + Math.sin(angle) * (fy - cy);
+  };
+  const fade = (t: number) => t * t * (3 - 2 * t);
+  const u = fade(fx);
+  const v = fade(fy);
+  const top = corner(0, 0) + (corner(1, 0) - corner(0, 0)) * u;
+  const bottom = corner(0, 1) + (corner(1, 1) - corner(0, 1)) * u;
+  return (top + (bottom - top) * v) * 1.4;
+}
+
+interface Point {
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  vx: number;
+  vy: number;
 }
 
 export function Waves({
@@ -91,52 +74,102 @@ export function Waves({
   style = {},
   className,
 }: WavesProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const boundingRef = useRef({ width: 0, height: 0, left: 0, top: 0 });
-  const noiseRef = useRef(new Noise(Math.random()));
-  const linesRef = useRef<any[]>([]);
-  const mouseRef = useRef({
-    x: -10,
-    y: 0,
-    lx: 0,
-    ly: 0,
-    sx: 0,
-    sy: 0,
-    v: 0,
-    vs: 0,
-    a: 0,
-    set: false,
-  });
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const reduceMotion = useReducedMotion();
 
-  const configRef = useRef({
-    lineColor,
-    waveSpeedX,
-    waveSpeedY,
-    waveAmpX,
-    waveAmpY,
-    friction,
-    tension,
-    maxCursorMove,
-    xGap,
-    yGap,
-  });
-  const frameIdRef = useRef<number | null>(null);
-  const prefersReducedMotion = useReducedMotion();
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
 
-  useEffect(() => {
-    configRef.current = {
-      lineColor,
-      waveSpeedX,
-      waveSpeedY,
-      waveAmpX,
-      waveAmpY,
-      friction,
-      tension,
-      maxCursorMove,
-      xGap,
-      yGap,
+    let columns: Point[][] = [];
+    let width = 0;
+    let height = 0;
+    const cursor = { x: -1e4, y: -1e4, vx: 0, vy: 0 };
+
+    const build = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      width = rect.width;
+      height = rect.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      columns = [];
+      for (let x = -xGap; x <= width + xGap; x += xGap) {
+        const column: Point[] = [];
+        for (let y = -yGap; y <= height + yGap; y += yGap) {
+          column.push({ x, y, dx: 0, dy: 0, vx: 0, vy: 0 });
+        }
+        columns.push(column);
+      }
+    };
+
+    const draw = (time: number) => {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (const column of columns) {
+        column.forEach((p, i) => {
+          const n = noise((p.x + time * waveSpeedX) * 0.002, (p.y + time * waveSpeedY) * 0.0015);
+          if (!reduceMotion) {
+            const dist = Math.hypot(p.x - cursor.x, p.y - cursor.y);
+            const reach = Math.max(175, Math.hypot(cursor.vx, cursor.vy) * 10);
+            if (dist < reach) {
+              const push = 1 - dist / reach;
+              p.vx += cursor.vx * push * 0.0065;
+              p.vy += cursor.vy * push * 0.0065;
+            }
+            p.vx = (p.vx - p.dx * tension) * friction;
+            p.vy = (p.vy - p.dy * tension) * friction;
+            p.dx = Math.max(-maxCursorMove, Math.min(maxCursorMove, p.dx + p.vx));
+            p.dy = Math.max(-maxCursorMove, Math.min(maxCursorMove, p.dy + p.vy));
+          }
+          const x = p.x + Math.cos(n * Math.PI * 2) * waveAmpX + p.dx;
+          const y = p.y + Math.sin(n * Math.PI) * waveAmpY + p.dy;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+      }
+      ctx.stroke();
+    };
+
+    let frame = 0;
+    const tick = (time: number) => {
+      cursor.vx *= 0.9;
+      cursor.vy *= 0.9;
+      draw(time / 16);
+      frame = requestAnimationFrame(tick);
+    };
+
+    const onMove = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (cursor.x > -1e3) {
+        cursor.vx = x - cursor.x;
+        cursor.vy = y - cursor.y;
+      }
+      cursor.x = x;
+      cursor.y = y;
+    };
+
+    const observer = new ResizeObserver(() => {
+      build();
+      if (reduceMotion) draw(0);
+    });
+    observer.observe(canvas);
+    build();
+    if (reduceMotion) draw(0);
+    else {
+      frame = requestAnimationFrame(tick);
+      window.addEventListener("pointermove", onMove);
+    }
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("pointermove", onMove);
     };
   }, [
     lineColor,
@@ -144,204 +177,21 @@ export function Waves({
     waveSpeedY,
     waveAmpX,
     waveAmpY,
+    xGap,
+    yGap,
     friction,
     tension,
     maxCursorMove,
-    xGap,
-    yGap,
+    reduceMotion,
   ]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-    ctxRef.current = canvas.getContext("2d");
-
-    function setSize() {
-      if (!container || !canvas) return;
-      boundingRef.current = container.getBoundingClientRect();
-      canvas.width = boundingRef.current.width;
-      canvas.height = boundingRef.current.height;
-    }
-
-    function setLines() {
-      const { width, height } = boundingRef.current;
-      linesRef.current = [];
-      const oWidth = width + 200,
-        oHeight = height + 30;
-      const { xGap, yGap } = configRef.current;
-      const totalLines = Math.ceil(oWidth / xGap);
-      const totalPoints = Math.ceil(oHeight / yGap);
-      const xStart = (width - xGap * totalLines) / 2;
-      const yStart = (height - yGap * totalPoints) / 2;
-      for (let i = 0; i <= totalLines; i++) {
-        const pts = [];
-        for (let j = 0; j <= totalPoints; j++) {
-          pts.push({
-            x: xStart + xGap * i,
-            y: yStart + yGap * j,
-            wave: { x: 0, y: 0 },
-            cursor: { x: 0, y: 0, vx: 0, vy: 0 },
-          });
-        }
-        linesRef.current.push(pts);
-      }
-    }
-
-    function movePoints(time: number) {
-      const lines = linesRef.current,
-        mouse = mouseRef.current,
-        noise = noiseRef.current;
-      const { waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove } =
-        configRef.current;
-      lines.forEach((pts) => {
-        pts.forEach((p: any) => {
-          const move =
-            noise.perlin2((p.x + time * waveSpeedX) * 0.002, (p.y + time * waveSpeedY) * 0.0015) *
-            12;
-          p.wave.x = Math.cos(move) * waveAmpX;
-          p.wave.y = Math.sin(move) * waveAmpY;
-
-          const dx = p.x - mouse.sx,
-            dy = p.y - mouse.sy;
-          const dist = Math.hypot(dx, dy),
-            l = Math.max(175, mouse.vs);
-          if (dist < l) {
-            const s = 1 - dist / l;
-            const f = Math.cos(dist * 0.001) * s;
-            p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00065;
-            p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00065;
-          }
-
-          p.cursor.vx += (0 - p.cursor.x) * tension;
-          p.cursor.vy += (0 - p.cursor.y) * tension;
-          p.cursor.vx *= friction;
-          p.cursor.vy *= friction;
-          p.cursor.x += p.cursor.vx * 2;
-          p.cursor.y += p.cursor.vy * 2;
-          p.cursor.x = Math.min(maxCursorMove, Math.max(-maxCursorMove, p.cursor.x));
-          p.cursor.y = Math.min(maxCursorMove, Math.max(-maxCursorMove, p.cursor.y));
-        });
-      });
-    }
-
-    function moved(point: any, withCursor = true) {
-      const x = point.x + point.wave.x + (withCursor ? point.cursor.x : 0);
-      const y = point.y + point.wave.y + (withCursor ? point.cursor.y : 0);
-      return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
-    }
-
-    function drawLines() {
-      const { width, height } = boundingRef.current;
-      const ctx = ctxRef.current;
-      if (!ctx) return;
-      ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
-      ctx.strokeStyle = configRef.current.lineColor;
-      linesRef.current.forEach((points) => {
-        let p1 = moved(points[0], false);
-        ctx.moveTo(p1.x, p1.y);
-        points.forEach((p: any, idx: number) => {
-          const isLast = idx === points.length - 1;
-          p1 = moved(p, !isLast);
-          const p2 = moved(points[idx + 1] || points[points.length - 1], !isLast);
-          ctx.lineTo(p1.x, p1.y);
-          if (isLast) ctx.moveTo(p2.x, p2.y);
-        });
-      });
-      ctx.stroke();
-    }
-
-    function tick(t: number) {
-      const mouse = mouseRef.current;
-      mouse.sx += (mouse.x - mouse.sx) * 0.1;
-      mouse.sy += (mouse.y - mouse.sy) * 0.1;
-      const dx = mouse.x - mouse.lx,
-        dy = mouse.y - mouse.ly;
-      const d = Math.hypot(dx, dy);
-      mouse.v = d;
-      mouse.vs += (d - mouse.vs) * 0.1;
-      mouse.vs = Math.min(100, mouse.vs);
-      mouse.lx = mouse.x;
-      mouse.ly = mouse.y;
-      mouse.a = Math.atan2(dy, dx);
-      if (container) {
-        container.style.setProperty("--x", `${mouse.sx}px`);
-        container.style.setProperty("--y", `${mouse.sy}px`);
-      }
-
-      movePoints(t);
-      drawLines();
-      frameIdRef.current = requestAnimationFrame(tick);
-    }
-
-    // Reduced motion: draw a single still wave field, redrawn only when the size changes.
-    function drawStill() {
-      movePoints(0);
-      drawLines();
-    }
-
-    function onResize() {
-      setSize();
-      setLines();
-      if (prefersReducedMotion) drawStill();
-    }
-    function onMouseMove(e: MouseEvent) {
-      updateMouse(e.clientX, e.clientY);
-    }
-    function onTouchMove(e: TouchEvent) {
-      const touch = e.touches[0];
-      updateMouse(touch.clientX, touch.clientY);
-    }
-    function updateMouse(x: number, y: number) {
-      const mouse = mouseRef.current,
-        b = boundingRef.current;
-      mouse.x = x - b.left;
-      mouse.y = y - b.top;
-      if (!mouse.set) {
-        mouse.sx = mouse.x;
-        mouse.sy = mouse.y;
-        mouse.lx = mouse.x;
-        mouse.ly = mouse.y;
-        mouse.set = true;
-      }
-    }
-
-    setSize();
-    setLines();
-    window.addEventListener("resize", onResize);
-
-    if (prefersReducedMotion) {
-      drawStill();
-      return () => window.removeEventListener("resize", onResize);
-    }
-
-    frameIdRef.current = requestAnimationFrame(tick);
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("touchmove", onTouchMove);
-      if (frameIdRef.current) cancelAnimationFrame(frameIdRef.current);
-    };
-  }, [prefersReducedMotion]);
 
   return (
     <div
-      ref={containerRef}
+      aria-hidden
+      className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
       style={{ backgroundColor, ...style }}
-      className={cn("absolute left-0 top-0 h-full w-full overflow-hidden", className)}
     >
-      <div
-        className="pointer-events-none absolute left-0 top-0 h-2 w-2 rounded-full bg-primary/10"
-        style={{
-          transform: "translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)",
-          willChange: "transform",
-        }}
-      />
-      <canvas ref={canvasRef} className="pointer-events-none block h-full w-full" />
+      <canvas ref={canvasRef} className="block h-full w-full" />
     </div>
   );
 }

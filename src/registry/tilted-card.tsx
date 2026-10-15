@@ -1,15 +1,11 @@
 "use client";
+// Image card that tilts toward the pointer, with a caption that trails the cursor.
 
-import { useRef, useState } from "react";
+import * as React from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const springValues = {
-  damping: 30,
-  stiffness: 100,
-  mass: 2,
-};
-
-interface TiltedCardProps {
+export interface TiltedCardProps {
   imageSrc: string;
   altText?: string;
   captionText?: string;
@@ -23,7 +19,10 @@ interface TiltedCardProps {
   showTooltip?: boolean;
   overlayContent?: React.ReactNode;
   displayOverlayContent?: boolean;
+  className?: string;
 }
+
+const spring = { stiffness: 120, damping: 18, mass: 1 };
 
 export function TiltedCard({
   imageSrc,
@@ -39,113 +38,83 @@ export function TiltedCard({
   showTooltip = true,
   overlayContent = null,
   displayOverlayContent = false,
+  className,
 }: TiltedCardProps) {
-  const ref = useRef<HTMLElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(useMotionValue(0), springValues);
-  const rotateY = useSpring(useMotionValue(0), springValues);
-  const scale = useSpring(1, springValues);
-  const opacity = useSpring(0);
-  const rotateFigcaption = useSpring(0, {
-    stiffness: 350,
-    damping: 30,
-    mass: 1,
-  });
+  const reduceMotion = useReducedMotion();
+  const tiltX = useSpring(0, spring);
+  const tiltY = useSpring(0, spring);
+  const scale = useSpring(1, spring);
+  const captionX = useMotionValue(0);
+  const captionY = useMotionValue(0);
+  const captionOpacity = useSpring(0, spring);
+  const captionTurn = useSpring(0, { stiffness: 300, damping: 30 });
+  const lastY = React.useRef(0);
 
-  const [lastY, setLastY] = useState(0);
-  // Reduced motion: no tilt, zoom or caption swing; the caption still fades in and tracks the pointer.
-  const prefersReducedMotion = useReducedMotion();
-
-  function handleMouse(e: React.MouseEvent<HTMLElement>) {
-    if (!ref.current) return;
-
-    const rect = ref.current.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left - rect.width / 2;
-    const offsetY = e.clientY - rect.top - rect.height / 2;
-
-    const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
-    const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
-
-    if (!prefersReducedMotion) {
-      rotateX.set(rotationX);
-      rotateY.set(rotationY);
+  const onPointerMove = (event: React.PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = event.clientX - rect.left;
+    const py = event.clientY - rect.top;
+    if (!reduceMotion) {
+      tiltX.set((0.5 - py / rect.height) * 2 * rotateAmplitude);
+      tiltY.set((px / rect.width - 0.5) * 2 * rotateAmplitude);
+      captionTurn.set(-(py - lastY.current) * 0.6);
     }
+    captionX.set(px);
+    captionY.set(py);
+    lastY.current = py;
+  };
 
-    x.set(e.clientX - rect.left);
-    y.set(e.clientY - rect.top);
+  const onPointerEnter = () => {
+    if (!reduceMotion) scale.set(scaleOnHover);
+    captionOpacity.set(1);
+  };
 
-    const velocityY = offsetY - lastY;
-    if (!prefersReducedMotion) rotateFigcaption.set(-velocityY * 0.6);
-    setLastY(offsetY);
-  }
-
-  function handleMouseEnter() {
-    if (!prefersReducedMotion) scale.set(scaleOnHover);
-    opacity.set(1);
-  }
-
-  function handleMouseLeave() {
-    opacity.set(0);
+  const onPointerLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
     scale.set(1);
-    rotateX.set(0);
-    rotateY.set(0);
-    rotateFigcaption.set(0);
-  }
+    captionOpacity.set(0);
+    captionTurn.set(0);
+  };
 
   return (
     <figure
-      ref={ref}
-      className="relative flex h-full w-full flex-col items-center justify-center [perspective:800px]"
-      style={{
-        height: containerHeight,
-        width: containerWidth,
-      }}
-      onMouseMove={handleMouse}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={cn("relative m-0 flex items-center justify-center [perspective:800px]", className)}
+      style={{ width: containerWidth, height: containerHeight }}
+      onPointerMove={onPointerMove}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
     >
       {showMobileWarning && (
-        <div className="absolute top-4 block text-center text-sm text-muted-foreground sm:hidden">
-          This effect is optimized for desktop pointers.
-        </div>
+        <p className="absolute top-4 text-center text-sm text-muted-foreground sm:hidden">
+          This effect works best with a mouse or trackpad.
+        </p>
       )}
-
       <motion.div
         className="relative [transform-style:preserve-3d]"
-        style={{
-          width: imageWidth,
-          height: imageHeight,
-          rotateX,
-          rotateY,
-          scale,
-        }}
+        style={{ width: imageWidth, height: imageHeight, rotateX: tiltX, rotateY: tiltY, scale }}
       >
-        <motion.img
+        <img
           src={imageSrc}
           alt={altText}
-          className="absolute left-0 top-0 rounded-xl object-cover shadow-lg will-change-transform [transform:translateZ(0)]"
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-          }}
+          draggable={false}
+          className="absolute inset-0 h-full w-full rounded-xl object-cover shadow-lg"
         />
-
         {displayOverlayContent && overlayContent && (
-          <motion.div className="absolute left-0 top-0 z-[2] will-change-transform [transform:translateZ(30px)]">
-            {overlayContent}
-          </motion.div>
+          <div className="absolute inset-0 z-10">{overlayContent}</div>
         )}
       </motion.div>
-
-      {showTooltip && (
+      {showTooltip && captionText && (
         <motion.figcaption
-          className="pointer-events-none absolute left-0 top-0 z-[3] hidden rounded-md bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-xl sm:block"
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 z-20 hidden whitespace-nowrap rounded-md bg-popover px-2.5 py-1 text-xs text-popover-foreground shadow-md sm:block"
           style={{
-            x,
-            y,
-            opacity,
-            rotate: rotateFigcaption,
+            x: captionX,
+            y: captionY,
+            opacity: captionOpacity,
+            rotate: captionTurn,
+            translateX: 12,
+            translateY: 12,
           }}
         >
           {captionText}

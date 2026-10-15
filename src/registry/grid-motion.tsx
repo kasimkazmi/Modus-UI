@@ -1,109 +1,84 @@
 "use client";
+// A tilted wall of tiles whose rows drift with the pointer, each row on its own lagging spring.
 
-import React, { useEffect, useRef } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import { useEffect } from "react";
+import type React from "react";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
+
+const ROWS = 4;
+const COLS = 7;
+const TRAVEL = 220;
 
 export interface GridMotionProps {
   items?: React.ReactNode[];
-  className?: string;
   gradientColor?: string;
+  className?: string;
 }
 
-function GridRow({
-  rowIndex,
-  smoothX,
-  combinedItems,
+function Row({
+  pointer,
+  index,
+  cells,
 }: {
-  rowIndex: number;
-  smoothX: any;
-  combinedItems: React.ReactNode[];
+  pointer: MotionValue<number>;
+  index: number;
+  cells: React.ReactNode[];
 }) {
-  const direction = rowIndex % 2 === 0 ? 1 : -1;
-  const inertiaFactor = [0.6, 0.4, 0.3, 0.2][rowIndex % 4];
-  const maxMoveAmount = 300;
-
-  // Now useTransform is called at the top level of a component!
-  const x = useTransform(smoothX, (currentX: number) => {
-    if (typeof window === "undefined") return 0;
-    const moveAmount =
-      ((currentX / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
-    return moveAmount * inertiaFactor;
-  });
+  const direction = index % 2 === 0 ? 1 : -1;
+  const target = useTransform(pointer, (p) => p * TRAVEL * direction);
+  const x = useSpring(target, { stiffness: 40 - index * 7, damping: 18, mass: 1 + index * 0.3 });
 
   return (
     <motion.div className="grid grid-cols-7 gap-4" style={{ x }}>
-      {[...Array(7)].map((_, itemIndex) => {
-        const content = combinedItems[rowIndex * 7 + itemIndex];
-        return (
-          <div key={itemIndex} className="relative">
-            <div className="relative flex h-full w-full cursor-default items-center justify-center overflow-hidden rounded-[16px] border border-border bg-card text-[1.5rem] text-foreground shadow-sm transition-transform duration-300 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100">
-              {typeof content === "string" && content.startsWith("http") ? (
-                <div
-                  className="absolute left-0 top-0 h-full w-full bg-cover bg-center"
-                  style={{ backgroundImage: `url(${content})` }}
-                />
-              ) : (
-                <div className="z-[1] p-4 text-center">{content}</div>
-              )}
-            </div>
-          </div>
-        );
-      })}
+      {cells.map((cell, i) => (
+        <div
+          key={i}
+          className="flex aspect-[4/3] items-center justify-center rounded-2xl bg-card p-4 text-center font-sans text-lg text-card-foreground shadow-sm"
+        >
+          {cell}
+        </div>
+      ))}
     </motion.div>
   );
 }
 
 export function GridMotion({
   items = [],
-  className,
   gradientColor = "hsl(var(--background))",
+  className,
 }: GridMotionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Create an array of 28 items minimum
-  const totalItems = 28;
-  const defaultItems = Array.from({ length: totalItems }, (_, index) => `Item ${index + 1}`);
-  const combinedItems = items.length > 0 ? items.slice(0, totalItems) : defaultItems;
-
-  const mouseX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 0);
-  const smoothX = useSpring(mouseX, { damping: 50, stiffness: 400 });
-  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
+  const pointer = useMotionValue(0);
 
   useEffect(() => {
-    // Reduced motion: the rows stay at rest instead of following the pointer.
-    if (prefersReducedMotion) return;
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-    };
+    if (reduceMotion) return;
+    const onMove = (e: PointerEvent) => pointer.set((e.clientX / window.innerWidth) * 2 - 1);
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [pointer, reduceMotion]);
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, prefersReducedMotion]);
+  const cells = Array.from({ length: ROWS * COLS }, (_, i) =>
+    items.length ? items[i % items.length] : null,
+  );
 
   return (
-    <div
-      ref={containerRef}
-      className={cn("h-full w-full overflow-hidden bg-background", className)}
+    <section
+      className={cn("relative h-full w-full overflow-hidden", className)}
+      style={{ background: `radial-gradient(circle, ${gradientColor} 0%, hsl(var(--muted)) 100%)` }}
     >
-      <section
-        className="relative flex h-screen w-full items-center justify-center overflow-hidden"
-        style={{
-          background: `radial-gradient(circle, ${gradientColor} 0%, transparent 100%)`,
-        }}
-      >
-        <div className="pointer-events-none absolute inset-0 z-[4] bg-[length:250px]"></div>
-        <div className="relative z-[2] grid h-[150vh] w-[150vw] flex-none origin-center rotate-[-15deg] grid-cols-1 grid-rows-4 gap-4">
-          {[...Array(4)].map((_, rowIndex) => (
-            <GridRow
-              key={rowIndex}
-              rowIndex={rowIndex}
-              smoothX={smoothX}
-              combinedItems={combinedItems}
-            />
-          ))}
-        </div>
-      </section>
-    </div>
+      <div className="absolute left-1/2 top-1/2 flex w-[150%] -translate-x-1/2 -translate-y-1/2 -rotate-[15deg] flex-col gap-4">
+        {Array.from({ length: ROWS }, (_, r) => (
+          <Row key={r} index={r} pointer={pointer} cells={cells.slice(r * COLS, r * COLS + COLS)} />
+        ))}
+      </div>
+    </section>
   );
 }
