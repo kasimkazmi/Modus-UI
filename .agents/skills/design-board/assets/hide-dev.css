@@ -1,0 +1,6 @@
+/* Hides the Next.js dev badge and similar dev overlays from screenshots. */
+nextjs-portal,
+[data-nextjs-toast],
+#__next-build-watcher {
+  display: none !important;
+}

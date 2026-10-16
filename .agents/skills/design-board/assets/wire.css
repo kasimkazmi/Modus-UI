@@ -1,0 +1,31 @@
+/* Wireframe mode: neutral greys for the shadcn-style colour tokens, everything greyscale, and the
+   logo (LOGO_SELECTOR, replaced at capture time) shown as a hatched placeholder box. Add any other
+   project tokens to :root via the config's "wireCss". */
+:root {
+  --background: #f2f2f2;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --secondary: #efefef;
+  --muted: #f3f3f3;
+  --accent: #d9d9d9;
+  --accent-foreground: #333;
+  --primary: #4a4a4a;
+  --primary-foreground: #fff;
+  --foreground: #333;
+  --card-foreground: #333;
+  --muted-foreground: #8a8a8a;
+  --input: #9a9a9a;
+  --border: #d0d0d0;
+  --ring: #888;
+  --destructive: #666;
+}
+html {
+  filter: grayscale(1);
+}
+LOGO_SELECTOR {
+  object-position: -9999px 0;
+  background: repeating-linear-gradient(45deg, #d5d5d5 0 2px, transparent 2px 10px);
+  outline: 2px dashed #aaa;
+  outline-offset: -2px;
+  border-radius: 6px;
+}

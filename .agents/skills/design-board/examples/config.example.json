@@ -1,0 +1,131 @@
+{
+  "out": "./board",
+  "baseUrl": "http://localhost:3000",
+  "start": "/signup",
+  "flow": "./flow.sh",
+  "logoSelector": "header img",
+  "wireCss": "",
+  "pages": [
+    {
+      "name": "not-found",
+      "path": "/does-not-exist"
+    }
+  ],
+  "components": {
+    "path": "/design",
+    "selector": ".group",
+    "scale": 2
+  },
+  "sizes": {
+    "phone": [390, 710],
+    "tablet": [820, 1180],
+    "tabletLandscape": [1180, 820],
+    "desktop": [1440, 900]
+  },
+  "wireframeSizes": ["phone", "tablet", "desktop"],
+  "board": {
+    "width": 5200,
+    "font": "/absolute/path/to/the-app-font.woff2",
+    "url": "app.example.com/signup",
+    "statusBar": "#F5F5F5",
+    "cover": {
+      "logo": "./logo.png",
+      "title": "Sign-up flow,<br>redesigned",
+      "subtitle": "Phone, tablet and desktop. Every screen is the running app.",
+      "palette": [
+        ["Ground", "#F5F5F5"],
+        ["Surface", "#FFFFFF"],
+        ["Ink", "#1A1A1A"]
+      ],
+      "idea": "One sentence: what the design is, in the subject's own terms.",
+      "notes": [
+        ["The layout.", "What the composition does and why."],
+        ["The action.", "Where the main button sits and why."],
+        ["Readability.", "Type, sizes, touch targets."]
+      ]
+    },
+    "sections": [
+      {
+        "title": "Phone",
+        "text": "What changes on a phone.",
+        "groups": [
+          {
+            "device": "phone",
+            "dir": "c-390",
+            "frames": [
+              ["01-details", "Details"],
+              ["02-choose", "Choose"],
+              ["03-chosen", "Chosen"],
+              ["04-done", "Done"]
+            ]
+          },
+          {
+            "device": "full",
+            "joinRow": true,
+            "dir": "c-390",
+            "frames": [["01-details-full", "Details, full length"]]
+          }
+        ]
+      },
+      {
+        "title": "Tablet",
+        "text": "Portrait and landscape.",
+        "groups": [
+          {
+            "device": "tablet",
+            "dir": "c-820",
+            "frames": [
+              ["01-details", "Details"],
+              ["03-chosen", "Chosen"]
+            ]
+          },
+          {
+            "device": "tablet",
+            "joinRow": true,
+            "dir": "c-1180",
+            "frames": [["03-chosen", "Chosen, landscape"]]
+          }
+        ]
+      },
+      {
+        "title": "Desktop",
+        "text": "Wide screens.",
+        "device": "browser",
+        "dir": "c-1440",
+        "frames": [
+          ["01-details", "Details"],
+          ["03-chosen", "Chosen"],
+          ["04-done", "Done"]
+        ]
+      },
+      {
+        "title": "Wireframes",
+        "text": "Colour, imagery and brand removed: structure only.",
+        "groups": [
+          {
+            "device": "plain",
+            "dir": "w-390",
+            "frames": [
+              ["01-details", "Details"],
+              ["02-choose", "Choose"],
+              ["04-done", "Done"]
+            ]
+          },
+          {
+            "device": "plain",
+            "dir": "w-1440",
+            "frames": [
+              ["01-details", "Details"],
+              ["03-chosen", "Chosen"]
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Components",
+        "text": "Every component in each state.",
+        "components": true
+      }
+    ]
+  }
+}
