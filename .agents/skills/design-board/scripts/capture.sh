@@ -32,5 +32,9 @@ done 3<<< "$RUNS"
 if [ -n "$COMPONENTS" ]; then
   "$here/components.sh" "$BASE$COMPONENTS" "$COMP_SELECTOR" "$COMP_SCALE" "$CANVAS" "$OUT/components" "$cssdir/c.css"
 fi
+if [ -n "$TYPOGRAPHY" ]; then
+  rm -rf "$OUT/typography"
+  "$here/typography.sh" "$BASE$TYPOGRAPHY" "$TYPO_SCALE" "$OUT/typography/01.png"
+fi
 rm -rf "$cssdir"
 echo "Captures in $OUT"

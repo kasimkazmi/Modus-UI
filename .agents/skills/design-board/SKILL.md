@@ -45,17 +45,18 @@ the config file.
 
 Config keys:
 
-| Key                       | Meaning                                                                                                                                                                                                               |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `out`                     | Folder for captures and the board.                                                                                                                                                                                    |
-| `baseUrl`, `start`        | The app's origin and the flow's first page.                                                                                                                                                                           |
-| `flow`                    | The flow script (below). Omit to capture only `pages`.                                                                                                                                                                |
-| `pages`                   | `[{ "name", "path" }]`: single pages, shot at every size as a screen and full length.                                                                                                                                 |
-| `components`              | `{ "path", "selector", "scale" }`: the component sheet page, the selector for its groups and the pixel density (default 2). Each group is shot on its own over the board canvas into `components/01.png`, `02.png`... |
-| `sizes`, `wireframeSizes` | Sizes by name; wireframes use the named ones.                                                                                                                                                                         |
-| `logoSelector`            | CSS selector for the logo, drawn as a hatched box in wireframes.                                                                                                                                                      |
-| `wireCss`                 | Extra CSS for wireframes, e.g. `:root{--brand:#888}` for project tokens the default grey set misses.                                                                                                                  |
-| `board`                   | The board: `width`, `font` (local font file for captions), `url` (shown in the address pills), `statusBar` (status bar colour, to match the app's top edge), `cover`, `sections`.                                     |
+| Key                       | Meaning                                                                                                                                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `out`                     | Folder for captures and the board.                                                                                                                                                                                                                                                    |
+| `baseUrl`, `start`        | The app's origin and the flow's first page.                                                                                                                                                                                                                                           |
+| `flow`                    | The flow script (below). Omit to capture only `pages`.                                                                                                                                                                                                                                |
+| `pages`                   | `[{ "name", "path" }]`: single pages, shot at every size as a screen and full length.                                                                                                                                                                                                 |
+| `components`              | `{ "path", "selector", "scale" }`: the component sheet page, the selector for its groups and the pixel density (default 2). Each group is shot on its own over the board canvas into `components/01.png`, `02.png`...                                                                 |
+| `sizes`, `wireframeSizes` | Sizes by name; wireframes use the named ones.                                                                                                                                                                                                                                         |
+| `typography`              | `{ "path", "scale" }`: a page whose type to read (default scale 2). `typography.sh` finds the style each role (display, headings, body, link, button, caption) uses most, draws a specimen of them in the running page, set in its own fonts, and shoots it into `typography/01.png`. |
+| `logoSelector`            | CSS selector for the logo, drawn as a hatched box in wireframes.                                                                                                                                                                                                                      |
+| `wireCss`                 | Extra CSS for wireframes, e.g. `:root{--brand:#888}` for project tokens the default grey set misses.                                                                                                                                                                                  |
+| `board`                   | The board: `width`, `font` (local font file for captions), `url` (shown in the address pills), `statusBar` (status bar colour, to match the app's top edge), `cover`, `sections`.                                                                                                     |
 
 A section is `{ "title", "text", "groups": [...] }`, or one group inline. A group is
 `{ "device", "dir", "frames": [["file", "Caption"], ...], "perRow", "note", "joinRow" }`, where `device` is
@@ -68,6 +69,10 @@ The components section is `{ "title", "text", "components": true }`: every shot 
 laid straight on the canvas, large and unframed, flowing left to right like pieces on a Figma
 page. `"zoom"` scales them (default 1: one image pixel per board pixel, so a 2x capture shows at
 twice its CSS size). Never put the component sheet in a frame; it reads too small.
+
+The typography section is `{ "title", "text", "typography": true }`, laid flat the same way: the
+font families with the weights in use, then each role's font, weight, size / line height, tracking
+and case, with a sample of the page's own text. Put it right after the cover, beside the palette.
 
 The flow script is bash, sourced once per size and mode after the start page is open. It uses the
 helpers in `scripts/lib.sh`:

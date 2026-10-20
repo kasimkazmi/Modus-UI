@@ -62,18 +62,20 @@ def group_rows(g):
     return [frames[i:i + per] for i in range(0, len(frames), per)]
 
 
-def components(s):
-    """The component shots, laid straight on the canvas at full pixel size: no frame, no caption."""
-    d = os.path.join(OUT, "components")
+def flat(s, folder):
+    """Shots laid straight on the canvas at full pixel size: no frame, no caption (components, type)."""
+    d = os.path.join(OUT, folder)
     files = sorted(f for f in os.listdir(d) if f.endswith(".png"))
     zoom = s.get("zoom", 1)  # 1 = one image pixel per board pixel (a 2x capture shows at twice its CSS size)
-    items = "".join(f'<img src="components/{f}" width="{round(size("components/" + f)[0] * zoom)}">' for f in files)
+    items = "".join(f'<img src="{folder}/{f}" width="{round(size(folder + "/" + f)[0] * zoom)}">' for f in files)
     return f'<section><h2>{e(s["title"])}</h2><p>{e(s.get("text", ""))}</p><div class="parts">{items}</div></section>'
 
 
 def section(s):
     if s.get("components"):
-        return components(s)
+        return flat(s, "components")
+    if s.get("typography"):
+        return flat(s, "typography")
     rows = []
     for g in s.get("groups", [s]):
         new = group_rows(g)
