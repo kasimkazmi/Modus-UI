@@ -343,8 +343,8 @@ export function CurvedCarouselHero({
               {...draw(1)}
             />
             <motion.path d="M1186 518 L1170 530 L1188 542" {...draw(1.6)} />
-            <motion.path d="M560 990 C584 992 604 978 614 958" {...draw(1.1)} />
-            <motion.path d="M600 960 L615 956 L618 971" {...draw(1.6)} />
+            <motion.path d="M584 1000 C604 996 616 978 620 952" {...draw(1.1)} />
+            <motion.path d="M609 961 L620 950 L627 964" {...draw(1.6)} />
           </g>
         </svg>
         <motion.p
@@ -362,7 +362,7 @@ export function CurvedCarouselHero({
         </motion.p>
         <motion.p
           className="cch-note"
-          style={{ left: "calc(521 * var(--u))", top: "calc(937 * var(--u))", rotate: 24 }}
+          style={{ left: "calc(486 * var(--u))", top: "calc(944 * var(--u))", rotate: 24 }}
           {...(still
             ? {}
             : {
