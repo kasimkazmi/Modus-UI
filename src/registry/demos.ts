@@ -220,6 +220,7 @@ export const demos: Record<ComponentName, ComponentType> = {
   "signal-relay": dynamic(() => import("./signal-relay-demo")),
   "intaglio-deed": dynamic(() => import("./intaglio-deed-demo")),
   "pond-glide": dynamic(() => import("./pond-glide-demo")),
+  "curved-carousel-hero": dynamic(() => import("./curved-carousel-hero-demo")),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

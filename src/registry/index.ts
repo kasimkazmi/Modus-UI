@@ -4021,6 +4021,14 @@ export const registry = [
     files: ["registry/dispatch-colophon.tsx"],
   },
   {
+    name: "curved-carousel-hero",
+    title: "Curved Carousel Hero",
+    category: "Sections",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/curved-carousel-hero.tsx"],
+  },
+  {
     name: "aurora-veil",
     title: "Aurora Veil",
     category: "Backgrounds",

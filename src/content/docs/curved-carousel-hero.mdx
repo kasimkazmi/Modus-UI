@@ -1,0 +1,58 @@
+---
+title: Curved Carousel Hero
+description: A landing hero with a curved, draggable carousel of video cards that drifts like the inside of a cylinder.
+---
+
+A one-screen hero for showing work in motion: a badge, a two-line headline and a lede above an arched row of tall cards. The cards drift right to left on their own; drag or fling them, or press the arrow keys, and they coast to a stop before the drift carries on. Cards near the edges grow taller and lean outward, recomputed every frame as rounded quads. Handwritten notes and arrows draw themselves in. Colours come from theme tokens, so it follows light and dark mode and the palette picker. Below 820px it stacks into a centred column with a shorter carousel. With reduced motion there is no entrance, no drift and no video.
+
+<ComponentPreview name="curved-carousel-hero" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add curved-carousel-hero
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/curved-carousel-hero.tsx`.
+3. Paste the code.
+
+## Usage
+
+```tsx
+import { CurvedCarouselHero } from "@/components/ui/curved-carousel-hero";
+
+export default function Example() {
+  return (
+    <div className="relative h-screen w-full">
+      <CurvedCarouselHero
+        cards={[
+          { video: "/clips/sneaker.mp4", image: "/clips/sneaker.jpg" },
+          { image: "/clips/latte.jpg" },
+        ]}
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                   | Default                                                                                                                           | Description                                                   |
+| :---------------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------ |
+| `badge`           | `string`               | `"New · Curved carousel"`                                                                                                         | Pill above the headline.                                      |
+| `title`           | `string`               | `"Every story,\nin motion"`                                                                                                       | Headline; a newline starts the second line.                   |
+| `description`     | `string`               | `"Line your work up on a curved row that drifts on its own and answers to a drag. Drop in clips or images and it does the rest."` | Lede under the headline.                                      |
+| `ctaLabel`        | `string`               | `"Get started"`                                                                                                                   | Button label.                                                 |
+| `ctaHref`         | `string`               | `"#"`                                                                                                                             | Button link.                                                  |
+| `note`            | `string`               | `"Drag\nthe row"`                                                                                                                 | Handwritten note by the carousel; a newline breaks it.        |
+| `ctaNote`         | `string`               | `"It's free"`                                                                                                                     | Handwritten note by the button.                               |
+| `cards`           | `CurvedCarouselCard[]` | `[]`                                                                                                                              | `{ video?, image? }` per card, repeated to fill at least ten. |
+| `speed`           | `number`               | `50`                                                                                                                              | Drift speed in frame units (1/1440 of the width) per second.  |
+| `backgroundColor` | `string`               | None                                                                                                                              | Section background; defaults to the theme background.         |
+| `className`       | `string`               | None                                                                                                                              | Extra classes for the section.                                |
+| `style`           | `CSSProperties`        | None                                                                                                                              | Inline styles for the section.                                |
