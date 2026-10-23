@@ -4,6 +4,7 @@ import { motion, useAnimationFrame, useReducedMotion } from "framer-motion";
 import {
   useEffect,
   useRef,
+  useState,
   type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
@@ -24,11 +25,11 @@ const STYLES = `
 .cch { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; container-type: size; color: hsl(var(--foreground)); background: var(--cch-bg, hsl(var(--background))); font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif; }
 .cch-frame { --u: min(calc(100cqw / 1440), calc(100cqh / 1080)); --cch-units: 1440; position: absolute; top: 50%; left: 50%; width: calc(1440 * var(--u)); height: calc(1080 * var(--u)); transform: translate(-50%, -50%); }
 .cch-badge { position: absolute; top: calc(115 * var(--u)); left: 50%; translate: -50% 0; display: inline-flex; align-items: center; height: calc(37 * var(--u)); padding: 0 calc(18 * var(--u)); border-radius: 999px; background: hsl(var(--primary) / 0.14); color: hsl(var(--primary)); font-size: calc(16.6 * var(--u)); font-weight: 500; white-space: nowrap; }
-.cch-title { position: absolute; top: calc(176 * var(--u)); left: 0; right: 0; margin: 0; text-align: center; font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif; font-size: calc(88 * var(--u)); font-weight: 700; line-height: calc(92 * var(--u)); letter-spacing: -0.035em; }
+.cch-title { position: absolute; top: calc(176 * var(--u)); left: 0; right: 0; margin: 0; padding: 0; border: 0; color: inherit; text-align: center; font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif; font-size: calc(88 * var(--u)); font-weight: 700; line-height: calc(92 * var(--u)); letter-spacing: -0.035em; }
 .cch-title > span { display: block; }
 .cch-title > span + span { letter-spacing: -0.022em; }
 .cch-lede { position: absolute; top: calc(394 * var(--u)); left: 50%; width: calc(560 * var(--u)); translate: -50% 0; margin: 0; text-align: center; color: hsl(var(--muted-foreground)); font-size: calc(20.8 * var(--u)); line-height: calc(32 * var(--u)); }
-.cch-track-band { position: absolute; top: calc(495 * var(--u)); left: 0; width: 100%; height: calc(390 * var(--u)); --cch-cy: 192; }
+.cch-track-band { position: absolute; top: calc(495 * var(--u)); left: 50%; width: 100cqw; height: calc(390 * var(--u)); translate: -50% 0; overflow: hidden; --cch-cy: 192; }
 .cch-cta { position: absolute; top: calc(901 * var(--u)); left: calc(626 * var(--u)); width: calc(190 * var(--u)); height: calc(74 * var(--u)); display: grid; place-items: center; border: 1.5px dashed hsl(var(--primary) / 0.6); border-radius: 999px; }
 .cch-cta a { display: grid; place-items: center; width: calc(172 * var(--u)); height: calc(58 * var(--u)); border-radius: 999px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: calc(17 * var(--u)); font-weight: 500; text-decoration: none; }
 .cch-ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; color: hsl(var(--primary)); }
@@ -36,10 +37,9 @@ const STYLES = `
 .cch-track { position: relative; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; user-select: none; }
 .cch-track[data-dragging] { cursor: grabbing; }
 .cch-card { position: absolute; top: 0; left: 0; overflow: hidden; will-change: transform, clip-path; }
-.cch-card > img, .cch-card > video, .cch-card > i { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.cch-card > img, .cch-card > video, .cch-card > i { position: absolute; inset: 0; display: block; width: 100%; max-width: none; height: 100%; margin: 0; object-fit: cover; pointer-events: none; }
 .cch-card > video { opacity: 0; transition: opacity 0.4s; }
 .cch-card > video[data-ready] { opacity: 1; }
-.cch-play { position: absolute; bottom: 14px; left: 12px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: hsl(var(--background) / 0.35); color: hsl(var(--background)); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 @container (max-width: 820px) {
   .cch-frame { position: static; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 100%; padding: 20px 0; transform: none; --cch-units: 640; }
   .cch-badge, .cch-title, .cch-lede, .cch-track-band, .cch-cta { position: static; translate: none; }
@@ -98,7 +98,11 @@ function CarouselTrack({
     scale: 1,
   });
 
-  // The track's frame width (1440 wide, 640 compact) and vertical centre come from the stylesheet.
+  // At least enough cards to cover the row plus one off each edge.
+  const [minCount, setMinCount] = useState(10);
+
+  // Wide: the row spans the whole section at the frame's scale. Compact: a 640-unit row fitted to
+  // the band. The stylesheet says which through --cch-units.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -111,10 +115,12 @@ function CarouselTrack({
         s.units = track.clientWidth / s.scale;
         s.cy = track.clientHeight / 2 / s.scale;
       } else {
-        s.units = 1440;
-        s.scale = track.clientWidth / 1440;
+        const frame = track.closest(".cch-frame") as HTMLElement;
+        s.scale = frame.clientWidth / 1440;
+        s.units = track.clientWidth / s.scale;
         s.cy = Number(css.getPropertyValue("--cch-cy")) || 192;
       }
+      setMinCount(Math.ceil((s.units + 600) / PITCH));
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -122,8 +128,12 @@ function CarouselTrack({
     return () => observer.disconnect();
   }, []);
 
-  const count = cards.length;
-  const loop = count * PITCH;
+  // Repeating the whole set keeps a card's copies a full cycle apart instead of side by side.
+  const filled = Array.from(
+    { length: cards.length ? cards.length * Math.ceil(minCount / cards.length) : minCount },
+    (_, i): CurvedCarouselCard => cards[i % cards.length] ?? {},
+  );
+  const loop = filled.length * PITCH;
 
   useAnimationFrame((_, delta) => {
     const s = state.current;
@@ -135,12 +145,14 @@ function CarouselTrack({
     }
 
     const centre = s.units / 2;
-    const radius = centre - 14;
+    const radius = Math.max(706, centre - 14);
     cardRefs.current.forEach((el, i) => {
       if (!el) return;
       const t = ((((i * PITCH + s.offset) % loop) + loop * 1.5) % loop) - loop / 2;
       const x = centre + t * (1 + 0.083 * (t / radius) ** 2);
       const d = Math.abs(x - centre) / radius;
+      el.style.visibility = d > 1.25 ? "hidden" : "";
+      if (d > 1.25) return;
       const w = 170 + 48 * d * d;
       const edge = (ex: number) => 280 + 92 * (Math.abs(ex - centre) / radius) ** 2.6;
       const hl = edge(x - w / 2);
@@ -208,7 +220,7 @@ function CarouselTrack({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {cards.map((card, i) => (
+      {filled.map((card, i) => (
         <div
           key={i}
           ref={(el) => {
@@ -224,6 +236,12 @@ function CarouselTrack({
           {card.image && <img src={card.image} alt="" draggable={false} />}
           {card.video && !still && (
             <video
+              // React leaves `muted` out of the server HTML, so Chrome blocks autoplay until it is set here.
+              ref={(video) => {
+                if (!video) return;
+                video.muted = true;
+                video.play().catch(() => {});
+              }}
               src={card.video}
               poster={card.image}
               autoPlay
@@ -235,11 +253,6 @@ function CarouselTrack({
               }}
             />
           )}
-          <span className="cch-play" aria-hidden="true">
-            <svg width="11" height="12" viewBox="0 0 11 12" fill="currentColor">
-              <path d="M1 1.2v9.6a.8.8 0 0 0 1.2.7l8-4.8a.8.8 0 0 0 0-1.4l-8-4.8A.8.8 0 0 0 1 1.2Z" />
-            </svg>
-          </span>
         </div>
       ))}
     </div>
@@ -282,11 +295,6 @@ export function CurvedCarouselHero({
 }: CurvedCarouselHeroProps) {
   const prefersReducedMotion = useReducedMotion();
   const still = !!prefersReducedMotion;
-  // The arch needs at least ten cards to loop without a gap at 1440 units.
-  const filled = Array.from(
-    { length: Math.max(10, cards.length) },
-    (_, i) => cards[i % cards.length] ?? {},
-  );
 
   const enter = (delay: number, from: Record<string, number | string> = { opacity: 0, y: 16 }) =>
     still
@@ -329,7 +337,7 @@ export function CurvedCarouselHero({
           {description}
         </motion.p>
         <motion.div className="cch-track-band" {...enter(0.55, { opacity: 0, y: 60 })}>
-          <CarouselTrack cards={filled} speed={speed} still={still} />
+          <CarouselTrack cards={cards} speed={speed} still={still} />
         </motion.div>
         <motion.div className="cch-cta" {...enter(0.8, { opacity: 0, scale: 0.8 })}>
           <a href={ctaHref}>{ctaLabel}</a>

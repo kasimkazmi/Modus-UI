@@ -5,11 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NewBadge } from "@/components/new-badge";
 
 export interface SidebarCategory {
   title: string;
   icon: React.ReactNode;
-  items: { title: string; href: string }[];
+  items: { title: string; href: string; isNew?: boolean }[];
 }
 
 export function SidebarNav({ categories }: { categories: SidebarCategory[] }) {
@@ -115,13 +116,14 @@ export function SidebarNav({ categories }: { categories: SidebarCategory[] }) {
                         href={item.href}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "block truncate rounded-md px-3 py-1.5 text-[13px] transition-colors",
+                          "flex items-center gap-2 rounded-md px-3 py-1.5 text-[13px] transition-colors",
                           active
                             ? "bg-secondary font-medium text-foreground"
                             : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
                         )}
                       >
-                        {item.title}
+                        <span className="truncate">{item.title}</span>
+                        {item.isNew && <NewBadge />}
                       </Link>
                     );
                   })}

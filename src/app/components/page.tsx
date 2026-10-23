@@ -2,9 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 import { registry } from "@/registry";
+import { isNew } from "@/lib/registry";
+import { NewBadge } from "@/components/new-badge";
 
-const COMPONENT_LIST: { title: string; href: string; disabled?: boolean }[] = [
-  ...registry.map((item) => ({ title: item.title, href: `/components/${item.name}` })),
+const COMPONENT_LIST: { title: string; href: string; isNew?: boolean; disabled?: boolean }[] = [
+  ...registry.map((item) => ({
+    title: item.title,
+    href: `/components/${item.name}`,
+    isNew: isNew(item),
+  })),
   { title: "Coming Soon", href: "/components/coming-soon", disabled: true },
 ];
 
@@ -36,8 +42,9 @@ export default function ComponentsPage() {
                 href={component.href}
                 className="group flex items-center justify-between border-b border-border/40 py-2 transition-all duration-300 hover:border-foreground"
               >
-                <span className="text-base font-medium text-muted-foreground transition-colors group-hover:text-foreground">
+                <span className="flex items-center gap-2 text-base font-medium text-muted-foreground transition-colors group-hover:text-foreground">
                   {component.title}
+                  {component.isNew && <NewBadge />}
                 </span>
                 <MoveRight className="h-4 w-4 -translate-x-2 text-foreground opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
               </Link>

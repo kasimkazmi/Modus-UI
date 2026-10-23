@@ -45,6 +45,8 @@ export interface RegistryItem {
   type: "components:ui";
   dependencies: readonly string[];
   files: readonly string[];
+  /** Date first published (YYYY-MM-DD). Shows a New badge for 30 days after it. */
+  added?: string;
   /** Live controls shown under the docs preview. The demo forwards them to the component. */
   controls?: readonly PreviewControl[];
 }
@@ -4027,6 +4029,7 @@ export const registry = [
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/curved-carousel-hero.tsx"],
+    added: "2026-10-23",
   },
   {
     name: "aurora-veil",

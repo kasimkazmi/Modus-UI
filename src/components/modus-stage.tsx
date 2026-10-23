@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { createContext, useContext, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const GRAIN =
@@ -13,8 +15,24 @@ interface ModusStageProps {
   className?: string;
 }
 
+/** When true, stages render their demo frameless and full-window, as on a real page. */
+export const FramelessStage = createContext(false);
+
 /** The house frame every Modus demo sits in: a grained paper card, corner ticks and a mono caption. */
 export function ModusStage({ caption, layout = "center", children, className }: ModusStageProps) {
+  if (useContext(FramelessStage)) {
+    return (
+      <div
+        className={cn(
+          "relative h-screen w-full overflow-hidden bg-background",
+          layout === "center" && "flex items-center justify-center",
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <figure
       className={cn(

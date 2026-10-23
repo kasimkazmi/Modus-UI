@@ -165,6 +165,7 @@ const entry = `
     type: "components:ui",
     dependencies: ["framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/${name}.tsx"],
+    added: "${new Date().toISOString().slice(0, 10)}",
   },`;
 fs.writeFileSync(indexPath, index.slice(0, insertAt) + entry + index.slice(insertAt));
 

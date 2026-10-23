@@ -10,6 +10,7 @@ import { ControlledPreview } from "@/components/preview-controls";
 import { getDemo } from "@/registry/demos";
 import { cn } from "@/lib/utils";
 import { CopyPromptButton } from "@/components/copy-prompt-button";
+import { FramelessStage } from "@/components/modus-stage";
 
 // Recreate sticky page-level Navbar specifically for standalone live viewing
 import { MorphingNavbar } from "@/registry/morphing-navbar";
@@ -116,14 +117,12 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
     notFound();
   }
 
-  // Backgrounds fill the viewport: the demo's card sizing and border are for the docs frame.
+  // Backgrounds and sections fill the window like a real page, without the docs frame.
   const item = (registry as readonly RegistryItem[]).find((entry) => entry.name === name);
-  const fullBleed = item?.category === "Backgrounds";
+  const fullBleed = item?.category === "Backgrounds" || item?.category === "Sections";
   const stageClassName = cn(
     "w-full",
-    fullBleed
-      ? "h-screen [&>*]:!h-full [&>*]:!min-h-0 [&>*]:!rounded-none [&>*]:!border-0"
-      : "flex min-h-screen flex-1 items-center justify-center",
+    fullBleed ? "h-screen" : "flex min-h-screen flex-1 items-center justify-center",
   );
 
   return (
@@ -144,17 +143,19 @@ export default function StandalonePreviewPage({ params }: PreviewPageProps) {
       </div>
 
       {/* Full screen rendering of the demo component, with live controls when it has any */}
-      {item?.controls ? (
-        <ControlledPreview
-          Demo={DemoComponent}
-          controls={item.controls}
-          stageClassName={stageClassName}
-        />
-      ) : (
-        <div className={stageClassName} data-preview-stage>
-          <DemoComponent />
-        </div>
-      )}
+      <FramelessStage.Provider value={fullBleed}>
+        {item?.controls ? (
+          <ControlledPreview
+            Demo={DemoComponent}
+            controls={item.controls}
+            stageClassName={stageClassName}
+          />
+        ) : (
+          <div className={stageClassName} data-preview-stage>
+            <DemoComponent />
+          </div>
+        )}
+      </FramelessStage.Provider>
     </div>
   );
 }

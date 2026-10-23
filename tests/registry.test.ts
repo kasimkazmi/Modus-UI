@@ -19,6 +19,10 @@ describe("registry integrity", () => {
     }
   });
 
+  it.each(registry)("$name has a valid added date, if any", (item: RegistryItem) => {
+    if (item.added) expect(item.added).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+
   it.each(registry)("$name has a demo and an mdx doc", (item) => {
     expect(fs.existsSync(path.join(SRC, "registry", `${item.name}-demo.tsx`))).toBe(true);
     expect(fs.existsSync(path.join(SRC, "content/docs", `${item.name}.mdx`))).toBe(true);
