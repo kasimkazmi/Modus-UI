@@ -80,9 +80,7 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
           <SidebarNav categories={DOC_CATEGORIES} />
 
           <div className="space-y-2 border-t border-border p-4">
-            <div className="flex justify-end">
-              <AccountMenu />
-            </div>
+            <AccountMenu variant="row" />
             <ThemePicker className="w-full" />
             <ModeSwitcher />
           </div>
