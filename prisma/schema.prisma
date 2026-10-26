@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Shared side-project Supabase database: this app owns the `modus_ui` schema, so both URLs must end
+// in ?schema=modus_ui (see kasimkazmi-workspace/docs/shared-database.md).
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User/Session/Account/Verification follow Better Auth's Prisma adapter requirements (see
+// src/lib/auth.ts) — don't rename these fields without checking its docs first.
+model User {
+  id            String     @id @default(cuid())
+  name          String?
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
+  favorites     Favorite[]
+  comments      Comment[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+// `componentSlug` is a registry name (src/registry/index.ts), not a foreign key: the registry lives in code.
+model Favorite {
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  componentSlug String
+  createdAt     DateTime @default(now())
+
+  @@id([userId, componentSlug])
+  @@index([componentSlug])
+}
+
+model Comment {
+  id            String   @id @default(cuid())
+  componentSlug String
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body          String
+  createdAt     DateTime @default(now())
+
+  @@index([componentSlug, createdAt])
+}

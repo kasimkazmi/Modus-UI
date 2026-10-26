@@ -4,6 +4,8 @@ import { getDocBySlug } from "@/lib/mdx";
 import { SITE } from "@/lib/site";
 import { notFound } from "next/navigation";
 import { TableOfContents } from "@/components/table-of-contents";
+import { FavoriteButton } from "@/components/favorite-button";
+import { Comments } from "@/components/comments";
 
 interface PageProps {
   params: {
@@ -51,7 +53,10 @@ export default async function DocPage({ params }: PageProps) {
         </nav>
 
         <div className="mb-16">
-          <h1 className="heading-landing mb-6 text-5xl">{doc.frontmatter.title}</h1>
+          <div className="mb-6 flex items-start justify-between gap-6">
+            <h1 className="heading-landing text-5xl">{doc.frontmatter.title}</h1>
+            <FavoriteButton slug={params.slug} />
+          </div>
           <p className="max-w-3xl text-xl leading-relaxed text-muted-foreground">
             {doc.frontmatter.description}
           </p>
@@ -60,6 +65,8 @@ export default async function DocPage({ params }: PageProps) {
         <div className="prose prose-neutral max-w-none prose-headings:font-serif prose-headings:font-normal prose-headings:tracking-tight prose-headings:text-foreground prose-h2:mb-6 prose-h2:mt-16 prose-h2:border-b prose-h2:border-border prose-h2:pb-3 prose-h2:text-2xl prose-p:leading-relaxed prose-p:text-muted-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
           <div id="preview">{doc.content}</div>
         </div>
+
+        <Comments slug={params.slug} />
       </main>
 
       <aside className="hidden w-56 shrink-0 xl:block">

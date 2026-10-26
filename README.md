@@ -46,6 +46,27 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
+## Accounts, favorites and comments
+
+Signing in with Google is optional and only needed to favorite a component or comment on it. The
+site itself, the CLI and the MCP server stay anonymous. Data lives in the `modus_ui` schema of the
+shared side-project Supabase Postgres. Set these in `.env` (gitignored; copy the two URLs from the
+Supabase dashboard, **Connect**):
+
+```
+# Transaction pooler (port 6543): runtime queries
+DATABASE_URL="postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true&schema=modus_ui"
+# Session pooler (port 5432): Prisma migrations
+DIRECT_URL="postgresql://postgres.<project-ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres?schema=modus_ui"
+BETTER_AUTH_SECRET=<openssl rand -hex 32>
+BETTER_AUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+```
+
+Add `<BETTER_AUTH_URL>/api/auth/callback/google` as an authorised redirect URI on the Google OAuth
+client (localhost and the production domain), then apply the schema with `pnpm db:migrate`.
+
 ## For coding agents
 
 The MCP server lets your agent search the catalogue, read a component's real props and source, and get its install command:
