@@ -4,6 +4,7 @@ import { ThemePicker } from "@/components/theme-picker";
 import { SidebarNav, type SidebarCategory } from "@/components/sidebar-nav";
 import { GitHubStarsButton } from "@/components/github-stars-button";
 import { ModeSwitcher } from "@/components/mode-switcher";
+import { AccountMenu } from "@/components/account-menu";
 import {
   Layout,
   MousePointer2,
@@ -79,6 +80,9 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
           <SidebarNav categories={DOC_CATEGORIES} />
 
           <div className="space-y-2 border-t border-border p-4">
+            <div className="flex justify-end">
+              <AccountMenu />
+            </div>
             <ThemePicker className="w-full" />
             <ModeSwitcher />
           </div>
@@ -108,7 +112,10 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
             </div>
             <span>Modus UI</span>
           </Link>
-          <ThemePicker variant="icon" className="ml-auto" />
+          <div className="ml-auto flex items-center gap-2">
+            <AccountMenu />
+            <ThemePicker variant="icon" />
+          </div>
         </header>
         <main className="flex-1 p-8 md:p-12 lg:p-16">
           <div className="mx-auto max-w-[1200px]">{children}</div>

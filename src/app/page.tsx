@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemePicker } from "@/components/theme-picker";
+import { AccountMenu } from "@/components/account-menu";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function HomePage() {
@@ -48,6 +49,7 @@ export default function HomePage() {
             </span>
           </Link>
           <ThemePicker />
+          <AccountMenu />
         </nav>
       </header>
 
