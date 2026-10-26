@@ -26,26 +26,17 @@ export function GitHubStarCard() {
   return (
     <div className="rounded-xl border border-border bg-background/50 p-4 shadow-sm transition-all duration-300 hover:shadow-md">
       {/* Category Header */}
-      <div className="mb-2 flex items-center gap-2 text-muted-foreground/60">
+      <div className="mb-3 flex items-center gap-2 text-muted-foreground/60">
         <GithubIcon className="h-3.5 w-3.5" />
         <p className="text-[10px] font-bold uppercase tracking-[0.2em]">Open Source</p>
       </div>
-
-      {/* Title */}
-      <h4 className="font-serif text-2xl font-normal tracking-tight text-foreground">Modus UI</h4>
-
-      {/* Subtitle */}
-      <p className="mb-4 mt-1.5 text-xs leading-relaxed text-muted-foreground">
-        Modus UI is completely free, open-source, and crafted for typographic precision. Support our
-        craft with a star!
-      </p>
 
       {/* CTA Button */}
       <a
         href={GITHUB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="group/btn flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 active:scale-[0.98]"
+        className="group/btn flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary/90 active:scale-[0.98]"
       >
         <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 transition-transform duration-300 group-hover/btn:rotate-[15deg]" />
         <span>Star on GitHub</span>
