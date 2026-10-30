@@ -1,0 +1,53 @@
+---
+title: Pin Pad
+description: A React Native numeric keypad for PINs and passcodes, with popping dots, a shake on a wrong PIN and spoken progress.
+---
+
+A numeric keypad for PINs and passcodes. Dots fill with a small pop as digits go in, a wrong PIN shakes the row and clears it, and a right one turns the dots green. Every key is a full-size button with a spoken label, and the dots announce progress as a single value. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="pin-pad" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pin-pad
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pin-pad.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { PinPad } from "@/components/ui/pin-pad";
+
+export default function Example() {
+  return (
+    <PinPad
+      title="Enter your PIN"
+      onComplete={async (pin) => {
+        const response = await fetch("/api/unlock", { method: "POST", body: pin });
+        return response.ok;
+      }}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                                           | Default                  | Description                                                                             |
+| :----------- | :--------------------------------------------- | :----------------------- | :-------------------------------------------------------------------------------------- |
+| `onComplete` | `(pin: string) => boolean \| Promise<boolean>` | -                        | Receives the full PIN. Return true to accept it; false shakes the dots and clears them. |
+| `length`     | `number`                                       | `4`                      | How many digits make a PIN.                                                             |
+| `title`      | `string`                                       | -                        | Heading above the dots.                                                                 |
+| `errorText`  | `string`                                       | `"Wrong PIN, try again"` | Shown under the dots after a wrong PIN.                                                 |
+| `colors`     | `Partial<PinPadColors>`                        | -                        | Overrides `text`, `mutedText`, `dot`, `key`, `keyText`, `error` and `success`.          |
+| `style`      | `StyleProp<ViewStyle>`                         | -                        | Style for the container.                                                                |

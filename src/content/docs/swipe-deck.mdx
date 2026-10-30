@@ -1,0 +1,67 @@
+---
+title: Swipe Deck
+description: A React Native card stack swiped away one at a time, with tilt, a rising next card, like and pass stamps, and screen reader actions.
+---
+
+A stack of cards swiped away one at a time. The top card follows the finger and tilts with it, the card underneath grows to take its place, and release either flies the card off or springs it back. Each swipe is also a screen reader action, so the deck works without the gesture. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="swipe-deck" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swipe-deck
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swipe-deck.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { SwipeDeck } from "@/components/ui/swipe-deck";
+
+const places = [
+  { id: "lisbon", city: "Lisbon" },
+  { id: "kyoto", city: "Kyoto" },
+];
+
+export default function Example() {
+  return (
+    <View style={{ height: 420, padding: 20 }}>
+      <SwipeDeck
+        data={places}
+        keyExtractor={(place) => place.id}
+        renderCard={(place) => <Text style={{ padding: 20, fontSize: 28 }}>{place.city}</Text>}
+        onSwipe={(place, direction) => console.log(place.city, direction)}
+      />
+    </View>
+  );
+}
+```
+
+The deck fills its parent, so give the parent a height.
+
+## Props
+
+| Prop           | Type                                      | Default  | Description                                                                                   |
+| :------------- | :---------------------------------------- | :------- | :-------------------------------------------------------------------------------------------- |
+| `data`         | `T[]`                                     | -        | The items to swipe through, first item on top.                                                |
+| `renderCard`   | `(item: T, index: number) => ReactNode`   | -        | Renders a card's content. The deck draws the card itself.                                     |
+| `keyExtractor` | `(item: T, index: number) => string`      | -        | A stable key for each item.                                                                   |
+| `onSwipe`      | `(item: T, direction: Direction) => void` | -        | Called once a card has left the deck, with `"left"` or `"right"`.                             |
+| `empty`        | `ReactNode`                               | -        | Shown when every card has been swiped.                                                        |
+| `visible`      | `number`                                  | `3`      | How many cards are drawn at once, the top one included.                                       |
+| `threshold`    | `number`                                  | `0.3`    | Fraction of the deck's width a drag must cover to send the card away. A fast flick also does. |
+| `rightLabel`   | `string`                                  | `"Like"` | Stamp on the card, and screen reader action, for a swipe to the right.                        |
+| `leftLabel`    | `string`                                  | `"Pass"` | Stamp on the card, and screen reader action, for a swipe to the left.                         |
+| `colors`       | `Partial<SwipeDeckColors>`                | -        | Overrides `card`, `border`, `like` and `pass`.                                                |
+| `style`        | `StyleProp<ViewStyle>`                    | -        | Style for the deck container.                                                                 |

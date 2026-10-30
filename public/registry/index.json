@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 214,
+  "count": 217,
   "categories": [
     "Navigation",
     "Actions",
@@ -2623,6 +2623,30 @@
       "category": "Native",
       "platform": "native",
       "description": "A React Native segmented control whose thumb glides between options on a spring and stretches as it travels.",
+      "dependencies": []
+    },
+    {
+      "name": "swipe-deck",
+      "title": "Swipe Deck",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native card stack swiped away one at a time, with tilt, a rising next card, like and pass stamps, and screen reader actions.",
+      "dependencies": []
+    },
+    {
+      "name": "fan-menu",
+      "title": "Fan Menu",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native floating button that fans its actions out along an arc, springing them out one after another.",
+      "dependencies": []
+    },
+    {
+      "name": "pin-pad",
+      "title": "Pin Pad",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native numeric keypad for PINs and passcodes, with popping dots, a shake on a wrong PIN and spoken progress.",
       "dependencies": []
     }
   ],

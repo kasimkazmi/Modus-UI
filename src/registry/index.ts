@@ -4164,6 +4164,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/glide-segments.tsx"],
   },
+  {
+    name: "swipe-deck",
+    title: "Swipe Deck",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/swipe-deck.tsx"],
+  },
+  {
+    name: "fan-menu",
+    title: "Fan Menu",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/fan-menu.tsx"],
+  },
+  {
+    name: "pin-pad",
+    title: "Pin Pad",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/pin-pad.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

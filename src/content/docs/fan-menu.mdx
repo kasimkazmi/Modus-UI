@@ -1,0 +1,58 @@
+---
+title: Fan Menu
+description: A React Native floating button that fans its actions out along an arc, springing them out one after another.
+---
+
+A floating button that fans its actions out along an arc. The items spring out one after another, the plus turns into a cross, and picking an item folds the fan away. Place it with `style`; the items are positioned from the button, so keep room for the arc on that side. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="fan-menu" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add fan-menu
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/fan-menu.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { FanMenu } from "@/components/ui/fan-menu";
+
+export default function Example() {
+  return (
+    <View style={{ flex: 1 }}>
+      <FanMenu
+        style={{ position: "absolute", right: 24, bottom: 24 }}
+        items={[
+          { label: "New note", icon: <Text>✎</Text>, onPress: () => console.log("note") },
+          { label: "Email", icon: <Text>✉</Text>, onPress: () => console.log("email") },
+        ]}
+      />
+    </View>
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                     | Default     | Description                                                              |
+| :----------- | :----------------------- | :---------- | :----------------------------------------------------------------------- |
+| `items`      | `FanMenuItem[]`          | -           | The actions. Each has a spoken `label`, an `icon` and an `onPress`.      |
+| `label`      | `string`                 | `"Actions"` | Spoken label of the main button.                                         |
+| `size`       | `number`                 | `58`        | Diameter of the main button.                                             |
+| `radius`     | `number`                 | `104`       | Distance from the main button to each item.                              |
+| `startAngle` | `number`                 | `180`       | Where the fan starts, in degrees: 0 is right, 90 down, 180 left, 270 up. |
+| `endAngle`   | `number`                 | `270`       | Where the fan ends, in degrees.                                          |
+| `colors`     | `Partial<FanMenuColors>` | -           | Overrides `button`, `bar` and `item`.                                    |
+| `style`      | `StyleProp<ViewStyle>`   | -           | Style for the button's container, for example to position it.            |
