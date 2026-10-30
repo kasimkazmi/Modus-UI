@@ -9,6 +9,8 @@ export interface CatalogueComponent {
   name: string;
   title: string;
   category: string;
+  /** "native" components are React Native (Expo); everything else is a web component. */
+  platform?: "web" | "native";
   description: string;
   dependencies: string[];
 }
@@ -97,7 +99,7 @@ export function fallbackMarkdown(
     "",
     entry.description,
     "",
-    `Category: ${entry.category}. Docs: ${origin}/components/${entry.name}`,
+    `Category: ${entry.category}. ${entry.platform === "native" ? "Platform: React Native (Expo). " : ""}Docs: ${origin}/components/${entry.name}`,
     "",
     "## Installation",
     "",

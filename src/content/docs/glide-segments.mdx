@@ -1,0 +1,58 @@
+---
+title: Glide Segments
+description: A React Native segmented control whose thumb glides between options on a spring and stretches as it travels.
+---
+
+A segmented control whose thumb glides between options on a spring and stretches slightly as it travels. Segments share the width equally, each is a full touch target, and screen readers hear them as tabs. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="glide-segments" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add glide-segments
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/glide-segments.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { GlideSegments } from "@/components/ui/glide-segments";
+
+export default function Example() {
+  const [range, setRange] = useState("week");
+
+  return (
+    <GlideSegments
+      value={range}
+      onChange={setRange}
+      options={[
+        { value: "day", label: "Day" },
+        { value: "week", label: "Week" },
+        { value: "month", label: "Month" },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                           | Default | Description                                            |
+| :--------- | :----------------------------- | :------ | :----------------------------------------------------- |
+| `options`  | `GlideSegmentsOption[]`        | -       | The segments, each with a `value` and a `label`.       |
+| `value`    | `string`                       | -       | The selected option's `value`.                         |
+| `onChange` | `(value: string) => void`      | -       | Called with the tapped option's `value`.               |
+| `height`   | `number`                       | `40`    | Height of the control.                                 |
+| `colors`   | `Partial<GlideSegmentsColors>` | -       | Overrides `track`, `thumb`, `text` and `selectedText`. |
+| `style`    | `StyleProp<ViewStyle>`         | -       | Style for the track.                                   |

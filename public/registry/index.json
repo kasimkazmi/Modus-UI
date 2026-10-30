@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 210,
+  "count": 214,
   "categories": [
     "Navigation",
     "Actions",
@@ -10,13 +10,15 @@
     "Three.js",
     "Typography",
     "Sections",
-    "Components"
+    "Components",
+    "Native"
   ],
   "components": [
     {
       "name": "liquid-tabs",
       "title": "Liquid Tabs",
       "category": "Navigation",
+      "platform": "web",
       "description": "A tab switcher with a physics-driven, stretching selection pill.",
       "dependencies": [
         "framer-motion",
@@ -28,6 +30,7 @@
       "name": "flowing-menu",
       "title": "Flowing Menu",
       "category": "Navigation",
+      "platform": "web",
       "description": "A full-screen menu where hovering an item triggers an infinite scrolling marquee.",
       "dependencies": [
         "framer-motion",
@@ -39,6 +42,7 @@
       "name": "morphing-navbar",
       "title": "Morphing Navbar",
       "category": "Navigation",
+      "platform": "web",
       "description": "A premium, scroll-aware header that dynamically adjusts its layout density and logo scale based on scroll position.",
       "dependencies": [
         "next/image",
@@ -52,6 +56,7 @@
       "name": "floating-dock",
       "title": "Floating Dock",
       "category": "Navigation",
+      "platform": "web",
       "description": "A premium navigation dock with smooth Apple-style magnifying zoom animation on hover.",
       "dependencies": [
         "framer-motion",
@@ -63,6 +68,7 @@
       "name": "notch-footer",
       "title": "Notch Footer",
       "category": "Navigation",
+      "platform": "web",
       "description": "A premium, animated footer component with a smooth curved pocket.",
       "dependencies": [
         "framer-motion",
@@ -74,6 +80,7 @@
       "name": "process-stepper",
       "title": "Process Stepper",
       "category": "Navigation",
+      "platform": "web",
       "description": "A wizard-style stepper component for breaking down complex forms and processes into manageable chunks.",
       "dependencies": [
         "framer-motion",
@@ -85,6 +92,7 @@
       "name": "magnet",
       "title": "Magnet",
       "category": "Actions",
+      "platform": "web",
       "description": "A micro-interaction component that pulls an element towards the mouse cursor.",
       "dependencies": [
         "framer-motion",
@@ -96,6 +104,7 @@
       "name": "magic-button",
       "title": "Magic Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A smooth animated button using Framer Motion.",
       "dependencies": [
         "framer-motion",
@@ -107,6 +116,7 @@
       "name": "animated-button",
       "title": "Animated Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A smooth button with hover and tap scale animations using Framer Motion.",
       "dependencies": [
         "framer-motion",
@@ -118,6 +128,7 @@
       "name": "pulse-button",
       "title": "Pulse Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A button with an organic, rhythmic pulsing animation to draw user attention.",
       "dependencies": [
         "framer-motion",
@@ -129,6 +140,7 @@
       "name": "bounce-cards",
       "title": "Bounce Cards",
       "category": "Data Display",
+      "platform": "web",
       "description": "A stack of playing cards that fan out and straighten out interactively when hovered.",
       "dependencies": [
         "framer-motion",
@@ -140,6 +152,7 @@
       "name": "masonry-grid",
       "title": "Masonry Grid",
       "category": "Data Display",
+      "platform": "web",
       "description": "A fully responsive, animated masonry layout powered by Framer Motion.",
       "dependencies": [
         "framer-motion",
@@ -151,6 +164,7 @@
       "name": "animated-list",
       "title": "Animated List",
       "category": "Data Display",
+      "platform": "web",
       "description": "A scrollable, animated list component with keyboard navigation, hover states, and smooth entrance physics.",
       "dependencies": [
         "framer-motion",
@@ -162,6 +176,7 @@
       "name": "kinetic-carousel",
       "title": "Kinetic Carousel",
       "category": "Data Display",
+      "platform": "web",
       "description": "A modern, physics-based carousel that supports dragging, infinite looping, and 3D perspective transitions.",
       "dependencies": [
         "framer-motion",
@@ -173,6 +188,7 @@
       "name": "expandable-showcase",
       "title": "Expandable Showcase",
       "category": "Data Display",
+      "platform": "web",
       "description": "A horizontal or vertical list of items where hovering or clicking expands one item while shrinking others.",
       "dependencies": [
         "framer-motion",
@@ -184,6 +200,7 @@
       "name": "focus-card",
       "title": "Focus Card",
       "category": "Data Display",
+      "platform": "web",
       "description": "A card with a subtle radial gradient spotlight that follows the user's cursor.",
       "dependencies": [
         "framer-motion",
@@ -195,6 +212,7 @@
       "name": "rotating-card",
       "title": "Rotating Card",
       "category": "Data Display",
+      "platform": "web",
       "description": "A 3D-style rotating card that responds to user hover with smooth perspective shifts.",
       "dependencies": [
         "framer-motion",
@@ -206,6 +224,7 @@
       "name": "tilt-card",
       "title": "Tilt Card",
       "category": "Data Display",
+      "platform": "web",
       "description": "A 3D parallax tilt card featuring smooth physics-based rotations on hover, collapsible tags and descriptions, and custom CTA buttons.",
       "dependencies": [
         "framer-motion",
@@ -217,6 +236,7 @@
       "name": "cursor-grid",
       "title": "Cursor Grid",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "An interactive canvas grid that reacts to cursor proximity and clicks.",
       "dependencies": [
         "framer-motion",
@@ -228,6 +248,7 @@
       "name": "waves",
       "title": "Waves",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A reactive background of flowing lines driven by Perlin noise and cursor physics.",
       "dependencies": [
         "framer-motion",
@@ -239,6 +260,7 @@
       "name": "letter-glitch",
       "title": "Letter Glitch",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A canvas-rendered procedural matrix of glitching letters and symbols.",
       "dependencies": [
         "framer-motion",
@@ -250,6 +272,7 @@
       "name": "aurora-background",
       "title": "Aurora Background",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A stunning, smooth animated aurora borealis background effect using Framer Motion.",
       "dependencies": [
         "framer-motion",
@@ -261,6 +284,7 @@
       "name": "circuit-background",
       "title": "Circuit Background",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A highly ambient, canvas-based circuit board animation with interactive mouse ripple effects.",
       "dependencies": [
         "framer-motion",
@@ -272,6 +296,7 @@
       "name": "orbiting-elements",
       "title": "Orbiting Elements",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Elements that mathematically orbit around a central node in circular paths.",
       "dependencies": [
         "framer-motion",
@@ -283,6 +308,7 @@
       "name": "gloop-trail",
       "title": "Gloop Trail",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A pooled ink trail that follows the pointer, shading from the theme ink toward muted grey.",
       "dependencies": [
         "framer-motion",
@@ -294,6 +320,7 @@
       "name": "iron-filings",
       "title": "Iron Filings",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A field of fine ink filings that turn to face the pointer, like iron around a lodestone.",
       "dependencies": [
         "clsx",
@@ -304,6 +331,7 @@
       "name": "grid-motion",
       "title": "Grid Motion",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "An interactive, infinite grid that tracks mouse movement with beautiful inertia physics.",
       "dependencies": [
         "framer-motion",
@@ -315,6 +343,7 @@
       "name": "moon-lattice",
       "title": "Moon Lattice",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A centred WebGL globe of noise-carved points, tilted and threaded with thin rings, inked in the theme colours.",
       "dependencies": [
         "three",
@@ -327,6 +356,7 @@
       "name": "resonance-plate",
       "title": "Resonance Plate",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Chladni-style nodal lines shimmering across an off-centre plate, with drifting motes, in theme ink.",
       "dependencies": [
         "framer-motion",
@@ -338,6 +368,7 @@
       "name": "confluence-lines",
       "title": "Confluence Lines",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL shader of three light streams meeting on the page background, inked in the theme primary, foreground and muted tones.",
       "dependencies": [
         "framer-motion",
@@ -349,6 +380,7 @@
       "name": "silk-bands",
       "title": "Silk Bands",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL background of slow, wide bands printed through a coarse halftone screen in a ramp of the theme colours.",
       "dependencies": [
         "framer-motion",
@@ -360,6 +392,7 @@
       "name": "mercury-bloom",
       "title": "Mercury Bloom",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A raymarched WebGL blob of liquid metal that reflects your theme and turns toward the pointer.",
       "dependencies": [
         "framer-motion",
@@ -371,6 +404,7 @@
       "name": "lumen-core",
       "title": "Lumen Core",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A slowly turning sphere of smoke-veined light in a field of drifting motes, shaded from your theme.",
       "dependencies": [
         "framer-motion",
@@ -382,6 +416,7 @@
       "name": "light-cut",
       "title": "Light Cut",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL shader of a beam of light cutting through fog, tinted from your theme, with five scenes.",
       "dependencies": [
         "framer-motion",
@@ -393,6 +428,7 @@
       "name": "stipple-tide",
       "title": "Stipple Tide",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL stipple of theme-coloured dots that swell in slow rings from the centre and drift with the pointer.",
       "dependencies": [
         "three",
@@ -405,6 +441,7 @@
       "name": "tide-line",
       "title": "Tide Line",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A slow band of ink-toned light rolling along the top edge, tinted from your theme.",
       "dependencies": [
         "three",
@@ -417,6 +454,7 @@
       "name": "lattice-drift",
       "title": "Lattice Drift",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL dome of ink points turning slowly under a fading mask, with scattered accent points in the theme primary.",
       "dependencies": [
         "three",
@@ -429,6 +467,7 @@
       "name": "star-tunnel",
       "title": "Star Tunnel",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL flight down a corridor of letters, streaks, keycaps or rings, coloured from a ramp of the theme primary and foreground.",
       "dependencies": [
         "three",
@@ -441,6 +480,7 @@
       "name": "plate-wheel",
       "title": "Plate Wheel",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A tilted WebGL wheel of curved, muted image plates turning over a ruled sheet in the theme colours.",
       "dependencies": [
         "three",
@@ -453,6 +493,7 @@
       "name": "node-weave",
       "title": "Node Weave",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A canvas weave of hollow knots and solid ink hubs, threaded by hairlines that tighten around the pointer.",
       "dependencies": [
         "framer-motion",
@@ -464,6 +505,7 @@
       "name": "aperture-bloom",
       "title": "Aperture Bloom",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A centred, noise-warped pair of WebGL rings inked in the theme colours that leans toward the pointer.",
       "dependencies": [
         "three",
@@ -476,6 +518,7 @@
       "name": "mosaic-crest",
       "title": "Mosaic Crest",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A swooping band of square tesserae that ripples with travelling waves, laid in the active theme colours.",
       "dependencies": [
         "framer-motion",
@@ -487,6 +530,7 @@
       "name": "forecast-curve",
       "title": "Forecast Curve",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A rising dotted curve whose dots swell and shimmer in crossing waves, inked in the theme accent.",
       "dependencies": [
         "framer-motion",
@@ -498,6 +542,7 @@
       "name": "dew-pane",
       "title": "Dew Pane",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Fine beads of dew that grow, merge and run down a pane, drawn in theme ink.",
       "dependencies": [
         "framer-motion",
@@ -509,6 +554,7 @@
       "name": "ink-pill",
       "title": "Ink Pill",
       "category": "Actions",
+      "platform": "web",
       "description": "A mono-set pill call-to-action washed in the theme's ink, with a diamond glyph and a paper-card sibling.",
       "dependencies": [
         "framer-motion",
@@ -520,6 +566,7 @@
       "name": "glyph-eddy",
       "title": "Glyph Eddy",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Turning rings of set type that crumble into glyph dust under the cursor and gather into the centre on click, drawn in the Modus type and theme ink.",
       "dependencies": [
         "framer-motion",
@@ -531,6 +578,7 @@
       "name": "phosphor-tube",
       "title": "Phosphor Tube",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL cathode-ray tube tinted with the theme tokens, showing a film countdown, a typing boot log, a fault report or a pixel-art title screen.",
       "dependencies": [
         "framer-motion",
@@ -542,6 +590,7 @@
       "name": "folio-title",
       "title": "Folio Title",
       "category": "Typography",
+      "platform": "web",
       "description": "A journal index whose italic serif titles decode from scrambled glyphs, set in your theme.",
       "dependencies": [
         "framer-motion",
@@ -553,6 +602,7 @@
       "name": "gravity-text-swap",
       "title": "Gravity Text Swap",
       "category": "Typography",
+      "platform": "web",
       "description": "Text that detaches and falls away with simulated gravity when swapped.",
       "dependencies": [
         "framer-motion",
@@ -564,6 +614,7 @@
       "name": "flip-words",
       "title": "Flip Words",
       "category": "Typography",
+      "platform": "web",
       "description": "A sleek text rotator that flips individual words sequentially using 3D perspective.",
       "dependencies": [
         "framer-motion",
@@ -575,6 +626,7 @@
       "name": "static-type",
       "title": "Static Type",
       "category": "Typography",
+      "platform": "web",
       "description": "Serif display type that tears into horizontal static, harder when you hover it.",
       "dependencies": [
         "framer-motion",
@@ -586,6 +638,7 @@
       "name": "scroll-velocity",
       "title": "Scroll Velocity",
       "category": "Typography",
+      "platform": "web",
       "description": "A marque text effect whose speed scales dynamically based on scroll velocity.",
       "dependencies": [
         "framer-motion",
@@ -597,6 +650,7 @@
       "name": "text-pressure",
       "title": "Text Pressure",
       "category": "Typography",
+      "platform": "web",
       "description": "A responsive variable-font typography effect that reacts fluidly to the cursor's proximity.",
       "dependencies": [
         "framer-motion",
@@ -608,6 +662,7 @@
       "name": "true-focus",
       "title": "True Focus",
       "category": "Typography",
+      "platform": "web",
       "description": "A typographic animation that moves a camera-like focus frame between words while blurring the rest.",
       "dependencies": [
         "framer-motion",
@@ -619,6 +674,7 @@
       "name": "gradient-text",
       "title": "Gradient Text",
       "category": "Typography",
+      "platform": "web",
       "description": "Seamlessly looping animated gradient text that can optionally wrap its borders.",
       "dependencies": [
         "framer-motion",
@@ -630,6 +686,7 @@
       "name": "blur-text",
       "title": "Blur Text",
       "category": "Typography",
+      "platform": "web",
       "description": "Smoothly unblurs text characters or words as they enter the viewport.",
       "dependencies": [
         "framer-motion",
@@ -641,6 +698,7 @@
       "name": "split-text",
       "title": "Split Text",
       "category": "Typography",
+      "platform": "web",
       "description": "Staggered text animations splitting by characters, words, or lines.",
       "dependencies": [
         "framer-motion",
@@ -652,6 +710,7 @@
       "name": "decrypted-text",
       "title": "Decrypted Text",
       "category": "Typography",
+      "platform": "web",
       "description": "A hacker-style text decryption matrix effect that scrambles text before revealing it.",
       "dependencies": [
         "framer-motion",
@@ -663,6 +722,7 @@
       "name": "shimmer-text",
       "title": "Shimmer Text",
       "category": "Typography",
+      "platform": "web",
       "description": "Animated text that shimmers with a flowing gradient effect.",
       "dependencies": [
         "framer-motion",
@@ -674,6 +734,7 @@
       "name": "floating-text",
       "title": "Floating Text",
       "category": "Typography",
+      "platform": "web",
       "description": "A text component that floats and drifts subtly, creating an editorial, high-end feel.",
       "dependencies": [
         "framer-motion",
@@ -685,6 +746,7 @@
       "name": "animated-beam",
       "title": "Animated Beam",
       "category": "Components",
+      "platform": "web",
       "description": "A dynamic SVG beam animation that traces paths between elements.",
       "dependencies": [
         "framer-motion",
@@ -696,6 +758,7 @@
       "name": "border-beam",
       "title": "Border Beam",
       "category": "Components",
+      "platform": "web",
       "description": "A glowing, animated gradient beam that endlessly traces the perimeter.",
       "dependencies": [
         "framer-motion",
@@ -707,6 +770,7 @@
       "name": "bento-grid",
       "title": "Bento Grid",
       "category": "Components",
+      "platform": "web",
       "description": "A highly structured, responsive layout primitive for creating asymmetric grid layouts.",
       "dependencies": [
         "framer-motion",
@@ -718,6 +782,7 @@
       "name": "erosion-plate",
       "title": "Erosion Plate",
       "category": "Components",
+      "platform": "web",
       "description": "A matted image plate that erodes under turbulence as the cursor moves.",
       "dependencies": [
         "framer-motion",
@@ -729,6 +794,7 @@
       "name": "scratch-to-reveal",
       "title": "Scratch to Reveal",
       "category": "Components",
+      "platform": "web",
       "description": "An interactive canvas component that lets users scratch off an overlay to reveal the content underneath.",
       "dependencies": [
         "framer-motion",
@@ -740,6 +806,7 @@
       "name": "stack",
       "title": "Stack",
       "category": "Components",
+      "platform": "web",
       "description": "A 3D interactive stack of cards that can be dragged and rearranged.",
       "dependencies": [
         "framer-motion",
@@ -751,6 +818,7 @@
       "name": "star-border",
       "title": "Star Border",
       "category": "Components",
+      "platform": "web",
       "description": "A glowing button border animation that circles the perimeter.",
       "dependencies": [
         "framer-motion",
@@ -762,6 +830,7 @@
       "name": "tilted-card",
       "title": "Tilted Card",
       "category": "Components",
+      "platform": "web",
       "description": "A 3D interactive card that physically tilts and pans relative to the cursor position.",
       "dependencies": [
         "framer-motion",
@@ -773,6 +842,7 @@
       "name": "pixel-card",
       "title": "Pixel Card",
       "category": "Components",
+      "platform": "web",
       "description": "A card that reveals a pixelated, shimmering canvas pattern on hover.",
       "dependencies": [
         "framer-motion",
@@ -784,6 +854,7 @@
       "name": "click-spark",
       "title": "Click Spark",
       "category": "Components",
+      "platform": "web",
       "description": "A physics-based canvas effect that bursts colorful sparks wherever the user clicks.",
       "dependencies": [
         "framer-motion",
@@ -795,6 +866,7 @@
       "name": "spotlight-card",
       "title": "Spotlight Card",
       "category": "Components",
+      "platform": "web",
       "description": "A card with a subtle spotlight gradient that follows the user's mouse cursor on hover.",
       "dependencies": [
         "framer-motion",
@@ -806,6 +878,7 @@
       "name": "border-glow",
       "title": "Border Glow",
       "category": "Components",
+      "platform": "web",
       "description": "An interactive card wrapper with an ambient glowing mesh gradient that mathematically tracks the mouse.",
       "dependencies": [
         "framer-motion",
@@ -817,6 +890,7 @@
       "name": "comparison-slider",
       "title": "Comparison Slider",
       "category": "Components",
+      "platform": "web",
       "description": "Two layers stacked, with a divider the user drags to compare them.",
       "dependencies": [
         "lucide-react",
@@ -829,6 +903,7 @@
       "name": "dock",
       "title": "Dock",
       "category": "Components",
+      "platform": "web",
       "description": "A highly interactive macOS-style dock that magnifies items on hover.",
       "dependencies": [
         "framer-motion",
@@ -840,6 +915,7 @@
       "name": "progress-ring",
       "title": "Progress Ring",
       "category": "Components",
+      "platform": "web",
       "description": "A circular ring that smoothly sweeps to a value, with a live numeric readout.",
       "dependencies": [
         "framer-motion",
@@ -851,6 +927,7 @@
       "name": "marquee",
       "title": "Marquee",
       "category": "Components",
+      "platform": "web",
       "description": "A seamless, infinitely scrolling row of elements.",
       "dependencies": [
         "framer-motion",
@@ -862,6 +939,7 @@
       "name": "mirror-plate",
       "title": "Mirror Plate",
       "category": "Components",
+      "platform": "web",
       "description": "A member pass whose surface mirrors the webcam through a metallic glass filter.",
       "dependencies": [
         "framer-motion",
@@ -874,6 +952,7 @@
       "name": "fluid-glass",
       "title": "Fluid Glass",
       "category": "Components",
+      "platform": "web",
       "description": "TODO one sentence on what Fluid Glass does.",
       "dependencies": [
         "framer-motion",
@@ -885,6 +964,7 @@
       "name": "dome-gallery",
       "title": "Dome Gallery",
       "category": "Components",
+      "platform": "web",
       "description": "An immersive 3D gallery dome.",
       "dependencies": [
         "@use-gesture/react",
@@ -897,6 +977,7 @@
       "name": "portrait-wall",
       "title": "Portrait Wall",
       "category": "Components",
+      "platform": "web",
       "description": "A wall of paper-toned portrait cards where colour returns only under the pointer.",
       "dependencies": [
         "framer-motion",
@@ -908,6 +989,7 @@
       "name": "chime-switch",
       "title": "Chime Switch",
       "category": "Components",
+      "platform": "web",
       "description": "A square-shouldered subscribe switch whose bell chimes as it flips to the theme ink.",
       "dependencies": [
         "framer-motion",
@@ -919,6 +1001,7 @@
       "name": "root-nav",
       "title": "Root Nav",
       "category": "Components",
+      "platform": "web",
       "description": "A docs-style navigation tree whose hairline roots draw out to each open chapter.",
       "dependencies": [
         "framer-motion",
@@ -932,6 +1015,7 @@
       "name": "run-tag",
       "title": "Run Tag",
       "category": "Components",
+      "platform": "web",
       "description": "A monospace run tag that fills with theme ink while a command runs, then settles to done or retry.",
       "dependencies": [
         "framer-motion",
@@ -945,6 +1029,7 @@
       "name": "cipher-reel",
       "title": "Cipher Reel",
       "category": "Components",
+      "platform": "web",
       "description": "A one-time code field of paper slots with serif numerals that drop in and seal on success.",
       "dependencies": [
         "framer-motion",
@@ -956,6 +1041,7 @@
       "name": "orbit-knob",
       "title": "Orbit Knob",
       "category": "Components",
+      "platform": "web",
       "description": "A flickable rotary knob with a tracer tail in theme ink and a serif readout.",
       "dependencies": [
         "framer-motion",
@@ -967,6 +1053,7 @@
       "name": "coy-key",
       "title": "Coy Key",
       "category": "Components",
+      "platform": "web",
       "description": "A dashed mono key that edges away from the cursor until it relents.",
       "dependencies": [
         "framer-motion",
@@ -978,6 +1065,7 @@
       "name": "turn-leaf",
       "title": "Turn Leaf",
       "category": "Components",
+      "platform": "web",
       "description": "A paper leaf you drag, click or key-press to turn over, with a soft tilt and sheen.",
       "dependencies": [
         "framer-motion",
@@ -989,6 +1077,7 @@
       "name": "paper-stack",
       "title": "Paper Stack",
       "category": "Components",
+      "platform": "web",
       "description": "A paper sleeve that fans out draggable note slips when opened.",
       "dependencies": [
         "framer-motion",
@@ -1000,6 +1089,7 @@
       "name": "cinder-trigger",
       "title": "Cinder Trigger",
       "category": "Components",
+      "platform": "web",
       "description": "A commit button that burns down an undo window along its edge before it settles.",
       "dependencies": [
         "framer-motion",
@@ -1011,6 +1101,7 @@
       "name": "tray-picker",
       "title": "Tray Picker",
       "category": "Components",
+      "platform": "web",
       "description": "A compact select whose tray slides open from its chip with serif options.",
       "dependencies": [
         "framer-motion",
@@ -1024,6 +1115,7 @@
       "name": "steady-press",
       "title": "Steady Press",
       "category": "Components",
+      "platform": "web",
       "description": "A press-and-hold confirm button that fills from below with a wavy crest.",
       "dependencies": [
         "framer-motion",
@@ -1035,6 +1127,7 @@
       "name": "bloom-choice",
       "title": "Bloom Choice",
       "category": "Components",
+      "platform": "web",
       "description": "A row of mono chips where the chosen one swells with a springy pop.",
       "dependencies": [
         "framer-motion",
@@ -1046,6 +1139,7 @@
       "name": "tile-wait",
       "title": "Tile Wait",
       "category": "Components",
+      "platform": "web",
       "description": "A dot-grid progress indicator with a ticking timer and a mono caption.",
       "dependencies": [
         "framer-motion",
@@ -1057,6 +1151,7 @@
       "name": "folio-crush",
       "title": "Folio Crush",
       "category": "Components",
+      "platform": "web",
       "description": "A WebGL print you can hold to crush into a ball and drag around.",
       "dependencies": [
         "framer-motion",
@@ -1069,6 +1164,7 @@
       "name": "glance-score",
       "title": "Glance Score",
       "category": "Components",
+      "platform": "web",
       "description": "A rating row whose icons lift as you hover, with a mono label tip.",
       "dependencies": [
         "framer-motion",
@@ -1080,6 +1176,7 @@
       "name": "query-well",
       "title": "Query Well",
       "category": "Components",
+      "platform": "web",
       "description": "A composer for AI requests with sources, commands, model and effort menus.",
       "dependencies": [
         "framer-motion",
@@ -1093,6 +1190,7 @@
       "name": "beat-mark",
       "title": "Beat Mark",
       "category": "Components",
+      "platform": "web",
       "description": "A like button whose icon bursts and whose counter rolls on press.",
       "dependencies": [
         "framer-motion",
@@ -1104,6 +1202,7 @@
       "name": "polish-pane",
       "title": "Polish Pane",
       "category": "Components",
+      "platform": "web",
       "description": "A frame that resolves an image from pixel mosaic to sharp as generation progresses.",
       "dependencies": [
         "framer-motion",
@@ -1117,6 +1216,7 @@
       "name": "stretch-toggle",
       "title": "Stretch Toggle",
       "category": "Components",
+      "platform": "web",
       "description": "A segmented control whose thumb stretches and squashes as it travels.",
       "dependencies": [
         "framer-motion",
@@ -1128,6 +1228,7 @@
       "name": "drag-number",
       "title": "Drag Number",
       "category": "Components",
+      "platform": "web",
       "description": "A compact number chip you scrub sideways to change, with a rubber-band edge and a delta tag.",
       "dependencies": [
         "framer-motion",
@@ -1139,6 +1240,7 @@
       "name": "paper-mill",
       "title": "Paper Mill",
       "category": "Components",
+      "platform": "web",
       "description": "A list of cards you drag into a slot that cuts them into falling strips.",
       "dependencies": [
         "framer-motion",
@@ -1150,6 +1252,7 @@
       "name": "swipe-confirm",
       "title": "Swipe Confirm",
       "category": "Components",
+      "platform": "web",
       "description": "A drag-to-confirm track for actions that should not happen by accident.",
       "dependencies": [
         "framer-motion",
@@ -1161,6 +1264,7 @@
       "name": "pull-launch",
       "title": "Pull Launch",
       "category": "Components",
+      "platform": "web",
       "description": "A send button you can pull back like a slingshot and release.",
       "dependencies": [
         "framer-motion",
@@ -1174,6 +1278,7 @@
       "name": "tide-meter",
       "title": "Tide Meter",
       "category": "Components",
+      "platform": "web",
       "description": "A vertical level meter whose fill sloshes as it moves.",
       "dependencies": [
         "framer-motion",
@@ -1185,6 +1290,7 @@
       "name": "tally-box",
       "title": "Tally Box",
       "category": "Components",
+      "platform": "web",
       "description": "A checkbox whose box springs full and strikes through its label.",
       "dependencies": [
         "framer-motion",
@@ -1196,6 +1302,7 @@
       "name": "press-toggle",
       "title": "Press Toggle",
       "category": "Components",
+      "platform": "web",
       "description": "A switch whose thumb squashes and stretches as you drag or tap it.",
       "dependencies": [
         "framer-motion",
@@ -1207,6 +1314,7 @@
       "name": "state-glyph",
       "title": "State Glyph",
       "category": "Components",
+      "platform": "web",
       "description": "A small ring that shows pending, running, done, failed or cancelled with drawn transitions.",
       "dependencies": [
         "framer-motion",
@@ -1218,6 +1326,7 @@
       "name": "glide-ledger-row",
       "title": "Ledger Row",
       "category": "Components",
+      "platform": "web",
       "description": "A list row that glides aside on a swipe to reveal a drawer of actions, set like an entry in a printed ledger.",
       "dependencies": [
         "framer-motion",
@@ -1229,6 +1338,7 @@
       "name": "flick-notice",
       "title": "Flick Notice",
       "category": "Components",
+      "platform": "web",
       "description": "A card-stock notice that slides in, burns down a thin primary fuse and flicks away under a swipe.",
       "dependencies": [
         "framer-motion",
@@ -1240,6 +1350,7 @@
       "name": "stub-pass",
       "title": "Stub Pass",
       "category": "Components",
+      "platform": "web",
       "description": "A perforated card with a primary-ink stub you can drag and tear clean off.",
       "dependencies": [
         "framer-motion",
@@ -1251,6 +1362,7 @@
       "name": "ink-murmur",
       "title": "Ink Murmur",
       "category": "Components",
+      "platform": "web",
       "description": "A mono status line that breathes while work is in progress and settles into a timed summary.",
       "dependencies": [
         "framer-motion",
@@ -1262,6 +1374,7 @@
       "name": "hum-capsule",
       "title": "Hum Capsule",
       "category": "Components",
+      "platform": "web",
       "description": "A dictation button that opens into a capsule with a live level meter and a running clock.",
       "dependencies": [
         "framer-motion",
@@ -1273,6 +1386,7 @@
       "name": "rouse-track",
       "title": "Rouse Track",
       "category": "Components",
+      "platform": "web",
       "description": "A range input drawn as a field of bars that rise into a crest around the thumb.",
       "dependencies": [
         "framer-motion",
@@ -1284,6 +1398,7 @@
       "name": "ember-hint",
       "title": "Ember Hint",
       "category": "Components",
+      "platform": "web",
       "description": "An inverted ink tooltip that stays warm, so moving between triggers glides from one label to the next.",
       "dependencies": [
         "framer-motion",
@@ -1295,6 +1410,7 @@
       "name": "bough-study",
       "title": "Bough Study",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A painterly canvas tree that grows, sways and regrows in ink drawn from your theme.",
       "dependencies": [
         "framer-motion",
@@ -1306,6 +1422,7 @@
       "name": "sigil-weather",
       "title": "Sigil Weather",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL2 background where lightning, water or flame plays around a sigil, toned in the active theme colours.",
       "dependencies": [
         "framer-motion",
@@ -1317,6 +1434,7 @@
       "name": "crown-bar",
       "title": "Crown Bar",
       "category": "Navigation",
+      "platform": "web",
       "description": "A proximity-spring navigation bar in four fits — a masthead command bar, a centred pill, a dithered pixel strip and a refracting glass rail.",
       "dependencies": [
         "three",
@@ -1329,6 +1447,7 @@
       "name": "mote-beacon",
       "title": "Mote Beacon",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Italic serif letters and marks sinking through the page while accent beams rise, threading themselves to your pointer.",
       "dependencies": [
         "framer-motion",
@@ -1340,6 +1459,7 @@
       "name": "ink-rush",
       "title": "Ink Rush",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Rounded ink strokes rushing out of a high vanishing point, in the theme ink and accent.",
       "dependencies": [
         "framer-motion",
@@ -1351,6 +1471,7 @@
       "name": "arch-current",
       "title": "Arch Current",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Dotted Bézier paths sweeping in from both edges to a low vanishing point, drawn in your theme's ink.",
       "dependencies": [
         "framer-motion",
@@ -1362,6 +1483,7 @@
       "name": "ink-fountain",
       "title": "Ink Fountain",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Primary ink strokes fanning rightward from a source on the left edge.",
       "dependencies": [
         "framer-motion",
@@ -1373,6 +1495,7 @@
       "name": "wire-ledger",
       "title": "Wire Ledger",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Drifting points joined by hairlines when they come within reach, inked in your theme.",
       "dependencies": [
         "framer-motion",
@@ -1384,6 +1507,7 @@
       "name": "rising-strokes",
       "title": "Rising Strokes",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Fine pen strokes rise through the frame, slowing, lengthening and taking the primary colour as they cross a low horizon.",
       "dependencies": [
         "framer-motion",
@@ -1395,6 +1519,7 @@
       "name": "contour-sheet",
       "title": "Contour Sheet",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A WebGL contour map drawn like a survey sheet: ink contours on paper, with every fifth index line in the theme primary.",
       "dependencies": [
         "framer-motion",
@@ -1406,6 +1531,7 @@
       "name": "night-gate",
       "title": "Night Gate",
       "category": "Actions",
+      "platform": "web",
       "description": "A serif link pill floating over a drifting field of ink specks and pulsing motes.",
       "dependencies": [
         "framer-motion",
@@ -1417,6 +1543,7 @@
       "name": "starstream-button",
       "title": "Starstream Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A WebGL pill whose face carries a sideways stream of stars that stretches into streaks on hover.",
       "dependencies": [
         "framer-motion",
@@ -1428,6 +1555,7 @@
       "name": "arc-halo-button",
       "title": "Arc Halo Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A WebGL card button traced by crawling ink arcs that multiply on hover and discharge on click.",
       "dependencies": [
         "framer-motion",
@@ -1439,6 +1567,7 @@
       "name": "current-button",
       "title": "Current Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A WebGL pill filled with a slow ink current that quickens on hover and flares on press.",
       "dependencies": [
         "framer-motion",
@@ -1450,6 +1579,7 @@
       "name": "inkwell",
       "title": "Inkwell",
       "category": "Actions",
+      "platform": "web",
       "description": "A round WebGL button holding a well of theme ink that tilts as you sweep the cursor and draws down on click.",
       "dependencies": [
         "framer-motion",
@@ -1461,6 +1591,7 @@
       "name": "muse-button",
       "title": "Muse Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A canvas busy-state button in the theme's ink, with a comet tracing its border, a dot spinner and a shimmering serif label.",
       "dependencies": [
         "framer-motion",
@@ -1472,6 +1603,7 @@
       "name": "pulse-dust",
       "title": "Pulse Dust",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A grain field on the page's own paper where slow travelling waves swell the dots, with rare accent grains in the theme primary.",
       "dependencies": [
         "framer-motion",
@@ -1483,6 +1615,7 @@
       "name": "signal-tiles",
       "title": "Signal Tiles",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Rounded tiles that swell in waves rolling across the frame from one corner, crested in the theme accent.",
       "dependencies": [
         "framer-motion",
@@ -1494,6 +1627,7 @@
       "name": "hollow-bloom",
       "title": "Hollow Bloom",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A curved dot matrix that blooms outward from a hollow centre and drifts with the pointer, tinted from the theme primary.",
       "dependencies": [
         "framer-motion",
@@ -1505,6 +1639,7 @@
       "name": "grain-swell",
       "title": "Grain Swell",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A flowing field resolved through a dot screen, inked in your theme on the page ground.",
       "dependencies": [
         "three",
@@ -1517,6 +1652,7 @@
       "name": "ridge-strata",
       "title": "Ridge Strata",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Layered ink-wash ridges drifting in parallax, rimmed in the theme's primary.",
       "dependencies": [
         "framer-motion",
@@ -1528,6 +1664,7 @@
       "name": "drift-lines",
       "title": "Drift Lines",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Thousands of fine strokes drifting along a simplex-noise current, drawn in your theme's inks.",
       "dependencies": [
         "framer-motion",
@@ -1539,6 +1676,7 @@
       "name": "loom-field",
       "title": "Loom Field",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A Three.js Verlet cloth printed with Modus type in the theme ink, plus three dramatic cloths — iridescent silk, a flown folio flag and a washi noren.",
       "dependencies": [
         "three",
@@ -1551,6 +1689,7 @@
       "name": "word-swarm",
       "title": "Word Swarm",
       "category": "Typography",
+      "platform": "web",
       "description": "A gooey swarm of cells drifts over serif type and turns each word it touches to ink and italic.",
       "dependencies": [
         "framer-motion",
@@ -1562,6 +1701,7 @@
       "name": "orb-lettering",
       "title": "Orb Lettering",
       "category": "Typography",
+      "platform": "web",
       "description": "A canvas sphere whose land is set in italic serif type along the latitudes, inked in your theme.",
       "dependencies": [
         "framer-motion",
@@ -1573,6 +1713,7 @@
       "name": "contour-stream",
       "title": "Contour Stream",
       "category": "Typography",
+      "platform": "web",
       "description": "A sentence in italic serif running around the contour of an SVG mark, drawn on canvas.",
       "dependencies": [
         "framer-motion",
@@ -1584,6 +1725,7 @@
       "name": "shifting-swarm",
       "title": "Shifting Swarm",
       "category": "Typography",
+      "platform": "web",
       "description": "A swarm of serif glyphs filling one SVG mark that turns into another on click.",
       "dependencies": [
         "framer-motion",
@@ -1595,6 +1737,7 @@
       "name": "drape-type",
       "title": "Drape Type",
       "category": "Typography",
+      "platform": "web",
       "description": "A verlet drape woven from italic serif letters in your theme's ink. Grab it and pull.",
       "dependencies": [
         "framer-motion",
@@ -1606,6 +1749,7 @@
       "name": "glyph-surge",
       "title": "Glyph Surge",
       "category": "Typography",
+      "platform": "web",
       "description": "A quiet field of mono glyphs where every click sends a surge of weight and colour through the type.",
       "dependencies": [
         "framer-motion",
@@ -1617,6 +1761,7 @@
       "name": "sphere-sketch",
       "title": "Sphere Sketch",
       "category": "Typography",
+      "platform": "web",
       "description": "Italic serif letters wrapped around a turning globe; click to shake some loose.",
       "dependencies": [
         "framer-motion",
@@ -1628,6 +1773,7 @@
       "name": "emblem-globe",
       "title": "Emblem Globe",
       "category": "Components",
+      "platform": "web",
       "description": "A tiny dot-matrix globe that draws 23 marks in the theme ink, for a status pill or an avatar slot.",
       "dependencies": [
         "framer-motion",
@@ -1639,6 +1785,7 @@
       "name": "vitals-board",
       "title": "Vitals Board",
       "category": "Components",
+      "platform": "web",
       "description": "An isometric ink-line readout in your theme colours, with floating node cubes, layered planes or a flowing mesh.",
       "dependencies": [
         "framer-motion",
@@ -1650,6 +1797,7 @@
       "name": "tactile-switch",
       "title": "Tactile Switch",
       "category": "Components",
+      "platform": "web",
       "description": "One switch in four treatments drawn from the Modus tokens: a flat sprung switch, a pressed-paper tactile slider, Three.js glass and a shader-lit capsule.",
       "dependencies": [
         "three",
@@ -1662,6 +1810,7 @@
       "name": "draft-form",
       "title": "Draft Form",
       "category": "Components",
+      "platform": "web",
       "description": "A turning wireframe solid inked on a drafting guide, in your theme's colours.",
       "dependencies": [
         "framer-motion",
@@ -1673,6 +1822,7 @@
       "name": "pace-dial",
       "title": "Pace Dial",
       "category": "Data Display",
+      "platform": "web",
       "description": "A printed instrument dial with a self-test needle sweep, in speedometer, tachometer, boost and power variants.",
       "dependencies": [
         "framer-motion",
@@ -1684,6 +1834,7 @@
       "name": "conjure-button",
       "title": "Conjure Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A seated paper button whose serif letters shimmer in a wave and swap to an active label on focus.",
       "dependencies": [
         "framer-motion",
@@ -1695,6 +1846,7 @@
       "name": "halo-trace",
       "title": "Halo Trace",
       "category": "Actions",
+      "platform": "web",
       "description": "A mono pill whose hairline is traced by a slow beam of the theme's primary colour.",
       "dependencies": [
         "framer-motion",
@@ -1706,6 +1858,7 @@
       "name": "glaze-button",
       "title": "Glaze Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A glazed button in the theme's primary colour with a serif label and a sheen that sweeps across on hover.",
       "dependencies": [
         "framer-motion",
@@ -1717,6 +1870,7 @@
       "name": "sheen-cta",
       "title": "Sheen CTA",
       "category": "Actions",
+      "platform": "web",
       "description": "A paper pill with a serif italic label and a sweep of primary light on hover.",
       "dependencies": [
         "framer-motion",
@@ -1728,6 +1882,7 @@
       "name": "kiln-button",
       "title": "Kiln Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A glowing pill button fired from the theme's primary and destructive colours, with a coal-chip chevron.",
       "dependencies": [
         "framer-motion",
@@ -1739,6 +1894,7 @@
       "name": "hairline-cta",
       "title": "Hairline CTA",
       "category": "Actions",
+      "platform": "web",
       "description": "A mono, uppercase hairline button whose primary ink floods up from the baseline on hover.",
       "dependencies": [
         "framer-motion",
@@ -1750,6 +1906,7 @@
       "name": "halo-invite",
       "title": "Halo Invite",
       "category": "Actions",
+      "platform": "web",
       "description": "A card-coloured invite pill with a monogram badge and a halo of light circling its edge.",
       "dependencies": [
         "framer-motion",
@@ -1761,6 +1918,7 @@
       "name": "terrace-dusk",
       "title": "Terrace Dusk",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Fifteen breathing terraces stepping down from left to right, cut from your theme's tones.",
       "dependencies": [
         "three",
@@ -1773,6 +1931,7 @@
       "name": "circuit-heart",
       "title": "Circuit Heart",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "An isometric Three.js platform with a pulsing core and orbiting nodes, lit from your theme.",
       "dependencies": [
         "three",
@@ -1785,6 +1944,7 @@
       "name": "lens-drift",
       "title": "Lens Drift",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Soft noise-driven bands of theme colour drifting behind a trail of glass lenses that follow the pointer.",
       "dependencies": [
         "three",
@@ -1797,6 +1957,7 @@
       "name": "thread-swell",
       "title": "Thread Swell",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A curtain of Three.js threads that swell in rolling waves, inked in the active theme colours.",
       "dependencies": [
         "three",
@@ -1809,6 +1970,7 @@
       "name": "relief-mesh",
       "title": "Relief Mesh",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A slowly turning mesh globe of pulsing nodes joined by fine links, inked in theme tokens and fading into the page background.",
       "dependencies": [
         "three",
@@ -1821,6 +1983,7 @@
       "name": "dust-veil",
       "title": "Dust Veil",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A drifting fbm veil of dust in your theme's tones that leans toward the pointer.",
       "dependencies": [
         "three",
@@ -1833,6 +1996,7 @@
       "name": "ribbon-light",
       "title": "Ribbon Light",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Diagonal ribbons of ink-toned light drifting over the page, tinted from your theme.",
       "dependencies": [
         "three",
@@ -1845,6 +2009,7 @@
       "name": "ash-spiral",
       "title": "Ash Spiral",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A drifting spiral of 12,000 sparks drawn in your theme's ink, set off-centre.",
       "dependencies": [
         "three",
@@ -1857,6 +2022,7 @@
       "name": "dot-whirl",
       "title": "Dot Whirl",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A leaning funnel of 9,500 dots wound by two spiral guides, drawn in your theme's ink.",
       "dependencies": [
         "three",
@@ -1869,6 +2035,7 @@
       "name": "orbit-chip-button",
       "title": "Orbit Chip Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A solid primary pill led by a paper chip whose arrow turns forward on hover.",
       "dependencies": [
         "framer-motion",
@@ -1880,6 +2047,7 @@
       "name": "stamp-key",
       "title": "Stamp Key",
       "category": "Actions",
+      "platform": "web",
       "description": "A theme-inked key that presses into its base and lights its index tick on hover.",
       "dependencies": [
         "framer-motion",
@@ -1891,6 +2059,7 @@
       "name": "ink-endcap-button",
       "title": "Ink Endcap Button",
       "category": "Actions",
+      "platform": "web",
       "description": "An italic serif pill with a round ink endcap, as a hairline outline or a solid fill.",
       "dependencies": [
         "framer-motion",
@@ -1902,6 +2071,7 @@
       "name": "prism-key",
       "title": "Prism Key",
       "category": "Actions",
+      "platform": "web",
       "description": "A frosted key-shaped button with a palette-tinted prism edge and an ink arrow chip.",
       "dependencies": [
         "framer-motion",
@@ -1913,6 +2083,7 @@
       "name": "round-glyph",
       "title": "Round Glyph",
       "category": "Actions",
+      "platform": "web",
       "description": "Three round icon buttons in the theme's colours: a raised plus key, a frosted play disc and a stitched mail ring.",
       "dependencies": [
         "framer-motion",
@@ -1924,6 +2095,7 @@
       "name": "prism-flow-button",
       "title": "Prism Flow Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A WebGL2 button whose face pours into prismatic ribbons on hover, set on a soft theme-coloured pool.",
       "dependencies": [
         "framer-motion",
@@ -1935,6 +2107,7 @@
       "name": "ember-tag",
       "title": "Ember Tag",
       "category": "Components",
+      "platform": "web",
       "description": "A lanyard tag sketched in thousands of theme-ink embers, standing in light slanted rain above a waterline.",
       "dependencies": [
         "framer-motion",
@@ -1946,6 +2119,7 @@
       "name": "draft-folio",
       "title": "Draft Folio",
       "category": "Components",
+      "platform": "web",
       "description": "An open folio in theme ink whose leaves curl as you drag them, with a primary-tinted loupe you can slide across the page.",
       "dependencies": [
         "framer-motion",
@@ -1957,6 +2131,7 @@
       "name": "ink-capsule",
       "title": "Ink Capsule",
       "category": "Actions",
+      "platform": "web",
       "description": "An ink-filled capsule with a comet of light orbiting inside it and a serif label.",
       "dependencies": [
         "framer-motion",
@@ -1968,6 +2143,7 @@
       "name": "keystroke-button",
       "title": "Keystroke Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A keycap button with a key legend, a serif label and a hard bottom edge that sinks when pressed.",
       "dependencies": [
         "framer-motion",
@@ -1979,6 +2155,7 @@
       "name": "stitch-frame-button",
       "title": "Stitch Frame Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A paper button that pins four corners and stitches a dashed frame around itself on hover.",
       "dependencies": [
         "framer-motion",
@@ -1990,6 +2167,7 @@
       "name": "rising-motes",
       "title": "Rising Motes",
       "category": "Actions",
+      "platform": "web",
       "description": "A primary-ink button with motes of light drifting up through it.",
       "dependencies": [
         "framer-motion",
@@ -2001,6 +2179,7 @@
       "name": "roll-label",
       "title": "Roll Label",
       "category": "Actions",
+      "platform": "web",
       "description": "A paper pill whose mono label rolls up and away while an inked copy with an arrow rises in on hover.",
       "dependencies": [
         "framer-motion",
@@ -2012,6 +2191,7 @@
       "name": "comet-ring-button",
       "title": "Comet Ring Button",
       "category": "Actions",
+      "platform": "web",
       "description": "A card-toned button whose hairline rim is chased by a comet of theme colour.",
       "dependencies": [
         "framer-motion",
@@ -2023,6 +2203,7 @@
       "name": "satin-capsule",
       "title": "Satin Capsule",
       "category": "Actions",
+      "platform": "web",
       "description": "A satin card-toned capsule with a graded hairline, a mono annotation and a primary arrow chip.",
       "dependencies": [
         "framer-motion",
@@ -2034,6 +2215,7 @@
       "name": "opening-mark",
       "title": "Opening Mark",
       "category": "Typography",
+      "platform": "web",
       "description": "An opening title in the theme's italic serif that assembles letter by letter, then holds and loops.",
       "dependencies": [
         "framer-motion",
@@ -2045,6 +2227,7 @@
       "name": "dust-signature",
       "title": "Dust Signature",
       "category": "Typography",
+      "platform": "web",
       "description": "A word set in the theme's italic serif, drawn from a grid of dots and squares lit by drifting bands.",
       "dependencies": [
         "framer-motion",
@@ -2056,6 +2239,7 @@
       "name": "echo-letters",
       "title": "Echo Letters",
       "category": "Typography",
+      "platform": "web",
       "description": "A serif wordmark between two offset equaliser discs, one pulsing in your primary colour and one cut from a plate.",
       "dependencies": [
         "framer-motion",
@@ -2067,6 +2251,7 @@
       "name": "cast-reel",
       "title": "Cast Reel",
       "category": "Data Display",
+      "platform": "web",
       "description": "A 3D reel of team cards, as a tonal card wave or a contact-sheet filmstrip, coloured by your theme.",
       "dependencies": [
         "framer-motion",
@@ -2078,6 +2263,7 @@
       "name": "signal-relay",
       "title": "Signal Relay",
       "category": "Components",
+      "platform": "web",
       "description": "A ticked progress readout in your theme colours, with a glowing percentage and press-room phase labels.",
       "dependencies": [
         "framer-motion",
@@ -2089,6 +2275,7 @@
       "name": "intaglio-deed",
       "title": "Intaglio Deed",
       "category": "Components",
+      "platform": "web",
       "description": "A guilloche intaglio deed in theme ink whose rosette cycles through four lathe cams.",
       "dependencies": [
         "framer-motion",
@@ -2100,6 +2287,7 @@
       "name": "pond-glide",
       "title": "Pond Glide",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A draggable stack of three cards over a slow theme-tinted swirl, with pixel-tile reveals.",
       "dependencies": [
         "framer-motion",
@@ -2111,6 +2299,7 @@
       "name": "herbarium-study",
       "title": "Herbarium Study",
       "category": "Three.js",
+      "platform": "web",
       "description": "An ink-and-paper botanical plate in Three.js where line-drawn ferns and seed heads grow while seed fluff drifts past.",
       "dependencies": [
         "three",
@@ -2123,6 +2312,7 @@
       "name": "winter-pagoda",
       "title": "Winter Pagoda",
       "category": "Three.js",
+      "platform": "web",
       "description": "A five-tier pagoda on a snowy hillside among pines, in paper-white daylight or under a pale winter moon, coloured from your theme.",
       "dependencies": [
         "three",
@@ -2135,6 +2325,7 @@
       "name": "survey-relief",
       "title": "Survey Relief",
       "category": "Three.js",
+      "platform": "web",
       "description": "A procedural topographic relief model turning on a survey table, with contour bands in your theme colours.",
       "dependencies": [
         "three",
@@ -2147,6 +2338,7 @@
       "name": "form-foundry",
       "title": "Form Foundry",
       "category": "Three.js",
+      "platform": "web",
       "description": "An abstract architectural form assembles itself block by block on a studio plinth, in daylight or at dusk.",
       "dependencies": [
         "three",
@@ -2159,6 +2351,7 @@
       "name": "specimen-desk",
       "title": "Specimen Desk",
       "category": "Three.js",
+      "platform": "web",
       "description": "A Three.js desk study with a pinned fan of Modus type specimen cards, paper-white by day and lamplit by night.",
       "dependencies": [
         "three",
@@ -2171,6 +2364,7 @@
       "name": "dot-screen",
       "title": "Dot Screen",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A printed dot screen whose rings roll in from the lower-left corner, inked in theme colours.",
       "dependencies": [
         "three",
@@ -2183,6 +2377,7 @@
       "name": "tubelight",
       "title": "Tubelight",
       "category": "Typography",
+      "platform": "web",
       "description": "Serif neon lettering on canvas, lit in the theme colour, that breathes and flickers one letter.",
       "dependencies": [
         "framer-motion",
@@ -2194,6 +2389,7 @@
       "name": "salon-banner",
       "title": "Salon Banner",
       "category": "Typography",
+      "platform": "web",
       "description": "An oversized serif headline ringed by twelve plates mixed from your theme, orbiting while hovered.",
       "dependencies": [
         "framer-motion",
@@ -2205,6 +2401,7 @@
       "name": "button-atlas",
       "title": "Button Atlas",
       "category": "Actions",
+      "platform": "web",
       "description": "Twenty-two rectangle buttons and animated CTAs, each drawn from your theme tokens and set in the Modus type.",
       "dependencies": [
         "framer-motion",
@@ -2216,6 +2413,7 @@
       "name": "folio-opening",
       "title": "Folio Opening",
       "category": "Sections",
+      "platform": "web",
       "description": "A two-column opening spread with a serif headline, a ruled lede and an inked device illustration in your theme colours.",
       "dependencies": [
         "framer-motion",
@@ -2227,7 +2425,20 @@
       "name": "dispatch-colophon",
       "title": "Dispatch Colophon",
       "category": "Sections",
+      "platform": "web",
       "description": "An editorial footer with an outlined serif sign-off, a ruled sign-up line and mono legal links, drawn from your theme.",
+      "dependencies": [
+        "framer-motion",
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "name": "curved-carousel-hero",
+      "title": "Curved Carousel Hero",
+      "category": "Sections",
+      "platform": "web",
+      "description": "A landing hero with a curved, draggable carousel of video cards that drifts like the inside of a cylinder.",
       "dependencies": [
         "framer-motion",
         "clsx",
@@ -2238,6 +2449,7 @@
       "name": "aurora-veil",
       "title": "Aurora Veil",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Layered aurora curtains drifting over a night sky with soft noise, film grain and a vignette.",
       "dependencies": [
         "shaders",
@@ -2250,6 +2462,7 @@
       "name": "silk-mesh",
       "title": "Silk Mesh",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A soft flowing mesh gradient in your theme colours with grain and noise texture.",
       "dependencies": [
         "shaders",
@@ -2262,6 +2475,7 @@
       "name": "liquid-chrome-orb",
       "title": "Liquid Chrome Orb",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A molten liquid-metal torus, sphere or blob floating in a lit studio.",
       "dependencies": [
         "shaders",
@@ -2274,6 +2488,7 @@
       "name": "plasma-glow",
       "title": "Plasma Glow",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Glowing plasma with bloom, chromatic aberration and a vignette.",
       "dependencies": [
         "shaders",
@@ -2286,6 +2501,7 @@
       "name": "nebula-orb",
       "title": "Nebula Orb",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A volumetric gas nebula sealed in a glass sphere over a twinkling star field.",
       "dependencies": [
         "shaders",
@@ -2298,6 +2514,7 @@
       "name": "godray-haze",
       "title": "Godray Haze",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Volumetric light rays through a hazy gradient sky.",
       "dependencies": [
         "shaders",
@@ -2310,6 +2527,7 @@
       "name": "ink-canvas",
       "title": "Ink Canvas",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Drag to paint swirling ribbons of ink through a live fluid simulation.",
       "dependencies": [
         "shaders",
@@ -2322,6 +2540,7 @@
       "name": "holo-foil",
       "title": "Holo Foil",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "An iridescent holographic foil card with glitter and rainbow sheen.",
       "dependencies": [
         "shaders",
@@ -2334,6 +2553,7 @@
       "name": "crystal-cells",
       "title": "Crystal Cells",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A faceted crystal lens refracting a shifting Voronoi cell field.",
       "dependencies": [
         "shaders",
@@ -2346,6 +2566,7 @@
       "name": "fluted-gradient",
       "title": "Fluted Gradient",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A flowing silk gradient seen through ribbed fluted glass.",
       "dependencies": [
         "shaders",
@@ -2358,6 +2579,7 @@
       "name": "ripple-pool",
       "title": "Ripple Pool",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "A swirling gradient that ripples like water under the cursor.",
       "dependencies": [
         "shaders",
@@ -2370,6 +2592,7 @@
       "name": "ascii-flow",
       "title": "ASCII Flow",
       "category": "Backgrounds",
+      "platform": "web",
       "description": "Flowing fractal noise rendered as ASCII characters in your theme colours.",
       "dependencies": [
         "shaders",
@@ -2377,6 +2600,30 @@
         "clsx",
         "tailwind-merge"
       ]
+    },
+    {
+      "name": "swipe-actions",
+      "title": "Swipe Actions",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native list row that slides left to reveal action buttons, with rubber-banding, flick detection and screen reader actions.",
+      "dependencies": []
+    },
+    {
+      "name": "snap-sheet",
+      "title": "Snap Sheet",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native bottom sheet with snap points, flick momentum, dismiss-by-drag and an adjustable handle for screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "glide-segments",
+      "title": "Glide Segments",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native segmented control whose thumb glides between options on a spring and stretches as it travels.",
+      "dependencies": []
     }
   ],
   "renamed": {

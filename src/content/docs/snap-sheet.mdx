@@ -1,0 +1,60 @@
+---
+title: Snap Sheet
+description: A React Native bottom sheet with snap points, flick momentum, dismiss-by-drag and an adjustable handle for screen readers.
+---
+
+A bottom sheet with snap points. Drag the handle: release picks the nearest stop, a flick carries it to the next, and pulling past the lowest stop dismisses it. The sheet draws inside its parent, so it works in a screen, a tab or a `Modal`. The handle is also an adjustable control for screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="snap-sheet" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add snap-sheet
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/snap-sheet.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, Text, View } from "react-native";
+import { SnapSheet } from "@/components/ui/snap-sheet";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Button title="Details" onPress={() => setOpen(true)} />
+      <SnapSheet open={open} onClose={() => setOpen(false)} title="Delivery details">
+        <Text>Arrives Thursday</Text>
+      </SnapSheet>
+    </View>
+  );
+}
+```
+
+The parent must fill the area the sheet should cover, because the sheet and its backdrop are sized to it.
+
+## Props
+
+| Prop           | Type                       | Default      | Description                                                                     |
+| :------------- | :------------------------- | :----------- | :------------------------------------------------------------------------------ |
+| `open`         | `boolean`                  | -            | Whether the sheet is showing.                                                   |
+| `onClose`      | `() => void`               | -            | Called when the sheet is dismissed by dragging it down or tapping the backdrop. |
+| `title`        | `string`                   | -            | Heading next to the handle. Also the handle's accessibility label.              |
+| `snapPoints`   | `number[]`                 | `[0.4, 0.9]` | Visible height at each stop, as a fraction of the container, lowest first.      |
+| `initialSnap`  | `number`                   | `0`          | Index into `snapPoints` the sheet opens at.                                     |
+| `onSnapChange` | `(index: number) => void`  | -            | Called when the sheet settles on a stop.                                        |
+| `colors`       | `Partial<SnapSheetColors>` | -            | Overrides `surface`, `handle`, `title` and `backdrop`.                          |
+| `style`        | `StyleProp<ViewStyle>`     | -            | Style for the sheet.                                                            |

@@ -38,6 +38,7 @@ const catalogue = {
     name: item.name,
     title: item.title,
     category: item.category,
+    platform: (item as { platform?: string }).platform ?? "web",
     description: readComponentDoc(item.name).description,
     dependencies: item.dependencies,
   })),
