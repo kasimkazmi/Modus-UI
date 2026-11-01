@@ -16,6 +16,7 @@ import {
   type LucideIcon,
   Box,
   PanelsTopLeft,
+  Smartphone,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
 import { isNew } from "@/lib/registry";
@@ -29,6 +30,7 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Typography: Type,
   Sections: PanelsTopLeft,
   Components: LayoutTemplate,
+  Native: Smartphone,
 };
 
 const DOC_CATEGORIES: SidebarCategory[] = [

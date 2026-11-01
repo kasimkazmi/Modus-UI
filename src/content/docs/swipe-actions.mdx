@@ -1,0 +1,55 @@
+---
+title: Swipe Actions
+description: A React Native list row that slides left to reveal action buttons, with rubber-banding, flick detection and screen reader actions.
+---
+
+A list row that slides left to reveal action buttons. It follows your finger, resists past either end, springs open or shut on release (a quick flick is enough), and every action is also exposed to screen readers as a custom action, so nothing depends on the gesture. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="swipe-actions" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swipe-actions
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swipe-actions.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { SwipeActions } from "@/components/ui/swipe-actions";
+
+export default function Example() {
+  return (
+    <SwipeActions
+      actions={[
+        { label: "Archive", onPress: () => console.log("archive") },
+        { label: "Delete", color: "#dc2626", onPress: () => console.log("delete") },
+      ]}
+    >
+      <Text style={{ padding: 16 }}>Swipe me left</Text>
+    </SwipeActions>
+  );
+}
+```
+
+## Props
+
+| Prop            | Type                          | Default | Description                                                                                        |
+| :-------------- | :---------------------------- | :------ | :------------------------------------------------------------------------------------------------- |
+| `actions`       | `SwipeActionItem[]`           | -       | Buttons revealed by the swipe. Each has a `label`, an `onPress` and an optional `color`.           |
+| `actionWidth`   | `number`                      | `76`    | Width of each revealed action.                                                                     |
+| `openThreshold` | `number`                      | `0.4`   | Fraction of the revealed width that commits the swipe when released. A fast flick also commits it. |
+| `onOpenChange`  | `(open: boolean) => void`     | -       | Called when the row settles open or closed.                                                        |
+| `colors`        | `Partial<SwipeActionsColors>` | -       | Overrides `surface`, `action` and `actionText`.                                                    |
+| `style`         | `StyleProp<ViewStyle>`        | -       | Style for the outer container.                                                                     |

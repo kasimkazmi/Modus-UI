@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { registry } from "@/registry";
+import { registry, type RegistryItem } from "@/registry";
+
+// React Native components have no DOM: no CSS classes, no "use client", no web-only packages.
+const isNative = (item: RegistryItem) => item.platform === "native";
 
 const ROOT = process.cwd();
 const read = (file: string) => fs.readFileSync(path.join(ROOT, file), "utf8");
@@ -46,14 +49,26 @@ describe("coding standards (AGENTS.md)", () => {
   });
 
   it.each(registry)("$name merges its className prop with cn()", (item) => {
+    if (isNative(item)) return;
     const source = read(path.join("src", item.files[0]));
     if (!/className\??:/.test(source)) return;
     expect(source).toMatch(/import\s*\{[^}]*\bcn\b[^}]*\}\s*from\s*["']@\/lib\/utils["']/);
   });
 
   it.each(registry)("$name is a client component when it uses hooks or motion", (item) => {
+    if (isNative(item)) return;
     const source = read(path.join("src", item.files[0]));
     if (!/\buse[A-Z]\w*\(|framer-motion|motion\/react/.test(source)) return;
     expect(source.trimStart()).toMatch(/^["']use client["']/);
+  });
+
+  it.each(registry.filter(isNative))("$name is plain React Native", (item) => {
+    const source = read(path.join("src", item.files[0]));
+    // Single-file and copy-paste: no web-only imports, no CSS-in-class, no extra packages.
+    expect(source).not.toMatch(
+      /from\s+["'](framer-motion|motion\/react|clsx|tailwind-merge|react-dom|next\b)/,
+    );
+    expect(source).not.toMatch(/\bclassName\b/);
+    expect(item.dependencies).toEqual([]);
   });
 });

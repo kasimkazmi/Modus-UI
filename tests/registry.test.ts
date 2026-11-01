@@ -38,7 +38,7 @@ describe("registry integrity", () => {
           .join("/"),
       )
       // Peers the host app already provides.
-      .filter((pkg) => !["react", "react-dom", "next"].includes(pkg));
+      .filter((pkg) => !["react", "react-dom", "next", "react-native"].includes(pkg));
     for (const pkg of new Set(imported)) {
       expect(item.dependencies, `${item.name} imports ${pkg}`).toContain(pkg);
     }

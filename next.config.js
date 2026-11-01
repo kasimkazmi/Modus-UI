@@ -3,6 +3,13 @@ const renamed = require("./component-redirects.json");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Native (React Native) component demos render on the site through react-native-web.
+  transpilePackages: ["react-native-web"],
+  webpack: (config) => {
+    config.resolve.alias = { ...config.resolve.alias, "react-native$": "react-native-web" };
+    config.resolve.extensions = [".web.js", ".web.ts", ".web.tsx", ...config.resolve.extensions];
+    return config;
+  },
   images: {
     remotePatterns: [
       {

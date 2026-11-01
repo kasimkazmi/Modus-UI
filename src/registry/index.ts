@@ -12,6 +12,7 @@ export const CATEGORIES = [
   "Typography",
   "Sections",
   "Components",
+  "Native",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -43,6 +44,12 @@ export interface RegistryItem {
   title: string;
   category: Category;
   type: "components:ui";
+  /**
+   * "native" components are React Native (Expo) files, previewed on the site through react-native-web.
+   * They import only `react-native`, which the host app already has, so they list no dependencies.
+   * Defaults to "web".
+   */
+  platform?: "web" | "native";
   dependencies: readonly string[];
   files: readonly string[];
   /** Date first published (YYYY-MM-DD). Shows a New badge for 30 days after it. */
@@ -4126,6 +4133,66 @@ export const registry = [
     type: "components:ui",
     dependencies: ["shaders", "framer-motion", "clsx", "tailwind-merge"],
     files: ["registry/ascii-flow.tsx"],
+  },
+  {
+    name: "swipe-actions",
+    title: "Swipe Actions",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/swipe-actions.tsx"],
+  },
+  {
+    name: "snap-sheet",
+    title: "Snap Sheet",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/snap-sheet.tsx"],
+  },
+  {
+    name: "glide-segments",
+    title: "Glide Segments",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/glide-segments.tsx"],
+  },
+  {
+    name: "swipe-deck",
+    title: "Swipe Deck",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/swipe-deck.tsx"],
+  },
+  {
+    name: "fan-menu",
+    title: "Fan Menu",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/fan-menu.tsx"],
+  },
+  {
+    name: "pin-pad",
+    title: "Pin Pad",
+    category: "Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-10-30",
+    dependencies: [],
+    files: ["registry/pin-pad.tsx"],
   },
 ] as const satisfies readonly RegistryItem[];
 

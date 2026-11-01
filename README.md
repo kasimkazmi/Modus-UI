@@ -91,6 +91,9 @@ For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The d
 | **Backgrounds**  | Cursor Grid, Waves, Letter Glitch, Aurora Background, Circuit Background, Grid Motion                                         |
 | **Typography**   | Scroll Velocity, Text Pressure, True Focus, Gradient Text, Blur Text, Split Text, Decrypted Text, Shimmer Text, Floating Text |
 | **Components**   | Scratch to Reveal, Stack, Star Border, Tilted Card, Pixel Card, Click Spark, Spotlight Card, Border Glow                      |
+| **Native**       | Swipe Actions, Snap Sheet, Glide Segments, Swipe Deck, Fan Menu, Pin Pad                                                      |
+
+**Native** components are React Native (Expo) files that import only `react-native`, so they need no extra packages. Install them the same way (`npx @modus-ui/cli add swipe-actions`); the docs preview them live in the browser through react-native-web.
 
 ## Documentation
 

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { registry } from "@/registry";
+import { registry, type RegistryItem } from "@/registry";
 
 /**
  * Components must take their colours from the theme tokens so they follow the
@@ -59,8 +59,24 @@ describe("component colours", () => {
     "%s uses theme tokens instead of hex colours",
     (name, file) => {
       if (name in HEX_ALLOWED) return;
+      // React Native has no CSS variables to read, so native components carry plain default colours;
+      // the next test makes sure each one can be themed through its `colors` prop.
+      if (
+        (registry as readonly RegistryItem[]).find((item) => item.name === name)?.platform ===
+        "native"
+      )
+        return;
       const source = readFileSync(join(process.cwd(), "src", file), "utf8");
       expect(source.match(HEX)?.[0]).toBeUndefined();
     },
   );
+});
+
+describe("native component colours", () => {
+  const native = (registry as readonly RegistryItem[]).filter((item) => item.platform === "native");
+
+  it.each(native)("$name can be themed through a colors prop", (item) => {
+    const source = readFileSync(join(process.cwd(), "src", item.files[0]), "utf8");
+    expect(source).toMatch(/colors\?: Partial</);
+  });
 });

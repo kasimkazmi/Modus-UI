@@ -167,6 +167,13 @@ export const demos: Record<ComponentName, ComponentType> = {
   "fluted-gradient": dynamic(() => import("./fluted-gradient-demo")),
   "ripple-pool": dynamic(() => import("./ripple-pool-demo")),
   "ascii-flow": dynamic(() => import("./ascii-flow-demo")),
+  // Native demos render through react-native-web, which only runs on the client.
+  "swipe-actions": dynamic(() => import("./swipe-actions-demo"), { ssr: false }),
+  "snap-sheet": dynamic(() => import("./snap-sheet-demo"), { ssr: false }),
+  "glide-segments": dynamic(() => import("./glide-segments-demo"), { ssr: false }),
+  "swipe-deck": dynamic(() => import("./swipe-deck-demo"), { ssr: false }),
+  "fan-menu": dynamic(() => import("./fan-menu-demo"), { ssr: false }),
+  "pin-pad": dynamic(() => import("./pin-pad-demo"), { ssr: false }),
   "herbarium-study": dynamic(() => import("./herbarium-study-demo")),
   "winter-pagoda": dynamic(() => import("./winter-pagoda-demo")),
   "survey-relief": dynamic(() => import("./survey-relief-demo")),
