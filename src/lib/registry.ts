@@ -9,6 +9,11 @@ export function isNew(item: RegistryItem) {
   return !!item.added && Date.now() - Date.parse(item.added) < NEW_FOR_MS;
 }
 
+/** Whether a component is a web (React) or React Native one. Defaults to web. */
+export function platformOf(item: RegistryItem): "web" | "native" {
+  return item.platform ?? "web";
+}
+
 export function getRegistryComponent(name: string) {
   const item = registry.find((c) => c.name === name);
   if (!item) return null;

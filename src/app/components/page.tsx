@@ -2,14 +2,22 @@ import React from "react";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
 import { registry } from "@/registry";
-import { isNew } from "@/lib/registry";
+import { isNew, platformOf } from "@/lib/registry";
 import { NewBadge } from "@/components/new-badge";
+import { PlatformIcon, type ComponentPlatform } from "@/components/platform-icon";
 
-const COMPONENT_LIST: { title: string; href: string; isNew?: boolean; disabled?: boolean }[] = [
+const COMPONENT_LIST: {
+  title: string;
+  href: string;
+  isNew?: boolean;
+  platform?: ComponentPlatform;
+  disabled?: boolean;
+}[] = [
   ...registry.map((item) => ({
     title: item.title,
     href: `/components/${item.name}`,
     isNew: isNew(item),
+    platform: platformOf(item),
   })),
   { title: "Coming Soon", href: "/components/coming-soon", disabled: true },
 ];
@@ -43,6 +51,7 @@ export default function ComponentsPage() {
                 className="group flex items-center justify-between border-b border-border/40 py-2 transition-all duration-300 hover:border-foreground"
               >
                 <span className="flex items-center gap-2 text-base font-medium text-muted-foreground transition-colors group-hover:text-foreground">
+                  {component.platform && <PlatformIcon platform={component.platform} />}
                   {component.title}
                   {component.isNew && <NewBadge />}
                 </span>

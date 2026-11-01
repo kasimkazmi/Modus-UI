@@ -1,0 +1,55 @@
+---
+title: Parallax Header
+description: A React Native scroll view whose hero stretches on overscroll, drifts at half speed, and collapses into a compact title bar.
+---
+
+A scroll view with a hero that stretches when pulled past the top, drifts at half speed as you scroll, and ends as a compact bar whose title fades in. The content slides over the hero, so give the hero a full-bleed background. With reduced motion the hero scrolls with the content and the bar simply appears once it is covered. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="parallax-header" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add parallax-header
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/parallax-header.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { ParallaxHeader } from "@/components/ui/parallax-header";
+
+export default function Example() {
+  return (
+    <ParallaxHeader
+      title="Coastal Trails"
+      header={<View style={{ flex: 1, backgroundColor: "#2f7fb8" }} />}
+    >
+      <Text style={{ padding: 20 }}>Scrolling content goes here.</Text>
+    </ParallaxHeader>
+  );
+}
+```
+
+The component fills its parent, so give the parent a height (a screen with `flex: 1` is enough).
+
+## Props
+
+| Prop              | Type                            | Default | Description                                                                 |
+| :---------------- | :------------------------------ | :------ | :-------------------------------------------------------------------------- |
+| `header`          | `ReactNode`                     | -       | The hero's content. It fills the hero, so give it a background or an image. |
+| `headerHeight`    | `number`                        | `220`   | Height of the hero before any scrolling.                                    |
+| `collapsedHeight` | `number`                        | `56`    | Height of the bar the hero collapses into.                                  |
+| `title`           | `string`                        | -       | Shown in the collapsed bar.                                                 |
+| `colors`          | `Partial<ParallaxHeaderColors>` | -       | Overrides `background`, `bar`, `title` and `border`.                        |
+| `style`           | `StyleProp<ViewStyle>`          | -       | Style for the container.                                                    |

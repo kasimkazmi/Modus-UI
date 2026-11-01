@@ -1,0 +1,51 @@
+---
+title: Slide Switch
+description: A React Native switch whose thumb can be dragged as well as tapped, stretching while held and settling on the nearer side.
+---
+
+A switch whose thumb can be dragged as well as tapped. It stretches while held, follows the finger, and settles on whichever side it is nearer to (a flick decides it sooner). The track cross-fades between the two colors, and screen readers get a standard switch with its state. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="slide-switch" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add slide-switch
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/slide-switch.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SlideSwitch } from "@/components/ui/slide-switch";
+
+export default function Example() {
+  const [enabled, setEnabled] = useState(false);
+
+  return <SlideSwitch label="Notifications" value={enabled} onValueChange={setEnabled} />;
+}
+```
+
+The switch is controlled: it shows `value`, and a tap or drag calls `onValueChange` with the new one. Update `value` there to accept the change.
+
+## Props
+
+| Prop            | Type                         | Default | Description                                          |
+| :-------------- | :--------------------------- | :------ | :--------------------------------------------------- |
+| `value`         | `boolean`                    | -       | Whether the switch is on.                            |
+| `onValueChange` | `(value: boolean) => void`   | -       | Called with the new value after a tap or a drag.     |
+| `disabled`      | `boolean`                    | `false` | Dims the switch and ignores touches.                 |
+| `size`          | `number`                     | `32`    | Height of the track. The track is 1.8 times as wide. |
+| `label`         | `string`                     | -       | Spoken name of the switch.                           |
+| `colors`        | `Partial<SlideSwitchColors>` | -       | Overrides `off`, `on` and `thumb`.                   |
+| `style`         | `StyleProp<ViewStyle>`       | -       | Style for the switch's container.                    |

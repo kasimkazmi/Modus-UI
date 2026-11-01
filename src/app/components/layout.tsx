@@ -19,7 +19,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
-import { isNew } from "@/lib/registry";
+import { isNew, platformOf } from "@/lib/registry";
 
 const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Navigation: PanelTop,
@@ -39,7 +39,12 @@ const DOC_CATEGORIES: SidebarCategory[] = [
     icon: React.createElement(CATEGORY_ICONS[category], { className: "h-3.5 w-3.5" }),
     items: registry
       .filter((item) => item.category === category)
-      .map((item) => ({ title: item.title, href: `/components/${item.name}`, isNew: isNew(item) })),
+      .map((item) => ({
+        title: item.title,
+        href: `/components/${item.name}`,
+        isNew: isNew(item),
+        platform: platformOf(item),
+      })),
   })),
   {
     title: "Resources",

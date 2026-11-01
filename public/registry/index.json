@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 217,
+  "count": 223,
   "categories": [
     "Navigation",
     "Actions",
@@ -2647,6 +2647,54 @@
       "category": "Native",
       "platform": "native",
       "description": "A React Native numeric keypad for PINs and passcodes, with popping dots, a shake on a wrong PIN and spoken progress.",
+      "dependencies": []
+    },
+    {
+      "name": "flick-toast",
+      "title": "Flick Toast",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native stack of toasts you flick away, with a countdown line that waits while you hold, older toasts scaled back, and screen reader dismiss.",
+      "dependencies": []
+    },
+    {
+      "name": "fold-panel",
+      "title": "Fold Panel",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native accordion whose panels grow to the measured height of their content, with a turning chevron and screen reader state.",
+      "dependencies": []
+    },
+    {
+      "name": "snap-carousel",
+      "title": "Snap Carousel",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native carousel that settles on one card at a time, with neighbors that shrink and fade and dots that stretch to follow.",
+      "dependencies": []
+    },
+    {
+      "name": "slide-switch",
+      "title": "Slide Switch",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native switch whose thumb can be dragged as well as tapped, stretching while held and settling on the nearer side.",
+      "dependencies": []
+    },
+    {
+      "name": "shimmer-block",
+      "title": "Shimmer Block",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native loading placeholder with a soft highlight that sweeps across it, stacked lines that shimmer together, and one spoken \"Loading\" for the whole block.",
+      "dependencies": []
+    },
+    {
+      "name": "parallax-header",
+      "title": "Parallax Header",
+      "category": "Native",
+      "platform": "native",
+      "description": "A React Native scroll view whose hero stretches on overscroll, drifts at half speed, and collapses into a compact title bar.",
       "dependencies": []
     }
   ],

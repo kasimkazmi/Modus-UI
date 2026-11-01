@@ -1,0 +1,67 @@
+---
+title: Flick Toast
+description: A React Native stack of toasts you flick away, with a countdown line that waits while you hold, older toasts scaled back, and screen reader dismiss.
+---
+
+A stack of toasts you flick away. The newest slides in at the front with the older ones scaled back behind it. A thin line counts down the front toast's time and waits while you hold it, and a sideways or toward-the-edge flick sends it off. The host owns the list: remove a toast in `onDismiss`. Each toast is a live region with a dismiss action for screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="flick-toast" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add flick-toast
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/flick-toast.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, View } from "react-native";
+import { FlickToast, type FlickToastItem } from "@/components/ui/flick-toast";
+
+export default function Example() {
+  const [toasts, setToasts] = useState<FlickToastItem[]>([]);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Button
+        title="Save"
+        onPress={() =>
+          setToasts((all) => [
+            ...all,
+            { id: String(Date.now()), title: "Changes saved", tone: "success" },
+          ])
+        }
+      />
+      <FlickToast
+        toasts={toasts}
+        onDismiss={(id) => setToasts((all) => all.filter((toast) => toast.id !== id))}
+      />
+    </View>
+  );
+}
+```
+
+The parent must fill the area the toasts should float over. Only the newest three are drawn; the rest wait their turn.
+
+## Props
+
+| Prop        | Type                        | Default | Description                                                                                           |
+| :---------- | :-------------------------- | :------ | :---------------------------------------------------------------------------------------------------- |
+| `toasts`    | `FlickToastItem[]`          | -       | The toasts to show, oldest first. Each has an `id`, a `title`, and optional `description` and `tone`. |
+| `onDismiss` | `(id: string) => void`      | -       | Called once a toast has left, whether it timed out, was flicked away or dismissed by a screen reader. |
+| `duration`  | `number`                    | `4000`  | Milliseconds the front toast stays before it leaves. 0 keeps toasts until they are dismissed.         |
+| `position`  | `"top" \| "bottom"`         | `"top"` | Which edge the stack sits against.                                                                    |
+| `colors`    | `Partial<FlickToastColors>` | -       | Overrides `surface`, `text`, `mutedText`, `border`, `accent`, `success` and `error`.                  |
+| `style`     | `StyleProp<ViewStyle>`      | -       | Style for the overlay that holds the toasts.                                                          |

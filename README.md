@@ -83,15 +83,15 @@ For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The d
 
 ## Components
 
-| Category         | Components                                                                                                                    |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| **Navigation**   | Liquid Tabs, Flowing Menu, Morphing Navbar, Floating Dock, Notch Footer, Process Stepper                                      |
-| **Actions**      | Magnet, Magic Button, Animated Button, Pulse Button                                                                           |
-| **Data Display** | Bounce Cards, Masonry Grid, Animated List, Kinetic Carousel, Expandable Showcase, Focus Card, Rotating Card, Tilt Card        |
-| **Backgrounds**  | Cursor Grid, Waves, Letter Glitch, Aurora Background, Circuit Background, Grid Motion                                         |
-| **Typography**   | Scroll Velocity, Text Pressure, True Focus, Gradient Text, Blur Text, Split Text, Decrypted Text, Shimmer Text, Floating Text |
-| **Components**   | Scratch to Reveal, Stack, Star Border, Tilted Card, Pixel Card, Click Spark, Spotlight Card, Border Glow                      |
-| **Native**       | Swipe Actions, Snap Sheet, Glide Segments, Swipe Deck, Fan Menu, Pin Pad                                                      |
+| Category         | Components                                                                                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Navigation**   | Liquid Tabs, Flowing Menu, Morphing Navbar, Floating Dock, Notch Footer, Process Stepper                                                                       |
+| **Actions**      | Magnet, Magic Button, Animated Button, Pulse Button                                                                                                            |
+| **Data Display** | Bounce Cards, Masonry Grid, Animated List, Kinetic Carousel, Expandable Showcase, Focus Card, Rotating Card, Tilt Card                                         |
+| **Backgrounds**  | Cursor Grid, Waves, Letter Glitch, Aurora Background, Circuit Background, Grid Motion                                                                          |
+| **Typography**   | Scroll Velocity, Text Pressure, True Focus, Gradient Text, Blur Text, Split Text, Decrypted Text, Shimmer Text, Floating Text                                  |
+| **Components**   | Scratch to Reveal, Stack, Star Border, Tilted Card, Pixel Card, Click Spark, Spotlight Card, Border Glow                                                       |
+| **Native**       | Swipe Actions, Snap Sheet, Glide Segments, Swipe Deck, Fan Menu, Pin Pad, Flick Toast, Fold Panel, Snap Carousel, Slide Switch, Shimmer Block, Parallax Header |
 
 **Native** components are React Native (Expo) files that import only `react-native`, so they need no extra packages. Install them the same way (`npx @modus-ui/cli add swipe-actions`); the docs preview them live in the browser through react-native-web.
 
