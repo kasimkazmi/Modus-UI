@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 223,
+  "count": 229,
   "categories": [
     "Navigation",
     "Actions",
@@ -11,7 +11,7 @@
     "Typography",
     "Sections",
     "Components",
-    "Native"
+    "React Native"
   ],
   "components": [
     {
@@ -2604,7 +2604,7 @@
     {
       "name": "swipe-actions",
       "title": "Swipe Actions",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native list row that slides left to reveal action buttons, with rubber-banding, flick detection and screen reader actions.",
       "dependencies": []
@@ -2612,7 +2612,7 @@
     {
       "name": "snap-sheet",
       "title": "Snap Sheet",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native bottom sheet with snap points, flick momentum, dismiss-by-drag and an adjustable handle for screen readers.",
       "dependencies": []
@@ -2620,7 +2620,7 @@
     {
       "name": "glide-segments",
       "title": "Glide Segments",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native segmented control whose thumb glides between options on a spring and stretches as it travels.",
       "dependencies": []
@@ -2628,7 +2628,7 @@
     {
       "name": "swipe-deck",
       "title": "Swipe Deck",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native card stack swiped away one at a time, with tilt, a rising next card, like and pass stamps, and screen reader actions.",
       "dependencies": []
@@ -2636,7 +2636,7 @@
     {
       "name": "fan-menu",
       "title": "Fan Menu",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native floating button that fans its actions out along an arc, springing them out one after another.",
       "dependencies": []
@@ -2644,7 +2644,7 @@
     {
       "name": "pin-pad",
       "title": "Pin Pad",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native numeric keypad for PINs and passcodes, with popping dots, a shake on a wrong PIN and spoken progress.",
       "dependencies": []
@@ -2652,7 +2652,7 @@
     {
       "name": "flick-toast",
       "title": "Flick Toast",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native stack of toasts you flick away, with a countdown line that waits while you hold, older toasts scaled back, and screen reader dismiss.",
       "dependencies": []
@@ -2660,7 +2660,7 @@
     {
       "name": "fold-panel",
       "title": "Fold Panel",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native accordion whose panels grow to the measured height of their content, with a turning chevron and screen reader state.",
       "dependencies": []
@@ -2668,7 +2668,7 @@
     {
       "name": "snap-carousel",
       "title": "Snap Carousel",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native carousel that settles on one card at a time, with neighbors that shrink and fade and dots that stretch to follow.",
       "dependencies": []
@@ -2676,7 +2676,7 @@
     {
       "name": "slide-switch",
       "title": "Slide Switch",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native switch whose thumb can be dragged as well as tapped, stretching while held and settling on the nearer side.",
       "dependencies": []
@@ -2684,7 +2684,7 @@
     {
       "name": "shimmer-block",
       "title": "Shimmer Block",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native loading placeholder with a soft highlight that sweeps across it, stacked lines that shimmer together, and one spoken \"Loading\" for the whole block.",
       "dependencies": []
@@ -2692,9 +2692,57 @@
     {
       "name": "parallax-header",
       "title": "Parallax Header",
-      "category": "Native",
+      "category": "React Native",
       "platform": "native",
       "description": "A React Native scroll view whose hero stretches on overscroll, drifts at half speed, and collapses into a compact title bar.",
+      "dependencies": []
+    },
+    {
+      "name": "bubble-tab-bar",
+      "title": "Bubble Tab Bar",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native bottom tab bar where a rounded pill slides behind the selected tab and the selected tab opens to show its label.",
+      "dependencies": []
+    },
+    {
+      "name": "roll-number",
+      "title": "Roll Number",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native odometer whose digits roll to their new value, last digit first, with separators, decimals and negative numbers.",
+      "dependencies": []
+    },
+    {
+      "name": "star-rating",
+      "title": "Star Rating",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native star rating you can tap or scrub, with half stars, popping fills and adjustable screen reader support.",
+      "dependencies": []
+    },
+    {
+      "name": "value-slider",
+      "title": "Value Slider",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native slider with a value bubble, step snapping, tap-to-jump and adjustable screen reader support.",
+      "dependencies": []
+    },
+    {
+      "name": "expand-search",
+      "title": "Expand Search",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native search field that starts as a round button and springs open to full width, with a clear button and a Cancel that folds it away.",
+      "dependencies": []
+    },
+    {
+      "name": "intro-pager",
+      "title": "Intro Pager",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A swipeable React Native onboarding pager where the art drifts against the text, the dots stretch, and Next turns into the final action.",
       "dependencies": []
     }
   ],

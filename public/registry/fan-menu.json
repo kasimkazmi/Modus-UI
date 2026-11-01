@@ -1,7 +1,7 @@
 {
   "name": "fan-menu",
   "title": "Fan Menu",
-  "category": "Native",
+  "category": "React Native",
   "type": "components:ui",
   "platform": "native",
   "added": "2026-10-30",

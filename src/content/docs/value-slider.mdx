@@ -1,0 +1,62 @@
+---
+title: Value Slider
+description: A React Native slider with a value bubble, step snapping, tap-to-jump and adjustable screen reader support.
+---
+
+A slider you can drag or tap. Touching the track jumps the thumb there; grabbing the thumb moves it without a jump. The thumb grows while held and a bubble above it reads out the value, which snaps to `step` and stays within `min` and `max`. Screen readers get an adjustable control with increment and decrement actions. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="value-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add value-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/value-slider.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ValueSlider } from "@/components/ui/value-slider";
+
+export default function Example() {
+  const [volume, setVolume] = useState(40);
+
+  return (
+    <ValueSlider
+      label="Volume"
+      value={volume}
+      onValueChange={setVolume}
+      onSlidingComplete={(final) => console.log("saved", final)}
+    />
+  );
+}
+```
+
+The slider fills the width of its parent.
+
+## Props
+
+| Prop                | Type                         | Default   | Description                                                    |
+| :------------------ | :--------------------------- | :-------- | :------------------------------------------------------------- |
+| `value`             | `number`                     | -         | The current value.                                             |
+| `onValueChange`     | `(value: number) => void`    | -         | Called with the snapped value as the thumb moves.              |
+| `onSlidingComplete` | `(value: number) => void`    | -         | Called once with the final value when the finger lifts.        |
+| `min`               | `number`                     | `0`       | The value at the left end.                                     |
+| `max`               | `number`                     | `100`     | The value at the right end.                                    |
+| `step`              | `number`                     | `1`       | Values snap to multiples of this, counted from `min`.          |
+| `showBubble`        | `boolean`                    | `true`    | Shows the current value above the thumb while it is held.      |
+| `disabled`          | `boolean`                    | `false`   | Dims the slider and ignores touches.                           |
+| `label`             | `string`                     | `"Value"` | Spoken name of the slider.                                     |
+| `colors`            | `Partial<ValueSliderColors>` | -         | Overrides `track`, `fill`, `thumb`, `bubble` and `bubbleText`. |
+| `style`             | `StyleProp<ViewStyle>`       | -         | Style for the slider.                                          |

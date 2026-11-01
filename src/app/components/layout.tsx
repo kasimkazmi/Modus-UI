@@ -30,7 +30,7 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Typography: Type,
   Sections: PanelsTopLeft,
   Components: LayoutTemplate,
-  Native: Smartphone,
+  "React Native": Smartphone,
 };
 
 const DOC_CATEGORIES: SidebarCategory[] = [

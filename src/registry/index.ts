@@ -12,7 +12,7 @@ export const CATEGORIES = [
   "Typography",
   "Sections",
   "Components",
-  "Native",
+  "React Native",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -4137,7 +4137,7 @@ export const registry = [
   {
     name: "swipe-actions",
     title: "Swipe Actions",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4147,7 +4147,7 @@ export const registry = [
   {
     name: "snap-sheet",
     title: "Snap Sheet",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4157,7 +4157,7 @@ export const registry = [
   {
     name: "glide-segments",
     title: "Glide Segments",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4167,7 +4167,7 @@ export const registry = [
   {
     name: "swipe-deck",
     title: "Swipe Deck",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4177,7 +4177,7 @@ export const registry = [
   {
     name: "fan-menu",
     title: "Fan Menu",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4187,7 +4187,7 @@ export const registry = [
   {
     name: "pin-pad",
     title: "Pin Pad",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4197,7 +4197,7 @@ export const registry = [
   {
     name: "flick-toast",
     title: "Flick Toast",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4207,7 +4207,7 @@ export const registry = [
   {
     name: "fold-panel",
     title: "Fold Panel",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4217,7 +4217,7 @@ export const registry = [
   {
     name: "snap-carousel",
     title: "Snap Carousel",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4227,7 +4227,7 @@ export const registry = [
   {
     name: "slide-switch",
     title: "Slide Switch",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4237,7 +4237,7 @@ export const registry = [
   {
     name: "shimmer-block",
     title: "Shimmer Block",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4247,12 +4247,72 @@ export const registry = [
   {
     name: "parallax-header",
     title: "Parallax Header",
-    category: "Native",
+    category: "React Native",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
     dependencies: [],
     files: ["registry/parallax-header.tsx"],
+  },
+  {
+    name: "bubble-tab-bar",
+    title: "Bubble Tab Bar",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/bubble-tab-bar.tsx"],
+  },
+  {
+    name: "roll-number",
+    title: "Roll Number",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/roll-number.tsx"],
+  },
+  {
+    name: "star-rating",
+    title: "Star Rating",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/star-rating.tsx"],
+  },
+  {
+    name: "value-slider",
+    title: "Value Slider",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/value-slider.tsx"],
+  },
+  {
+    name: "expand-search",
+    title: "Expand Search",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/expand-search.tsx"],
+  },
+  {
+    name: "intro-pager",
+    title: "Intro Pager",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-02",
+    dependencies: [],
+    files: ["registry/intro-pager.tsx"],
   },
 ] as const satisfies readonly RegistryItem[];
 

@@ -194,6 +194,7 @@ export function SnapSheet({
           accessibilityRole="adjustable"
           accessibilityLabel={title ?? "Sheet"}
           accessibilityValue={{ text: `Stop ${snap + 1} of ${stops.length}` }}
+          aria-valuetext={`Stop ${snap + 1} of ${stops.length}`}
           accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
           onAccessibilityAction={(event) =>
             goToSnap(snap + (event.nativeEvent.actionName === "increment" ? 1 : -1))

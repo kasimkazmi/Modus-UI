@@ -1,7 +1,7 @@
 {
   "name": "shimmer-block",
   "title": "Shimmer Block",
-  "category": "Native",
+  "category": "React Native",
   "type": "components:ui",
   "platform": "native",
   "added": "2026-11-01",

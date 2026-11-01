@@ -1,0 +1,56 @@
+---
+title: Roll Number
+description: A React Native odometer whose digits roll to their new value, last digit first, with separators, decimals and negative numbers.
+---
+
+An odometer. Each digit is a column that rolls to its new value, starting from the last digit and moving left. Thousands separators stay put, the number may grow or shrink in length, and screen readers get the whole value as one piece of text instead of a column of digits. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="roll-number" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add roll-number
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/roll-number.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, View } from "react-native";
+import { RollNumber } from "@/components/ui/roll-number";
+
+export default function Example() {
+  const [balance, setBalance] = useState(12480.62);
+
+  return (
+    <View style={{ alignItems: "center", gap: 16 }}>
+      <RollNumber value={balance} decimals={2} prefix="$" />
+      <Button title="Add $100" onPress={() => setBalance((value) => value + 100)} />
+    </View>
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default | Description                                                         |
+| :--------- | :-------------------------- | :------ | :------------------------------------------------------------------ |
+| `value`    | `number`                    | -       | The number to show. Negative values get a minus sign.               |
+| `decimals` | `number`                    | `0`     | Digits after the decimal point.                                     |
+| `prefix`   | `string`                    | -       | Text before the number, such as a currency symbol.                  |
+| `suffix`   | `string`                    | -       | Text after the number, such as a unit.                              |
+| `fontSize` | `number`                    | `40`    | Size of the digits. Their column width follows it.                  |
+| `colors`   | `Partial<RollNumberColors>` | -       | Overrides `text`, the color of the digits and the surrounding text. |
+| `duration` | `number`                    | `700`   | How long each digit takes to roll, in milliseconds.                 |
+| `style`    | `StyleProp<ViewStyle>`      | -       | Style for the container.                                            |

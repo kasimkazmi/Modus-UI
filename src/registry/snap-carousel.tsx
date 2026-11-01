@@ -230,6 +230,7 @@ export function SnapCarousel<T>({
         accessibilityRole="adjustable"
         accessibilityLabel="Carousel"
         accessibilityValue={{ text: `Item ${index + 1} of ${data.length}` }}
+        aria-valuetext={`Item ${index + 1} of ${data.length}`}
         accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
         onAccessibilityAction={(event) =>
           goTo(index + (event.nativeEvent.actionName === "increment" ? 1 : -1))

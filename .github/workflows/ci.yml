@@ -60,6 +60,29 @@ jobs:
   e2e:
     name: End-to-end
     runs-on: ubuntu-latest
+    # Every docs page loads the session, favorites and comments, which are backed by Postgres. Run
+    # against a real throwaway database so those calls succeed instead of returning 500.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: modus_ui
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/modus_ui?schema=modus_ui
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/modus_ui?schema=modus_ui
+      # Throwaway values: nothing in CI signs anyone in, but Better Auth needs them to start.
+      BETTER_AUTH_SECRET: ci-only-secret-0123456789abcdef0123456789abcdef
+      BETTER_AUTH_URL: http://localhost:3100
+      GOOGLE_OAUTH_CLIENT_ID: ci-client-id
+      GOOGLE_OAUTH_CLIENT_SECRET: ci-client-secret
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
@@ -69,6 +92,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm db:migrate
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

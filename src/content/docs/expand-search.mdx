@@ -1,0 +1,57 @@
+---
+title: Expand Search
+description: A React Native search field that starts as a round button and springs open to full width, with a clear button and a Cancel that folds it away.
+---
+
+A search field that starts as a round button and springs open to the full width, where the cursor is waiting. A clear button shows while there is text, and Cancel (or Escape on the web) folds the field away and clears it. The magnifier is drawn with plain views, so there is no icon package. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="expand-search" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add expand-search
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/expand-search.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { View } from "react-native";
+import { ExpandSearch } from "@/components/ui/expand-search";
+
+export default function Example() {
+  const [query, setQuery] = useState("");
+
+  return (
+    <View style={{ padding: 20 }}>
+      <ExpandSearch value={query} onChangeText={setQuery} onSubmit={(text) => console.log(text)} />
+    </View>
+  );
+}
+```
+
+The field is as wide as its parent allows, so the parent decides how far it opens.
+
+## Props
+
+| Prop               | Type                          | Default    | Description                                                                    |
+| :----------------- | :---------------------------- | :--------- | :----------------------------------------------------------------------------- |
+| `value`            | `string`                      | -          | The text in the field. Leave it out to let the component keep the text itself. |
+| `onChangeText`     | `(text: string) => void`      | -          | Called as the text changes, and with an empty string on clear or Cancel.       |
+| `onSubmit`         | `(text: string) => void`      | -          | Called when the keyboard's search key is pressed.                              |
+| `placeholder`      | `string`                      | `"Search"` | Placeholder text, also the field's accessibility label.                        |
+| `defaultExpanded`  | `boolean`                     | `false`    | Whether the field starts open.                                                 |
+| `onExpandedChange` | `(expanded: boolean) => void` | -          | Called when the field opens or closes.                                         |
+| `colors`           | `Partial<ExpandSearchColors>` | -          | Overrides `field`, `icon`, `text` and `placeholder`.                           |
+| `style`            | `StyleProp<ViewStyle>`        | -          | Style for the container, which is as wide as its parent allows.                |
