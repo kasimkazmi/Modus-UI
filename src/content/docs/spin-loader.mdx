@@ -1,0 +1,45 @@
+---
+title: Spin Loader
+description: Four React Native loading spinners in one component, a ring, bouncing dots, rising bars and a spreading pulse, that stand still when motion is reduced.
+---
+
+Four loading spinners in one component: a turning ring, three bouncing dots, a row of rising bars, and a pulse that spreads outward. They share one loop, mount their views once so the animation never restarts, and stand still when motion is reduced. Each reads out as a busy progress bar with your label. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="spin-loader" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add spin-loader
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/spin-loader.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { SpinLoader } from "@/components/ui/spin-loader";
+
+export default function Example() {
+  return <SpinLoader variant="dots" size={36} label="Loading messages" />;
+}
+```
+
+## Props
+
+| Prop       | Type                                    | Default     | Description                      |
+| :--------- | :-------------------------------------- | :---------- | :------------------------------- |
+| `variant`  | `"ring" \| "dots" \| "bars" \| "pulse"` | `"ring"`    | Which style of spinner to draw.  |
+| `size`     | `number`                                | `32`        | Height and width of the spinner. |
+| `duration` | `number`                                | `900`       | Milliseconds for one full cycle. |
+| `label`    | `string`                                | `"Loading"` | Spoken name of the spinner.      |
+| `colors`   | `Partial<SpinLoaderColors>`             | -           | Overrides `color` and `track`.   |
+| `style`    | `StyleProp<ViewStyle>`                  | -           | Style for the spinner's box.     |
