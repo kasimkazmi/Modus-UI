@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 229,
+  "count": 239,
   "categories": [
     "Navigation",
     "Actions",
@@ -2743,6 +2743,86 @@
       "category": "React Native",
       "platform": "native",
       "description": "A swipeable React Native onboarding pager where the art drifts against the text, the dots stretch, and Next turns into the final action.",
+      "dependencies": []
+    },
+    {
+      "name": "drag-list",
+      "title": "Drag List",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native reorderable list where you drag a grip and the other rows spring out of the way, with move actions for screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "long-press-menu",
+      "title": "Long Press Menu",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native menu that springs out from a trigger you press and hold, with every item also exposed as an accessibility action.",
+      "dependencies": []
+    },
+    {
+      "name": "slide-confirm",
+      "title": "Slide Confirm",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native slide-to-confirm control. Drag the thumb to the end to confirm, release early to spring back, and confirm with a screen reader or keyboard action.",
+      "dependencies": []
+    },
+    {
+      "name": "calendar-strip",
+      "title": "Calendar Strip",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native horizontal strip of days with a pill that glides to the selected day, event dots, and full dates read out to screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "step-tracker",
+      "title": "Step Tracker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native progress tracker built from plain Views, with popping checks, a pulsing current step and connectors that fill as you advance.",
+      "dependencies": []
+    },
+    {
+      "name": "chip-input",
+      "title": "Chip Input",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native tag input where Enter or a comma turns text into chips that pop in, wrap, and can each be removed.",
+      "dependencies": []
+    },
+    {
+      "name": "typing-dots",
+      "title": "Typing Dots",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native chat typing indicator whose dots bounce in a staggered wave, with a bubble behind them and a single spoken label.",
+      "dependencies": []
+    },
+    {
+      "name": "marquee-ticker",
+      "title": "Marquee Ticker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native endless scrolling strip with a seamless loop, either direction, press and hold to pause, and a still fallback for reduced motion.",
+      "dependencies": []
+    },
+    {
+      "name": "choice-chips",
+      "title": "Choice Chips",
+      "category": "React Native",
+      "platform": "native",
+      "description": "React Native chips for one choice or several, blending to the selected color while a check mark opens in front of the label.",
+      "dependencies": []
+    },
+    {
+      "name": "hold-stepper",
+      "title": "Hold Stepper",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native plus and minus stepper that repeats while held, speeding up the longer you hold, with the value sliding in from the direction it moved.",
       "dependencies": []
     }
   ],

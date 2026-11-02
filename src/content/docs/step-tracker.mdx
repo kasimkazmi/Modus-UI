@@ -1,0 +1,61 @@
+---
+title: Step Tracker
+description: A React Native progress tracker built from plain Views, with popping checks, a pulsing current step and connectors that fill as you advance.
+---
+
+A progress tracker made from plain Views, with no icon or SVG packages. Complete steps show a check that pops in, the step in progress has a soft pulsing ring, and the connector between two steps fills as `current` moves past it. Vertical rows size to their text, and horizontal columns give each title two lines. Each step reads to a screen reader as "Step 2 of 4: Packed, current". Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="step-tracker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add step-tracker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/step-tracker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, View } from "react-native";
+import { StepTracker } from "@/components/ui/step-tracker";
+
+const steps = [
+  { id: "ordered", title: "Ordered" },
+  { id: "packed", title: "Packed", description: "Boxed at the warehouse" },
+  { id: "shipped", title: "Shipped" },
+];
+
+export default function Example() {
+  const [current, setCurrent] = useState(1);
+
+  return (
+    <View style={{ padding: 20 }}>
+      <StepTracker steps={steps} current={current} />
+      <Button title="Next" onPress={() => setCurrent((n) => n + 1)} />
+    </View>
+  );
+}
+```
+
+In the horizontal layout each step gets a 64pt column, so it suits about four or five short titles on a phone; descriptions are shown only in the vertical layout.
+
+## Props
+
+| Prop          | Type                         | Default      | Description                                                                                    |
+| :------------ | :--------------------------- | :----------- | :--------------------------------------------------------------------------------------------- |
+| `steps`       | `StepTrackerStep[]`          | -            | The steps, each with an `id`, a `title` and an optional `description`.                         |
+| `current`     | `number`                     | -            | Index of the step in progress. Earlier steps are complete; a value past the end completes all. |
+| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` | Whether steps stack top to bottom or run left to right.                                        |
+| `colors`      | `Partial<StepTrackerColors>` | -            | Overrides `complete`, `current`, `upcoming`, `line`, `text` and `mutedText`.                   |
+| `style`       | `StyleProp<ViewStyle>`       | -            | Style for the container.                                                                       |

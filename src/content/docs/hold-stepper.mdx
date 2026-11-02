@@ -1,0 +1,51 @@
+---
+title: Hold Stepper
+description: A React Native plus and minus stepper that repeats while held, speeding up the longer you hold, with the value sliding in from the direction it moved.
+---
+
+A plus and minus stepper. A tap changes the value by one step. Holding a button repeats, slowly at first and then faster, and stops the moment the button is released, the pointer leaves or the limit is reached. The value slides in from the direction it moved. Both buttons are 44pt, the pair reads as one adjustable control to screen readers, and reduced motion drops the slide. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="hold-stepper" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hold-stepper
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hold-stepper.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { HoldStepper } from "@/components/ui/hold-stepper";
+
+export default function Example() {
+  const [guests, setGuests] = useState(2);
+
+  return <HoldStepper label="guests" min={1} max={12} value={guests} onChange={setGuests} />;
+}
+```
+
+## Props
+
+| Prop        | Type                         | Default | Description                                                                         |
+| :---------- | :--------------------------- | :------ | :---------------------------------------------------------------------------------- |
+| `value`     | `number`                     | -       | The current value.                                                                  |
+| `onChange`  | `(next: number) => void`     | -       | Called with the new value on each tap and each repeat.                              |
+| `min`       | `number`                     | `0`     | The lowest value. The minus button dims and stops here.                             |
+| `max`       | `number`                     | `99`    | The highest value. The plus button dims and stops here.                             |
+| `step`      | `number`                     | `1`     | How much one tap, or one repeat, changes the value.                                 |
+| `holdDelay` | `number`                     | `400`   | Milliseconds a button must be held before it starts repeating.                      |
+| `label`     | `string`                     | -       | What the value counts, for example "Guests". Spoken with the buttons and the group. |
+| `colors`    | `Partial<HoldStepperColors>` | -       | Overrides `button`, `glyph` and `text`.                                             |
+| `style`     | `StyleProp<ViewStyle>`       | -       | Style for the container.                                                            |

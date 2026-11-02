@@ -1,0 +1,56 @@
+---
+title: Calendar Strip
+description: A React Native horizontal strip of days with a pill that glides to the selected day, event dots, and full dates read out to screen readers.
+---
+
+A horizontal strip of days. A pill glides behind the selected day on a spring, and the strip scrolls to keep that day centred. Dates are local dates in `YYYY-MM-DD` form, so nothing shifts a day near midnight or across time zones. Each day is a button that reads out its full date, and days with events say so. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="calendar-strip" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add calendar-strip
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/calendar-strip.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { CalendarStrip } from "@/components/ui/calendar-strip";
+
+export default function Example() {
+  const [day, setDay] = useState("2026-11-04");
+
+  return (
+    <CalendarStrip
+      selected={day}
+      onSelect={setDay}
+      startDate="2026-11-01"
+      marked={["2026-11-03", "2026-11-10"]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                           | Default | Description                                                              |
+| :---------- | :----------------------------- | :------ | :----------------------------------------------------------------------- |
+| `selected`  | `string`                       | -       | The selected day, as `YYYY-MM-DD`.                                       |
+| `onSelect`  | `(date: string) => void`       | -       | Called with the tapped day as `YYYY-MM-DD`.                              |
+| `startDate` | `string`                       | -       | First day shown, as `YYYY-MM-DD`. Defaults to today in local time.       |
+| `days`      | `number`                       | `21`    | How many days the strip covers.                                          |
+| `marked`    | `string[]`                     | -       | Days (`YYYY-MM-DD`) that show a small dot, for example days with events. |
+| `colors`    | `Partial<CalendarStripColors>` | -       | Overrides `pill`, `text`, `selectedText`, `mutedText` and `dot`.         |
+| `style`     | `StyleProp<ViewStyle>`         | -       | Style for the container.                                                 |
