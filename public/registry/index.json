@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 258,
+  "count": 264,
   "categories": [
     "Navigation",
     "Actions",
@@ -2975,6 +2975,54 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native month calendar with a pill that glides to the selected day, swipe to change month, event dots, and local dates that never shift across time zones.",
+      "dependencies": []
+    },
+    {
+      "name": "chat-bubble",
+      "title": "Chat Bubble",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native chat message that springs in from its own corner, shows delivery ticks that turn blue when read, and becomes a retry button when it fails.",
+      "dependencies": []
+    },
+    {
+      "name": "live-dot",
+      "title": "Live Dot",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native presence and broadcast indicator whose live or online dot sends a soft ring outward on a loop, and whose status is always spoken as well as coloured.",
+      "dependencies": []
+    },
+    {
+      "name": "composer-bar",
+      "title": "Composer Bar",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native message composer whose field grows line by line, whose microphone turns into a send arrow as you type, and which sends on Enter on the web.",
+      "dependencies": []
+    },
+    {
+      "name": "setting-list",
+      "title": "Setting List",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native grouped settings list with icon tiles, chevrons, values and animated switches, in the style of a phone's own settings screen.",
+      "dependencies": []
+    },
+    {
+      "name": "pull-refresh",
+      "title": "Pull Refresh",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native scrolling list you refresh by pulling down from the top, with resistance, a turning arrow, a holding spinner, and a Refresh action for screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "story-bars",
+      "title": "Story Bars",
+      "category": "React Native",
+      "platform": "native",
+      "description": "The React Native row of segmented progress bars from a story viewer, which fills each story in turn, holds in place when paused, and announces its position.",
       "dependencies": []
     }
   ],

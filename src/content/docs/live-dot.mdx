@@ -1,0 +1,46 @@
+---
+title: Live Dot
+description: A React Native presence and broadcast indicator whose live or online dot sends a soft ring outward on a loop, and whose status is always spoken as well as coloured.
+---
+
+A presence or broadcast indicator. A live or online dot sends a soft ring outward on a loop, and the colour changes between statuses. Away, busy and offline stay still. The status is read out as words, so it never relies on colour alone, and with reduced motion the ring doesn't pulse. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="live-dot" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add live-dot
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/live-dot.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { LiveDot } from "@/components/ui/live-dot";
+
+export default function Example() {
+  return <LiveDot status="live" showLabel />;
+}
+```
+
+## Props
+
+| Prop        | Type                                                  | Default | Description                                                        |
+| :---------- | :---------------------------------------------------- | :------ | :----------------------------------------------------------------- |
+| `status`    | `"live" \| "online" \| "away" \| "busy" \| "offline"` | -       | Which state the dot shows.                                         |
+| `size`      | `number`                                              | `10`    | Diameter of the dot.                                               |
+| `pulse`     | `boolean`                                             | `true`  | Sends a soft ring outward from the dot while it is live or online. |
+| `showLabel` | `boolean`                                             | `false` | Shows the status word beside the dot.                              |
+| `label`     | `string`                                              | -       | Replaces the status word, for example "Recording".                 |
+| `colors`    | `Partial<LiveDotColors>`                              | -       | Overrides `live`, `online`, `away`, `busy`, `offline` and `text`.  |
+| `style`     | `StyleProp<ViewStyle>`                                | -       | Style for the row.                                                 |

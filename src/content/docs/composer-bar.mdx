@@ -1,0 +1,60 @@
+---
+title: Composer Bar
+description: A React Native message composer whose field grows line by line, whose microphone turns into a send arrow as you type, and which sends on Enter on the web.
+---
+
+A message composer. The field grows line by line up to a limit, and the button on the right turns from a microphone into a send arrow as soon as there is text, with the two glyphs swapping on a spring. On the web Enter sends and Shift+Enter starts a new line. It clears itself after sending and keeps focus, so you can keep typing. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="composer-bar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add composer-bar
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/composer-bar.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ComposerBar } from "@/components/ui/composer-bar";
+
+export default function Example() {
+  const [text, setText] = useState("");
+
+  return (
+    <ComposerBar
+      value={text}
+      onChangeText={setText}
+      onSend={(message) => console.log("send", message)}
+      onAttach={() => console.log("attach")}
+      onRecord={() => console.log("record")}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                         | Default     | Description                                                                                          |
+| :------------- | :--------------------------- | :---------- | :--------------------------------------------------------------------------------------------------- |
+| `value`        | `string`                     | -           | The text in the field.                                                                               |
+| `onChangeText` | `(text: string) => void`     | -           | Called as the text changes, and with an empty string after sending.                                  |
+| `onSend`       | `(text: string) => void`     | -           | Called with the trimmed text when the send button or Enter (on the web) is pressed.                  |
+| `placeholder`  | `string`                     | `"Message"` | Hint shown in the empty field, also its spoken label.                                                |
+| `maxLines`     | `number`                     | `5`         | How many lines the field grows to before it scrolls.                                                 |
+| `onAttach`     | `() => void`                 | -           | Shows a plus button on the left when given.                                                          |
+| `onRecord`     | `() => void`                 | -           | Shows a microphone in place of the send button while the field is empty, when given.                 |
+| `disabled`     | `boolean`                    | `false`     | Stops editing and sending.                                                                           |
+| `colors`       | `Partial<ComposerBarColors>` | -           | Overrides `background`, `field`, `border`, `text`, `placeholder`, `accent`, `accentText` and `icon`. |
+| `style`        | `StyleProp<ViewStyle>`       | -           | Style for the bar.                                                                                   |

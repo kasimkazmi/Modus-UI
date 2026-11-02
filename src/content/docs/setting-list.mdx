@@ -1,0 +1,55 @@
+---
+title: Setting List
+description: A React Native grouped settings list with icon tiles, chevrons, values and animated switches, in the style of a phone's own settings screen.
+---
+
+A grouped settings list in the style of a phone's own settings screen. Rows are rounded and split by hairlines, each with an optional icon tile, a label and description, and a chevron, a value or a switch on the right. The switches slide on a spring and are real switches to screen readers, a pressed row highlights, and a row can be marked destructive or disabled. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="setting-list" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add setting-list
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/setting-list.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SettingList } from "@/components/ui/setting-list";
+
+export default function Example() {
+  const [push, setPush] = useState(true);
+
+  return (
+    <SettingList
+      header="Preferences"
+      items={[
+        { id: "push", label: "Notifications", kind: "toggle", checked: push, onToggle: setPush },
+        { id: "lang", label: "Language", kind: "value", value: "English", onPress: () => {} },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop     | Type                         | Default | Description                                                                                                                                                                                                    |
+| :------- | :--------------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`  | `SettingItem[]`              | -       | The rows. Each has an `id` and a `label`, and optionally `icon`, `description`, `kind` (`"link"`, `"value"`, `"toggle"` or `"info"`), `value`, `checked`, `onPress`, `onToggle`, `destructive` and `disabled`. |
+| `header` | `string`                     | -       | A small heading above the group.                                                                                                                                                                               |
+| `footer` | `string`                     | -       | Explanatory text under the group.                                                                                                                                                                              |
+| `colors` | `Partial<SettingListColors>` | -       | Overrides `surface`, `border`, `text`, `muted`, `accent`, `destructive`, `tile` and `track`.                                                                                                                   |
+| `style`  | `StyleProp<ViewStyle>`       | -       | Style for the group and its heading.                                                                                                                                                                           |

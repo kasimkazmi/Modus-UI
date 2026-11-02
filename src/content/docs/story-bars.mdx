@@ -1,0 +1,60 @@
+---
+title: Story Bars
+description: The React Native row of segmented progress bars from a story viewer, which fills each story in turn, holds in place when paused, and announces its position.
+---
+
+The row of progress bars at the top of a story viewer. Finished stories are full, the current one fills over `duration` and then asks for the next, and the rest are empty. Pausing holds the fill in place and resuming carries on from where it stopped. The position is read out as "Story 2 of 5". The bars only keep time; you add the tap zones, so the viewer can also go back, skip ahead or pause while a finger is down. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="story-bars" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add story-bars
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/story-bars.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { StoryBars } from "@/components/ui/story-bars";
+
+export default function Example() {
+  const [index, setIndex] = useState(0);
+
+  return (
+    <StoryBars
+      count={5}
+      index={index}
+      onIndexChange={setIndex}
+      onComplete={() => console.log("last story done")}
+      duration={4000}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop            | Type                       | Default | Description                                                          |
+| :-------------- | :------------------------- | :------ | :------------------------------------------------------------------- |
+| `count`         | `number`                   | -       | How many stories there are.                                          |
+| `index`         | `number`                   | -       | The story showing now, from 0.                                       |
+| `onIndexChange` | `(index: number) => void`  | -       | Called when the current story's time is up and the next should show. |
+| `onComplete`    | `() => void`               | -       | Called when the last story's time is up.                             |
+| `duration`      | `number`                   | `5000`  | How long each story shows, in milliseconds.                          |
+| `paused`        | `boolean`                  | `false` | Holds the bar where it is, for example while a finger is down.       |
+| `height`        | `number`                   | `3`     | Height of each bar.                                                  |
+| `gap`           | `number`                   | `4`     | Space between the bars.                                              |
+| `colors`        | `Partial<StoryBarsColors>` | -       | Overrides `track` and `fill`.                                        |
+| `style`         | `StyleProp<ViewStyle>`     | -       | Style for the row.                                                   |
