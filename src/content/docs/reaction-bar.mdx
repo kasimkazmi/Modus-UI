@@ -1,0 +1,63 @@
+---
+title: Reaction Bar
+description: A React Native row of emoji reactions whose emoji pops and wobbles when chosen, with counts that roll to their new number.
+---
+
+A row of emoji reactions. Choosing one pops and wobbles its emoji, tints the pill and rolls the count to its new number, and pressing your choice again takes it back. You can hold one reaction at a time. Each pill reads out as "Love, 9, selected" and mirrors its state for screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="reaction-bar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add reaction-bar
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/reaction-bar.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ReactionBar } from "@/components/ui/reaction-bar";
+
+const reactions = [
+  { id: "like", emoji: "👍", label: "Like" },
+  { id: "love", emoji: "❤️", label: "Love" },
+];
+
+export default function Example() {
+  const [mine, setMine] = useState<string | null>(null);
+
+  return (
+    <ReactionBar
+      reactions={reactions}
+      counts={{ like: 12, love: 4 }}
+      value={mine}
+      onChange={setMine}
+    />
+  );
+}
+```
+
+`counts` holds what everyone else chose. Your own choice is added on top, so the bar always shows the right total.
+
+## Props
+
+| Prop        | Type                             | Default | Description                                                                       |
+| :---------- | :------------------------------- | :------ | :-------------------------------------------------------------------------------- |
+| `reactions` | `Reaction[]`                     | -       | The reactions, each with an `id`, an `emoji` and a spoken `label`.                |
+| `counts`    | `Record<string, number>`         | -       | How many other people chose each reaction, by `id`.                               |
+| `value`     | `string \| null`                 | -       | The reaction you chose, or `null`.                                                |
+| `onChange`  | `(next: string \| null) => void` | -       | Called with the reaction you chose, or `null` when you take it back.              |
+| `hideZero`  | `boolean`                        | `true`  | Hides the count on reactions nobody chose.                                        |
+| `colors`    | `Partial<ReactionBarColors>`     | -       | Overrides `pill`, `selectedPill`, `border`, `selectedBorder`, `text` and `count`. |
+| `style`     | `StyleProp<ViewStyle>`           | -       | Style for the row.                                                                |

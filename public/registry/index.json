@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 247,
+  "count": 254,
   "categories": [
     "Navigation",
     "Actions",
@@ -2887,6 +2887,62 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native progress bar whose fill grows on a spring and whose diagonal stripes drift, with an indeterminate mode and no gradient packages.",
+      "dependencies": []
+    },
+    {
+      "name": "range-slider",
+      "title": "Range Slider",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native slider with two thumbs for choosing a range, where the thumbs never cross, values snap to a step, and each thumb is adjustable for screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "tick-box",
+      "title": "Tick Box",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native checkbox that pops its fill in on a spring, grows its tick, and has a mixed state for select-all boxes.",
+      "dependencies": []
+    },
+    {
+      "name": "notice-banner",
+      "title": "Notice Banner",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native inline alert in four tones that slides in, collapses its height on the way out, and can be swiped away or closed with a button.",
+      "dependencies": []
+    },
+    {
+      "name": "side-drawer",
+      "title": "Side Drawer",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native panel that slides in from the left or right edge, follows your finger as you drag it shut, and can be pulled open by a swipe from the screen edge.",
+      "dependencies": []
+    },
+    {
+      "name": "reaction-bar",
+      "title": "Reaction Bar",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native row of emoji reactions whose emoji pops and wobbles when chosen, with counts that roll to their new number.",
+      "dependencies": []
+    },
+    {
+      "name": "suggest-input",
+      "title": "Suggest Input",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native text field with a suggestion list that narrows as you type, bolds what matched, and works with arrow keys, Enter and Escape on the web.",
+      "dependencies": []
+    },
+    {
+      "name": "expand-card",
+      "title": "Expand Card",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native card that grows from a compact row into a full detail view, with its picture swelling from a thumbnail to a banner and its details fading in.",
       "dependencies": []
     }
   ],

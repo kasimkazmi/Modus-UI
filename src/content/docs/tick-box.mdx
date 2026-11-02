@@ -1,0 +1,51 @@
+---
+title: Tick Box
+description: A React Native checkbox that pops its fill in on a spring, grows its tick, and has a mixed state for select-all boxes.
+---
+
+A checkbox whose fill pops in on a spring and whose tick grows out of the box. It also has a "mixed" state for a select-all box over partly checked children. The whole row is the touch target, pressing the label toggles it, and the state is read out as checked, unchecked or mixed. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="tick-box" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tick-box
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tick-box.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { TickBox } from "@/components/ui/tick-box";
+
+export default function Example() {
+  const [agreed, setAgreed] = useState(false);
+
+  return <TickBox label="I agree to the terms" checked={agreed} onChange={setAgreed} />;
+}
+```
+
+## Props
+
+| Prop          | Type                      | Default | Description                                                                      |
+| :------------ | :------------------------ | :------ | :------------------------------------------------------------------------------- |
+| `checked`     | `boolean \| "mixed"`      | -       | Checked, unchecked, or `"mixed"` for a parent whose children are partly checked. |
+| `onChange`    | `(next: boolean) => void` | -       | Called with the new state when pressed. A mixed box becomes checked.             |
+| `label`       | `string`                  | -       | Text beside the box. Pressing it toggles the box too.                            |
+| `description` | `string`                  | -       | A second, smaller line under the label.                                          |
+| `size`        | `number`                  | `24`    | Side of the box.                                                                 |
+| `round`       | `boolean`                 | `false` | Draws a circle instead of a rounded square.                                      |
+| `disabled`    | `boolean`                 | `false` | Dims the row and ignores presses.                                                |
+| `colors`      | `Partial<TickBoxColors>`  | -       | Overrides `border`, `fill`, `tick`, `text` and `description`.                    |
+| `style`       | `StyleProp<ViewStyle>`    | -       | Style for the row.                                                               |

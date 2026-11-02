@@ -1,0 +1,58 @@
+---
+title: Side Drawer
+description: A React Native panel that slides in from the left or right edge, follows your finger as you drag it shut, and can be pulled open by a swipe from the screen edge.
+---
+
+A panel that slides in from the left or right edge of its parent. Drag it toward its edge to close it, tap the backdrop, or press Escape on the web. Give it `onOpen` and a swipe that starts at the screen edge pulls it open, following your finger, then settles open or shut by how far and how fast you went. It is drawn inside the screen it belongs to, so the parent must fill that screen. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="side-drawer" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add side-drawer
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/side-drawer.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, Text, View } from "react-native";
+import { SideDrawer } from "@/components/ui/side-drawer";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Button title="Menu" onPress={() => setOpen(true)} />
+      <SideDrawer open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
+        <Text style={{ padding: 20 }}>Drawer content</Text>
+      </SideDrawer>
+    </View>
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                        | Default  | Description                                                                               |
+| :-------- | :-------------------------- | :------- | :---------------------------------------------------------------------------------------- |
+| `open`    | `boolean`                   | -        | Whether the drawer is showing.                                                            |
+| `onClose` | `() => void`                | -        | Called when the drawer is closed by a backdrop tap, a drag or Escape on the web.          |
+| `onOpen`  | `() => void`                | -        | Called when a swipe from the screen edge pulls it open. Without it the edge swipe is off. |
+| `side`    | `"left" \| "right"`         | `"left"` | Which edge the drawer comes from.                                                         |
+| `width`   | `number`                    | `280`    | Width of the panel.                                                                       |
+| `label`   | `string`                    | `"Menu"` | Spoken name of the drawer.                                                                |
+| `colors`  | `Partial<SideDrawerColors>` | -        | Overrides `surface`, `backdrop` and `border`.                                             |
+| `style`   | `StyleProp<ViewStyle>`      | -        | Style for the panel.                                                                      |

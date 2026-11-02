@@ -1,0 +1,65 @@
+---
+title: Range Slider
+description: A React Native slider with two thumbs for choosing a range, where the thumbs never cross, values snap to a step, and each thumb is adjustable for screen readers.
+---
+
+A slider with two thumbs for choosing a range, such as a price band. Each thumb drags on its own and can never cross the other, values snap to `step`, a bubble shows the value above the thumb you hold, and tapping the bare track moves the nearest thumb. Both thumbs are adjustable controls for screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="range-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add range-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/range-slider.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { RangeSlider } from "@/components/ui/range-slider";
+
+export default function Example() {
+  const [price, setPrice] = useState<[number, number]>([100, 300]);
+
+  return (
+    <RangeSlider
+      label="Price"
+      value={price}
+      onValueChange={setPrice}
+      min={0}
+      max={500}
+      step={5}
+      format={(value) => `$${value}`}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop                | Type                                | Default   | Description                                                       |
+| :------------------ | :---------------------------------- | :-------- | :---------------------------------------------------------------- |
+| `value`             | `[number, number]`                  | -         | The selected range as `[low, high]`.                              |
+| `onValueChange`     | `(value: [number, number]) => void` | -         | Called as either thumb moves.                                     |
+| `onSlidingComplete` | `(value: [number, number]) => void` | -         | Called once when a drag ends, or after a tap on the track.        |
+| `min`               | `number`                            | `0`       | The lowest value.                                                 |
+| `max`               | `number`                            | `100`     | The highest value.                                                |
+| `step`              | `number`                            | `1`       | Values snap to multiples of this from `min`.                      |
+| `minGap`            | `number`                            | `0`       | The least the two thumbs may be apart.                            |
+| `showBubbles`       | `boolean`                           | `true`    | Floats the thumb's value above it while it is held.               |
+| `disabled`          | `boolean`                           | `false`   | Dims the slider and ignores input.                                |
+| `label`             | `string`                            | `"Range"` | Spoken name of the range; the thumbs add "minimum" and "maximum". |
+| `format`            | `(value: number) => string`         | -         | Turns a value into the text shown in the bubble and read out.     |
+| `colors`            | `Partial<RangeSliderColors>`        | -         | Overrides `track`, `fill`, `thumb`, `bubble` and `bubbleText`.    |
+| `style`             | `StyleProp<ViewStyle>`              | -         | Style for the slider.                                             |

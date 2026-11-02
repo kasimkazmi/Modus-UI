@@ -1,0 +1,59 @@
+---
+title: Notice Banner
+description: A React Native inline alert in four tones that slides in, collapses its height on the way out, and can be swiped away or closed with a button.
+---
+
+An inline alert in one of four tones: info, success, warning and error. It slides in and collapses its height on the way out, so the content below follows smoothly. With `onDismiss` it shows a close button and can also be swiped sideways. Errors and warnings are announced at once, and the other tones wait politely. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="notice-banner" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add notice-banner
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/notice-banner.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { NoticeBanner } from "@/components/ui/notice-banner";
+
+export default function Example() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <NoticeBanner
+      tone="warning"
+      title="Storage almost full"
+      message="You have used 9.2 of 10 GB."
+      visible={open}
+      onDismiss={() => setOpen(false)}
+      action={{ label: "Manage", onPress: () => console.log("manage") }}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                                     | Default  | Description                                                                        |
+| :---------- | :--------------------------------------- | :------- | :--------------------------------------------------------------------------------- |
+| `title`     | `string`                                 | -        | The banner's heading.                                                              |
+| `message`   | `string`                                 | -        | Text under the heading.                                                            |
+| `tone`      | `NoticeTone`                             | `"info"` | One of `"info"`, `"success"`, `"warning"` and `"error"`.                           |
+| `visible`   | `boolean`                                | `true`   | Shows or hides the banner. It slides in and collapses out.                         |
+| `onDismiss` | `() => void`                             | -        | When given, the banner shows a close button and can be swiped away.                |
+| `action`    | `{ label: string; onPress: () => void }` | -        | A button under the message, for example "Undo" or "View".                          |
+| `colors`    | `Partial<NoticeBannerColors>`            | -        | Overrides `info`, `success`, `warning`, `error`, `surface`, `title` and `message`. |
+| `style`     | `StyleProp<ViewStyle>`                   | -        | Style for the banner card.                                                         |
