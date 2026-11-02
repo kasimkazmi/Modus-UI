@@ -1,0 +1,46 @@
+---
+title: Wave Bars
+description: A React Native audio waveform made of bars that swell out of step while playing and tint as they are played.
+---
+
+A row of bars drawn like an audio waveform. At rest they keep their recorded shape. While `playing` each bar swells and settles out of step with its neighbours, and `progress` tints the bars already played. With reduced motion the bars hold still. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="wave-bars" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add wave-bars
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/wave-bars.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { WaveBars } from "@/components/ui/wave-bars";
+
+export default function Example() {
+  return <WaveBars playing progress={0.4} />;
+}
+```
+
+## Props
+
+| Prop       | Type                      | Default      | Description                                     |
+| :--------- | :------------------------ | :----------- | :---------------------------------------------- |
+| `playing`  | `boolean`                 | `false`      | Makes the bars dance.                           |
+| `count`    | `number`                  | `24`         | How many bars to draw.                          |
+| `height`   | `number`                  | `40`         | Height of the tallest bar.                      |
+| `progress` | `number`                  | `0`          | Colours the bars up to this fraction as played. |
+| `label`    | `string`                  | `"Waveform"` | Spoken name of the waveform.                    |
+| `colors`   | `Partial<WaveBarsColors>` | -            | Overrides `bar` and `played`.                   |
+| `style`    | `StyleProp<ViewStyle>`    | -            | Style for the row of bars.                      |

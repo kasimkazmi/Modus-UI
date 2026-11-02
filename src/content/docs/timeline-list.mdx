@@ -1,0 +1,50 @@
+---
+title: Timeline List
+description: A React Native vertical timeline with completed, current and upcoming steps and a pulsing dot on the step in progress.
+---
+
+A vertical list of events joined by a line. Finished steps are green, the current step has a dot that pulses outward, and later steps are muted. Each row reads out its status, so progress does not depend on colour alone. With reduced motion the pulse stands still. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="timeline-list" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add timeline-list
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/timeline-list.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { TimelineList } from "@/components/ui/timeline-list";
+
+export default function Example() {
+  return (
+    <TimelineList
+      items={[
+        { id: "1", title: "Order placed", time: "9:02", status: "done" },
+        { id: "2", title: "Out for delivery", status: "current" },
+        { id: "3", title: "Delivered", status: "upcoming" },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop     | Type                          | Default | Description                                                                            |
+| :------- | :---------------------------- | :------ | :------------------------------------------------------------------------------------- |
+| `items`  | `TimelineItem[]`              | -       | The steps, each with an `id`, `title`, `status` and optional `description` and `time`. |
+| `colors` | `Partial<TimelineListColors>` | -       | Overrides `line`, `done`, `current`, `upcoming`, `title` and `description`.            |
+| `style`  | `StyleProp<ViewStyle>`        | -       | Style for the list.                                                                    |

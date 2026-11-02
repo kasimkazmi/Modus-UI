@@ -281,6 +281,10 @@ export const demos: Record<ComponentName, ComponentType> = {
   "mode-toggle": dynamic(() => import("./mode-toggle-demo"), { ssr: false }),
   "tip-popover": dynamic(() => import("./tip-popover-demo"), { ssr: false }),
   "data-table": dynamic(() => import("./data-table-demo"), { ssr: false }),
+  "wave-bars": dynamic(() => import("./wave-bars-demo"), { ssr: false }),
+  "page-dots": dynamic(() => import("./page-dots-demo"), { ssr: false }),
+  "password-meter": dynamic(() => import("./password-meter-demo"), { ssr: false }),
+  "timeline-list": dynamic(() => import("./timeline-list-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */
