@@ -9,6 +9,8 @@ npx @modus-ui/cli add blur-text magnet
 npx @modus-ui/cli list
 ```
 
+With another package manager, swap `npx` for its runner: `pnpm dlx`, `yarn dlx` or `bunx`.
+
 ## Commands
 
 ### `add <name...>`

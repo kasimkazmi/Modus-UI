@@ -33,6 +33,15 @@ Modus UI is **not** a package you import from. You own the code: add a component
 npx @modus-ui/cli add blur-text
 ```
 
+Use whichever package manager you prefer. Each component page has a tab for each:
+
+| Package manager | Command                                |
+| :-------------- | :------------------------------------- |
+| npm             | `npx @modus-ui/cli add blur-text`      |
+| pnpm            | `pnpm dlx @modus-ui/cli add blur-text` |
+| yarn            | `yarn dlx @modus-ui/cli add blur-text` |
+| bun             | `bunx @modus-ui/cli add blur-text`     |
+
 The CLI writes the component into your project and lists the npm packages it needs. Every component page shows its own command.
 
 To copy and paste instead, open the **Code** tab on any component page and save the file as `components/ui/<name>.tsx`. Components import `cn()` from `@/lib/utils`:
