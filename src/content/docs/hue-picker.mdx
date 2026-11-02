@@ -1,0 +1,50 @@
+---
+title: Hue Picker
+description: A React Native colour picker built from plain Views, with a hue strip, a lightness strip for the chosen hue, one-tap swatches and a live preview.
+---
+
+A colour picker built from plain Views, with no gradient or SVG packages. Drag the hue strip, then the lightness strip, which runs dark to light in the hue you chose, or tap a swatch. Hue, saturation and lightness are kept as numbers while you drag and only turned into hex on the way out, so the hex never drifts and the hue survives passing through black or white. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="hue-picker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hue-picker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hue-picker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { HuePicker } from "@/components/ui/hue-picker";
+
+export default function Example() {
+  const [color, setColor] = useState("#4f46e5");
+
+  return <HuePicker value={color} onChange={setColor} />;
+}
+```
+
+`value` is expected to echo `onChange`. If you set it to something else, the picker adopts it.
+
+## Props
+
+| Prop        | Type                       | Default    | Description                                                     |
+| :---------- | :------------------------- | :--------- | :-------------------------------------------------------------- |
+| `value`     | `string`                   | -          | The colour as a hex string such as `#4f46e5`.                   |
+| `onChange`  | `(hex: string) => void`    | -          | Called with a lowercase `#rrggbb` string as the colour changes. |
+| `swatches`  | `string[]`                 | eight hues | Colours offered as one-tap swatches.                            |
+| `showValue` | `boolean`                  | `true`     | Show the hex text next to the preview.                          |
+| `colors`    | `Partial<HuePickerColors>` | -          | Overrides `ring` and `text`.                                    |
+| `style`     | `StyleProp<ViewStyle>`     | -          | Style for the container.                                        |

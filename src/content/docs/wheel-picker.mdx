@@ -1,0 +1,55 @@
+---
+title: Wheel Picker
+description: A React Native scrolling wheel that snaps rows to the middle, fades them with distance, and settles reliably even when a mouse wheel stops.
+---
+
+An iOS-style scrolling wheel. Rows snap to the middle, shrink and fade with their distance from it, and `onChange` fires when the wheel comes to rest, including when a mouse wheel stops, not on every frame of the scroll. A tap on a row brings it to the middle, and screen readers can step through the options. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="wheel-picker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add wheel-picker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/wheel-picker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { WheelPicker } from "@/components/ui/wheel-picker";
+
+const sizes = ["Small", "Medium", "Large", "Extra large"].map((name) => ({
+  value: name.toLowerCase(),
+  label: name,
+}));
+
+export default function Example() {
+  const [size, setSize] = useState("medium");
+
+  return <WheelPicker label="Size" options={sizes} value={size} onChange={setSize} />;
+}
+```
+
+## Props
+
+| Prop           | Type                         | Default    | Description                                                                 |
+| :------------- | :--------------------------- | :--------- | :-------------------------------------------------------------------------- |
+| `options`      | `WheelPickerOption[]`        | -          | The rows, each with a `value` and a `label`.                                |
+| `value`        | `string`                     | -          | The selected option's `value`.                                              |
+| `onChange`     | `(value: string) => void`    | -          | Called once the wheel settles on a different option.                        |
+| `itemHeight`   | `number`                     | `40`       | Height of one row.                                                          |
+| `visibleCount` | `number`                     | `5`        | How many rows are visible. Use an odd number so one row sits in the middle. |
+| `label`        | `string`                     | `"Picker"` | Spoken name of the wheel, for example "Hour".                               |
+| `colors`       | `Partial<WheelPickerColors>` | -          | Overrides `text`, `selectedText` and `highlight`.                           |
+| `style`        | `StyleProp<ViewStyle>`       | -          | Style for the wheel.                                                        |

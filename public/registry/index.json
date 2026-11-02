@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 239,
+  "count": 247,
   "categories": [
     "Navigation",
     "Actions",
@@ -2823,6 +2823,70 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native plus and minus stepper that repeats while held, speeding up the longer you hold, with the value sliding in from the direction it moved.",
+      "dependencies": []
+    },
+    {
+      "name": "action-tray",
+      "title": "Action Tray",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native bottom action list that slides up over a dimmed backdrop, with grouped actions, a separate cancel button and drag to dismiss.",
+      "dependencies": []
+    },
+    {
+      "name": "confirm-dialog",
+      "title": "Confirm Dialog",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native alert dialog that pops in on a spring, starts focus on Cancel so Enter never confirms by accident, and locks while work is under way.",
+      "dependencies": []
+    },
+    {
+      "name": "code-boxes",
+      "title": "Code Boxes",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native one-time-code input drawn as separate boxes, with paste, SMS autofill, a blinking caret, a pop for each digit and a shake on error.",
+      "dependencies": []
+    },
+    {
+      "name": "hue-picker",
+      "title": "Hue Picker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native colour picker built from plain Views, with a hue strip, a lightness strip for the chosen hue, one-tap swatches and a live preview.",
+      "dependencies": []
+    },
+    {
+      "name": "tab-pager",
+      "title": "Tab Pager",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native tab header over swipeable pages, with an underline that follows your finger and labels that blend as their page arrives.",
+      "dependencies": []
+    },
+    {
+      "name": "wheel-picker",
+      "title": "Wheel Picker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native scrolling wheel that snaps rows to the middle, fades them with distance, and settles reliably even when a mouse wheel stops.",
+      "dependencies": []
+    },
+    {
+      "name": "avatar-stack",
+      "title": "Avatar Stack",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native stack of overlapping avatars that spreads apart on a press, collapses extras into a plus count, and reads out who is in it.",
+      "dependencies": []
+    },
+    {
+      "name": "stripe-progress",
+      "title": "Stripe Progress",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native progress bar whose fill grows on a spring and whose diagonal stripes drift, with an indeterminate mode and no gradient packages.",
       "dependencies": []
     }
   ],

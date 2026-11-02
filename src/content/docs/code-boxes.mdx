@@ -1,0 +1,60 @@
+---
+title: Code Boxes
+description: A React Native one-time-code input drawn as separate boxes, with paste, SMS autofill, a blinking caret, a pop for each digit and a shake on error.
+---
+
+A one-time-code field drawn as separate boxes. One real, invisible input sits over them, so paste, the keyboard and SMS autofill all work, and the boxes only show what it holds. The active box has a ring and a blinking caret, each character pops in, and a wrong code shakes the row. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="code-boxes" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add code-boxes
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/code-boxes.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { CodeBoxes } from "@/components/ui/code-boxes";
+
+export default function Example() {
+  const [code, setCode] = useState("");
+  const [wrong, setWrong] = useState(false);
+
+  return (
+    <CodeBoxes
+      value={code}
+      onChange={setCode}
+      error={wrong}
+      onComplete={async (entered) => setWrong(!(await verify(entered)))}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop         | Type                       | Default | Description                                                              |
+| :----------- | :------------------------- | :------ | :----------------------------------------------------------------------- |
+| `value`      | `string`                   | -       | The code entered so far.                                                 |
+| `onChange`   | `(next: string) => void`   | -       | Called with the cleaned code as characters are typed, pasted or removed. |
+| `length`     | `number`                   | `6`     | How many characters make the code.                                       |
+| `onComplete` | `(code: string) => void`   | -       | Called once when the last character arrives, with the full code.         |
+| `numeric`    | `boolean`                  | `true`  | Accept digits only and show a numeric keyboard.                          |
+| `autoFocus`  | `boolean`                  | `false` | Focus the field when it mounts.                                          |
+| `error`      | `boolean`                  | `false` | Turns the boxes the error color and shakes them.                         |
+| `disabled`   | `boolean`                  | `false` | Dims the boxes and ignores input.                                        |
+| `colors`     | `Partial<CodeBoxesColors>` | -       | Overrides `box`, `border`, `focusBorder`, `text` and `error`.            |
+| `style`      | `StyleProp<ViewStyle>`     | -       | Style for the container.                                                 |

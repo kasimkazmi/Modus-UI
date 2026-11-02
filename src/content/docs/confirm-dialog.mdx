@@ -1,0 +1,69 @@
+---
+title: Confirm Dialog
+description: A React Native alert dialog that pops in on a spring, starts focus on Cancel so Enter never confirms by accident, and locks while work is under way.
+---
+
+A centred alert dialog, drawn inside its parent so it works in a screen, a tab or a `Modal` alike. It pops in on a spring over a dimmed backdrop. On the web focus starts on Cancel, so pressing Enter can never confirm a destructive action by accident, and Escape cancels. While `loading` the confirm button shows a spinner and the dialog cannot be dismissed. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="confirm-dialog" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add confirm-dialog
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/confirm-dialog.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, View } from "react-native";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Button title="Delete" onPress={() => setOpen(true)} />
+      <ConfirmDialog
+        open={open}
+        destructive
+        title="Delete this project?"
+        message="This cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      />
+    </View>
+  );
+}
+```
+
+The parent must fill the area the dialog should cover, because the dialog and its backdrop are sized to it.
+
+## Props
+
+| Prop           | Type                           | Default     | Description                                                                                                              |
+| :------------- | :----------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `open`         | `boolean`                      | -           | Whether the dialog is showing.                                                                                           |
+| `onConfirm`    | `() => void`                   | -           | Called when the confirm button is pressed.                                                                               |
+| `onCancel`     | `() => void`                   | -           | Called by the cancel button, a backdrop tap or Escape on the web.                                                        |
+| `title`        | `string`                       | -           | The dialog's heading, also its spoken label.                                                                             |
+| `message`      | `string`                       | -           | Text under the heading.                                                                                                  |
+| `confirmLabel` | `string`                       | `"Confirm"` | Text of the confirm button.                                                                                              |
+| `cancelLabel`  | `string`                       | `"Cancel"`  | Text of the cancel button.                                                                                               |
+| `destructive`  | `boolean`                      | `false`     | Styles the confirm button as a warning, for actions that cannot be undone.                                               |
+| `loading`      | `boolean`                      | `false`     | Shows a spinner in the confirm button and disables the dialog while work is under way.                                   |
+| `colors`       | `Partial<ConfirmDialogColors>` | -           | Overrides `surface`, `backdrop`, `title`, `message`, `border`, `cancelText`, `confirm`, `confirmText` and `destructive`. |
+| `style`        | `StyleProp<ViewStyle>`         | -           | Style for the dialog card.                                                                                               |
