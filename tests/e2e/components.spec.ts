@@ -163,7 +163,8 @@ for (const { name } of registry) {
         const errors = trackErrors(page);
         const response = await page.goto(`/preview/${name}`);
         expect(response?.status()).toBe(200);
-        await expect.poll(() => showsContent(page), { timeout: 5_000 }).toBe(true);
+        // Generous because WebGL previews render in software on CI runners, which is far slower than a GPU.
+        await expect.poll(() => showsContent(page), { timeout: 15_000 }).toBe(true);
         expect(errors).toEqual([]);
       });
     }

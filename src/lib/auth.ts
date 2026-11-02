@@ -13,6 +13,9 @@ export const auth = betterAuth({
     },
   },
   session: { cookieCache: { enabled: true, maxAge: 60 } },
+  // On in production by default (100 requests per 10 seconds per IP). The end-to-end suite loads
+  // every docs page from one machine and would be throttled, so CI sets AUTH_RATE_LIMIT=off.
+  rateLimit: { enabled: process.env.AUTH_RATE_LIMIT === "off" ? false : undefined },
 });
 
 export async function getSession() {

@@ -234,17 +234,19 @@ function CarouselTrack({
             }}
           />
           {card.image && <img src={card.image} alt="" draggable={false} />}
-          {card.video && !still && (
+          {/* Rendered either way so the server HTML matches the client; reduced motion just never plays it. */}
+          {card.video && (
             <video
               // React leaves `muted` out of the server HTML, so Chrome blocks autoplay until it is set here.
               ref={(video) => {
-                if (!video) return;
+                if (!video || still) return;
                 video.muted = true;
                 video.play().catch(() => {});
               }}
               src={card.video}
               poster={card.image}
-              autoPlay
+              autoPlay={!still}
+              preload={still ? "none" : "auto"}
               muted
               loop
               playsInline
@@ -296,22 +298,20 @@ export function CurvedCarouselHero({
   const prefersReducedMotion = useReducedMotion();
   const still = !!prefersReducedMotion;
 
-  const enter = (delay: number, from: Record<string, number | string> = { opacity: 0, y: 16 }) =>
-    still
-      ? {}
-      : {
-          initial: from,
-          animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
-          transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-        };
-  const draw = (delay: number) =>
-    still
-      ? {}
-      : {
-          initial: { pathLength: 0 },
-          animate: { pathLength: 1 },
-          transition: { delay, duration: 0.9, ease: "easeInOut" as const },
-        };
+  // The server cannot know about reduced motion, so it always renders the hidden starting state. Keep
+  // that state on the client too (so the markup matches) and, when motion is reduced, reach the end
+  // state at once instead of omitting the animation, which would leave the content hidden.
+  const instant = { duration: 0 };
+  const enter = (delay: number, from: Record<string, number | string> = { opacity: 0, y: 16 }) => ({
+    initial: from,
+    animate: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" },
+    transition: still ? instant : { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+  });
+  const draw = (delay: number) => ({
+    initial: { pathLength: 0 },
+    animate: { pathLength: 1 },
+    transition: still ? instant : { delay, duration: 0.9, ease: "easeInOut" as const },
+  });
 
   return (
     <section
@@ -358,26 +358,18 @@ export function CurvedCarouselHero({
         <motion.p
           className="cch-note"
           style={{ left: "calc(1212 * var(--u))", top: "calc(310 * var(--u))", rotate: 16 }}
-          {...(still
-            ? {}
-            : {
-                initial: { opacity: 0 },
-                animate: { opacity: 1 },
-                transition: { delay: 1.1, duration: 0.6 },
-              })}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={still ? instant : { delay: 1.1, duration: 0.6 }}
         >
           {note}
         </motion.p>
         <motion.p
           className="cch-note"
           style={{ left: "calc(486 * var(--u))", top: "calc(944 * var(--u))", rotate: 24 }}
-          {...(still
-            ? {}
-            : {
-                initial: { opacity: 0 },
-                animate: { opacity: 1 },
-                transition: { delay: 1.2, duration: 0.6 },
-              })}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={still ? instant : { delay: 1.2, duration: 0.6 }}
         >
           {ctaNote}
         </motion.p>

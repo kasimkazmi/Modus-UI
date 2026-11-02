@@ -83,6 +83,8 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3100
       GOOGLE_OAUTH_CLIENT_ID: ci-client-id
       GOOGLE_OAUTH_CLIENT_SECRET: ci-client-secret
+      # One machine loads ~1,700 pages; Better Auth's per-IP limit would answer some with 429.
+      AUTH_RATE_LIMIT: "off"
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
