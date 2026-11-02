@@ -1,0 +1,63 @@
+---
+title: Drag List
+description: A React Native reorderable list where you drag a grip and the other rows spring out of the way, with move actions for screen readers.
+---
+
+A reorderable list. Press the grip on a row and drag: the row lifts and follows the pointer, the rows it passes spring out of the way, and on release it settles into its slot. Each grip is also an accessible control with move up and move down actions, so reordering never needs a gesture. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="drag-list" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add drag-list
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/drag-list.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Text } from "react-native";
+import { DragList } from "@/components/ui/drag-list";
+
+export default function Example() {
+  const [items, setItems] = useState([
+    { id: "a", title: "First" },
+    { id: "b", title: "Second" },
+    { id: "c", title: "Third" },
+  ]);
+
+  return (
+    <DragList
+      data={items}
+      keyExtractor={(item) => item.id}
+      onReorder={setItems}
+      renderItem={(item) => <Text style={{ padding: 20 }}>{item.title}</Text>}
+    />
+  );
+}
+```
+
+The list is controlled: it reorders only when you pass it a new `data`. It is as tall as its rows, so put it inside a `ScrollView` if there are many.
+
+## Props
+
+| Prop           | Type                                                   | Default | Description                                                                                    |
+| :------------- | :----------------------------------------------------- | :------ | :--------------------------------------------------------------------------------------------- |
+| `data`         | `T[]`                                                  | -       | The items, in order. The list reorders only when `data` does.                                  |
+| `renderItem`   | `(item: T, state: { dragging: boolean }) => ReactNode` | -       | Renders a row's content. The grip handle is added beside it.                                   |
+| `keyExtractor` | `(item: T, index: number) => string`                   | -       | A stable key for each item.                                                                    |
+| `onReorder`    | `(next: T[]) => void`                                  | -       | Called once, after a dragged row has settled, with the new order. Not called if nothing moved. |
+| `rowHeight`    | `number`                                               | `64`    | Height of every row. Rows have a fixed height so slots can be computed exactly.                |
+| `colors`       | `Partial<DragListColors>`                              | -       | Overrides `row`, `border` and `handle`.                                                        |
+| `style`        | `StyleProp<ViewStyle>`                                 | -       | Style for the list container.                                                                  |

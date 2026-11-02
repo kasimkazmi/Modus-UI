@@ -33,6 +33,15 @@ Modus UI is **not** a package you import from. You own the code: add a component
 npx @modus-ui/cli add blur-text
 ```
 
+Use whichever package manager you prefer. Each component page has a tab for each:
+
+| Package manager | Command                                |
+| :-------------- | :------------------------------------- |
+| npm             | `npx @modus-ui/cli add blur-text`      |
+| pnpm            | `pnpm dlx @modus-ui/cli add blur-text` |
+| yarn            | `yarn dlx @modus-ui/cli add blur-text` |
+| bun             | `bunx @modus-ui/cli add blur-text`     |
+
 The CLI writes the component into your project and lists the npm packages it needs. Every component page shows its own command.
 
 To copy and paste instead, open the **Code** tab on any component page and save the file as `components/ui/<name>.tsx`. Components import `cn()` from `@/lib/utils`:
@@ -83,17 +92,17 @@ For Cursor, Windsurf or VS Code setup, see [`packages/mcp`](packages/mcp). The d
 
 ## Components
 
-| Category         | Components                                                                                                                    |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| **Navigation**   | Liquid Tabs, Flowing Menu, Morphing Navbar, Floating Dock, Notch Footer, Process Stepper                                      |
-| **Actions**      | Magnet, Magic Button, Animated Button, Pulse Button                                                                           |
-| **Data Display** | Bounce Cards, Masonry Grid, Animated List, Kinetic Carousel, Expandable Showcase, Focus Card, Rotating Card, Tilt Card        |
-| **Backgrounds**  | Cursor Grid, Waves, Letter Glitch, Aurora Background, Circuit Background, Grid Motion                                         |
-| **Typography**   | Scroll Velocity, Text Pressure, True Focus, Gradient Text, Blur Text, Split Text, Decrypted Text, Shimmer Text, Floating Text |
-| **Components**   | Scratch to Reveal, Stack, Star Border, Tilted Card, Pixel Card, Click Spark, Spotlight Card, Border Glow                      |
-| **Native**       | Swipe Actions, Snap Sheet, Glide Segments, Swipe Deck, Fan Menu, Pin Pad                                                      |
+| Category         | Components                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Navigation**   | Liquid Tabs, Flowing Menu, Morphing Navbar, Floating Dock, Notch Footer, Process Stepper                                                                                                                                                                                                                                                                                                         |
+| **Actions**      | Magnet, Magic Button, Animated Button, Pulse Button                                                                                                                                                                                                                                                                                                                                              |
+| **Data Display** | Bounce Cards, Masonry Grid, Animated List, Kinetic Carousel, Expandable Showcase, Focus Card, Rotating Card, Tilt Card                                                                                                                                                                                                                                                                           |
+| **Backgrounds**  | Cursor Grid, Waves, Letter Glitch, Aurora Background, Circuit Background, Grid Motion                                                                                                                                                                                                                                                                                                            |
+| **Typography**   | Scroll Velocity, Text Pressure, True Focus, Gradient Text, Blur Text, Split Text, Decrypted Text, Shimmer Text, Floating Text                                                                                                                                                                                                                                                                    |
+| **Components**   | Scratch to Reveal, Stack, Star Border, Tilted Card, Pixel Card, Click Spark, Spotlight Card, Border Glow                                                                                                                                                                                                                                                                                         |
+| **React Native** | Swipe Actions, Snap Sheet, Glide Segments, Swipe Deck, Fan Menu, Pin Pad, Flick Toast, Fold Panel, Snap Carousel, Slide Switch, Shimmer Block, Parallax Header, Bubble Tab Bar, Roll Number, Star Rating, Value Slider, Expand Search, Intro Pager, Drag List, Long Press Menu, Slide Confirm, Calendar Strip, Step Tracker, Chip Input, Typing Dots, Marquee Ticker, Choice Chips, Hold Stepper |
 
-**Native** components are React Native (Expo) files that import only `react-native`, so they need no extra packages. Install them the same way (`npx @modus-ui/cli add swipe-actions`); the docs preview them live in the browser through react-native-web.
+**React Native** components are Expo files that import only `react-native`, so they need no extra packages. Install them the same way (`npx @modus-ui/cli add swipe-actions`); the docs preview them live in the browser through react-native-web.
 
 ## Documentation
 

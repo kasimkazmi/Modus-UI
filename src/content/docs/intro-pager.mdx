@@ -1,0 +1,68 @@
+---
+title: Intro Pager
+description: A swipeable React Native onboarding pager where the art drifts against the text, the dots stretch, and Next turns into the final action.
+---
+
+A swipeable onboarding pager. The art drifts against the text as you swipe, the dots stretch to show where you are, and the button turns from Next into the final action on the last page. On the web it also pages with a mouse drag, which a scroll view does not do by itself. With reduced motion the art stays put. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="intro-pager" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add intro-pager
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/intro-pager.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { IntroPager } from "@/components/ui/intro-pager";
+
+const pages = [
+  {
+    id: "plan",
+    title: "Plan the week",
+    description: "See every task on the day it belongs to.",
+    art: <View style={{ width: 160, height: 160, borderRadius: 80, backgroundColor: "#c7d2fe" }} />,
+  },
+  {
+    id: "focus",
+    title: "Stay in focus",
+    description: "One card at a time.",
+    art: <Text style={{ fontSize: 96 }}>🎯</Text>,
+  },
+];
+
+export default function Example() {
+  return (
+    <View style={{ flex: 1 }}>
+      <IntroPager pages={pages} onDone={() => console.log("done")} />
+    </View>
+  );
+}
+```
+
+The pager fills its parent, so give the parent a height (a screen with `flex: 1` is enough).
+
+## Props
+
+| Prop        | Type                        | Default         | Description                                                                             |
+| :---------- | :-------------------------- | :-------------- | :-------------------------------------------------------------------------------------- |
+| `pages`     | `IntroPage[]`               | -               | The pages. Each has an `id`, a `title`, a `description` and an `art` node.              |
+| `onDone`    | `() => void`                | -               | Called when the button is pressed on the last page.                                     |
+| `skipLabel` | `string`                    | `"Skip"`        | Label of the skip button, shown until the last page.                                    |
+| `nextLabel` | `string`                    | `"Next"`        | Label of the button until the last page.                                                |
+| `doneLabel` | `string`                    | `"Get started"` | Label the button morphs into on the last page.                                          |
+| `colors`    | `Partial<IntroPagerColors>` | -               | Overrides `background`, `title`, `text`, `dot`, `activeDot`, `button` and `buttonText`. |
+| `style`     | `StyleProp<ViewStyle>`      | -               | Style for the container.                                                                |

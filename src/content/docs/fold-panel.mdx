@@ -1,0 +1,61 @@
+---
+title: Fold Panel
+description: A React Native accordion whose panels grow to the measured height of their content, with a turning chevron and screen reader state.
+---
+
+An accordion whose panels grow to exactly the height of their content, measured rather than guessed, so any content works. The chevron turns as a panel opens, and every header is a button that tells screen readers whether it is expanded. Closed panels are hidden from them. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="fold-panel" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add fold-panel
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/fold-panel.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { FoldPanel } from "@/components/ui/fold-panel";
+
+export default function Example() {
+  return (
+    <FoldPanel
+      defaultOpen={["shipping"]}
+      items={[
+        {
+          id: "shipping",
+          title: "How long does shipping take?",
+          content: <Text>Three to five working days.</Text>,
+        },
+        {
+          id: "returns",
+          title: "Can I return an item?",
+          content: <Text>Yes, within 30 days.</Text>,
+        },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                       | Default | Description                                                                            |
+| :------------ | :------------------------- | :------ | :------------------------------------------------------------------------------------- |
+| `items`       | `FoldPanelItem[]`          | -       | The panels. Each has an `id`, a `title` and its `content`.                             |
+| `multiple`    | `boolean`                  | `false` | Whether several panels can be open at once. When false, opening one closes the others. |
+| `defaultOpen` | `string[]`                 | `[]`    | Ids of the panels that start open.                                                     |
+| `colors`      | `Partial<FoldPanelColors>` | -       | Overrides `surface`, `text`, `mutedText` and `border`.                                 |
+| `style`       | `StyleProp<ViewStyle>`     | -       | Style for the panel container.                                                         |

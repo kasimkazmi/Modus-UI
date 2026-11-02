@@ -1,0 +1,51 @@
+---
+title: Star Rating
+description: A React Native star rating you can tap or scrub, with half stars, popping fills and adjustable screen reader support.
+---
+
+A star rating you can tap or scrub. Drag across the row and the rating follows the pointer, snapping to whole stars (or halves); dragging past the left edge clears it. Each star pops as it fills. Screen readers get an adjustable control that says "3 of 5", and a read-only rating is announced as an image with the same text. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="star-rating" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add star-rating
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/star-rating.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { StarRating } from "@/components/ui/star-rating";
+
+export default function Example() {
+  const [rating, setRating] = useState(4);
+
+  return <StarRating value={rating} onChange={setRating} allowHalf />;
+}
+```
+
+## Props
+
+| Prop        | Type                        | Default    | Description                                                             |
+| :---------- | :-------------------------- | :--------- | :---------------------------------------------------------------------- |
+| `value`     | `number`                    | -          | The current rating, from 0 to `max`.                                    |
+| `onChange`  | `(value: number) => void`   | -          | Called with the new rating whenever a tap or drag changes it.           |
+| `max`       | `number`                    | `5`        | How many stars there are.                                               |
+| `size`      | `number`                    | `34`       | Width and height of each star.                                          |
+| `allowHalf` | `boolean`                   | `false`    | Lets the rating land on halves: the left half of a star counts as half. |
+| `readOnly`  | `boolean`                   | `false`    | Shows the rating without letting anyone change it.                      |
+| `label`     | `string`                    | `"Rating"` | Spoken name of the control.                                             |
+| `colors`    | `Partial<StarRatingColors>` | -          | Overrides `filled` and `empty`.                                         |
+| `style`     | `StyleProp<ViewStyle>`      | -          | Style for the row.                                                      |

@@ -1,0 +1,65 @@
+---
+title: Snap Carousel
+description: A React Native carousel that settles on one card at a time, with neighbors that shrink and fade and dots that stretch to follow.
+---
+
+A horizontal carousel that settles on one card at a time. The centered card is full size and opaque, its neighbors shrink and fade with the scroll position, and the dots below stretch to follow. Tap a dot or a neighboring card to go there. The dots row doubles as an adjustable control for screen readers, and on desktop the cards can be dragged with a mouse. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="snap-carousel" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add snap-carousel
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/snap-carousel.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { SnapCarousel } from "@/components/ui/snap-carousel";
+
+const places = [
+  { id: "ridge", name: "Ridge Cabin" },
+  { id: "harbor", name: "Harbor Loft" },
+  { id: "orchard", name: "Orchard House" },
+];
+
+export default function Example() {
+  return (
+    <SnapCarousel
+      data={places}
+      keyExtractor={(place) => place.id}
+      renderItem={(place) => <Text style={{ padding: 24, fontSize: 20 }}>{place.name}</Text>}
+      onIndexChange={(index) => console.log(index)}
+    />
+  );
+}
+```
+
+The carousel is as wide as its parent and as tall as its tallest card. Give the cards a background, since the carousel draws none.
+
+## Props
+
+| Prop            | Type                                    | Default | Description                                                                |
+| :-------------- | :-------------------------------------- | :------ | :------------------------------------------------------------------------- |
+| `data`          | `T[]`                                   | -       | The items to show.                                                         |
+| `renderItem`    | `(item: T, index: number) => ReactNode` | -       | Renders a card's content. The carousel sizes and animates the card itself. |
+| `keyExtractor`  | `(item: T, index: number) => string`    | -       | A stable key for each item.                                                |
+| `itemWidth`     | `number`                                | `0.72`  | Card width as a fraction of the carousel's width.                          |
+| `gap`           | `number`                                | `12`    | Space between cards.                                                       |
+| `onIndexChange` | `(index: number) => void`               | -       | Called when a different card becomes the centered one.                     |
+| `initialIndex`  | `number`                                | `0`     | Index of the card centered at first.                                       |
+| `showDots`      | `boolean`                               | `true`  | Whether to draw the dots under the cards.                                  |
+| `colors`        | `Partial<SnapCarouselColors>`           | -       | Overrides `dot` and `activeDot`.                                           |
+| `style`         | `StyleProp<ViewStyle>`                  | -       | Style for the carousel container.                                          |

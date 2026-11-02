@@ -121,6 +121,9 @@ export function PinPad({
         accessibilityRole="progressbar"
         accessibilityLabel="PIN"
         accessibilityValue={{ min: 0, max: length, now: pin.length }}
+        aria-valuemin={0}
+        aria-valuemax={length}
+        aria-valuenow={pin.length}
         style={[styles.dots, { transform: [{ translateX: shake }] }]}
       >
         {Array.from({ length }, (_, i) => (

@@ -1,0 +1,63 @@
+---
+title: Shimmer Block
+description: A React Native loading placeholder with a soft highlight that sweeps across it, stacked lines that shimmer together, and one spoken "Loading" for the whole block.
+---
+
+A loading placeholder with a soft highlight that sweeps across it. Ask for several `lines` and they sweep in step, with the last one shorter like the end of a paragraph. Screen readers hear a single "Loading" for the whole block, or nothing at all when the block is `decorative` and its parent already announces the wait. With reduced motion the block stays still. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="shimmer-block" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add shimmer-block
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/shimmer-block.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { View } from "react-native";
+import { ShimmerBlock } from "@/components/ui/shimmer-block";
+
+export default function Example({
+  loading,
+  children,
+}: {
+  loading: boolean;
+  children: React.ReactNode;
+}) {
+  if (!loading) return <>{children}</>;
+
+  return (
+    <View style={{ gap: 16 }}>
+      <ShimmerBlock height={20} width="50%" />
+      <ShimmerBlock lines={3} height={12} />
+    </View>
+  );
+}
+```
+
+When several blocks sit inside one parent that already announces "Loading", mark each block `decorative` so a screen reader does not read the wait once per block.
+
+## Props
+
+| Prop         | Type                          | Default  | Description                                                                                             |
+| :----------- | :---------------------------- | :------- | :------------------------------------------------------------------------------------------------------ |
+| `width`      | `DimensionValue`              | `"100%"` | Width of the block, or of the whole stack when `lines` is more than 1.                                  |
+| `height`     | `number`                      | `16`     | Height of each line.                                                                                    |
+| `radius`     | `number`                      | `8`      | Corner radius of each line.                                                                             |
+| `lines`      | `number`                      | `1`      | How many stacked lines to draw. The last of several is shorter, like the end of a paragraph.            |
+| `duration`   | `number`                      | `1400`   | Time for the highlight to cross the block, in milliseconds.                                             |
+| `decorative` | `boolean`                     | `false`  | Hide the block from screen readers. Use it for blocks inside a parent that already announces "Loading". |
+| `colors`     | `Partial<ShimmerBlockColors>` | -        | Overrides `base` (the block) and `highlight` (the sweeping band).                                       |
+| `style`      | `StyleProp<ViewStyle>`        | -        | Style for the block, or for the stack of lines.                                                         |

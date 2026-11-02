@@ -1,0 +1,58 @@
+---
+title: Choice Chips
+description: React Native chips for one choice or several, blending to the selected color while a check mark opens in front of the label.
+---
+
+Selectable chips for a single choice or several. Selecting blends the chip to its selected color and opens a check mark in front of the label, the chip pushes in while pressed, and everything wraps onto as many lines as it needs. Each chip is at least 44pt tall and reads as a radio button or checkbox to screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="choice-chips" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add choice-chips
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/choice-chips.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ChoiceChips } from "@/components/ui/choice-chips";
+
+const sizes = [
+  { value: "s", label: "Small" },
+  { value: "m", label: "Medium" },
+  { value: "l", label: "Large" },
+];
+
+export default function Example() {
+  const [size, setSize] = useState(["m"]);
+
+  return <ChoiceChips min={1} options={sizes} value={size} onChange={setSize} />;
+}
+```
+
+The selection is always an array of values. In the default single mode it holds at most one.
+
+## Props
+
+| Prop       | Type                         | Default | Description                                                                                            |
+| :--------- | :--------------------------- | :------ | :----------------------------------------------------------------------------------------------------- |
+| `options`  | `ChoiceChipOption[]`         | -       | The chips, each with a `value` and a `label`.                                                          |
+| `value`    | `string[]`                   | -       | The selected values.                                                                                   |
+| `onChange` | `(next: string[]) => void`   | -       | Called with the new selection.                                                                         |
+| `multiple` | `boolean`                    | `false` | Allow more than one chip to be selected. Otherwise it behaves like a radio group.                      |
+| `min`      | `number`                     | `0`     | The fewest chips that may stay selected. With `1`, the last selected chip cannot be turned off.        |
+| `max`      | `number`                     | -       | The most chips that may be selected at once, in multiple mode. Further chips dim until one is removed. |
+| `colors`   | `Partial<ChoiceChipsColors>` | -       | Overrides `chip`, `selectedChip`, `text`, `selectedText` and `border`.                                 |
+| `style`    | `StyleProp<ViewStyle>`       | -       | Style for the container.                                                                               |

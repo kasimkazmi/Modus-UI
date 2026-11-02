@@ -1,0 +1,56 @@
+---
+title: Bubble Tab Bar
+description: A React Native bottom tab bar where a rounded pill slides behind the selected tab and the selected tab opens to show its label.
+---
+
+A bottom tab bar where a rounded pill slides behind the selected tab, stretching a little as it travels. The selected tab opens up to show its label next to the icon; the others stay icon-only. Every tab is at least 44 points tall and wide, and the bar is a tablist to screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="bubble-tab-bar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add bubble-tab-bar
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/bubble-tab-bar.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Text } from "react-native";
+import { BubbleTabBar } from "@/components/ui/bubble-tab-bar";
+
+const tabs = [
+  { id: "home", label: "Home", icon: (color: string) => <Text style={{ color }}>⌂</Text> },
+  { id: "saved", label: "Saved", icon: (color: string) => <Text style={{ color }}>♡</Text> },
+  { id: "profile", label: "Profile", icon: (color: string) => <Text style={{ color }}>☺</Text> },
+];
+
+export default function Example() {
+  const [tab, setTab] = useState("home");
+
+  return <BubbleTabBar tabs={tabs} value={tab} onChange={setTab} />;
+}
+```
+
+An icon can be a node, or a function that receives the tab's current color (white on the pill, muted elsewhere) and returns the node. The bar fills its parent's width.
+
+## Props
+
+| Prop       | Type                          | Default | Description                                          |
+| :--------- | :---------------------------- | :------ | :--------------------------------------------------- |
+| `tabs`     | `BubbleTab[]`                 | -       | The tabs. Each has an `id`, a `label` and an `icon`. |
+| `value`    | `string`                      | -       | The `id` of the selected tab.                        |
+| `onChange` | `(id: string) => void`        | -       | Called with the `id` of the tab that was pressed.    |
+| `colors`   | `Partial<BubbleTabBarColors>` | -       | Overrides `bar`, `pill`, `active` and `inactive`.    |
+| `style`    | `StyleProp<ViewStyle>`        | -       | Style for the bar.                                   |

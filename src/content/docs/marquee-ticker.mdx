@@ -1,0 +1,54 @@
+---
+title: Marquee Ticker
+description: A React Native endless scrolling strip with a seamless loop, either direction, press and hold to pause, and a still fallback for reduced motion.
+---
+
+An endless strip of scrolling content. The content is measured and repeated to fill the strip plus one spare copy, and the strip travels exactly one copy per loop, so the seam is invisible. Press and hold to pause. With reduced motion the content stands still, left aligned and clipped. Screen readers read the first copy only. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="marquee-ticker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add marquee-ticker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/marquee-ticker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { MarqueeTicker } from "@/components/ui/marquee-ticker";
+
+export default function Example() {
+  return (
+    <MarqueeTicker speed={60}>
+      <Text style={{ paddingVertical: 12 }}>
+        Free shipping on orders over $50 · New arrivals every Friday
+      </Text>
+    </MarqueeTicker>
+  );
+}
+```
+
+The strip is as wide as its parent and as tall as its content.
+
+## Props
+
+| Prop           | Type                           | Default  | Description                                           |
+| :------------- | :----------------------------- | :------- | :---------------------------------------------------- |
+| `speed`        | `number`                       | `60`     | Scroll speed in pixels per second.                    |
+| `direction`    | `"left" \| "right"`            | `"left"` | Which way the content travels.                        |
+| `gap`          | `number`                       | `32`     | Space between one repeat of the content and the next. |
+| `pauseOnPress` | `boolean`                      | `true`   | Pause while the strip is pressed and held.            |
+| `colors`       | `Partial<MarqueeTickerColors>` | -        | Overrides `background`.                               |
+| `style`        | `StyleProp<ViewStyle>`         | -        | Style for the strip.                                  |

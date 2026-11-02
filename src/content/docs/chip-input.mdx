@@ -1,0 +1,60 @@
+---
+title: Chip Input
+description: A React Native tag input where Enter or a comma turns text into chips that pop in, wrap, and can each be removed.
+---
+
+A tag input. Type and press Enter or a comma to turn the text into a chip. Chips pop in, wrap onto new lines, and each has its own remove button with a full 44pt touch target. Backspace on an empty field removes the last chip, and leaving the field keeps whatever was typed instead of losing it. Additions and removals are announced to screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="chip-input" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add chip-input
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/chip-input.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ChipInput } from "@/components/ui/chip-input";
+
+export default function Example() {
+  const [tags, setTags] = useState(["design", "mobile"]);
+
+  return (
+    <ChipInput
+      value={tags}
+      onChange={setTags}
+      placeholder="Add a topic"
+      maxChips={6}
+      validate={(text) => text.length <= 20}
+    />
+  );
+}
+```
+
+Pasting `a,b,c` adds a and b as chips and leaves c in the field. A repeat is ignored in any letter case unless `allowDuplicates` is set.
+
+## Props
+
+| Prop              | Type                        | Default       | Description                                                                         |
+| :---------------- | :-------------------------- | :------------ | :---------------------------------------------------------------------------------- |
+| `value`           | `string[]`                  | -             | The current chips.                                                                  |
+| `onChange`        | `(next: string[]) => void`  | -             | Called with the new list when a chip is added or removed.                           |
+| `placeholder`     | `string`                    | `"Add a tag"` | Hint shown in the empty field, and the input's accessibility label.                 |
+| `maxChips`        | `number`                    | `8`           | No more chips are added once there are this many.                                   |
+| `validate`        | `(text: string) => boolean` | -             | Return false to reject a chip. It receives the trimmed text.                        |
+| `allowDuplicates` | `boolean`                   | `false`       | Allow the same chip twice. Without it a repeat, in any letter case, is ignored.     |
+| `colors`          | `Partial<ChipInputColors>`  | -             | Overrides `field`, `chip`, `chipText`, `text`, `placeholder`, `border` and `focus`. |
+| `style`           | `StyleProp<ViewStyle>`      | -             | Style for the outer container.                                                      |

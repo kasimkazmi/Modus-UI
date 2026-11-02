@@ -1,0 +1,58 @@
+---
+title: Long Press Menu
+description: A React Native menu that springs out from a trigger you press and hold, with every item also exposed as an accessibility action.
+---
+
+Press and hold a trigger to open a menu beside it. The trigger shrinks a little under your finger, the menu springs out from its corner, and choosing an item, tapping elsewhere or pressing Escape folds it away. Every item is also an accessibility action on the trigger, so nothing depends on the long press. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="long-press-menu" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add long-press-menu
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/long-press-menu.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { LongPressMenu } from "@/components/ui/long-press-menu";
+
+export default function Example() {
+  return (
+    <LongPressMenu
+      items={[
+        { label: "Reply", onPress: () => console.log("reply") },
+        { label: "Delete", destructive: true, onPress: () => console.log("delete") },
+      ]}
+    >
+      <View style={{ padding: 16, borderRadius: 16, backgroundColor: "#eee" }}>
+        <Text>Press and hold me</Text>
+      </View>
+    </LongPressMenu>
+  );
+}
+```
+
+On iOS and Android the menu opens in a transparent `Modal`, so a tap anywhere on the screen closes it. On the web it renders inline, which keeps it inside the page area you place it in.
+
+## Props
+
+| Prop        | Type                           | Default   | Description                                                                       |
+| :---------- | :----------------------------- | :-------- | :-------------------------------------------------------------------------------- |
+| `items`     | `LongPressMenuItem[]`          | -         | The menu entries. Each has a `label`, an `onPress` and an optional `destructive`. |
+| `delay`     | `number`                       | `350`     | How long to hold, in milliseconds.                                                |
+| `placement` | `"below" \| "above"`           | `"below"` | Which side of the trigger the menu opens on.                                      |
+| `colors`    | `Partial<LongPressMenuColors>` | -         | Overrides `menu`, `text`, `destructive` and `border`.                             |
+| `style`     | `StyleProp<ViewStyle>`         | -         | Style for the wrapper around the trigger.                                         |

@@ -1,6 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "./copy-button";
+import { InstallTabs } from "./install-tabs";
+import { NPM_INSTALL_PATTERN } from "@/lib/install";
 import { CodeBlock } from "./code-block";
 
 export const MDXComponents = {
@@ -65,6 +67,9 @@ export const MDXComponents = {
   ),
   pre: async ({ className, children, ...props }: any) => {
     const code = children?.props?.children || "";
+    // The docs write the npm command; show it with a tab per package manager.
+    const install = typeof code === "string" ? NPM_INSTALL_PATTERN.exec(code.trim()) : null;
+    if (install) return <InstallTabs name={install[1]} />;
     const lang = children?.props?.className?.replace("language-", "") || "tsx";
 
     return (

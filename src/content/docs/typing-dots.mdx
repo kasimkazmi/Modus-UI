@@ -1,0 +1,51 @@
+---
+title: Typing Dots
+description: A React Native chat typing indicator whose dots bounce in a staggered wave, with a bubble behind them and a single spoken label.
+---
+
+The three bouncing dots of a chat typing indicator. A wave runs through the dots, each lifting and brightening in turn. With reduced motion they sit still at a medium brightness. Screen readers hear one element with the label, not the dots. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="typing-dots" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add typing-dots
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/typing-dots.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { View } from "react-native";
+import { TypingDots } from "@/components/ui/typing-dots";
+
+export default function Example() {
+  const someoneIsTyping = true;
+
+  return <View style={{ padding: 16 }}>{someoneIsTyping ? <TypingDots /> : null}</View>;
+}
+```
+
+Render it only while the other person is typing. For dots without the bubble, for example inside your own bubble, pass `bubble={false}`.
+
+## Props
+
+| Prop     | Type                        | Default    | Description                                                       |
+| :------- | :-------------------------- | :--------- | :---------------------------------------------------------------- |
+| `size`   | `number`                    | `8`        | Diameter of each dot.                                             |
+| `count`  | `number`                    | `3`        | How many dots.                                                    |
+| `bubble` | `boolean`                   | `true`     | Draw the rounded chat bubble behind the dots.                     |
+| `speed`  | `number`                    | `1200`     | Length of one full wave, in milliseconds.                         |
+| `label`  | `string`                    | `"Typing"` | Spoken label. The dots themselves are hidden from screen readers. |
+| `colors` | `Partial<TypingDotsColors>` | -          | Overrides `dot` and `bubble`.                                     |
+| `style`  | `StyleProp<ViewStyle>`      | -          | Style for the bubble, or for the dots when `bubble` is off.       |

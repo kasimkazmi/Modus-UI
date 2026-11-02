@@ -1,0 +1,56 @@
+---
+title: Slide Confirm
+description: A React Native slide-to-confirm control. Drag the thumb to the end to confirm, release early to spring back, and confirm with a screen reader or keyboard action.
+---
+
+A "slide to confirm" control for actions that should not happen by accident, like paying or deleting. Drag the thumb along the track: the track fills behind it, the label fades away, and letting go early springs it back. It is also one button for screen readers and the keyboard, so confirming never depends on the gesture. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="slide-confirm" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add slide-confirm
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/slide-confirm.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { SlideConfirm } from "@/components/ui/slide-confirm";
+
+export default function Example() {
+  return (
+    <SlideConfirm
+      label="Slide to pay"
+      confirmedLabel="Paid"
+      onConfirm={() => console.log("paid")}
+    />
+  );
+}
+```
+
+`onConfirm` runs once per confirmation. With `resetAfter` set, the thumb springs back after that many milliseconds and can be used again.
+
+## Props
+
+| Prop             | Type                          | Default              | Description                                                                                             |
+| :--------------- | :---------------------------- | :------------------- | :------------------------------------------------------------------------------------------------------ |
+| `onConfirm`      | `() => void`                  | -                    | Called once when the thumb reaches the end, or when a screen reader or the keyboard activates it.       |
+| `label`          | `string`                      | `"Slide to confirm"` | Text on the track before confirming.                                                                    |
+| `confirmedLabel` | `string`                      | `"Confirmed"`        | Shown on the track once confirmed.                                                                      |
+| `threshold`      | `number`                      | `0.9`                | Fraction of the track the thumb must cover for the slide to count.                                      |
+| `height`         | `number`                      | `56`                 | Height of the track; the thumb is a little smaller.                                                     |
+| `disabled`       | `boolean`                     | `false`              | Dims the control and ignores drags and activation.                                                      |
+| `resetAfter`     | `number`                      | `0`                  | Milliseconds after confirming until the thumb springs back and can be used again. 0 keeps it confirmed. |
+| `colors`         | `Partial<SlideConfirmColors>` | -                    | Overrides `track`, `fill`, `thumb`, `icon`, `text` and `confirmedText`.                                 |
+| `style`          | `StyleProp<ViewStyle>`        | -                    | Style for the track.                                                                                    |

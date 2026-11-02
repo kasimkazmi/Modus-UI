@@ -6,6 +6,9 @@ import { notFound } from "next/navigation";
 import { TableOfContents } from "@/components/table-of-contents";
 import { FavoriteButton } from "@/components/favorite-button";
 import { Comments } from "@/components/comments";
+import { PlatformBadge } from "@/components/platform-icon";
+import { registry } from "@/registry";
+import { platformOf } from "@/lib/registry";
 
 interface PageProps {
   params: {
@@ -36,6 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function DocPage({ params }: PageProps) {
   const doc = await getDocBySlug(params.slug);
+  const entry = registry.find((item) => item.name === params.slug);
 
   if (!doc) {
     notFound();
@@ -57,6 +61,11 @@ export default async function DocPage({ params }: PageProps) {
             <h1 className="heading-landing text-5xl">{doc.frontmatter.title}</h1>
             <FavoriteButton slug={params.slug} />
           </div>
+          {entry && (
+            <div className="mb-5">
+              <PlatformBadge platform={platformOf(entry)} />
+            </div>
+          )}
           <p className="max-w-3xl text-xl leading-relaxed text-muted-foreground">
             {doc.frontmatter.description}
           </p>

@@ -6,11 +6,12 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NewBadge } from "@/components/new-badge";
+import { PlatformIcon, type ComponentPlatform } from "@/components/platform-icon";
 
 export interface SidebarCategory {
   title: string;
   icon: React.ReactNode;
-  items: { title: string; href: string; isNew?: boolean }[];
+  items: { title: string; href: string; isNew?: boolean; platform?: ComponentPlatform }[];
 }
 
 export function SidebarNav({ categories }: { categories: SidebarCategory[] }) {
@@ -122,6 +123,7 @@ export function SidebarNav({ categories }: { categories: SidebarCategory[] }) {
                             : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
                         )}
                       >
+                        {item.platform && <PlatformIcon platform={item.platform} />}
                         <span className="truncate">{item.title}</span>
                         {item.isNew && <NewBadge />}
                       </Link>

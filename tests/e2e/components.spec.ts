@@ -67,58 +67,62 @@ async function showsContent(page: Page): Promise<boolean> {
  * e.g. a marquee track) is skipped.
  */
 async function clippedInPreview(page: Page): Promise<string[]> {
-  return page.getByRole("tabpanel").evaluate((panel: HTMLElement) => {
-    const frame = panel.getBoundingClientRect();
-    // The outermost clipping box is the demo's frame. If a clipping container nested inside it
-    // already cuts the element off (a marquee track, a zoom viewer, a scroller), that is by design.
-    const scrolls = (el: Element) => {
-      const clippers: Element[] = [];
-      for (let n = el.parentElement; n && n !== panel; n = n.parentElement) {
-        if (getComputedStyle(n).overflowX !== "visible") clippers.push(n);
-      }
-      const box = el.getBoundingClientRect();
-      // Every clipper but the outermost, plus the outermost too when it is narrower than the
-      // frame: that is the component's own window (a carousel viewport), not the frame.
-      const own = clippers.filter(
-        (c, i) => i < clippers.length - 1 || c.getBoundingClientRect().width < frame.width - 24,
-      );
-      return own.some((c) => {
-        const { overflowX } = getComputedStyle(c);
-        const r = c.getBoundingClientRect();
-        return (
-          overflowX === "auto" ||
-          overflowX === "scroll" ||
-          box.left < r.left - 2 ||
-          box.right > r.right + 2
-        );
-      });
-    };
-    // Opacity multiplies up the tree, so a page parked at opacity 0 hides its contents too.
-    const visible = (el: HTMLElement) => {
-      if (getComputedStyle(el).visibility === "hidden") return false;
-      let opacity = 1;
-      for (let n: HTMLElement | null = el; n && n !== panel; n = n.parentElement) {
-        const style = getComputedStyle(n);
-        if (style.display === "none") return false;
-        opacity *= Number(style.opacity || "1");
-      }
-      return opacity > 0.05;
-    };
-    const content = [
-      ...panel.querySelectorAll<HTMLElement>("button, a, input, img, [role]"),
-    ].concat(
-      [...panel.querySelectorAll<HTMLElement>("*")].filter((el) =>
-        [...el.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()),
-      ),
-    );
-    return content
-      .filter((el) => {
+  // The preview is the first tab panel; the install command below it has tabs of its own.
+  return page
+    .getByRole("tabpanel")
+    .first()
+    .evaluate((panel: HTMLElement) => {
+      const frame = panel.getBoundingClientRect();
+      // The outermost clipping box is the demo's frame. If a clipping container nested inside it
+      // already cuts the element off (a marquee track, a zoom viewer, a scroller), that is by design.
+      const scrolls = (el: Element) => {
+        const clippers: Element[] = [];
+        for (let n = el.parentElement; n && n !== panel; n = n.parentElement) {
+          if (getComputedStyle(n).overflowX !== "visible") clippers.push(n);
+        }
         const box = el.getBoundingClientRect();
-        if (box.width === 0 || !visible(el) || scrolls(el)) return false;
-        return box.left < frame.left - 2 || box.right > frame.right + 2;
-      })
-      .map((el) => `${el.tagName.toLowerCase()} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
-  });
+        // Every clipper but the outermost, plus the outermost too when it is narrower than the
+        // frame: that is the component's own window (a carousel viewport), not the frame.
+        const own = clippers.filter(
+          (c, i) => i < clippers.length - 1 || c.getBoundingClientRect().width < frame.width - 24,
+        );
+        return own.some((c) => {
+          const { overflowX } = getComputedStyle(c);
+          const r = c.getBoundingClientRect();
+          return (
+            overflowX === "auto" ||
+            overflowX === "scroll" ||
+            box.left < r.left - 2 ||
+            box.right > r.right + 2
+          );
+        });
+      };
+      // Opacity multiplies up the tree, so a page parked at opacity 0 hides its contents too.
+      const visible = (el: HTMLElement) => {
+        if (getComputedStyle(el).visibility === "hidden") return false;
+        let opacity = 1;
+        for (let n: HTMLElement | null = el; n && n !== panel; n = n.parentElement) {
+          const style = getComputedStyle(n);
+          if (style.display === "none") return false;
+          opacity *= Number(style.opacity || "1");
+        }
+        return opacity > 0.05;
+      };
+      const content = [
+        ...panel.querySelectorAll<HTMLElement>("button, a, input, img, [role]"),
+      ].concat(
+        [...panel.querySelectorAll<HTMLElement>("*")].filter((el) =>
+          [...el.childNodes].some((n) => n.nodeType === Node.TEXT_NODE && n.textContent?.trim()),
+        ),
+      );
+      return content
+        .filter((el) => {
+          const box = el.getBoundingClientRect();
+          if (box.width === 0 || !visible(el) || scrolls(el)) return false;
+          return box.left < frame.left - 2 || box.right > frame.right + 2;
+        })
+        .map((el) => `${el.tagName.toLowerCase()} "${(el.textContent ?? "").trim().slice(0, 30)}"`);
+    });
 }
 
 // Demos whose content runs past the frame by design. Dome Gallery tiles the inside of a
@@ -143,7 +147,7 @@ for (const { name } of registry) {
       test.skip(test.info().project.name !== "mobile", "phone layout only");
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(`/components/${name}`);
-      await expect(page.getByRole("tabpanel")).toBeVisible();
+      await expect(page.getByRole("tabpanel").first()).toBeVisible();
       await page.waitForTimeout(800);
       const width = await page.evaluate(() => [
         document.documentElement.scrollWidth,
@@ -159,7 +163,8 @@ for (const { name } of registry) {
         const errors = trackErrors(page);
         const response = await page.goto(`/preview/${name}`);
         expect(response?.status()).toBe(200);
-        await expect.poll(() => showsContent(page), { timeout: 5_000 }).toBe(true);
+        // Generous because WebGL previews render in software on CI runners, which is far slower than a GPU.
+        await expect.poll(() => showsContent(page), { timeout: 15_000 }).toBe(true);
         expect(errors).toEqual([]);
       });
     }
