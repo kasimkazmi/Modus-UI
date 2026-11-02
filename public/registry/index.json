@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 264,
+  "count": 274,
   "categories": [
     "Navigation",
     "Actions",
@@ -3023,6 +3023,86 @@
       "category": "React Native",
       "platform": "native",
       "description": "The React Native row of segmented progress bars from a story viewer, which fills each story in turn, holds in place when paused, and announces its position.",
+      "dependencies": []
+    },
+    {
+      "name": "action-button",
+      "title": "Action Button",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native button that carries its own progress, turning its label into a spinner, then a tick or a cross with a shake, without ever changing size.",
+      "dependencies": []
+    },
+    {
+      "name": "spin-loader",
+      "title": "Spin Loader",
+      "category": "React Native",
+      "platform": "native",
+      "description": "Four React Native loading spinners in one component, a ring, bouncing dots, rising bars and a spreading pulse, that stand still when motion is reduced.",
+      "dependencies": []
+    },
+    {
+      "name": "radio-group",
+      "title": "Radio Group",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native radio group drawn as cards with a springing dot, a single tab stop and arrow-key navigation on the web.",
+      "dependencies": []
+    },
+    {
+      "name": "mode-toggle",
+      "title": "Mode Toggle",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native light and dark switch where the sun slides across, turns into a moon and the sky fills with stars.",
+      "dependencies": []
+    },
+    {
+      "name": "tip-popover",
+      "title": "Tip Popover",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native tip that points at its trigger, springs out from the arrow and closes on an outside tap or Escape.",
+      "dependencies": []
+    },
+    {
+      "name": "data-table",
+      "title": "Data Table",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native table with sortable columns, a header that stays put while rows scroll and sideways scrolling for wide columns.",
+      "dependencies": []
+    },
+    {
+      "name": "wave-bars",
+      "title": "Wave Bars",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native audio waveform made of bars that swell out of step while playing and tint as they are played.",
+      "dependencies": []
+    },
+    {
+      "name": "page-dots",
+      "title": "Page Dots",
+      "category": "React Native",
+      "platform": "native",
+      "description": "React Native pager dots where the current page stretches into a pill and every dot can be tapped to jump.",
+      "dependencies": []
+    },
+    {
+      "name": "password-meter",
+      "title": "Password Meter",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native strength meter whose four bars fill and change colour as a password gets stronger.",
+      "dependencies": []
+    },
+    {
+      "name": "timeline-list",
+      "title": "Timeline List",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native vertical timeline with completed, current and upcoming steps and a pulsing dot on the step in progress.",
       "dependencies": []
     }
   ],
