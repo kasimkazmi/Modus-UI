@@ -1,0 +1,61 @@
+---
+title: Float Field
+description: A React Native text field whose label floats up from inside the box, with an animated focus border, an error shake, a clear button and a Show toggle for passwords.
+---
+
+A text field whose label starts inside the box and floats up to the top as you focus or type. The border blends to the focus colour, a new error shakes the field and turns it red, and the message is announced to screen readers. It clears with one tap and can hide its text behind a Show button for passwords. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="float-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add float-field
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/float-field.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { FloatField } from "@/components/ui/float-field";
+
+export default function Example() {
+  const [email, setEmail] = useState("");
+
+  return (
+    <FloatField
+      label="Email"
+      value={email}
+      onChangeText={setEmail}
+      keyboardType="email-address"
+      helper="We only use it to sign you in"
+    />
+  );
+}
+```
+
+## Props
+
+| Prop              | Type                                                                | Default     | Description                                                                             |
+| :---------------- | :------------------------------------------------------------------ | :---------- | :-------------------------------------------------------------------------------------- |
+| `value`           | `string`                                                            | -           | The text in the field.                                                                  |
+| `onChangeText`    | `(text: string) => void`                                            | -           | Called as the text changes.                                                             |
+| `label`           | `string`                                                            | -           | The field's name. It floats up when there is text or focus.                             |
+| `helper`          | `string`                                                            | -           | A hint under the field.                                                                 |
+| `error`           | `string`                                                            | -           | Replaces the hint, turns the border red and shakes the field when it first appears.     |
+| `secureTextEntry` | `boolean`                                                           | `false`     | Hides the text, with a Show and Hide button.                                            |
+| `clearable`       | `boolean`                                                           | `true`      | Shows a clear button while the field has text.                                          |
+| `disabled`        | `boolean`                                                           | `false`     | Dims the field and stops editing.                                                       |
+| `keyboardType`    | `"default" \| "email-address" \| "numeric" \| "phone-pad" \| "url"` | `"default"` | Which keyboard to show.                                                                 |
+| `colors`          | `Partial<FloatFieldColors>`                                         | -           | Overrides `background`, `border`, `focusBorder`, `label`, `text`, `error` and `helper`. |
+| `style`           | `StyleProp<ViewStyle>`                                              | -           | Style for the field and its message.                                                    |

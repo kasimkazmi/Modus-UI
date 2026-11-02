@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 254,
+  "count": 258,
   "categories": [
     "Navigation",
     "Actions",
@@ -2943,6 +2943,38 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native card that grows from a compact row into a full detail view, with its picture swelling from a thumbnail to a banner and its details fading in.",
+      "dependencies": []
+    },
+    {
+      "name": "ring-meter",
+      "title": "Ring Meter",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native circular progress ring drawn with plain views and no SVG package, that sweeps smoothly all the way round and holds any content in its middle.",
+      "dependencies": []
+    },
+    {
+      "name": "count-badge",
+      "title": "Count Badge",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native notification count that sits on an icon's corner, pops in when it appears, pulses as the number changes, and reads out with its label.",
+      "dependencies": []
+    },
+    {
+      "name": "float-field",
+      "title": "Float Field",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native text field whose label floats up from inside the box, with an animated focus border, an error shake, a clear button and a Show toggle for passwords.",
+      "dependencies": []
+    },
+    {
+      "name": "month-grid",
+      "title": "Month Grid",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native month calendar with a pill that glides to the selected day, swipe to change month, event dots, and local dates that never shift across time zones.",
       "dependencies": []
     }
   ],
