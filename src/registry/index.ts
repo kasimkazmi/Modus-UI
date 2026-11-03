@@ -4824,6 +4824,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/poll-bars.tsx"],
   },
+  {
+    name: "card-field",
+    title: "Card Field",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/card-field.tsx"],
+  },
+  {
+    name: "step-slider",
+    title: "Step Slider",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/step-slider.tsx"],
+  },
+  {
+    name: "cart-quantity",
+    title: "Cart Quantity",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/cart-quantity.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

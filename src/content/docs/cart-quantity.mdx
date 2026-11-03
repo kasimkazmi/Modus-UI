@@ -1,0 +1,51 @@
+---
+title: Cart Quantity
+description: A React Native quantity picker whose minus turns into a bin at one so the same tap removes the item.
+---
+
+A quantity picker for a cart line. At one, the minus becomes a bin so the same tap removes the item instead of going to zero. The number pops when it changes and the plus dims at the limit. Each button names the item it changes, and the new quantity is announced. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="cart-quantity" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add cart-quantity
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/cart-quantity.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { CartQuantity } from "@/components/ui/cart-quantity";
+
+export default function Example() {
+  const [qty, setQty] = useState(1);
+
+  return (
+    <CartQuantity label="Linen shirt" value={qty} onChange={setQty} onRemove={() => setQty(0)} />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                          | Default  | Description                                                    |
+| :--------- | :---------------------------- | :------- | :------------------------------------------------------------- |
+| `value`    | `number`                      | -        | The current quantity.                                          |
+| `onChange` | `(value: number) => void`     | -        | Called with the new quantity.                                  |
+| `onRemove` | `() => void`                  | -        | Called when minus is pressed at 1; the minus then shows a bin. |
+| `max`      | `number`                      | `99`     | The most that can be ordered.                                  |
+| `label`    | `string`                      | `"item"` | Spoken name of the item.                                       |
+| `colors`   | `Partial<CartQuantityColors>` | -        | Overrides `surface`, `border`, `text`, `accent` and `remove`.  |
+| `style`    | `StyleProp<ViewStyle>`        | -        | Style for the picker.                                          |
