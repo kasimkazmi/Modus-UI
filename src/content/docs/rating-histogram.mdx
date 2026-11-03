@@ -1,0 +1,43 @@
+---
+title: Rating Histogram
+description: A React Native review breakdown with one animated bar per star level and the average beside them.
+---
+
+The breakdown of ratings you see on a product page: one bar per star level that grows to its share of all ratings, with the average beside them. Bars animate to new counts, and each row reads out as "4 stars: 12 ratings". Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="rating-histogram" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add rating-histogram
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/rating-histogram.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { RatingHistogram } from "@/components/ui/rating-histogram";
+
+export default function Example() {
+  return <RatingHistogram counts={[2, 3, 8, 21, 46]} />;
+}
+```
+
+## Props
+
+| Prop          | Type                                       | Default | Description                                                  |
+| :------------ | :----------------------------------------- | :------ | :----------------------------------------------------------- |
+| `counts`      | `[number, number, number, number, number]` | -       | How many ratings each star level got, from one star to five. |
+| `showAverage` | `boolean`                                  | `true`  | Shows the average and the total beside the bars.             |
+| `colors`      | `Partial<RatingHistogramColors>`           | -       | Overrides `bar`, `track`, `text` and `average`.              |
+| `style`       | `StyleProp<ViewStyle>`                     | -       | Style for the whole block.                                   |

@@ -4764,6 +4764,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/timeline-list.tsx"],
   },
+  {
+    name: "empty-state",
+    title: "Empty State",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/empty-state.tsx"],
+  },
+  {
+    name: "rating-histogram",
+    title: "Rating Histogram",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/rating-histogram.tsx"],
+  },
+  {
+    name: "countdown-timer",
+    title: "Countdown Timer",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/countdown-timer.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

@@ -1,0 +1,53 @@
+---
+title: Empty State
+description: A React Native empty list placeholder with a floating badge, a message and an optional action button.
+---
+
+What to show when a list has nothing in it yet. A badge with a glyph floats gently above a title, a short message and an optional button, and the whole block rises into place when it appears. With reduced motion it appears already in place and the badge stays still. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="empty-state" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add empty-state
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/empty-state.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { EmptyState } from "@/components/ui/empty-state";
+
+export default function Example() {
+  return (
+    <EmptyState
+      title="No messages yet"
+      message="When someone writes to you, it will show up here."
+      actionLabel="Send a message"
+      onAction={() => {}}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                        | Default | Description                                                       |
+| :------------ | :-------------------------- | :------ | :---------------------------------------------------------------- |
+| `title`       | `string`                    | -       | The headline.                                                     |
+| `message`     | `string`                    | -       | A short explanation under the title.                              |
+| `icon`        | `string`                    | `"📭"`  | A single glyph or emoji drawn in the badge.                       |
+| `actionLabel` | `string`                    | -       | Label of the button; leave it out for no button.                  |
+| `onAction`    | `() => void`                | -       | Called when the button is pressed.                                |
+| `colors`      | `Partial<EmptyStateColors>` | -       | Overrides `badge`, `title`, `message`, `button` and `buttonText`. |
+| `style`       | `StyleProp<ViewStyle>`      | -       | Style for the block.                                              |

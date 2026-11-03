@@ -1,0 +1,45 @@
+---
+title: Countdown Timer
+description: A React Native minutes and seconds countdown with a draining bar that pauses, resumes and fires once when time is up.
+---
+
+A minutes and seconds countdown with a bar that drains underneath. Pausing holds both the digits and the bar and resuming carries on from there. When the time is up the digits turn to the done colour and `onComplete` fires once. The remaining time is not announced every second, only "Time is up", so a screen reader is not flooded. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="countdown-timer" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add countdown-timer
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/countdown-timer.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { CountdownTimer } from "@/components/ui/countdown-timer";
+
+export default function Example() {
+  return <CountdownTimer seconds={90} onComplete={() => console.log("done")} />;
+}
+```
+
+## Props
+
+| Prop         | Type                            | Default   | Description                                                  |
+| :----------- | :------------------------------ | :-------- | :----------------------------------------------------------- |
+| `seconds`    | `number`                        | -         | How long to count down from. Changing it restarts the timer. |
+| `running`    | `boolean`                       | `true`    | Pauses the countdown when false.                             |
+| `onComplete` | `() => void`                    | -         | Called once when the time runs out.                          |
+| `label`      | `string`                        | `"Timer"` | Spoken name of the timer.                                    |
+| `colors`     | `Partial<CountdownTimerColors>` | -         | Overrides `text`, `track`, `fill` and `done`.                |
+| `style`      | `StyleProp<ViewStyle>`          | -         | Style for the timer's container.                             |
