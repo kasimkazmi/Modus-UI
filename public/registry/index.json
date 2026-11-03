@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 274,
+  "count": 298,
   "categories": [
     "Navigation",
     "Actions",
@@ -3103,6 +3103,198 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native vertical timeline with completed, current and upcoming steps and a pulsing dot on the step in progress.",
+      "dependencies": []
+    },
+    {
+      "name": "empty-state",
+      "title": "Empty State",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native empty list placeholder with a floating badge, a message and an optional action button.",
+      "dependencies": []
+    },
+    {
+      "name": "rating-histogram",
+      "title": "Rating Histogram",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native review breakdown with one animated bar per star level and the average beside them.",
+      "dependencies": []
+    },
+    {
+      "name": "countdown-timer",
+      "title": "Countdown Timer",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native minutes and seconds countdown with a draining bar that pauses, resumes and fires once when time is up.",
+      "dependencies": []
+    },
+    {
+      "name": "contact-index",
+      "title": "Contact Index",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native alphabetical list with a draggable letter rail that jumps between sections like a phone's contacts.",
+      "dependencies": []
+    },
+    {
+      "name": "select-grid",
+      "title": "Select Grid",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native multi-select grid of cards where a tick springs in, with an optional limit that dims the rest.",
+      "dependencies": []
+    },
+    {
+      "name": "poll-bars",
+      "title": "Poll Bars",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native poll whose options turn into animated result bars with percentages once a vote is cast.",
+      "dependencies": []
+    },
+    {
+      "name": "card-field",
+      "title": "Card Field",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native payment card input that groups the number, names the brand, adds the expiry slash and shakes on a failed check.",
+      "dependencies": []
+    },
+    {
+      "name": "step-slider",
+      "title": "Step Slider",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native slider with fixed stops whose thumb follows the finger and springs onto the nearest label.",
+      "dependencies": []
+    },
+    {
+      "name": "cart-quantity",
+      "title": "Cart Quantity",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native quantity picker whose minus turns into a bin at one so the same tap removes the item.",
+      "dependencies": []
+    },
+    {
+      "name": "password-field",
+      "title": "Password Field",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native password input with a Show and Hide button and a border that eases to the accent colour on focus.",
+      "dependencies": []
+    },
+    {
+      "name": "resend-button",
+      "title": "Resend Button",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native resend code link that waits out a countdown, pulses when ready and starts over after each press.",
+      "dependencies": []
+    },
+    {
+      "name": "gauge-meter",
+      "title": "Gauge Meter",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native half-circle gauge whose arc springs round to the value, built from clipped Views with no SVG package.",
+      "dependencies": []
+    },
+    {
+      "name": "undo-snackbar",
+      "title": "Undo Snackbar",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native snackbar with an Undo button that slides up, shows a draining timer line and closes itself.",
+      "dependencies": []
+    },
+    {
+      "name": "mood-picker",
+      "title": "Mood Picker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native row of faces for rating how something felt, where the chosen face swells with a bounce and shows its name.",
+      "dependencies": []
+    },
+    {
+      "name": "expandable-text",
+      "title": "Expandable Text",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native paragraph that clamps to a few lines with a Read more link that grows the box to the full text.",
+      "dependencies": []
+    },
+    {
+      "name": "extended-fab",
+      "title": "Extended FAB",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native floating action button with a label that slides away to leave a circle when collapsed.",
+      "dependencies": []
+    },
+    {
+      "name": "swatch-picker",
+      "title": "Swatch Picker",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native colour picker of circles where the chosen one gets a ring that springs out and a tick inside.",
+      "dependencies": []
+    },
+    {
+      "name": "like-button",
+      "title": "Like Button",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native heart button that pops on like with a ring of sparks flying outward, and shrinks quietly when unliked.",
+      "dependencies": []
+    },
+    {
+      "name": "task-checklist",
+      "title": "Task Checklist",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native to-do list with a progress bar, where ticking a task draws a strike-through line across its text.",
+      "dependencies": []
+    },
+    {
+      "name": "spark-bars",
+      "title": "Spark Bars",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A tiny React Native bar chart for trends inside a card, whose bars grow up one after another and resize on change.",
+      "dependencies": []
+    },
+    {
+      "name": "battery-meter",
+      "title": "Battery Meter",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native battery gauge whose fill slides to the level, turns red when low and pulses a bolt while charging.",
+      "dependencies": []
+    },
+    {
+      "name": "compare-slider",
+      "title": "Compare Slider",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native before and after slider where dragging a handle reveals more of one side, steppable by screen readers.",
+      "dependencies": []
+    },
+    {
+      "name": "hold-confirm",
+      "title": "Hold Confirm",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native press and hold button for risky actions that fills while held and drains back if released early.",
+      "dependencies": []
+    },
+    {
+      "name": "select-menu",
+      "title": "Select Menu",
+      "category": "React Native",
+      "platform": "native",
+      "description": "A React Native dropdown that opens in place, pushing content down instead of floating, with a turning chevron.",
       "dependencies": []
     }
   ],
