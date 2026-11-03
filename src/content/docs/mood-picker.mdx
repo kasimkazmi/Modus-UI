@@ -1,0 +1,48 @@
+---
+title: Mood Picker
+description: A React Native row of faces for rating how something felt, where the chosen face swells with a bounce and shows its name.
+---
+
+A row of faces for rating how something felt, from awful to great. The chosen face swells with a bounce and its name appears beneath it while the others dim. The faces form a radio group, so a screen reader reads each name and which one is chosen. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="mood-picker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mood-picker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mood-picker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { MoodPicker } from "@/components/ui/mood-picker";
+
+export default function Example() {
+  const [mood, setMood] = useState<number | null>(null);
+
+  return <MoodPicker value={mood} onChange={setMood} />;
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default                                     | Description                                |
+| :--------- | :-------------------------- | :------------------------------------------ | :----------------------------------------- |
+| `value`    | `number \| null`            | -                                           | The chosen index, or null for none.        |
+| `onChange` | `(index: number) => void`   | -                                           | Called with the index of the pressed face. |
+| `icons`    | `string[]`                  | `["😡", "🙁", "😐", "🙂", "😍"]`            | One glyph per level, worst first.          |
+| `labels`   | `string[]`                  | `["Awful", "Bad", "Okay", "Good", "Great"]` | One spoken name per level.                 |
+| `colors`   | `Partial<MoodPickerColors>` | -                                           | Overrides `accent`, `surface` and `text`.  |
+| `style`    | `StyleProp<ViewStyle>`      | -                                           | Style for the row.                         |

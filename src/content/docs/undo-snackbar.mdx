@@ -1,0 +1,57 @@
+---
+title: Undo Snackbar
+description: A React Native snackbar with an Undo button that slides up, shows a draining timer line and closes itself.
+---
+
+The bar that appears after a delete with an Undo button. It slides up from the bottom of its parent, a thin line along its edge shows how long is left, and it closes itself when that runs out. The message is announced when it opens, and the action is an ordinary button. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="undo-snackbar" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add undo-snackbar
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/undo-snackbar.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { UndoSnackbar } from "@/components/ui/undo-snackbar";
+
+export default function Example() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <UndoSnackbar
+      open={open}
+      message="Note deleted"
+      onAction={() => {}}
+      onClose={() => setOpen(false)}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                          | Default  | Description                                             |
+| :------------ | :---------------------------- | :------- | :------------------------------------------------------ |
+| `open`        | `boolean`                     | -        | Whether the snackbar is showing.                        |
+| `onClose`     | `() => void`                  | -        | Called when the time runs out or the action is pressed. |
+| `message`     | `string`                      | -        | What happened.                                          |
+| `actionLabel` | `string`                      | `"Undo"` | The button's text.                                      |
+| `onAction`    | `() => void`                  | -        | Called when the action is pressed, before it closes.    |
+| `duration`    | `number`                      | `5000`   | How long it stays, in milliseconds.                     |
+| `colors`      | `Partial<UndoSnackbarColors>` | -        | Overrides `background`, `text`, `action` and `timer`.   |
+| `style`       | `StyleProp<ViewStyle>`        | -        | Style for the bar.                                      |

@@ -4884,6 +4884,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/gauge-meter.tsx"],
   },
+  {
+    name: "undo-snackbar",
+    title: "Undo Snackbar",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/undo-snackbar.tsx"],
+  },
+  {
+    name: "mood-picker",
+    title: "Mood Picker",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/mood-picker.tsx"],
+  },
+  {
+    name: "expandable-text",
+    title: "Expandable Text",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/expandable-text.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];
