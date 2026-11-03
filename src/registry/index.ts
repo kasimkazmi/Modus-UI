@@ -4914,6 +4914,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/expandable-text.tsx"],
   },
+  {
+    name: "extended-fab",
+    title: "Extended FAB",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/extended-fab.tsx"],
+  },
+  {
+    name: "swatch-picker",
+    title: "Swatch Picker",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/swatch-picker.tsx"],
+  },
+  {
+    name: "like-button",
+    title: "Like Button",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/like-button.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

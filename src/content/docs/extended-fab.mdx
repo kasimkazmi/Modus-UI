@@ -1,0 +1,45 @@
+---
+title: Extended FAB
+description: A React Native floating action button with a label that slides away to leave a circle when collapsed.
+---
+
+A floating action button with a label. While `collapsed` is false it shows icon and label; when it turns true the label slides away and the button shrinks to a circle, the way the compose button folds up as a list scrolls. The label stays in the accessibility tree either way. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="extended-fab" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add extended-fab
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/extended-fab.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ExtendedFab } from "@/components/ui/extended-fab";
+
+export default function Example() {
+  return <ExtendedFab label="Compose" icon="✎" collapsed={false} onPress={() => {}} />;
+}
+```
+
+## Props
+
+| Prop        | Type                         | Default | Description                          |
+| :---------- | :--------------------------- | :------ | :----------------------------------- |
+| `label`     | `string`                     | -       | The button's text.                   |
+| `onPress`   | `() => void`                 | -       | Called when the button is pressed.   |
+| `icon`      | `string`                     | `"+"`   | A glyph drawn before the label.      |
+| `collapsed` | `boolean`                    | `false` | Shrinks the button to just its icon. |
+| `colors`    | `Partial<ExtendedFabColors>` | -       | Overrides `background` and `text`.   |
+| `style`     | `StyleProp<ViewStyle>`       | -       | Style for the button's wrapper.      |

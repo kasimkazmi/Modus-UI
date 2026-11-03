@@ -300,6 +300,9 @@ export const demos: Record<ComponentName, ComponentType> = {
   "undo-snackbar": dynamic(() => import("./undo-snackbar-demo"), { ssr: false }),
   "mood-picker": dynamic(() => import("./mood-picker-demo"), { ssr: false }),
   "expandable-text": dynamic(() => import("./expandable-text-demo"), { ssr: false }),
+  "extended-fab": dynamic(() => import("./extended-fab-demo"), { ssr: false }),
+  "swatch-picker": dynamic(() => import("./swatch-picker-demo"), { ssr: false }),
+  "like-button": dynamic(() => import("./like-button-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */
