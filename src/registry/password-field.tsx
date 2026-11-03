@@ -123,7 +123,7 @@ export function PasswordField({
 
 const styles = StyleSheet.create({
   root: { flexDirection: "row", alignItems: "center", borderWidth: 2, borderRadius: 14 },
-  input: { flex: 1, height: 50, paddingHorizontal: 14, fontSize: 16 },
+  input: { flex: 1, minWidth: 0, height: 50, paddingHorizontal: 14, fontSize: 16 },
   toggle: { paddingHorizontal: 14, height: 50, justifyContent: "center", userSelect: "none" },
   toggleText: { fontSize: 14, fontWeight: "700" },
 });
