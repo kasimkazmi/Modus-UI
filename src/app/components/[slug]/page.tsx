@@ -28,9 +28,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!doc) return {};
   const { title, description } = doc.frontmatter;
   const url = `/components/${params.slug}`;
+  const entry = registry.find((item) => item.name === params.slug);
+  const native = entry ? platformOf(entry) === "native" : false;
+  const keywords = [
+    title,
+    ...(native
+      ? [`${title} React Native`, "React Native component", "Expo component"]
+      : [`${title} React`, "React component"]),
+    ...(entry ? [entry.category] : []),
+    ...SITE.keywords.slice(0, 4),
+  ];
   return {
     title,
     description,
+    keywords,
     alternates: { canonical: url },
     openGraph: { type: "article", siteName: SITE.name, title, description, url },
     twitter: { card: "summary_large_image", title, description },
