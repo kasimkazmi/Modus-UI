@@ -294,6 +294,9 @@ export const demos: Record<ComponentName, ComponentType> = {
   "card-field": dynamic(() => import("./card-field-demo"), { ssr: false }),
   "step-slider": dynamic(() => import("./step-slider-demo"), { ssr: false }),
   "cart-quantity": dynamic(() => import("./cart-quantity-demo"), { ssr: false }),
+  "password-field": dynamic(() => import("./password-field-demo"), { ssr: false }),
+  "resend-button": dynamic(() => import("./resend-button-demo"), { ssr: false }),
+  "gauge-meter": dynamic(() => import("./gauge-meter-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

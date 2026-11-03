@@ -4854,6 +4854,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/cart-quantity.tsx"],
   },
+  {
+    name: "password-field",
+    title: "Password Field",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/password-field.tsx"],
+  },
+  {
+    name: "resend-button",
+    title: "Resend Button",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/resend-button.tsx"],
+  },
+  {
+    name: "gauge-meter",
+    title: "Gauge Meter",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/gauge-meter.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

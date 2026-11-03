@@ -1,0 +1,44 @@
+---
+title: Resend Button
+description: A React Native resend code link that waits out a countdown, pulses when ready and starts over after each press.
+---
+
+The "Resend code" link under a verification form. It starts out waiting, showing the seconds left, and becomes pressable when the wait is over, pulsing once to say so. Pressing it calls `onResend` and starts the wait again. The time is not announced each second, only "You can resend now". Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="resend-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add resend-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/resend-button.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ResendButton } from "@/components/ui/resend-button";
+
+export default function Example() {
+  return <ResendButton onResend={() => console.log("sent again")} />;
+}
+```
+
+## Props
+
+| Prop       | Type                          | Default         | Description                                                 |
+| :--------- | :---------------------------- | :-------------- | :---------------------------------------------------------- |
+| `onResend` | `() => void`                  | -               | Called when pressed after the wait; the wait then restarts. |
+| `seconds`  | `number`                      | `30`            | How long to wait before it can be pressed, in seconds.      |
+| `label`    | `string`                      | `"Resend code"` | The button's text.                                          |
+| `colors`   | `Partial<ResendButtonColors>` | -               | Overrides `accent` and `disabled`.                          |
+| `style`    | `StyleProp<ViewStyle>`        | -               | Style for the button.                                       |

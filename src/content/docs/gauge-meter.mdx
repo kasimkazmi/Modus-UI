@@ -1,0 +1,46 @@
+---
+title: Gauge Meter
+description: A React Native half-circle gauge whose arc springs round to the value, built from clipped Views with no SVG package.
+---
+
+A half-circle gauge. The arc sweeps round from the left to the value on a spring, with the percentage in the middle and an optional caption below it. The arc is built from clipped, rotated Views, so it needs no SVG package. It reads out as a progress bar. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="gauge-meter" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add gauge-meter
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/gauge-meter.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { GaugeMeter } from "@/components/ui/gauge-meter";
+
+export default function Example() {
+  return <GaugeMeter value={0.62} caption="Storage used" />;
+}
+```
+
+## Props
+
+| Prop        | Type                        | Default   | Description                                      |
+| :---------- | :-------------------------- | :-------- | :----------------------------------------------- |
+| `value`     | `number`                    | -         | Progress from 0 to 1.                            |
+| `size`      | `number`                    | `220`     | Width of the gauge; its height is half of this.  |
+| `thickness` | `number`                    | `18`      | Width of the arc.                                |
+| `caption`   | `string`                    | -         | Text under the number.                           |
+| `label`     | `string`                    | `"Gauge"` | Spoken name of the gauge.                        |
+| `colors`    | `Partial<GaugeMeterColors>` | -         | Overrides `track`, `fill`, `text` and `caption`. |
+| `style`     | `StyleProp<ViewStyle>`      | -         | Style for the gauge's box.                       |
