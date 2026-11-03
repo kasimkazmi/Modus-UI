@@ -1,0 +1,56 @@
+---
+title: Task Checklist
+description: A React Native to-do list with a progress bar, where ticking a task draws a strike-through line across its text.
+---
+
+A to-do list with a progress bar above it. Ticking a task fills its box, greys its text and draws a line through it from left to right, and the bar grows to the share of tasks finished. Each task is a checkbox, and the progress is read out as "2 of 4 done". Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="task-checklist" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add task-checklist
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/task-checklist.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { TaskChecklist } from "@/components/ui/task-checklist";
+
+export default function Example() {
+  const [done, setDone] = useState<string[]>([]);
+
+  return (
+    <TaskChecklist
+      items={[
+        { id: "a", label: "Verify your email" },
+        { id: "b", label: "Invite a teammate" },
+      ]}
+      value={done}
+      onChange={setDone}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                           | Default | Description                                               |
+| :--------- | :----------------------------- | :------ | :-------------------------------------------------------- |
+| `items`    | `ChecklistItem[]`              | -       | The tasks, each with an `id` and a `label`.               |
+| `value`    | `string[]`                     | -       | The ids of the finished tasks.                            |
+| `onChange` | `(value: string[]) => void`    | -       | Called with the new list of finished ids.                 |
+| `colors`   | `Partial<TaskChecklistColors>` | -       | Overrides `accent`, `text`, `done`, `track` and `border`. |
+| `style`    | `StyleProp<ViewStyle>`         | -       | Style for the whole list.                                 |

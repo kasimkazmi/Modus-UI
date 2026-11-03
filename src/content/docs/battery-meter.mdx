@@ -1,0 +1,45 @@
+---
+title: Battery Meter
+description: A React Native battery gauge whose fill slides to the level, turns red when low and pulses a bolt while charging.
+---
+
+A battery gauge. The fill slides to the charge level and turns red below 20 percent, amber while charging, and green otherwise. While charging a bolt pulses over the cell. The level is read out with whether it is charging. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="battery-meter" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add battery-meter
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/battery-meter.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { BatteryMeter } from "@/components/ui/battery-meter";
+
+export default function Example() {
+  return <BatteryMeter level={0.64} charging />;
+}
+```
+
+## Props
+
+| Prop          | Type                          | Default | Description                                              |
+| :------------ | :---------------------------- | :------ | :------------------------------------------------------- |
+| `level`       | `number`                      | -       | Charge from 0 to 1.                                      |
+| `charging`    | `boolean`                     | `false` | Shows the charging colour and a pulsing bolt.            |
+| `width`       | `number`                      | `64`    | Width of the battery.                                    |
+| `showPercent` | `boolean`                     | `true`  | Shows the percentage beside it.                          |
+| `colors`      | `Partial<BatteryMeterColors>` | -       | Overrides `outline`, `low`, `ok`, `charging` and `text`. |
+| `style`       | `StyleProp<ViewStyle>`        | -       | Style for the row.                                       |

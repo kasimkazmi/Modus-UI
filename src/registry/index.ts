@@ -4944,6 +4944,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/like-button.tsx"],
   },
+  {
+    name: "task-checklist",
+    title: "Task Checklist",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/task-checklist.tsx"],
+  },
+  {
+    name: "spark-bars",
+    title: "Spark Bars",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/spark-bars.tsx"],
+  },
+  {
+    name: "battery-meter",
+    title: "Battery Meter",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/battery-meter.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];
