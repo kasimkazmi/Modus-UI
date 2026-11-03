@@ -4794,6 +4794,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/countdown-timer.tsx"],
   },
+  {
+    name: "contact-index",
+    title: "Contact Index",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/contact-index.tsx"],
+  },
+  {
+    name: "select-grid",
+    title: "Select Grid",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/select-grid.tsx"],
+  },
+  {
+    name: "poll-bars",
+    title: "Poll Bars",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/poll-bars.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

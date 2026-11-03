@@ -288,6 +288,9 @@ export const demos: Record<ComponentName, ComponentType> = {
   "empty-state": dynamic(() => import("./empty-state-demo"), { ssr: false }),
   "rating-histogram": dynamic(() => import("./rating-histogram-demo"), { ssr: false }),
   "countdown-timer": dynamic(() => import("./countdown-timer-demo"), { ssr: false }),
+  "contact-index": dynamic(() => import("./contact-index-demo"), { ssr: false }),
+  "select-grid": dynamic(() => import("./select-grid-demo"), { ssr: false }),
+  "poll-bars": dynamic(() => import("./poll-bars-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

@@ -1,0 +1,59 @@
+---
+title: Select Grid
+description: A React Native multi-select grid of cards where a tick springs in, with an optional limit that dims the rest.
+---
+
+A grid of cards where any number can be picked, such as interests during onboarding. A picked card takes the accent border and a tick springs into its corner. Set `max` and the remaining cards dim once the limit is reached. Every card is a checkbox for screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="select-grid" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add select-grid
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/select-grid.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SelectGrid } from "@/components/ui/select-grid";
+
+export default function Example() {
+  const [picked, setPicked] = useState<string[]>([]);
+
+  return (
+    <SelectGrid
+      options={[
+        { id: "music", label: "Music", icon: "🎧" },
+        { id: "food", label: "Food", icon: "🍜" },
+      ]}
+      value={picked}
+      onChange={setPicked}
+      max={3}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default | Description                                                                          |
+| :--------- | :-------------------------- | :------ | :----------------------------------------------------------------------------------- |
+| `options`  | `SelectOption[]`            | -       | The cards, each with an `id`, a `label` and an optional `icon`.                      |
+| `value`    | `string[]`                  | -       | The ids of the selected options.                                                     |
+| `onChange` | `(value: string[]) => void` | -       | Called with the new selection.                                                       |
+| `columns`  | `number`                    | `2`     | Cards per row.                                                                       |
+| `max`      | `number`                    | -       | The most cards that can be selected.                                                 |
+| `colors`   | `Partial<SelectGridColors>` | -       | Overrides `accent`, `border`, `surface`, `selectedSurface`, `label` and `checkText`. |
+| `style`    | `StyleProp<ViewStyle>`      | -       | Style for the grid.                                                                  |
