@@ -1,0 +1,52 @@
+---
+title: Compare Slider
+description: A React Native before and after slider where dragging a handle reveals more of one side, steppable by screen readers.
+---
+
+A before and after comparison. Drag the handle, or touch anywhere, and the divider follows to reveal more of one side or the other. It is an adjustable control for screen readers, which can step it by ten percent, and the position is read out as a percentage. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="compare-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add compare-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/compare-slider.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Image } from "react-native";
+import { CompareSlider } from "@/components/ui/compare-slider";
+
+export default function Example() {
+  return (
+    <CompareSlider
+      before={<Image source={require("./before.jpg")} style={{ flex: 1 }} />}
+      after={<Image source={require("./after.jpg")} style={{ flex: 1 }} />}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop      | Type                           | Default        | Description                              |
+| :-------- | :----------------------------- | :------------- | :--------------------------------------- |
+| `before`  | `ReactNode`                    | -              | Shown on the left of the divider.        |
+| `after`   | `ReactNode`                    | -              | Shown on the right of the divider.       |
+| `initial` | `number`                       | `0.5`          | Where the divider starts, from 0 to 1.   |
+| `height`  | `number`                       | `220`          | Height of the slider.                    |
+| `label`   | `string`                       | `"Comparison"` | Spoken name of the slider.               |
+| `colors`  | `Partial<CompareSliderColors>` | -              | Overrides `line`, `handle` and `arrows`. |
+| `style`   | `StyleProp<ViewStyle>`         | -              | Style for the slider's frame.            |

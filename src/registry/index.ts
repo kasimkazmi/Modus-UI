@@ -4974,6 +4974,36 @@ export const registry = [
     dependencies: [],
     files: ["registry/battery-meter.tsx"],
   },
+  {
+    name: "compare-slider",
+    title: "Compare Slider",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/compare-slider.tsx"],
+  },
+  {
+    name: "hold-confirm",
+    title: "Hold Confirm",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/hold-confirm.tsx"],
+  },
+  {
+    name: "select-menu",
+    title: "Select Menu",
+    category: "React Native",
+    type: "components:ui",
+    platform: "native",
+    added: "2026-11-03",
+    dependencies: [],
+    files: ["registry/select-menu.tsx"],
+  },
 ] as const satisfies readonly RegistryItem[];
 
 export type ComponentName = (typeof registry)[number]["name"];

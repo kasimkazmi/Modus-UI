@@ -306,6 +306,9 @@ export const demos: Record<ComponentName, ComponentType> = {
   "task-checklist": dynamic(() => import("./task-checklist-demo"), { ssr: false }),
   "spark-bars": dynamic(() => import("./spark-bars-demo"), { ssr: false }),
   "battery-meter": dynamic(() => import("./battery-meter-demo"), { ssr: false }),
+  "compare-slider": dynamic(() => import("./compare-slider-demo"), { ssr: false }),
+  "hold-confirm": dynamic(() => import("./hold-confirm-demo"), { ssr: false }),
+  "select-menu": dynamic(() => import("./select-menu-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */
