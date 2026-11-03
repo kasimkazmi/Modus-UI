@@ -1,0 +1,46 @@
+---
+title: Spark Bars
+description: A tiny React Native bar chart for trends inside a card, whose bars grow up one after another and resize on change.
+---
+
+A tiny bar chart for showing a trend inside a card. The bars grow up from the baseline one after another, resize when the values change, and the active bar takes the accent colour. It reads out as an image with every value listed, since the bars carry no labels. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="spark-bars" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add spark-bars
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/spark-bars.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { SparkBars } from "@/components/ui/spark-bars";
+
+export default function Example() {
+  return <SparkBars values={[12, 18, 9, 22, 30, 26, 34]} label="Steps per day" />;
+}
+```
+
+## Props
+
+| Prop        | Type                       | Default   | Description                                    |
+| :---------- | :------------------------- | :-------- | :--------------------------------------------- |
+| `values`    | `number[]`                 | -         | One value per bar; the tallest sets the scale. |
+| `height`    | `number`                   | `48`      | Height of the tallest bar.                     |
+| `gap`       | `number`                   | `4`       | Space between bars.                            |
+| `highlight` | `number`                   | -         | Index of the active bar; defaults to the last. |
+| `label`     | `string`                   | `"Chart"` | Spoken name of the chart.                      |
+| `colors`    | `Partial<SparkBarsColors>` | -         | Overrides `bar` and `active`.                  |
+| `style`     | `StyleProp<ViewStyle>`     | -         | Style for the row of bars.                     |

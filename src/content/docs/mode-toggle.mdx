@@ -1,0 +1,48 @@
+---
+title: Mode Toggle
+description: A React Native light and dark switch where the sun slides across, turns into a moon and the sky fills with stars.
+---
+
+A light and dark switch. The sun slides across the sky, its glow turns into a moon as a shadow crosses it, the day sky deepens to night and stars fade in. It reads as a switch that is on when the mode is dark, and with reduced motion it jumps between the two states. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="mode-toggle" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add mode-toggle
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/mode-toggle.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ModeToggle, type Mode } from "@/components/ui/mode-toggle";
+
+export default function Example() {
+  const [mode, setMode] = useState<Mode>("light");
+
+  return <ModeToggle mode={mode} onChange={setMode} />;
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default       | Description                                                   |
+| :--------- | :-------------------------- | :------------ | :------------------------------------------------------------ |
+| `mode`     | `"light" \| "dark"`         | -             | The current mode.                                             |
+| `onChange` | `(mode: Mode) => void`      | -             | Called with the other mode when the switch is pressed.        |
+| `size`     | `"md" \| "lg"`              | `"md"`        | Size of the switch.                                           |
+| `label`    | `string`                    | `"Dark mode"` | Spoken name of the switch.                                    |
+| `colors`   | `Partial<ModeToggleColors>` | -             | Overrides `dayTrack`, `nightTrack`, `sun`, `moon` and `star`. |
+| `style`    | `StyleProp<ViewStyle>`      | -             | Style for the switch's outer wrapper.                         |

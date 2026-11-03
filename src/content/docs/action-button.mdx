@@ -1,0 +1,58 @@
+---
+title: Action Button
+description: A React Native button that carries its own progress, turning its label into a spinner, then a tick or a cross with a shake, without ever changing size.
+---
+
+A button that carries its own progress. Press it and, if the action returns a promise, the label gives way to a spinner, then to a tick that pops in, or a cross and a shake if it fails, before it settles back to idle. The button never changes size, so nothing around it moves, the outcome is read out to screen readers, and pressing while it is busy does nothing. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="action-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add action-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/action-button.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ActionButton } from "@/components/ui/action-button";
+
+export default function Example() {
+  return (
+    <ActionButton
+      label="Save changes"
+      onPress={async () => {
+        await fetch("/api/save", { method: "POST" });
+      }}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop           | Type                                          | Default    | Description                                                                         |
+| :------------- | :-------------------------------------------- | :--------- | :---------------------------------------------------------------------------------- |
+| `label`        | `string`                                      | -          | The button's text.                                                                  |
+| `onPress`      | `() => void \| Promise<unknown>`              | -          | Called on press. If it returns a promise the button shows loading until it settles. |
+| `status`       | `"idle" \| "loading" \| "success" \| "error"` | -          | Sets the state yourself instead of following the promise.                           |
+| `variant`      | `"solid" \| "outline" \| "ghost"`             | `"solid"`  | How the button is drawn.                                                            |
+| `size`         | `"md" \| "lg"`                                | `"md"`     | Height of the button.                                                               |
+| `successLabel` | `string`                                      | `"Done"`   | Text announced in the success state.                                                |
+| `errorLabel`   | `string`                                      | `"Failed"` | Text announced in the error state.                                                  |
+| `resetAfter`   | `number`                                      | `1600`     | Milliseconds the success or error state stays before going back to idle.            |
+| `disabled`     | `boolean`                                     | `false`    | Dims the button and ignores presses.                                                |
+| `fullWidth`    | `boolean`                                     | `false`    | Stretches the button to the full width of its parent.                               |
+| `colors`       | `Partial<ActionButtonColors>`                 | -          | Overrides `background`, `text`, `success` and `error`.                              |
+| `style`        | `StyleProp<ViewStyle>`                        | -          | Style for the button's outer wrapper.                                               |

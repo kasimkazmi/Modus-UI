@@ -1,0 +1,62 @@
+---
+title: Data Table
+description: A React Native table with sortable columns, a header that stays put while rows scroll and sideways scrolling for wide columns.
+---
+
+A table that scrolls sideways when its columns are wider than the screen and keeps its header visible while the rows scroll up and down. Tapping a sortable header sorts by it, then reverses, and the arrow turns to match. Headers report their sort order to screen readers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="data-table" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add data-table
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/data-table.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { DataTable } from "@/components/ui/data-table";
+
+const rows = [
+  { id: "1", name: "Maya", score: 92 },
+  { id: "2", name: "Jon", score: 78 },
+];
+
+export default function Example() {
+  return (
+    <DataTable
+      rows={rows}
+      rowKey={(row) => row.id}
+      columns={[
+        { key: "name", title: "Name", sortable: true },
+        { key: "score", title: "Score", align: "right", sortable: true },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                                          | Default | Description                                                                           |
+| :------------ | :-------------------------------------------- | :------ | :------------------------------------------------------------------------------------ |
+| `columns`     | `DataTableColumn<T>[]`                        | -       | Each column's `key`, `title`, and optional `width`, `align`, `sortable` and `render`. |
+| `rows`        | `T[]`                                         | -       | The data to show.                                                                     |
+| `rowKey`      | `(row: T) => string`                          | -       | Returns a unique key for a row.                                                       |
+| `initialSort` | `{ key: string; direction: "asc" \| "desc" }` | -       | Column key and direction to sort by at first.                                         |
+| `onRowPress`  | `(row: T) => void`                            | -       | Called when a row is pressed.                                                         |
+| `striped`     | `boolean`                                     | `true`  | Shades every other row.                                                               |
+| `maxHeight`   | `number`                                      | `280`   | Height of the rows area; the header stays above it.                                   |
+| `colors`      | `Partial<DataTableColors>`                    | -       | Overrides `header`, `headerText`, `text`, `border`, `stripe` and `background`.        |
+| `style`       | `StyleProp<ViewStyle>`                        | -       | Style for the table's frame.                                                          |

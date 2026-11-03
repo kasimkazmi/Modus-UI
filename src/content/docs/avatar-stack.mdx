@@ -1,0 +1,55 @@
+---
+title: Avatar Stack
+description: A React Native stack of overlapping avatars that spreads apart on a press, collapses extras into a plus count, and reads out who is in it.
+---
+
+Overlapping avatars that spread apart when you press them. Each avatar shows a photo when it has one, or coloured initials with a stable colour per name, and sits in a ring so the overlaps read as separate. Anyone past `max` collapses into a "+N" avatar that opens the rest. The group is read out as a sentence such as "Maya Chen, Leo Park and 3 others". Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="avatar-stack" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add avatar-stack
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/avatar-stack.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { AvatarStack } from "@/components/ui/avatar-stack";
+
+const people = [
+  { id: "1", name: "Maya Chen" },
+  { id: "2", name: "Leo Park", image: "https://example.com/leo.jpg" },
+  { id: "3", name: "Ines Duarte" },
+];
+
+export default function Example() {
+  return (
+    <AvatarStack people={people} max={3} onPersonPress={(person) => console.log(person.name)} />
+  );
+}
+```
+
+## Props
+
+| Prop            | Type                             | Default | Description                                                                                       |
+| :-------------- | :------------------------------- | :------ | :------------------------------------------------------------------------------------------------ |
+| `people`        | `AvatarPerson[]`                 | -       | Who is in the stack. Each has an `id`, a `name` and an optional `image` URL.                      |
+| `max`           | `number`                         | `4`     | How many avatars show before the rest collapse into a "+N" avatar.                                |
+| `size`          | `number`                         | `40`    | Diameter of each avatar.                                                                          |
+| `overlap`       | `number`                         | `12`    | How far each avatar covers the one before it, in pixels.                                          |
+| `expandOnPress` | `boolean`                        | `true`  | Pressing the stack spreads the avatars apart and reveals the ones past `max`.                     |
+| `onPersonPress` | `(person: AvatarPerson) => void` | -       | Called with the person whose avatar is pressed, once the stack is spread (or if it can't spread). |
+| `colors`        | `Partial<AvatarStackColors>`     | -       | Overrides `ring`, `text` and `plus`.                                                              |
+| `style`         | `StyleProp<ViewStyle>`           | -       | Style for the stack.                                                                              |

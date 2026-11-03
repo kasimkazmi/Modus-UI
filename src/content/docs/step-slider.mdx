@@ -1,0 +1,55 @@
+---
+title: Step Slider
+description: A React Native slider with fixed stops whose thumb follows the finger and springs onto the nearest label.
+---
+
+A slider with a fixed set of stops, such as a text size or a delivery speed. The thumb follows the finger and settles on the nearest stop with a spring; tapping the track jumps to the stop under it. It is an adjustable control for screen readers and reads out the label of the chosen stop. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="step-slider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add step-slider
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/step-slider.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { StepSlider } from "@/components/ui/step-slider";
+
+export default function Example() {
+  const [index, setIndex] = useState(1);
+
+  return (
+    <StepSlider
+      steps={["Slow", "Normal", "Fast"]}
+      value={index}
+      onChange={setIndex}
+      label="Speed"
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default  | Description                                    |
+| :--------- | :-------------------------- | :------- | :--------------------------------------------- |
+| `steps`    | `string[]`                  | -        | The label under each stop.                     |
+| `value`    | `number`                    | -        | The index of the chosen stop.                  |
+| `onChange` | `(index: number) => void`   | -        | Called when the chosen stop changes.           |
+| `label`    | `string`                    | `"Step"` | Spoken name of the slider.                     |
+| `colors`   | `Partial<StepSliderColors>` | -        | Overrides `track`, `fill`, `thumb` and `text`. |
+| `style`    | `StyleProp<ViewStyle>`      | -        | Style for the slider.                          |

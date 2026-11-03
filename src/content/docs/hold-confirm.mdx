@@ -1,0 +1,45 @@
+---
+title: Hold Confirm
+description: A React Native press and hold button for risky actions that fills while held and drains back if released early.
+---
+
+A button for actions that should not happen by accident, such as deleting an account. A colour fills the button while it is held and the action runs when it is full; letting go early drains it back and nothing happens. Because holding is hard for some people, a screen reader's activate action and the Enter key on the web run the action straight away. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="hold-confirm" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add hold-confirm
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/hold-confirm.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { HoldConfirm } from "@/components/ui/hold-confirm";
+
+export default function Example() {
+  return <HoldConfirm label="Delete project" onComplete={() => console.log("deleted")} />;
+}
+```
+
+## Props
+
+| Prop         | Type                         | Default  | Description                                     |
+| :----------- | :--------------------------- | :------- | :---------------------------------------------- |
+| `label`      | `string`                     | -        | The button's text.                              |
+| `onComplete` | `() => void`                 | -        | Called once when held long enough or activated. |
+| `duration`   | `number`                     | `1200`   | How long to hold, in milliseconds.              |
+| `doneLabel`  | `string`                     | `"Done"` | Text shown after it completes.                  |
+| `colors`     | `Partial<HoldConfirmColors>` | -        | Overrides `background`, `fill` and `text`.      |
+| `style`      | `StyleProp<ViewStyle>`       | -        | Style for the button.                           |

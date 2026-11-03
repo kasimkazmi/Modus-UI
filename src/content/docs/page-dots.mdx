@@ -1,0 +1,48 @@
+---
+title: Page Dots
+description: React Native pager dots where the current page stretches into a pill and every dot can be tapped to jump.
+---
+
+The row of dots under a pager. The current page's dot stretches into a pill and takes the accent colour while the others shrink back to circles. Give it `onIndexChange` and the dots become buttons. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="page-dots" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add page-dots
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/page-dots.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { PageDots } from "@/components/ui/page-dots";
+
+export default function Example() {
+  const [index, setIndex] = useState(0);
+
+  return <PageDots count={4} index={index} onIndexChange={setIndex} />;
+}
+```
+
+## Props
+
+| Prop            | Type                      | Default | Description                                           |
+| :-------------- | :------------------------ | :------ | :---------------------------------------------------- |
+| `count`         | `number`                  | -       | How many pages there are.                             |
+| `index`         | `number`                  | -       | The page showing now, from 0.                         |
+| `onIndexChange` | `(index: number) => void` | -       | Makes each dot tappable and calls this with its page. |
+| `dotSize`       | `number`                  | `8`     | Diameter of a dot.                                    |
+| `colors`        | `Partial<PageDotsColors>` | -       | Overrides `active` and `inactive`.                    |
+| `style`         | `StyleProp<ViewStyle>`    | -       | Style for the row of dots.                            |

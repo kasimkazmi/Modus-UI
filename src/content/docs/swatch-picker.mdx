@@ -1,0 +1,57 @@
+---
+title: Swatch Picker
+description: A React Native colour picker of circles where the chosen one gets a ring that springs out and a tick inside.
+---
+
+A row of colour circles to choose from, such as a theme or a label colour. The chosen one gets a ring that springs out around it and a tick inside. The circles are a radio group and each is read out by the name you give it, not by its hex code. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="swatch-picker" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add swatch-picker
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/swatch-picker.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SwatchPicker } from "@/components/ui/swatch-picker";
+
+export default function Example() {
+  const [color, setColor] = useState("#3b82f6");
+
+  return (
+    <SwatchPicker
+      value={color}
+      onChange={setColor}
+      options={[
+        { value: "#ef4444", label: "Red" },
+        { value: "#3b82f6", label: "Blue" },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                          | Default | Description                                            |
+| :--------- | :---------------------------- | :------ | :----------------------------------------------------- |
+| `options`  | `Swatch[]`                    | -       | The colours, each with a `value` and a spoken `label`. |
+| `value`    | `string`                      | -       | The chosen swatch's colour value.                      |
+| `onChange` | `(value: string) => void`     | -       | Called with the pressed swatch's value.                |
+| `size`     | `number`                      | `36`    | Diameter of a swatch.                                  |
+| `colors`   | `Partial<SwatchPickerColors>` | -       | Overrides `ring` and `check`.                          |
+| `style`    | `StyleProp<ViewStyle>`        | -       | Style for the row of swatches.                         |

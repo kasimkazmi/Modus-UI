@@ -1,0 +1,54 @@
+---
+title: Chat Bubble
+description: A React Native chat message that springs in from its own corner, shows delivery ticks that turn blue when read, and becomes a retry button when it fails.
+---
+
+A chat message bubble. It springs in from its own corner, shows delivery ticks that move from sending to sent, delivered and read, and a failed message turns red and becomes a retry button. A run of messages from one sender can share a single tail. The sender, text, time and delivery state are read out as one sentence. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="chat-bubble" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add chat-bubble
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/chat-bubble.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ChatBubble } from "@/components/ui/chat-bubble";
+
+export default function Example() {
+  return (
+    <>
+      <ChatBubble side="them" name="Maya" text="Are we still on for Thursday?" time="9:38" />
+      <ChatBubble side="me" text="Yes! Same place as last time." time="9:39" status="read" />
+    </>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                                                       | Default  | Description                                                                        |
+| :---------- | :--------------------------------------------------------- | :------- | :--------------------------------------------------------------------------------- |
+| `text`      | `string`                                                   | -        | The message text.                                                                  |
+| `side`      | `"me" \| "them"`                                           | `"them"` | Whose message it is. Your own sit on the right.                                    |
+| `name`      | `string`                                                   | -        | The sender's name, read out and shown above messages from others.                  |
+| `time`      | `string`                                                   | -        | The time shown under the message, for example "9:41".                              |
+| `status`    | `"sending" \| "sent" \| "delivered" \| "read" \| "failed"` | -        | Delivery state of one of your own messages.                                        |
+| `tail`      | `boolean`                                                  | `true`   | Draws the small tail. Turn it off for all but the last message of a run.           |
+| `onRetry`   | `() => void`                                               | -        | Called when a failed message is pressed.                                           |
+| `animateIn` | `boolean`                                                  | `true`   | Slides and scales the bubble in when it first appears.                             |
+| `colors`    | `Partial<ChatBubbleColors>`                                | -        | Overrides `mine`, `theirs`, `mineText`, `theirsText`, `meta`, `read` and `failed`. |
+| `style`     | `StyleProp<ViewStyle>`                                     | -        | Style for the row that holds the bubble.                                           |

@@ -1,0 +1,64 @@
+---
+title: Tab Pager
+description: A React Native tab header over swipeable pages, with an underline that follows your finger and labels that blend as their page arrives.
+---
+
+Swipeable pages under a row of tabs. The underline follows your finger between the two tabs it is travelling across, growing or shrinking to each label's width, and the labels blend from muted to active as their page arrives. Tapping a tab scrolls to its page, and a long row of tabs scrolls to keep the selected one in view. On desktop browsers the pages can also be dragged with a mouse. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="tab-pager" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tab-pager
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tab-pager.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Text } from "react-native";
+import { TabPager } from "@/components/ui/tab-pager";
+
+const tabs = [
+  { id: "inbox", label: "Inbox" },
+  { id: "sent", label: "Sent" },
+  { id: "drafts", label: "Drafts" },
+];
+
+export default function Example() {
+  const [tab, setTab] = useState("inbox");
+
+  return (
+    <TabPager
+      tabs={tabs}
+      value={tab}
+      onChange={setTab}
+      renderPage={(item) => <Text style={{ padding: 20 }}>{item.label}</Text>}
+    />
+  );
+}
+```
+
+The pager fills its parent, so give the parent a height (a screen with `flex: 1` is enough).
+
+## Props
+
+| Prop         | Type                                             | Default | Description                                                             |
+| :----------- | :----------------------------------------------- | :------ | :---------------------------------------------------------------------- |
+| `tabs`       | `TabPagerTab[]`                                  | -       | The tabs, each with an `id` and a `label`.                              |
+| `renderPage` | `(tab: TabPagerTab, index: number) => ReactNode` | -       | Renders the content of one page.                                        |
+| `value`      | `string`                                         | -       | The `id` of the selected tab.                                           |
+| `onChange`   | `(id: string) => void`                           | -       | Called with the new tab's `id` after a swipe or a tap.                  |
+| `colors`     | `Partial<TabPagerColors>`                        | -       | Overrides `text`, `activeText`, `indicator`, `border` and `background`. |
+| `style`      | `StyleProp<ViewStyle>`                           | -       | Style for the container.                                                |

@@ -1,0 +1,51 @@
+---
+title: Contact Index
+description: A React Native alphabetical list with a draggable letter rail that jumps between sections like a phone's contacts.
+---
+
+An alphabetical list with a letter rail down the right edge, like a phone's contacts. Names are grouped under letter headers. Tap or drag along the rail to jump to a letter and the list scrolls there; the letter you are on is highlighted and read out. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="contact-index" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add contact-index
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/contact-index.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ContactIndex } from "@/components/ui/contact-index";
+
+export default function Example() {
+  return (
+    <ContactIndex
+      items={[
+        { id: "1", name: "Aaron" },
+        { id: "2", name: "Maya" },
+      ]}
+      onSelect={(item) => console.log(item.name)}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                          | Default | Description                                                      |
+| :--------- | :---------------------------- | :------ | :--------------------------------------------------------------- |
+| `items`    | `ContactItem[]`               | -       | The people to list, each with an `id` and a `name`.              |
+| `onSelect` | `(item: ContactItem) => void` | -       | Called when a name is pressed.                                   |
+| `colors`   | `Partial<ContactIndexColors>` | -       | Overrides `header`, `headerText`, `text`, `accent` and `border`. |
+| `style`    | `StyleProp<ViewStyle>`        | -       | Style for the list; give it a height.                            |

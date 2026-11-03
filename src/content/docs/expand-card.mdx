@@ -1,0 +1,63 @@
+---
+title: Expand Card
+description: A React Native card that grows from a compact row into a full detail view, with its picture swelling from a thumbnail to a banner and its details fading in.
+---
+
+A card that grows from a compact row into a full detail view. The picture swells from a thumbnail to a banner, the title slides down beneath it, the details fade in, and the chevron turns over, all driven by one value so the parts stay in step. Pressing the header toggles it, and the details stay interactive when open. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="expand-card" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add expand-card
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/expand-card.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Text, View } from "react-native";
+import { ExpandCard } from "@/components/ui/expand-card";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <ExpandCard
+      title="Harbor Loft"
+      subtitle="Halifax, Nova Scotia"
+      expanded={open}
+      onExpandedChange={setOpen}
+      hero={<View style={{ flex: 1, alignSelf: "stretch", backgroundColor: "#4f9bd9" }} />}
+    >
+      <Text>Top floor, harbour view.</Text>
+    </ExpandCard>
+  );
+}
+```
+
+## Props
+
+| Prop               | Type                          | Default | Description                                                             |
+| :----------------- | :---------------------------- | :------ | :---------------------------------------------------------------------- |
+| `expanded`         | `boolean`                     | -       | Whether the card is open.                                               |
+| `onExpandedChange` | `(expanded: boolean) => void` | -       | Called when the header is pressed.                                      |
+| `title`            | `string`                      | -       | The card's heading.                                                     |
+| `subtitle`         | `string`                      | -       | A smaller line under the heading.                                       |
+| `hero`             | `ReactNode`                   | -       | Drawn inside the picture box, which grows from a thumbnail to a banner. |
+| `collapsedHeight`  | `number`                      | `88`    | Height of the closed card.                                              |
+| `expandedHeight`   | `number`                      | `340`   | Height of the open card.                                                |
+| `heroHeight`       | `number`                      | `160`   | Height of the picture when the card is open.                            |
+| `colors`           | `Partial<ExpandCardColors>`   | -       | Overrides `surface`, `border`, `hero`, `title` and `subtitle`.          |
+| `style`            | `StyleProp<ViewStyle>`        | -       | Style for the card.                                                     |

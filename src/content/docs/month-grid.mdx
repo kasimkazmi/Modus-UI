@@ -1,0 +1,59 @@
+---
+title: Month Grid
+description: A React Native month calendar with a pill that glides to the selected day, swipe to change month, event dots, and local dates that never shift across time zones.
+---
+
+A month calendar. A pill glides to the selected day, the grid slides in from the side when the month changes, and a horizontal swipe changes the month too. Days outside the month are faded but still selectable, and days with events show a dot and say so to screen readers. Dates are local `YYYY-MM-DD` strings, so nothing shifts a day near midnight or across time zones. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="month-grid" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add month-grid
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/month-grid.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { MonthGrid } from "@/components/ui/month-grid";
+
+export default function Example() {
+  const [month, setMonth] = useState("2026-11");
+  const [day, setDay] = useState<string | null>("2026-11-04");
+
+  return (
+    <MonthGrid
+      month={month}
+      onMonthChange={setMonth}
+      selected={day}
+      onSelect={setDay}
+      marked={["2026-11-09", "2026-11-16"]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop            | Type                       | Default | Description                                                              |
+| :-------------- | :------------------------- | :------ | :----------------------------------------------------------------------- |
+| `month`         | `string`                   | -       | The month shown, as `YYYY-MM`.                                           |
+| `onMonthChange` | `(month: string) => void`  | -       | Called with the new month from the arrows, a swipe, or a faded day.      |
+| `selected`      | `string \| null`           | -       | The selected day as `YYYY-MM-DD`, or `null` for none.                    |
+| `onSelect`      | `(date: string) => void`   | -       | Called with the tapped day as `YYYY-MM-DD`.                              |
+| `marked`        | `string[]`                 | -       | Days (`YYYY-MM-DD`) that show a small dot, for example days with events. |
+| `weekStart`     | `0 \| 1`                   | `1`     | The first column: 1 for Monday, 0 for Sunday.                            |
+| `colors`        | `Partial<MonthGridColors>` | -       | Overrides `text`, `mutedText`, `pill`, `pillText`, `today` and `dot`.    |
+| `style`         | `StyleProp<ViewStyle>`     | -       | Style for the calendar.                                                  |

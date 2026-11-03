@@ -1,0 +1,52 @@
+---
+title: Stripe Progress
+description: A React Native progress bar whose fill grows on a spring and whose diagonal stripes drift, with an indeterminate mode and no gradient packages.
+---
+
+A progress bar whose fill grows with a spring and whose diagonal stripes drift along it. Leave `value` out and a segment travels across the track instead. The stripes are plain rotated views, so it needs no gradient or SVG package. With reduced motion nothing drifts or travels, but the fill still follows the value. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="stripe-progress" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add stripe-progress
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/stripe-progress.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { StripeProgress } from "@/components/ui/stripe-progress";
+
+export default function Example() {
+  return (
+    <>
+      <StripeProgress label="Uploading" value={0.64} showPercent />
+      <StripeProgress label="Syncing" />
+    </>
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                            | Default      | Description                                                  |
+| :------------ | :------------------------------ | :----------- | :----------------------------------------------------------- |
+| `value`       | `number`                        | -            | Progress from 0 to 1. Leave it out for an indeterminate bar. |
+| `height`      | `number`                        | `10`         | Height of the bar.                                           |
+| `striped`     | `boolean`                       | `true`       | Draws diagonal stripes on the fill.                          |
+| `animated`    | `boolean`                       | `true`       | Lets the stripes drift while the bar is determinate.         |
+| `label`       | `string`                        | `"Progress"` | Spoken name of the bar.                                      |
+| `showPercent` | `boolean`                       | `false`      | Shows the percentage next to the bar.                        |
+| `colors`      | `Partial<StripeProgressColors>` | -            | Overrides `track`, `fill`, `stripe` and `text`.              |
+| `style`       | `StyleProp<ViewStyle>`          | -            | Style for the row that holds the bar and the percentage.     |

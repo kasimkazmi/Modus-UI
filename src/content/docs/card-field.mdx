@@ -1,0 +1,46 @@
+---
+title: Card Field
+description: A React Native payment card input that groups the number, names the brand, adds the expiry slash and shakes on a failed check.
+---
+
+A card entry field. The number groups itself as you type, in fours or in the 4-6-5 pattern of an Amex, the brand name appears from the first digits, the expiry adds its own slash, and a full number that fails the Luhn check shakes and turns red. Each input has its own spoken name and the numeric keyboard. It only formats and checks the shape of a card; never send raw card numbers to your own server, use your payment provider's fields for that. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="card-field" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add card-field
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/card-field.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { CardField, type CardValue } from "@/components/ui/card-field";
+
+export default function Example() {
+  const [card, setCard] = useState<CardValue>({ number: "", expiry: "", cvc: "" });
+
+  return <CardField value={card} onChange={setCard} />;
+}
+```
+
+## Props
+
+| Prop       | Type                         | Default | Description                                                                |
+| :--------- | :--------------------------- | :------ | :------------------------------------------------------------------------- |
+| `value`    | `CardValue`                  | -       | The `number`, `expiry` and `cvc` as formatted strings.                     |
+| `onChange` | `(value: CardValue) => void` | -       | Called with the updated, formatted value.                                  |
+| `colors`   | `Partial<CardFieldColors>`   | -       | Overrides `surface`, `border`, `text`, `placeholder`, `error` and `valid`. |
+| `style`    | `StyleProp<ViewStyle>`       | -       | Style for the field's frame.                                               |

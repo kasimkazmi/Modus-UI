@@ -1,0 +1,66 @@
+---
+title: Action Tray
+description: A React Native bottom action list that slides up over a dimmed backdrop, with grouped actions, a separate cancel button and drag to dismiss.
+---
+
+A bottom action list in the style of a native action sheet. It slides up from the bottom of its parent over a dimmed backdrop, with the actions as one rounded group and Cancel as a separate button. Tap the backdrop, press Escape on the web, or drag the handle down to close it. It is drawn inside its parent, so it works in a screen, a tab or a `Modal` alike, and on the web it stays inside whatever frame holds it. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="action-tray" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add action-tray
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/action-tray.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Button, View } from "react-native";
+import { ActionTray } from "@/components/ui/action-tray";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Button title="Options" onPress={() => setOpen(true)} />
+      <ActionTray
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Photo"
+        actions={[
+          { label: "Share", onPress: () => console.log("share") },
+          { label: "Delete", onPress: () => console.log("delete"), destructive: true },
+        ]}
+      />
+    </View>
+  );
+}
+```
+
+The parent must fill the area the tray should cover, because the tray and its backdrop are sized to it. Picking an action runs it and then calls `onClose`.
+
+## Props
+
+| Prop          | Type                        | Default    | Description                                                                                       |
+| :------------ | :-------------------------- | :--------- | :------------------------------------------------------------------------------------------------ |
+| `open`        | `boolean`                   | -          | Whether the tray is showing.                                                                      |
+| `onClose`     | `() => void`                | -          | Called when the tray should close: backdrop tap, Escape, a drag down, Cancel, or after an action. |
+| `title`       | `string`                    | -          | Heading above the actions. Also the tray's accessibility label.                                   |
+| `message`     | `string`                    | -          | A line of smaller text under the title.                                                           |
+| `actions`     | `ActionTrayAction[]`        | -          | The actions. Each has a `label`, an `onPress`, and optional `destructive` and `disabled` flags.   |
+| `cancelLabel` | `string`                    | `"Cancel"` | Label of the separate cancel button.                                                              |
+| `colors`      | `Partial<ActionTrayColors>` | -          | Overrides `backdrop`, `surface`, `text`, `mutedText`, `destructive`, `divider` and `handle`.      |
+| `style`       | `StyleProp<ViewStyle>`      | -          | Style for the container that covers the parent.                                                   |

@@ -1,0 +1,60 @@
+---
+title: Pull Refresh
+description: A React Native scrolling list you refresh by pulling down from the top, with resistance, a turning arrow, a holding spinner, and a Refresh action for screen readers.
+---
+
+A scrolling list you refresh by pulling it down from the top. The content follows your finger with growing resistance, an arrow turns over as you reach the threshold, and on release a spinner holds the content open until you set `refreshing` back to false. It works with a mouse drag on the web, and screen reader users get a Refresh action instead of the gesture. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="pull-refresh" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add pull-refresh
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/pull-refresh.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Text } from "react-native";
+import { PullRefresh } from "@/components/ui/pull-refresh";
+
+export default function Example() {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const refresh = async () => {
+    setRefreshing(true);
+    await fetch("/api/feed");
+    setRefreshing(false);
+  };
+
+  return (
+    <PullRefresh refreshing={refreshing} onRefresh={refresh}>
+      <Text style={{ padding: 20 }}>Feed items go here.</Text>
+    </PullRefresh>
+  );
+}
+```
+
+The component fills its parent, so give the parent a height.
+
+## Props
+
+| Prop         | Type                         | Default | Description                                                                     |
+| :----------- | :--------------------------- | :------ | :------------------------------------------------------------------------------ |
+| `refreshing` | `boolean`                    | -       | Whether a refresh is under way. Set it true in `onRefresh` and false when done. |
+| `onRefresh`  | `() => void`                 | -       | Called when the list is pulled past the threshold and let go.                   |
+| `threshold`  | `number`                     | `72`    | How far, in pixels, the content must be pulled to trigger a refresh.            |
+| `colors`     | `Partial<PullRefreshColors>` | -       | Overrides `indicator`, `arrow` and `background`.                                |
+| `style`      | `StyleProp<ViewStyle>`       | -       | Style for the container.                                                        |

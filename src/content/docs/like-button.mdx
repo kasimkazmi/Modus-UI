@@ -1,0 +1,48 @@
+---
+title: Like Button
+description: A React Native heart button that pops on like with a ring of sparks flying outward, and shrinks quietly when unliked.
+---
+
+A heart button. Liking pops the heart past full size and settles it back while a ring of sparks flies outward and fades; unliking just shrinks it quietly. The button reports whether it is pressed and the count is part of its spoken name. With reduced motion the colour changes and nothing else. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="like-button" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add like-button
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/like-button.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { LikeButton } from "@/components/ui/like-button";
+
+export default function Example() {
+  const [liked, setLiked] = useState(false);
+
+  return <LikeButton liked={liked} onChange={setLiked} count={128} />;
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default | Description                            |
+| :--------- | :-------------------------- | :------ | :------------------------------------- |
+| `liked`    | `boolean`                   | -       | Whether the heart is filled.           |
+| `onChange` | `(liked: boolean) => void`  | -       | Called with the new state.             |
+| `count`    | `number`                    | -       | Shows a number beside the heart.       |
+| `size`     | `number`                    | `28`    | Size of the heart.                     |
+| `colors`   | `Partial<LikeButtonColors>` | -       | Overrides `liked`, `idle` and `count`. |
+| `style`    | `StyleProp<ViewStyle>`      | -       | Style for the button.                  |

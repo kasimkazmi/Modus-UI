@@ -1,0 +1,46 @@
+---
+title: Expandable Text
+description: A React Native paragraph that clamps to a few lines with a Read more link that grows the box to the full text.
+---
+
+A paragraph that shows a few lines and a Read more link. Pressing the link grows the box to the full text, and it shrinks back on Show less. The link only appears when the text is long enough to be cut, and it reports whether it is expanded. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="expandable-text" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add expandable-text
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/expandable-text.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { ExpandableText } from "@/components/ui/expandable-text";
+
+export default function Example() {
+  return <ExpandableText text="A long paragraph of text goes here..." lines={3} />;
+}
+```
+
+## Props
+
+| Prop         | Type                            | Default       | Description                               |
+| :----------- | :------------------------------ | :------------ | :---------------------------------------- |
+| `text`       | `string`                        | -             | The paragraph.                            |
+| `lines`      | `number`                        | `3`           | How many lines show before it is cut off. |
+| `lineHeight` | `number`                        | `22`          | Height of one line.                       |
+| `moreLabel`  | `string`                        | `"Read more"` | Text of the link while collapsed.         |
+| `lessLabel`  | `string`                        | `"Show less"` | Text of the link while expanded.          |
+| `colors`     | `Partial<ExpandableTextColors>` | -             | Overrides `text` and `link`.              |
+| `style`      | `StyleProp<ViewStyle>`          | -             | Style for the whole block.                |

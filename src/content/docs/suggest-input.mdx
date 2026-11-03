@@ -1,0 +1,65 @@
+---
+title: Suggest Input
+description: A React Native text field with a suggestion list that narrows as you type, bolds what matched, and works with arrow keys, Enter and Escape on the web.
+---
+
+A text field with a list of suggestions that narrows as you type. Suggestions that start with your text come first, and the part that matched is bold. On the web the arrow keys move through the list, Enter chooses and Escape closes it; on a phone you tap a suggestion. It is a combobox to screen readers, with the highlighted option announced as you move. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="suggest-input" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add suggest-input
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/suggest-input.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SuggestInput } from "@/components/ui/suggest-input";
+
+const cities = ["Lisbon", "Lima", "Lyon", "Kyoto"];
+
+export default function Example() {
+  const [text, setText] = useState("");
+
+  return (
+    <SuggestInput
+      label="City"
+      value={text}
+      onChangeText={setText}
+      suggestions={cities}
+      onSelect={setText}
+    />
+  );
+}
+```
+
+The suggestion list opens over whatever sits below the field, so leave room for it.
+
+## Props
+
+| Prop             | Type                           | Default        | Description                                                                                              |
+| :--------------- | :----------------------------- | :------------- | :------------------------------------------------------------------------------------------------------- |
+| `value`          | `string`                       | -              | The text in the field.                                                                                   |
+| `onChangeText`   | `(text: string) => void`       | -              | Called as the text changes.                                                                              |
+| `suggestions`    | `string[]`                     | -              | Everything that can be suggested, narrowed by what is typed.                                             |
+| `onSelect`       | `(suggestion: string) => void` | -              | Called with the suggestion that was chosen.                                                              |
+| `placeholder`    | `string`                       | `"Search"`     | Text shown while the field is empty.                                                                     |
+| `minChars`       | `number`                       | `1`            | How many characters must be typed before suggestions show.                                               |
+| `maxSuggestions` | `number`                       | `5`            | The most suggestions shown at once.                                                                      |
+| `emptyText`      | `string`                       | `"No matches"` | Shown when nothing matches.                                                                              |
+| `label`          | `string`                       | `"Search"`     | Spoken name of the field.                                                                                |
+| `colors`         | `Partial<SuggestInputColors>`  | -              | Overrides `field`, `border`, `focusBorder`, `text`, `placeholder`, `panel`, `highlight` and `activeRow`. |
+| `style`          | `StyleProp<ViewStyle>`         | -              | Style for the field's container.                                                                         |

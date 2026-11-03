@@ -1,0 +1,52 @@
+---
+title: Ring Meter
+description: A React Native circular progress ring drawn with plain views and no SVG package, that sweeps smoothly all the way round and holds any content in its middle.
+---
+
+A circular progress ring built from plain views, with no SVG or gradient package. Two half rings, each a bordered circle clipped to one side, are turned by the same value: the right half sweeps first, then the left takes over, so the arc grows smoothly all the way round. The middle shows the percentage, or any content you put inside it. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="ring-meter" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add ring-meter
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/ring-meter.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { RingMeter } from "@/components/ui/ring-meter";
+
+export default function Example() {
+  return (
+    <RingMeter value={0.74} size={160} thickness={14} label="Daily steps">
+      <Text style={{ fontSize: 28, fontWeight: "800" }}>7,420</Text>
+    </RingMeter>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                       | Default      | Description                                                    |
+| :---------- | :------------------------- | :----------- | :------------------------------------------------------------- |
+| `value`     | `number`                   | -            | Progress from 0 to 1.                                          |
+| `size`      | `number`                   | `120`        | Diameter of the ring.                                          |
+| `thickness` | `number`                   | `10`         | Width of the ring's stroke.                                    |
+| `showValue` | `boolean`                  | `true`       | Shows the percentage in the middle when there are no children. |
+| `animated`  | `boolean`                  | `true`       | Animates the ring to each new value.                           |
+| `label`     | `string`                   | `"Progress"` | Spoken name of the meter.                                      |
+| `colors`    | `Partial<RingMeterColors>` | -            | Overrides `track`, `fill` and `text`.                          |
+| `style`     | `StyleProp<ViewStyle>`     | -            | Style for the ring.                                            |

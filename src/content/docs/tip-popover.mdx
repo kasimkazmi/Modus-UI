@@ -1,0 +1,55 @@
+---
+title: Tip Popover
+description: A React Native tip that points at its trigger, springs out from the arrow and closes on an outside tap or Escape.
+---
+
+A small tip that points at its trigger. It is drawn inside its parent rather than in a Modal, so it stays within a screen, and it springs out from the arrow. Tapping anywhere else closes it, and on the web so does Escape. The tip is announced when it opens. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="tip-popover" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add tip-popover
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/tip-popover.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Pressable, Text } from "react-native";
+import { TipPopover } from "@/components/ui/tip-popover";
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <TipPopover open={open} onClose={() => setOpen(false)} content="Anyone with the link can view.">
+      <Pressable onPress={() => setOpen(!open)}>
+        <Text>Share</Text>
+      </Pressable>
+    </TipPopover>
+  );
+}
+```
+
+## Props
+
+| Prop        | Type                        | Default | Description                                 |
+| :---------- | :-------------------------- | :------ | :------------------------------------------ |
+| `open`      | `boolean`                   | -       | Whether the tip is showing.                 |
+| `onClose`   | `() => void`                | -       | Called on an outside tap or Escape.         |
+| `content`   | `string`                    | -       | The tip's text.                             |
+| `placement` | `"top" \| "bottom"`         | `"top"` | Which side of the trigger the tip opens on. |
+| `colors`    | `Partial<TipPopoverColors>` | -       | Overrides `background` and `text`.          |
+| `style`     | `StyleProp<ViewStyle>`      | -       | Style for the wrapper around the trigger.   |

@@ -1,0 +1,51 @@
+---
+title: Count Badge
+description: A React Native notification count that sits on an icon's corner, pops in when it appears, pulses as the number changes, and reads out with its label.
+---
+
+A count bubble that sits on the corner of an icon or avatar. It pops in when the count first appears, pulses each time the number changes, and shrinks away when it returns to zero. Large counts read "99+", it can be a plain dot instead, and the label and number are read out together. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="count-badge" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add count-badge
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/count-badge.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Text } from "react-native";
+import { CountBadge } from "@/components/ui/count-badge";
+
+export default function Example() {
+  return (
+    <CountBadge count={7} label="Messages">
+      <Text style={{ fontSize: 24 }}>✉</Text>
+    </CountBadge>
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default           | Description                                          |
+| :--------- | :-------------------------- | :---------------- | :--------------------------------------------------- |
+| `count`    | `number`                    | -                 | The number to show.                                  |
+| `max`      | `number`                    | `99`              | Counts above this show as "max+", for example "99+". |
+| `dot`      | `boolean`                   | `false`           | Shows a small dot instead of the number.             |
+| `hideZero` | `boolean`                   | `true`            | Hides the badge when the count is zero.              |
+| `label`    | `string`                    | `"Notifications"` | What is being counted. Read out with the number.     |
+| `colors`   | `Partial<CountBadgeColors>` | -                 | Overrides `badge`, `text` and `ring`.                |
+| `style`    | `StyleProp<ViewStyle>`      | -                 | Style for the wrapper around the icon.               |

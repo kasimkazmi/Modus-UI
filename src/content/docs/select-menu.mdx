@@ -1,0 +1,59 @@
+---
+title: Select Menu
+description: A React Native dropdown that opens in place, pushing content down instead of floating, with a turning chevron.
+---
+
+A dropdown that opens in place, pushing the content below it down instead of floating over it, which keeps it inside a scrolling screen. The chevron turns and the list grows open; choosing an option or pressing Escape on the web closes it. The trigger reports whether it is expanded. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="select-menu" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add select-menu
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/select-menu.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { SelectMenu } from "@/components/ui/select-menu";
+
+export default function Example() {
+  const [country, setCountry] = useState("");
+
+  return (
+    <SelectMenu
+      label="Country"
+      value={country}
+      onChange={setCountry}
+      options={[
+        { value: "ca", label: "Canada" },
+        { value: "us", label: "United States" },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop          | Type                        | Default              | Description                                                                    |
+| :------------ | :-------------------------- | :------------------- | :----------------------------------------------------------------------------- |
+| `options`     | `SelectOption[]`            | -                    | The choices, each with a `value` and a `label`.                                |
+| `value`       | `string`                    | -                    | The chosen option's value, or an empty string.                                 |
+| `onChange`    | `(value: string) => void`   | -                    | Called with the chosen value.                                                  |
+| `placeholder` | `string`                    | `"Select an option"` | Shown while nothing is chosen.                                                 |
+| `label`       | `string`                    | `"Select"`           | Spoken name of the menu.                                                       |
+| `colors`      | `Partial<SelectMenuColors>` | -                    | Overrides `surface`, `border`, `text`, `placeholder`, `selected` and `accent`. |
+| `style`       | `StyleProp<ViewStyle>`      | -                    | Style for the menu's frame.                                                    |

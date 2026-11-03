@@ -1,0 +1,56 @@
+---
+title: Poll Bars
+description: A React Native poll whose options turn into animated result bars with percentages once a vote is cast.
+---
+
+A poll. Before anyone has voted each option is a button. After a vote the options turn into bars that grow to each one's share of the votes, with percentages, and the chosen option is marked. Results are read out for each option, along with which one is yours. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="poll-bars" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add poll-bars
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/poll-bars.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { PollBars } from "@/components/ui/poll-bars";
+
+export default function Example() {
+  const [selected, setSelected] = useState<string>();
+
+  return (
+    <PollBars
+      selected={selected}
+      onVote={setSelected}
+      options={[
+        { id: "a", label: "Cats", votes: 12 },
+        { id: "b", label: "Dogs", votes: 9 },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                      | Default | Description                                                   |
+| :--------- | :------------------------ | :------ | :------------------------------------------------------------ |
+| `options`  | `PollOption[]`            | -       | The choices, each with an `id`, a `label` and its `votes`.    |
+| `selected` | `string`                  | -       | The id voted for; once set, results show.                     |
+| `onVote`   | `(id: string) => void`    | -       | Called with the id when an option is pressed.                 |
+| `colors`   | `Partial<PollBarsColors>` | -       | Overrides `bar`, `chosenBar`, `surface`, `border` and `text`. |
+| `style`    | `StyleProp<ViewStyle>`    | -       | Style for the poll.                                           |

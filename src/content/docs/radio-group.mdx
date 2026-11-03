@@ -1,0 +1,58 @@
+---
+title: Radio Group
+description: A React Native radio group drawn as cards with a springing dot, a single tab stop and arrow-key navigation on the web.
+---
+
+A group of mutually exclusive choices drawn as cards. The selected card takes the accent colour and its dot springs in. Only the selected radio is a tab stop, and on the web the arrow keys move the selection, skipping disabled options and wrapping at the ends, as a native radio group does. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="radio-group" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add radio-group
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/radio-group.tsx`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { RadioGroup } from "@/components/ui/radio-group";
+
+export default function Example() {
+  const [plan, setPlan] = useState("pro");
+
+  return (
+    <RadioGroup
+      label="Plan"
+      value={plan}
+      onChange={setPlan}
+      options={[
+        { value: "free", label: "Free", description: "One project" },
+        { value: "pro", label: "Pro", description: "Unlimited projects" },
+      ]}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop       | Type                        | Default     | Description                                                                                |
+| :--------- | :-------------------------- | :---------- | :----------------------------------------------------------------------------------------- |
+| `options`  | `RadioOption[]`             | -           | The choices, each with a `value`, a `label`, and an optional `description` and `disabled`. |
+| `value`    | `string`                    | -           | The selected option's value.                                                               |
+| `onChange` | `(value: string) => void`   | -           | Called with the new value when the selection changes.                                      |
+| `label`    | `string`                    | `"Options"` | Spoken name of the group.                                                                  |
+| `colors`   | `Partial<RadioGroupColors>` | -           | Overrides `accent`, `border`, `surface`, `selectedSurface`, `label` and `description`.     |
+| `style`    | `StyleProp<ViewStyle>`      | -           | Style for the group's container.                                                           |
