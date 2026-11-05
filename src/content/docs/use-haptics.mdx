@@ -1,0 +1,48 @@
+---
+title: useHaptics
+description: A React Native hook for touch feedback with tap, success, warning and error patterns that you can switch off.
+---
+
+Touch feedback built on React Native's Vibration, so it needs no extra package. Pass `enabled` false, for example from a settings switch, and every call does nothing. Android follows the patterns exactly; iOS only offers a single fixed buzz for any pattern, so for finer iOS feedback swap the bodies for expo-haptics. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="use-haptics" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add use-haptics
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/use-haptics.ts`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { Pressable, Text } from "react-native";
+import { useHaptics } from "@/components/ui/use-haptics";
+
+export default function SaveButton() {
+  const haptics = useHaptics();
+
+  return (
+    <Pressable onPress={() => haptics.success()}>
+      <Text>Save</Text>
+    </Pressable>
+  );
+}
+```
+
+## API
+
+| Part      | Type      | Default | Description                                             |
+| :-------- | :-------- | :------ | :------------------------------------------------------ |
+| `enabled` | `boolean` | `true`  | Pass false to turn every call into a no-op.             |
+| Returns   | `Haptics` | -       | An object with `tap`, `success`, `warning` and `error`. |

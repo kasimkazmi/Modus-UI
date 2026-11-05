@@ -1,0 +1,15 @@
+{
+  "name": "theme-provider",
+  "title": "ThemeProvider",
+  "category": "Providers",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/theme-provider.tsx",
+      "content": "import { createContext, useContext, useMemo, type ReactNode } from \"react\";\nimport { useColorScheme } from \"react-native\";\n\nexport interface ThemePalette {\n  background: string;\n  foreground: string;\n  card: string;\n  muted: string;\n  mutedForeground: string;\n  primary: string;\n  primaryForeground: string;\n  border: string;\n  destructive: string;\n}\n\nexport interface ThemeColors {\n  light: Partial<ThemePalette>;\n  dark: Partial<ThemePalette>;\n}\n\nconst LIGHT: ThemePalette = {\n  background: \"#ffffff\",\n  foreground: \"#111827\",\n  card: \"#f9fafb\",\n  muted: \"#f3f4f6\",\n  mutedForeground: \"#6b7280\",\n  primary: \"#4f46e5\",\n  primaryForeground: \"#ffffff\",\n  border: \"#e5e7eb\",\n  destructive: \"#dc2626\",\n};\n\nconst DARK: ThemePalette = {\n  background: \"#0b0b0f\",\n  foreground: \"#f9fafb\",\n  card: \"#16161d\",\n  muted: \"#1f1f29\",\n  mutedForeground: \"#9ca3af\",\n  primary: \"#818cf8\",\n  primaryForeground: \"#0b0b0f\",\n  border: \"#2a2a36\",\n  destructive: \"#f87171\",\n};\n\nexport interface Theme {\n  scheme: \"light\" | \"dark\";\n  colors: ThemePalette;\n}\n\nconst ThemeContext = createContext<Theme | null>(null);\n\nexport interface ThemeProviderProps {\n  children: ReactNode;\n  /** Which palette to use. Leave it out to follow the system; pass `useMode().scheme` to follow your own switch. */\n  scheme?: \"light\" | \"dark\";\n  /** Overrides for single colours in either palette. */\n  colors?: Partial<ThemeColors>;\n}\n\n/**\n * Supplies one palette to everything below it. Components call `useTheme()` and read colours by role,\n * so switching between light and dark restyles the whole tree at once with no per-component logic.\n * Override individual colours with `colors`; anything you leave out keeps its default.\n */\nexport function ThemeProvider({ children, scheme, colors }: ThemeProviderProps) {\n  const system = useColorScheme() === \"dark\" ? \"dark\" : \"light\";\n  const active = scheme ?? system;\n\n  const value = useMemo<Theme>(\n    () => ({\n      scheme: active,\n      colors: active === \"dark\" ? { ...DARK, ...colors?.dark } : { ...LIGHT, ...colors?.light },\n    }),\n    [active, colors],\n  );\n  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;\n}\n\n/** The active scheme and its colours. Throws when used outside a ThemeProvider. */\nexport function useTheme(): Theme {\n  const value = useContext(ThemeContext);\n  if (!value) throw new Error(\"useTheme must be used inside a ThemeProvider\");\n  return value;\n}\n"
+    }
+  ]
+}

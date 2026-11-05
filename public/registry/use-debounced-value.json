@@ -1,0 +1,15 @@
+{
+  "name": "use-debounced-value",
+  "title": "useDebouncedValue",
+  "category": "Hooks",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/use-debounced-value.ts",
+      "content": "import { useEffect, useState } from \"react\";\n\n/**\n * A copy of `value` that only updates after it has stopped changing for `delay` milliseconds. Use it\n * to wait out typing before searching: render with the live value, query with the debounced one. The\n * first render returns the value straight away.\n */\nexport function useDebouncedValue<T>(value: T, delay = 300): T {\n  const [debounced, setDebounced] = useState(value);\n\n  useEffect(() => {\n    const id = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(id);\n  }, [value, delay]);\n\n  return debounced;\n}\n"
+    }
+  ]
+}

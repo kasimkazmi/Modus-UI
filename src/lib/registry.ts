@@ -1,6 +1,11 @@
 import fs from "fs";
 import path from "path";
-import { registry, type RegistryItem } from "@/registry";
+import { registry, type Category, type RegistryItem } from "@/registry";
+
+/** Hooks, providers and theme tokens are not visual components: they have no colours or motion of their own. */
+export const UTILITY_CATEGORIES: readonly Category[] = ["Hooks", "Providers", "Theme"];
+
+export const isUtility = (item: RegistryItem) => UTILITY_CATEGORIES.includes(item.category);
 
 const NEW_FOR_MS = 30 * 24 * 60 * 60 * 1000;
 

@@ -16,12 +16,15 @@ interface PageProps {
   };
 }
 
-const TOC_ITEMS = [
+const tocItems = (last: string) => [
   { title: "Preview", id: "preview" },
   { title: "Installation", id: "installation" },
   { title: "Usage", id: "usage" },
-  { title: "Props", id: "props" },
+  { title: last, id: last.toLowerCase() },
 ];
+
+// Hooks and theme tokens document an API rather than a props table.
+const API_ONLY = ["Hooks", "Theme"];
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const doc = await getDocBySlug(params.slug);
@@ -30,10 +33,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `/components/${params.slug}`;
   const entry = registry.find((item) => item.name === params.slug);
   const native = entry ? platformOf(entry) === "native" : false;
+  const kind = entry?.category === "Hooks" ? "hook" : "component";
   const keywords = [
     title,
     ...(native
-      ? [`${title} React Native`, "React Native component", "Expo component"]
+      ? [`${title} React Native`, `React Native ${kind}`, `Expo ${kind}`]
       : [`${title} React`, "React component"]),
     ...(entry ? [entry.category] : []),
     ...SITE.keywords.slice(0, 4),
@@ -90,7 +94,9 @@ export default async function DocPage({ params }: PageProps) {
       </main>
 
       <aside className="hidden w-56 shrink-0 xl:block">
-        <TableOfContents items={TOC_ITEMS} />
+        <TableOfContents
+          items={tocItems(entry && API_ONLY.includes(entry.category) ? "API" : "Props")}
+        />
       </aside>
     </div>
   );

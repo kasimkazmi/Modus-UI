@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { registry, type RegistryItem } from "@/registry";
+import { isUtility } from "@/lib/registry";
 
 /**
  * Components must take their colours from the theme tokens so they follow the
@@ -73,7 +74,10 @@ describe("component colours", () => {
 });
 
 describe("native component colours", () => {
-  const native = (registry as readonly RegistryItem[]).filter((item) => item.platform === "native");
+  // Hooks, providers and theme tokens have no colours of their own to override.
+  const native = (registry as readonly RegistryItem[]).filter(
+    (item) => item.platform === "native" && !isUtility(item),
+  );
 
   it.each(native)("$name can be themed through a colors prop", (item) => {
     const source = readFileSync(join(process.cwd(), "src", item.files[0]), "utf8");

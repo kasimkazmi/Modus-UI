@@ -1,0 +1,55 @@
+---
+title: useReduceMotion
+description: A React Native hook that reports whether the system asks to reduce motion and follows later changes.
+---
+
+Whether the person has asked the system to reduce motion. It reads the setting once on mount and follows later changes, so animated components can skip or shorten their motion. It starts as false until the platform answers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="use-reduce-motion" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add use-reduce-motion
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/use-reduce-motion.ts`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { useEffect, useRef } from "react";
+import { Animated } from "react-native";
+import { useReduceMotion } from "@/components/ui/use-reduce-motion";
+
+export default function Fade({ show }: { show: boolean }) {
+  const reduce = useReduceMotion();
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (reduce) opacity.setValue(show ? 1 : 0);
+    else
+      Animated.timing(opacity, {
+        toValue: show ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+  }, [show, reduce, opacity]);
+
+  return <Animated.View style={{ opacity }} />;
+}
+```
+
+## API
+
+| Part    | Type      | Description                                 |
+| :------ | :-------- | :------------------------------------------ |
+| Returns | `boolean` | True when the system asks to reduce motion. |

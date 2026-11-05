@@ -1,0 +1,15 @@
+{
+  "name": "use-haptics",
+  "title": "useHaptics",
+  "category": "Hooks",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/use-haptics.ts",
+      "content": "import { useMemo } from \"react\";\nimport { Vibration } from \"react-native\";\n\nexport interface Haptics {\n  /** A light tick, for a press or a selection. */\n  tap: () => void;\n  /** Two short pulses, for something that worked. */\n  success: () => void;\n  /** Two firmer pulses, for something that needs attention. */\n  warning: () => void;\n  /** Three pulses, for something that failed. */\n  error: () => void;\n}\n\n/**\n * Touch feedback built on React Native's Vibration, so it needs no extra package. Pass `enabled`\n * false, for example from a settings switch, and every call does nothing. Android follows the\n * patterns exactly; iOS only offers a single fixed buzz for any pattern, so for finer iOS feedback\n * swap the bodies for expo-haptics.\n */\nexport function useHaptics(enabled = true): Haptics {\n  return useMemo(() => {\n    const run = (pattern: number | number[]) => {\n      if (enabled) Vibration.vibrate(pattern);\n    };\n    return {\n      tap: () => run(10),\n      success: () => run([0, 15, 60, 15]),\n      warning: () => run([0, 30, 50, 30]),\n      error: () => run([0, 50, 40, 50, 40, 50]),\n    };\n  }, [enabled]);\n}\n"
+    }
+  ]
+}

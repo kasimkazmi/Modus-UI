@@ -309,6 +309,15 @@ export const demos: Record<ComponentName, ComponentType> = {
   "compare-slider": dynamic(() => import("./compare-slider-demo"), { ssr: false }),
   "hold-confirm": dynamic(() => import("./hold-confirm-demo"), { ssr: false }),
   "select-menu": dynamic(() => import("./select-menu-demo"), { ssr: false }),
+  "use-color-scheme": dynamic(() => import("./use-color-scheme-demo"), { ssr: false }),
+  "use-keyboard-height": dynamic(() => import("./use-keyboard-height-demo"), { ssr: false }),
+  "use-haptics": dynamic(() => import("./use-haptics-demo"), { ssr: false }),
+  "use-reduce-motion": dynamic(() => import("./use-reduce-motion-demo"), { ssr: false }),
+  "use-debounced-value": dynamic(() => import("./use-debounced-value-demo"), { ssr: false }),
+  "mode-provider": dynamic(() => import("./mode-provider-demo"), { ssr: false }),
+  "theme-provider": dynamic(() => import("./theme-provider-demo"), { ssr: false }),
+  "theme-colors": dynamic(() => import("./theme-colors-demo"), { ssr: false }),
+  "theme-globals": dynamic(() => import("./theme-globals-demo"), { ssr: false }),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

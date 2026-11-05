@@ -1,0 +1,15 @@
+{
+  "name": "use-keyboard-height",
+  "title": "useKeyboardHeight",
+  "category": "Hooks",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/use-keyboard-height.ts",
+      "content": "import { useEffect, useState } from \"react\";\nimport { Keyboard, Platform } from \"react-native\";\n\n/**\n * The height of the on-screen keyboard, or 0 while it is hidden. On iOS it updates as the keyboard\n * starts to move, so a view can slide up alongside it; on Android it updates once the keyboard has\n * finished appearing. Always 0 on the web, where there is no on-screen keyboard to measure.\n */\nexport function useKeyboardHeight(): number {\n  const [height, setHeight] = useState(0);\n\n  useEffect(() => {\n    const ios = Platform.OS === \"ios\";\n    const show = Keyboard.addListener(ios ? \"keyboardWillShow\" : \"keyboardDidShow\", (event) =>\n      setHeight(event.endCoordinates.height),\n    );\n    const hide = Keyboard.addListener(ios ? \"keyboardWillHide\" : \"keyboardDidHide\", () =>\n      setHeight(0),\n    );\n    return () => {\n      show.remove();\n      hide.remove();\n    };\n  }, []);\n\n  return height;\n}\n"
+    }
+  ]
+}

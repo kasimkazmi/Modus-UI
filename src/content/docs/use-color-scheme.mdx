@@ -1,0 +1,43 @@
+---
+title: useColorScheme
+description: A React Native hook that returns the system colour scheme as light or dark, never null.
+---
+
+The system colour scheme, always "light" or "dark". React Native's own hook can return null before the platform reports a value; this one falls back to light so styles never see a missing scheme. It re-renders when the person switches appearance. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+
+<ComponentPreview name="use-color-scheme" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add use-color-scheme
+```
+
+### Manual
+
+1. Copy the code from the component tab.
+2. Create a file at `components/ui/use-color-scheme.ts`.
+3. Paste the code.
+
+It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+
+## Usage
+
+```tsx
+import { View } from "react-native";
+import { useColorScheme } from "@/components/ui/use-color-scheme";
+
+export default function Screen() {
+  const scheme = useColorScheme();
+
+  return <View style={{ backgroundColor: scheme === "dark" ? "#0b0b0f" : "#ffffff" }} />;
+}
+```
+
+## API
+
+| Part    | Type                | Description                                   |
+| :------ | :------------------ | :-------------------------------------------- |
+| Returns | `"light" \| "dark"` | The scheme in effect, light when none is set. |

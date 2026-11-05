@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 298,
+  "count": 307,
   "categories": [
     "Navigation",
     "Actions",
@@ -11,7 +11,10 @@
     "Typography",
     "Sections",
     "Components",
-    "React Native"
+    "React Native",
+    "Hooks",
+    "Providers",
+    "Theme"
   ],
   "components": [
     {
@@ -3295,6 +3298,78 @@
       "category": "React Native",
       "platform": "native",
       "description": "A React Native dropdown that opens in place, pushing content down instead of floating, with a turning chevron.",
+      "dependencies": []
+    },
+    {
+      "name": "use-color-scheme",
+      "title": "useColorScheme",
+      "category": "Hooks",
+      "platform": "native",
+      "description": "A React Native hook that returns the system colour scheme as light or dark, never null.",
+      "dependencies": []
+    },
+    {
+      "name": "use-keyboard-height",
+      "title": "useKeyboardHeight",
+      "category": "Hooks",
+      "platform": "native",
+      "description": "A React Native hook that returns the on-screen keyboard height, or 0 while it is hidden.",
+      "dependencies": []
+    },
+    {
+      "name": "use-haptics",
+      "title": "useHaptics",
+      "category": "Hooks",
+      "platform": "native",
+      "description": "A React Native hook for touch feedback with tap, success, warning and error patterns that you can switch off.",
+      "dependencies": []
+    },
+    {
+      "name": "use-reduce-motion",
+      "title": "useReduceMotion",
+      "category": "Hooks",
+      "platform": "native",
+      "description": "A React Native hook that reports whether the system asks to reduce motion and follows later changes.",
+      "dependencies": []
+    },
+    {
+      "name": "use-debounced-value",
+      "title": "useDebouncedValue",
+      "category": "Hooks",
+      "platform": "native",
+      "description": "A React Native hook that returns a copy of a value which only updates after it stops changing.",
+      "dependencies": []
+    },
+    {
+      "name": "mode-provider",
+      "title": "ModeProvider",
+      "category": "Providers",
+      "platform": "native",
+      "description": "A React Native provider that holds the light, dark or system choice and exposes it through a useMode hook.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-provider",
+      "title": "ThemeProvider",
+      "category": "Providers",
+      "platform": "native",
+      "description": "A React Native provider that supplies one colour palette to the tree through a useTheme hook, with per-colour overrides.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-colors",
+      "title": "Colors",
+      "category": "Theme",
+      "platform": "native",
+      "description": "Light and dark colour palettes for React Native, named by role, with a helper that adds transparency to any colour.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-globals",
+      "title": "Globals",
+      "category": "Theme",
+      "platform": "native",
+      "description": "Shared React Native design tokens for spacing, corner radius, type sizes, font weights and shadows.",
       "dependencies": []
     }
   ],

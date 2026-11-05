@@ -1,0 +1,15 @@
+{
+  "name": "theme-globals",
+  "title": "Globals",
+  "category": "Theme",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/theme-globals.ts",
+      "content": "/** Space between things, in points. Pick from the scale instead of typing a number. */\nexport const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;\n\n/** Corner radii, from slightly rounded to a full pill. */\nexport const radius = { sm: 8, md: 12, lg: 16, xl: 24, pill: 999 } as const;\n\n/** Type sizes with matching line heights. */\nexport const fontSize = {\n  caption: { fontSize: 12, lineHeight: 16 },\n  body: { fontSize: 16, lineHeight: 24 },\n  title: { fontSize: 20, lineHeight: 28 },\n  heading: { fontSize: 28, lineHeight: 34 },\n  display: { fontSize: 40, lineHeight: 46 },\n} as const;\n\n/** Font weights as the string values React Native expects. */\nexport const fontWeight = { regular: \"400\", medium: \"500\", semibold: \"600\", bold: \"700\" } as const;\n\n/** Elevation levels as box shadows. */\nexport const shadow = {\n  sm: \"0 1px 3px rgba(0, 0, 0, 0.12)\",\n  md: \"0 4px 12px rgba(0, 0, 0, 0.16)\",\n  lg: \"0 12px 32px rgba(0, 0, 0, 0.22)\",\n} as const;\n"
+    }
+  ]
+}

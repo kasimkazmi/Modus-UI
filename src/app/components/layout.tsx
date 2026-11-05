@@ -17,6 +17,9 @@ import {
   Box,
   PanelsTopLeft,
   Smartphone,
+  Webhook,
+  Layers,
+  Palette,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
 import { isNew, platformOf } from "@/lib/registry";
@@ -31,6 +34,9 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Sections: PanelsTopLeft,
   Components: LayoutTemplate,
   "React Native": Smartphone,
+  Hooks: Webhook,
+  Providers: Layers,
+  Theme: Palette,
 };
 
 const DOC_CATEGORIES: SidebarCategory[] = [

@@ -1,0 +1,15 @@
+{
+  "name": "use-color-scheme",
+  "title": "useColorScheme",
+  "category": "Hooks",
+  "type": "components:ui",
+  "platform": "native",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/use-color-scheme.ts",
+      "content": "import { useColorScheme as useSystemScheme } from \"react-native\";\n\nexport type Scheme = \"light\" | \"dark\";\n\n/**\n * The system colour scheme, always \"light\" or \"dark\". React Native's own hook can return null before\n * the platform reports a value; this one falls back to light so styles never see a missing scheme.\n * It re-renders when the user switches appearance.\n */\nexport function useColorScheme(): Scheme {\n  return useSystemScheme() === \"dark\" ? \"dark\" : \"light\";\n}\n"
+    }
+  ]
+}
