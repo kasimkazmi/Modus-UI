@@ -1,5 +1,6 @@
+"use client";
+
 import { useMemo } from "react";
-import { Vibration } from "react-native";
 
 export interface Haptics {
   /** A light tick, for a press or a selection. */
@@ -13,15 +14,14 @@ export interface Haptics {
 }
 
 /**
- * Touch feedback built on React Native's Vibration, so it needs no extra package. Pass `enabled`
- * false, for example from a settings switch, and every call does nothing. Android follows the
- * patterns exactly; iOS only offers a single fixed buzz for any pattern, so for finer iOS feedback
- * swap the bodies for expo-haptics.
+ * Touch feedback built on the browser's Vibration API, so it needs no extra package. Pass `enabled`
+ * false, for example from a settings switch, and every call does nothing. Browsers that cannot vibrate,
+ * which includes Safari and every desktop browser, ignore the calls without an error.
  */
 export function useHaptics(enabled = true): Haptics {
   return useMemo(() => {
     const run = (pattern: number | number[]) => {
-      if (enabled) Vibration.vibrate(pattern);
+      if (enabled && typeof navigator !== "undefined") navigator.vibrate?.(pattern);
     };
     return {
       tap: () => run(10),

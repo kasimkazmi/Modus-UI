@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Text, View } from "react-native";
-import { useReduceMotion } from "./use-reduce-motion";
+import { useReduceMotion } from "./use-reduce-motion.native";
 import { NativeStage } from "./native-stage";
 
 export function UseReduceMotionDemo() {

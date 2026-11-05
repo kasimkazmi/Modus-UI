@@ -1,7 +1,7 @@
 "use client";
 
 import { Text, View } from "react-native";
-import { useColorScheme } from "./use-color-scheme";
+import { useColorScheme } from "./use-color-scheme.native";
 import { NativeStage } from "./native-stage";
 
 function Readout() {

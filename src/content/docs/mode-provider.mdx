@@ -3,7 +3,7 @@ title: ModeProvider
 description: A React Native provider that holds the light, dark or system choice and exposes it through a useMode hook.
 ---
 
-Holds the light, dark or system choice for the whole app. Read it anywhere below with `useMode()`. "system" follows the device and updates when the device changes. The provider keeps the choice in memory only; save it from `onModeChange` and pass it back as `initialMode` to remember it. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+Holds the light, dark or system choice for the whole app. Read it anywhere below with `useMode()`. "system" follows the device and updates when the device changes. The provider keeps the choice in memory only; save it from `onModeChange` and pass it back as `initialMode` to remember it. Works in React and in React Native with no extra packages.
 
 <ComponentPreview name="mode-provider" />
 
@@ -17,11 +17,11 @@ npx @modus-ui/cli add mode-provider
 
 ### Manual
 
-1. Copy the code from the component tab.
+1. Copy the code from the code tab, using the React or React Native switch for your project.
 2. Create a file at `components/ui/mode-provider.tsx`.
 3. Paste the code.
 
-It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+The CLI installs the React Native version in an Expo or React Native app and the React version everywhere else. In a project that targets both, keep the React file `mode-provider.tsx` and the React Native file `mode-provider.native.tsx` side by side and import `./mode-provider`; Metro picks the `.native` file on its own.
 
 ## Usage
 

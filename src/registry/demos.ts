@@ -324,3 +324,18 @@ export const demos: Record<ComponentName, ComponentType> = {
 export function getDemo(name: string): ComponentType | undefined {
   return Object.hasOwn(demos, name) ? demos[name as ComponentName] : undefined;
 }
+
+// The React version of a "both" item whose React and React Native files differ. Items that share one file
+// are previewed by the React Native demo alone, which react-native-web draws in the browser too.
+const webDemos: Partial<Record<ComponentName, ComponentType>> = {
+  "use-color-scheme": dynamic(() => import("./web-demos/use-color-scheme"), { ssr: false }),
+  "use-keyboard-height": dynamic(() => import("./web-demos/use-keyboard-height"), { ssr: false }),
+  "use-haptics": dynamic(() => import("./web-demos/use-haptics"), { ssr: false }),
+  "use-reduce-motion": dynamic(() => import("./web-demos/use-reduce-motion"), { ssr: false }),
+  "mode-provider": dynamic(() => import("./web-demos/mode-provider"), { ssr: false }),
+  "theme-provider": dynamic(() => import("./web-demos/theme-provider"), { ssr: false }),
+};
+
+export function getWebDemo(name: string): ComponentType | undefined {
+  return Object.hasOwn(webDemos, name) ? webDemos[name as ComponentName] : undefined;
+}

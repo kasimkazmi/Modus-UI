@@ -3,7 +3,7 @@
   "title": "Globals",
   "category": "Theme",
   "type": "components:ui",
-  "platform": "native",
+  "platform": "both",
   "added": "2026-11-05",
   "dependencies": [],
   "files": [

@@ -19,7 +19,9 @@ describe("reduced motion", () => {
     (item) => {
       const source = read(item.files[0]);
       // useReducedMotion for JS-driven motion; Tailwind's motion-reduce: for CSS-only motion.
-      expect(source).toMatch(PATTERN[(item as RegistryItem).platform ?? "web"]);
+      expect(source).toMatch(
+        PATTERN[(item as RegistryItem).platform === "native" ? "native" : "web"],
+      );
     },
   );
 

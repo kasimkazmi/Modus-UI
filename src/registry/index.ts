@@ -12,7 +12,13 @@ export const CATEGORIES = [
   "Typography",
   "Sections",
   "Components",
-  "React Native",
+  "React Native · Inputs",
+  "React Native · Buttons",
+  "React Native · Navigation",
+  "React Native · Overlays",
+  "React Native · Feedback",
+  "React Native · Progress",
+  "React Native · Data",
   "Hooks",
   "Providers",
   "Theme",
@@ -50,9 +56,11 @@ export interface RegistryItem {
   /**
    * "native" components are React Native (Expo) files, previewed on the site through react-native-web.
    * They import only `react-native`, which the host app already has, so they list no dependencies.
+   * "both" items work in React and in React Native. Their first file is the React version; a second file
+   * ending in `.native.ts(x)` is the React Native version, and a single file works unchanged on both.
    * Defaults to "web".
    */
-  platform?: "web" | "native";
+  platform?: "web" | "native" | "both";
   dependencies: readonly string[];
   files: readonly string[];
   /** Date first published (YYYY-MM-DD). Shows a New badge for 30 days after it. */
@@ -4140,7 +4148,7 @@ export const registry = [
   {
     name: "swipe-actions",
     title: "Swipe Actions",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4150,7 +4158,7 @@ export const registry = [
   {
     name: "snap-sheet",
     title: "Snap Sheet",
-    category: "React Native",
+    category: "React Native · Overlays",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4160,7 +4168,7 @@ export const registry = [
   {
     name: "glide-segments",
     title: "Glide Segments",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4170,7 +4178,7 @@ export const registry = [
   {
     name: "swipe-deck",
     title: "Swipe Deck",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4180,7 +4188,7 @@ export const registry = [
   {
     name: "fan-menu",
     title: "Fan Menu",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4190,7 +4198,7 @@ export const registry = [
   {
     name: "pin-pad",
     title: "Pin Pad",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-10-30",
@@ -4200,7 +4208,7 @@ export const registry = [
   {
     name: "flick-toast",
     title: "Flick Toast",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4210,7 +4218,7 @@ export const registry = [
   {
     name: "fold-panel",
     title: "Fold Panel",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4220,7 +4228,7 @@ export const registry = [
   {
     name: "snap-carousel",
     title: "Snap Carousel",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4230,7 +4238,7 @@ export const registry = [
   {
     name: "slide-switch",
     title: "Slide Switch",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4240,7 +4248,7 @@ export const registry = [
   {
     name: "shimmer-block",
     title: "Shimmer Block",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4250,7 +4258,7 @@ export const registry = [
   {
     name: "parallax-header",
     title: "Parallax Header",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-01",
@@ -4260,7 +4268,7 @@ export const registry = [
   {
     name: "bubble-tab-bar",
     title: "Bubble Tab Bar",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4270,7 +4278,7 @@ export const registry = [
   {
     name: "roll-number",
     title: "Roll Number",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4280,7 +4288,7 @@ export const registry = [
   {
     name: "star-rating",
     title: "Star Rating",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4290,7 +4298,7 @@ export const registry = [
   {
     name: "value-slider",
     title: "Value Slider",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4300,7 +4308,7 @@ export const registry = [
   {
     name: "expand-search",
     title: "Expand Search",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4310,7 +4318,7 @@ export const registry = [
   {
     name: "intro-pager",
     title: "Intro Pager",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4320,7 +4328,7 @@ export const registry = [
   {
     name: "drag-list",
     title: "Drag List",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4330,7 +4338,7 @@ export const registry = [
   {
     name: "long-press-menu",
     title: "Long Press Menu",
-    category: "React Native",
+    category: "React Native · Overlays",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4340,7 +4348,7 @@ export const registry = [
   {
     name: "slide-confirm",
     title: "Slide Confirm",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4350,7 +4358,7 @@ export const registry = [
   {
     name: "calendar-strip",
     title: "Calendar Strip",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4360,7 +4368,7 @@ export const registry = [
   {
     name: "step-tracker",
     title: "Step Tracker",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4370,7 +4378,7 @@ export const registry = [
   {
     name: "chip-input",
     title: "Chip Input",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4380,7 +4388,7 @@ export const registry = [
   {
     name: "typing-dots",
     title: "Typing Dots",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4390,7 +4398,7 @@ export const registry = [
   {
     name: "marquee-ticker",
     title: "Marquee Ticker",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4400,7 +4408,7 @@ export const registry = [
   {
     name: "choice-chips",
     title: "Choice Chips",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4410,7 +4418,7 @@ export const registry = [
   {
     name: "hold-stepper",
     title: "Hold Stepper",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4420,7 +4428,7 @@ export const registry = [
   {
     name: "action-tray",
     title: "Action Tray",
-    category: "React Native",
+    category: "React Native · Overlays",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4430,7 +4438,7 @@ export const registry = [
   {
     name: "confirm-dialog",
     title: "Confirm Dialog",
-    category: "React Native",
+    category: "React Native · Overlays",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4440,7 +4448,7 @@ export const registry = [
   {
     name: "code-boxes",
     title: "Code Boxes",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4450,7 +4458,7 @@ export const registry = [
   {
     name: "hue-picker",
     title: "Hue Picker",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4460,7 +4468,7 @@ export const registry = [
   {
     name: "tab-pager",
     title: "Tab Pager",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4470,7 +4478,7 @@ export const registry = [
   {
     name: "wheel-picker",
     title: "Wheel Picker",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4480,7 +4488,7 @@ export const registry = [
   {
     name: "avatar-stack",
     title: "Avatar Stack",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4490,7 +4498,7 @@ export const registry = [
   {
     name: "stripe-progress",
     title: "Stripe Progress",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4500,7 +4508,7 @@ export const registry = [
   {
     name: "range-slider",
     title: "Range Slider",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4510,7 +4518,7 @@ export const registry = [
   {
     name: "tick-box",
     title: "Tick Box",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4520,7 +4528,7 @@ export const registry = [
   {
     name: "notice-banner",
     title: "Notice Banner",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4530,7 +4538,7 @@ export const registry = [
   {
     name: "side-drawer",
     title: "Side Drawer",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4540,7 +4548,7 @@ export const registry = [
   {
     name: "reaction-bar",
     title: "Reaction Bar",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4550,7 +4558,7 @@ export const registry = [
   {
     name: "suggest-input",
     title: "Suggest Input",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4560,7 +4568,7 @@ export const registry = [
   {
     name: "expand-card",
     title: "Expand Card",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4570,7 +4578,7 @@ export const registry = [
   {
     name: "ring-meter",
     title: "Ring Meter",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4580,7 +4588,7 @@ export const registry = [
   {
     name: "count-badge",
     title: "Count Badge",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4590,7 +4598,7 @@ export const registry = [
   {
     name: "float-field",
     title: "Float Field",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4600,7 +4608,7 @@ export const registry = [
   {
     name: "month-grid",
     title: "Month Grid",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-02",
@@ -4610,7 +4618,7 @@ export const registry = [
   {
     name: "chat-bubble",
     title: "Chat Bubble",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4620,7 +4628,7 @@ export const registry = [
   {
     name: "live-dot",
     title: "Live Dot",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4630,7 +4638,7 @@ export const registry = [
   {
     name: "composer-bar",
     title: "Composer Bar",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4640,7 +4648,7 @@ export const registry = [
   {
     name: "setting-list",
     title: "Setting List",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4650,7 +4658,7 @@ export const registry = [
   {
     name: "pull-refresh",
     title: "Pull Refresh",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4660,7 +4668,7 @@ export const registry = [
   {
     name: "story-bars",
     title: "Story Bars",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4670,7 +4678,7 @@ export const registry = [
   {
     name: "action-button",
     title: "Action Button",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4680,7 +4688,7 @@ export const registry = [
   {
     name: "spin-loader",
     title: "Spin Loader",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4690,7 +4698,7 @@ export const registry = [
   {
     name: "radio-group",
     title: "Radio Group",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4700,7 +4708,7 @@ export const registry = [
   {
     name: "mode-toggle",
     title: "Mode Toggle",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4710,7 +4718,7 @@ export const registry = [
   {
     name: "tip-popover",
     title: "Tip Popover",
-    category: "React Native",
+    category: "React Native · Overlays",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4720,7 +4728,7 @@ export const registry = [
   {
     name: "data-table",
     title: "Data Table",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4730,7 +4738,7 @@ export const registry = [
   {
     name: "wave-bars",
     title: "Wave Bars",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4740,7 +4748,7 @@ export const registry = [
   {
     name: "page-dots",
     title: "Page Dots",
-    category: "React Native",
+    category: "React Native · Navigation",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4750,7 +4758,7 @@ export const registry = [
   {
     name: "password-meter",
     title: "Password Meter",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4760,7 +4768,7 @@ export const registry = [
   {
     name: "timeline-list",
     title: "Timeline List",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4770,7 +4778,7 @@ export const registry = [
   {
     name: "empty-state",
     title: "Empty State",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4780,7 +4788,7 @@ export const registry = [
   {
     name: "rating-histogram",
     title: "Rating Histogram",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4790,7 +4798,7 @@ export const registry = [
   {
     name: "countdown-timer",
     title: "Countdown Timer",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4800,7 +4808,7 @@ export const registry = [
   {
     name: "contact-index",
     title: "Contact Index",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4810,7 +4818,7 @@ export const registry = [
   {
     name: "select-grid",
     title: "Select Grid",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4820,7 +4828,7 @@ export const registry = [
   {
     name: "poll-bars",
     title: "Poll Bars",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4830,7 +4838,7 @@ export const registry = [
   {
     name: "card-field",
     title: "Card Field",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4840,7 +4848,7 @@ export const registry = [
   {
     name: "step-slider",
     title: "Step Slider",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4850,7 +4858,7 @@ export const registry = [
   {
     name: "cart-quantity",
     title: "Cart Quantity",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4860,7 +4868,7 @@ export const registry = [
   {
     name: "password-field",
     title: "Password Field",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4870,7 +4878,7 @@ export const registry = [
   {
     name: "resend-button",
     title: "Resend Button",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4880,7 +4888,7 @@ export const registry = [
   {
     name: "gauge-meter",
     title: "Gauge Meter",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4890,7 +4898,7 @@ export const registry = [
   {
     name: "undo-snackbar",
     title: "Undo Snackbar",
-    category: "React Native",
+    category: "React Native · Feedback",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4900,7 +4908,7 @@ export const registry = [
   {
     name: "mood-picker",
     title: "Mood Picker",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4910,7 +4918,7 @@ export const registry = [
   {
     name: "expandable-text",
     title: "Expandable Text",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4920,7 +4928,7 @@ export const registry = [
   {
     name: "extended-fab",
     title: "Extended FAB",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4930,7 +4938,7 @@ export const registry = [
   {
     name: "swatch-picker",
     title: "Swatch Picker",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4940,7 +4948,7 @@ export const registry = [
   {
     name: "like-button",
     title: "Like Button",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4950,7 +4958,7 @@ export const registry = [
   {
     name: "task-checklist",
     title: "Task Checklist",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4960,7 +4968,7 @@ export const registry = [
   {
     name: "spark-bars",
     title: "Spark Bars",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4970,7 +4978,7 @@ export const registry = [
   {
     name: "battery-meter",
     title: "Battery Meter",
-    category: "React Native",
+    category: "React Native · Progress",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4980,7 +4988,7 @@ export const registry = [
   {
     name: "compare-slider",
     title: "Compare Slider",
-    category: "React Native",
+    category: "React Native · Data",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -4990,7 +4998,7 @@ export const registry = [
   {
     name: "hold-confirm",
     title: "Hold Confirm",
-    category: "React Native",
+    category: "React Native · Buttons",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -5000,7 +5008,7 @@ export const registry = [
   {
     name: "select-menu",
     title: "Select Menu",
-    category: "React Native",
+    category: "React Native · Inputs",
     type: "components:ui",
     platform: "native",
     added: "2026-11-03",
@@ -5012,47 +5020,47 @@ export const registry = [
     title: "useColorScheme",
     category: "Hooks",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/use-color-scheme.ts"],
+    files: ["registry/use-color-scheme.ts", "registry/use-color-scheme.native.ts"],
   },
   {
     name: "use-keyboard-height",
     title: "useKeyboardHeight",
     category: "Hooks",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/use-keyboard-height.ts"],
+    files: ["registry/use-keyboard-height.ts", "registry/use-keyboard-height.native.ts"],
   },
   {
     name: "use-haptics",
     title: "useHaptics",
     category: "Hooks",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/use-haptics.ts"],
+    files: ["registry/use-haptics.ts", "registry/use-haptics.native.ts"],
   },
   {
     name: "use-reduce-motion",
     title: "useReduceMotion",
     category: "Hooks",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/use-reduce-motion.ts"],
+    files: ["registry/use-reduce-motion.ts", "registry/use-reduce-motion.native.ts"],
   },
   {
     name: "use-debounced-value",
     title: "useDebouncedValue",
     category: "Hooks",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
     files: ["registry/use-debounced-value.ts"],
@@ -5062,27 +5070,27 @@ export const registry = [
     title: "ModeProvider",
     category: "Providers",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/mode-provider.tsx"],
+    files: ["registry/mode-provider.tsx", "registry/mode-provider.native.tsx"],
   },
   {
     name: "theme-provider",
     title: "ThemeProvider",
     category: "Providers",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
-    files: ["registry/theme-provider.tsx"],
+    files: ["registry/theme-provider.tsx", "registry/theme-provider.native.tsx"],
   },
   {
     name: "theme-colors",
     title: "Colors",
     category: "Theme",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
     files: ["registry/theme-colors.ts"],
@@ -5092,7 +5100,7 @@ export const registry = [
     title: "Globals",
     category: "Theme",
     type: "components:ui",
-    platform: "native",
+    platform: "both",
     added: "2026-11-05",
     dependencies: [],
     files: ["registry/theme-globals.ts"],

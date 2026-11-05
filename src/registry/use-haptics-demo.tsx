@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { useHaptics } from "./use-haptics";
+import { useHaptics } from "./use-haptics.native";
 import { NativeStage } from "./native-stage";
 
 export function UseHapticsDemo() {

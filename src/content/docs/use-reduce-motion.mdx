@@ -3,7 +3,7 @@ title: useReduceMotion
 description: A React Native hook that reports whether the system asks to reduce motion and follows later changes.
 ---
 
-Whether the person has asked the system to reduce motion. It reads the setting once on mount and follows later changes, so animated components can skip or shorten their motion. It starts as false until the platform answers. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+Whether the person has asked the system to reduce motion. It reads the setting once on mount and follows later changes, so animated components can skip or shorten their motion. It starts as false until the platform answers. Works in React and in React Native with no extra packages.
 
 <ComponentPreview name="use-reduce-motion" />
 
@@ -17,11 +17,11 @@ npx @modus-ui/cli add use-reduce-motion
 
 ### Manual
 
-1. Copy the code from the component tab.
+1. Copy the code from the code tab, using the React or React Native switch for your project.
 2. Create a file at `components/ui/use-reduce-motion.ts`.
 3. Paste the code.
 
-It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+The CLI installs the React Native version in an Expo or React Native app and the React version everywhere else. In a project that targets both, keep the React file `use-reduce-motion.ts` and the React Native file `use-reduce-motion.native.ts` side by side and import `./use-reduce-motion`; Metro picks the `.native` file on its own.
 
 ## Usage
 

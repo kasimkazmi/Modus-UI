@@ -3,7 +3,7 @@ title: ThemeProvider
 description: A React Native provider that supplies one colour palette to the tree through a useTheme hook, with per-colour overrides.
 ---
 
-Supplies one palette to everything below it. Components call `useTheme()` and read colours by role, so switching between light and dark restyles the whole tree at once with no per-component logic. Override individual colours with `colors`; anything you leave out keeps its default. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+Supplies one palette to everything below it. Components call `useTheme()` and read colours by role, so switching between light and dark restyles the whole tree at once with no per-component logic. Override individual colours with `colors`; anything you leave out keeps its default. Works in React and in React Native with no extra packages.
 
 <ComponentPreview name="theme-provider" />
 
@@ -17,11 +17,11 @@ npx @modus-ui/cli add theme-provider
 
 ### Manual
 
-1. Copy the code from the component tab.
+1. Copy the code from the code tab, using the React or React Native switch for your project.
 2. Create a file at `components/ui/theme-provider.tsx`.
 3. Paste the code.
 
-It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+The CLI installs the React Native version in an Expo or React Native app and the React version everywhere else. In a project that targets both, keep the React file `theme-provider.tsx` and the React Native file `theme-provider.native.tsx` side by side and import `./theme-provider`; Metro picks the `.native` file on its own.
 
 ## Usage
 

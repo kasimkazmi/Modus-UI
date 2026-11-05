@@ -1,7 +1,7 @@
 {
   "name": "mode-toggle",
   "title": "Mode Toggle",
-  "category": "React Native",
+  "category": "React Native · Inputs",
   "type": "components:ui",
   "platform": "native",
   "added": "2026-11-03",

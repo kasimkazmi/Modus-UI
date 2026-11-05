@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
-import { AccessibilityInfo } from "react-native";
+"use client";
+
+import { useSyncExternalStore } from "react";
+
+const QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribe(onChange: () => void) {
+  const media = window.matchMedia(QUERY);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
 
 /**
- * Whether the person has asked the system to reduce motion. It reads the setting once on mount and
- * follows later changes, so animated components can skip or shorten their motion. It starts as false
- * until the platform answers.
+ * Whether the person has asked the system to reduce motion. It reads the prefers-reduced-motion media
+ * query and follows later changes, so animated components can skip or shorten their motion. On the
+ * server, and for the first render while hydrating, it returns false so the markup matches.
  */
 export function useReduceMotion(): boolean {
-  const [reduce, setReduce] = useState(false);
-
-  useEffect(() => {
-    AccessibilityInfo.isReduceMotionEnabled().then(setReduce);
-    const subscription = AccessibilityInfo.addEventListener("reduceMotionChanged", setReduce);
-    return () => subscription.remove();
-  }, []);
-
-  return reduce;
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(QUERY).matches,
+    () => false,
+  );
 }

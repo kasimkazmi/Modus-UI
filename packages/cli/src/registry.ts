@@ -21,6 +21,8 @@ export interface RegistryComponent {
   title: string;
   category: string;
   type: string;
+  /** "native" is React Native only, "both" works in React and React Native, anything else is web. */
+  platform?: "web" | "native" | "both";
   dependencies: string[];
   files: { path: string; content: string }[];
 }

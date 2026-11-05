@@ -3,7 +3,7 @@ title: Globals
 description: Shared React Native design tokens for spacing, corner radius, type sizes, font weights and shadows.
 ---
 
-The numbers every screen repeats, in one place. Pick spacing, radius, type size and shadow from a scale instead of typing a value, and the whole app stays consistent when you change one. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+The numbers every screen repeats, in one place. Pick spacing, radius, type size and shadow from a scale instead of typing a value, and the whole app stays consistent when you change one. One file that works unchanged in React and in React Native, with no extra packages.
 
 <ComponentPreview name="theme-globals" />
 
@@ -17,11 +17,11 @@ npx @modus-ui/cli add theme-globals
 
 ### Manual
 
-1. Copy the code from the component tab.
+1. Copy the code from the code tab.
 2. Create a file at `components/ui/theme-globals.ts`.
 3. Paste the code.
 
-It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+The same file serves React and React Native, so the CLI installs it unchanged in either.
 
 ## Usage
 

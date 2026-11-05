@@ -56,7 +56,12 @@ export function componentMarkdown(name: string): string | null {
     `> ${doc.description}`,
     `Install: \`${SITE.cli} ${name}\``,
     doc.body,
-    `## Source\n\n\`components/ui/${name}.tsx\`\n\n\`\`\`tsx\n${component.content.trimEnd()}\n\`\`\``,
+    component.nativeContent
+      ? [
+          `## Source (React)\n\n\`${component.files[0]}\`\n\n\`\`\`tsx\n${component.content.trimEnd()}\n\`\`\``,
+          `## Source (React Native)\n\n\`${component.nativeFile}\`\n\n\`\`\`tsx\n${component.nativeContent.trimEnd()}\n\`\`\``,
+        ].join("\n\n")
+      : `## Source\n\n\`components/ui/${name}.tsx\`\n\n\`\`\`tsx\n${component.content.trimEnd()}\n\`\`\``,
   ].join("\n\n");
 }
 

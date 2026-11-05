@@ -1,8 +1,8 @@
 "use client";
 
 import { Pressable, Text, View } from "react-native";
-import { ThemeProvider, useTheme } from "./theme-provider";
-import { ModeProvider, useMode } from "./mode-provider";
+import { ThemeProvider, useTheme } from "./theme-provider.native";
+import { ModeProvider, useMode } from "./mode-provider.native";
 import { NativeStage } from "./native-stage";
 
 function Card() {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Text, TextInput, View } from "react-native";
-import { useKeyboardHeight } from "./use-keyboard-height";
+import { useKeyboardHeight } from "./use-keyboard-height.native";
 import { NativeStage } from "./native-stage";
 
 export function UseKeyboardHeightDemo() {

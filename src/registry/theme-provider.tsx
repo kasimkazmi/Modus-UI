@@ -1,5 +1,21 @@
-import { createContext, useContext, useMemo, type ReactNode } from "react";
-import { useColorScheme } from "react-native";
+"use client";
+
+import { createContext, useSyncExternalStore, useContext, useMemo, type ReactNode } from "react";
+
+const QUERY = "(prefers-color-scheme: dark)";
+
+/** The system scheme from the prefers-color-scheme media query; "light" on the server so hydration matches. */
+function useSystemScheme(): "light" | "dark" {
+  return useSyncExternalStore(
+    (onChange) => {
+      const media = window.matchMedia(QUERY);
+      media.addEventListener("change", onChange);
+      return () => media.removeEventListener("change", onChange);
+    },
+    () => (window.matchMedia(QUERY).matches ? "dark" : "light"),
+    () => "light",
+  );
+}
 
 export interface ThemePalette {
   background: string;
@@ -63,7 +79,7 @@ export interface ThemeProviderProps {
  * Override individual colours with `colors`; anything you leave out keeps its default.
  */
 export function ThemeProvider({ children, scheme, colors }: ThemeProviderProps) {
-  const system = useColorScheme() === "dark" ? "dark" : "light";
+  const system = useSystemScheme();
   const active = scheme ?? system;
 
   const value = useMemo<Theme>(

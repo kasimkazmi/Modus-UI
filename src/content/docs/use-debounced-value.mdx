@@ -3,7 +3,7 @@ title: useDebouncedValue
 description: A React Native hook that returns a copy of a value which only updates after it stops changing.
 ---
 
-A copy of `value` that only updates after it has stopped changing for `delay` milliseconds. Use it to wait out typing before searching: render with the live value, query with the debounced one. The first render returns the value straight away. Built for React Native and Expo with `react-native` only; this page previews it in the browser through react-native-web.
+A copy of `value` that only updates after it has stopped changing for `delay` milliseconds. Use it to wait out typing before searching: render with the live value, query with the debounced one. The first render returns the value straight away. One file that works unchanged in React and in React Native, with no extra packages.
 
 <ComponentPreview name="use-debounced-value" />
 
@@ -17,11 +17,11 @@ npx @modus-ui/cli add use-debounced-value
 
 ### Manual
 
-1. Copy the code from the component tab.
+1. Copy the code from the code tab.
 2. Create a file at `components/ui/use-debounced-value.ts`.
 3. Paste the code.
 
-It needs no packages beyond `react-native`, which your Expo or React Native app already has.
+The same file serves React and React Native, so the CLI installs it unchanged in either.
 
 ## Usage
 

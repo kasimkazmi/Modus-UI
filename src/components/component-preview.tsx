@@ -20,8 +20,30 @@ export const ComponentPreview = async ({ name }: ComponentPreviewProps) => {
 
   const filePath = component.files[0] || `components/ui/${name}.tsx`;
 
+  // An item with separate React and React Native files gets a switch between the two.
+  const variants =
+    component.nativeFile && component.nativeContent
+      ? [
+          {
+            label: "React",
+            preview: <RegistryDemo name={name} variant="web" />,
+            code: component.content,
+            filePath,
+            highlightedCode: <CodeBlock code={component.content} lang="tsx" minimal={true} />,
+          },
+          {
+            label: "React Native",
+            preview: <RegistryDemo name={name} />,
+            code: component.nativeContent,
+            filePath: component.nativeFile,
+            highlightedCode: <CodeBlock code={component.nativeContent} lang="tsx" minimal={true} />,
+          },
+        ]
+      : undefined;
+
   return (
     <ComponentPreviewClient
+      variants={variants}
       name={name}
       preview={<RegistryDemo name={name} />}
       code={component.content}

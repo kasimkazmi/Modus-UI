@@ -1,7 +1,7 @@
 "use client";
 
 import { Pressable, Text, View } from "react-native";
-import { ModeProvider, useMode, type Mode } from "./mode-provider";
+import { ModeProvider, useMode, type Mode } from "./mode-provider.native";
 import { NativeStage } from "./native-stage";
 
 const MODES: Mode[] = ["light", "dark", "system"];
