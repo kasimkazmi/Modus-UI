@@ -1,0 +1,51 @@
+---
+title: useDebouncedValue
+description: A React Native hook that returns a copy of a value which only updates after it stops changing.
+---
+
+A copy of `value` that only updates after it has stopped changing for `delay` milliseconds. Use it to wait out typing before searching: render with the live value, query with the debounced one. The first render returns the value straight away. One file that works unchanged in React and in React Native, with no extra packages.
+
+<ComponentPreview name="use-debounced-value" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add use-debounced-value
+```
+
+### Manual
+
+1. Copy the code from the code tab.
+2. Create a file at `components/ui/use-debounced-value.ts`.
+3. Paste the code.
+
+The same file serves React and React Native, so the CLI installs it unchanged in either.
+
+## Usage
+
+```tsx
+import { useEffect, useState } from "react";
+import { TextInput } from "react-native";
+import { useDebouncedValue } from "@/components/ui/use-debounced-value";
+
+export default function Search() {
+  const [query, setQuery] = useState("");
+  const debounced = useDebouncedValue(query, 400);
+
+  useEffect(() => {
+    if (debounced) console.log("search for", debounced);
+  }, [debounced]);
+
+  return <TextInput value={query} onChangeText={setQuery} />;
+}
+```
+
+## API
+
+| Part    | Type     | Default | Description                                      |
+| :------ | :------- | :------ | :----------------------------------------------- |
+| `value` | `T`      | -       | The value to debounce.                           |
+| `delay` | `number` | `300`   | Milliseconds the value must stay still.          |
+| Returns | `T`      | -       | The value as it was when the delay last ran out. |

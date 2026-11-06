@@ -10,6 +10,7 @@ import {
   findUtilsFile,
   installCommand,
   installedDependencies,
+  isReactNativeProject,
   readPackageJson,
   utilsFileTarget,
 } from "../project.js";
@@ -77,10 +78,16 @@ export async function add(names: string[], options: AddOptions): Promise<void> {
   const componentsDir = options.path ? resolve(cwd, options.path) : defaultComponentsDir(cwd);
   const deps = new Set<string>();
   let wrote = false;
+  let usesCn = false;
+  const native = isReactNativeProject(pkg);
   for (const component of components) {
-    const file = component.files[0];
+    // An item for both platforms ships a React file first and may add a `.native` one; an Expo or
+    // React Native app takes the `.native` file, anywhere else gets the React file.
+    const file =
+      (native && component.files.find((f) => /\.native\.tsx?$/.test(f.path))) || component.files[0];
     if (!file) throw new Error(`Registry entry for ${component.name} has no files.`);
-    const target = join(componentsDir, `${component.name}.tsx`);
+    const extension = file.path.endsWith(".ts") ? ".ts" : ".tsx";
+    const target = join(componentsDir, `${component.name}${extension}`);
     const shown = relative(cwd, target);
     if (existsSync(target) && !options.overwrite) {
       log(`Skipped ${shown} (already exists, pass --overwrite to replace it)`);
@@ -90,20 +97,24 @@ export async function add(names: string[], options: AddOptions): Promise<void> {
     await writeFile(target, file.content);
     log(`Added ${shown}`);
     wrote = true;
+    if (!component.platform || component.platform === "web") usesCn = true;
     for (const dep of component.dependencies) deps.add(dep);
   }
 
   if (!wrote) return;
 
-  // Every component imports cn from @/lib/utils, which needs clsx and tailwind-merge.
-  if (!findUtilsFile(cwd)) {
-    const utils = utilsFileTarget(cwd);
-    await mkdir(dirname(utils), { recursive: true });
-    await writeFile(utils, CN_SOURCE);
-    log(`Created ${relative(cwd, utils)} with the cn() helper`);
+  // Web components import cn from @/lib/utils, which needs clsx and tailwind-merge. React Native files
+  // and the hooks, providers and theme tokens use neither.
+  if (usesCn) {
+    if (!findUtilsFile(cwd)) {
+      const utils = utilsFileTarget(cwd);
+      await mkdir(dirname(utils), { recursive: true });
+      await writeFile(utils, CN_SOURCE);
+      log(`Created ${relative(cwd, utils)} with the cn() helper`);
+    }
+    deps.add("clsx");
+    deps.add("tailwind-merge");
   }
-  deps.add("clsx");
-  deps.add("tailwind-merge");
 
   const installed = installedDependencies(pkg);
   const missing = [...deps].filter((d) => !installed.has(d)).sort();

@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { registry, type RegistryItem } from "@/registry";
+import { isUtility } from "@/lib/registry";
 
 /**
  * Components must take their colours from the theme tokens so they follow the
@@ -61,11 +62,10 @@ describe("component colours", () => {
       if (name in HEX_ALLOWED) return;
       // React Native has no CSS variables to read, so native components carry plain default colours;
       // the next test makes sure each one can be themed through its `colors` prop.
-      if (
-        (registry as readonly RegistryItem[]).find((item) => item.name === name)?.platform ===
-        "native"
-      )
-        return;
+      const platform = (registry as readonly RegistryItem[]).find(
+        (item) => item.name === name,
+      )?.platform;
+      if (platform === "native" || platform === "both") return;
       const source = readFileSync(join(process.cwd(), "src", file), "utf8");
       expect(source.match(HEX)?.[0]).toBeUndefined();
     },
@@ -73,7 +73,10 @@ describe("component colours", () => {
 });
 
 describe("native component colours", () => {
-  const native = (registry as readonly RegistryItem[]).filter((item) => item.platform === "native");
+  // Hooks, providers and theme tokens have no colours of their own to override.
+  const native = (registry as readonly RegistryItem[]).filter(
+    (item) => item.platform === "native" && !isUtility(item),
+  );
 
   it.each(native)("$name can be themed through a colors prop", (item) => {
     const source = readFileSync(join(process.cwd(), "src", item.files[0]), "utf8");

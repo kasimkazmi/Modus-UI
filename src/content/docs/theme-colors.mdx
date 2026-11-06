@@ -1,0 +1,51 @@
+---
+title: Colors
+description: Light and dark colour palettes for React Native, named by role, with a helper that adds transparency to any colour.
+---
+
+Every colour a screen needs, named by role rather than by shade, so light and dark can swap freely. `lightColors` and `darkColors` hold the same nine names, and `withAlpha` turns any #rrggbb colour into an rgba() string for overlays and pressed states. One file that works unchanged in React and in React Native, with no extra packages.
+
+<ComponentPreview name="theme-colors" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add theme-colors
+```
+
+### Manual
+
+1. Copy the code from the code tab.
+2. Create a file at `components/ui/theme-colors.ts`.
+3. Paste the code.
+
+The same file serves React and React Native, so the CLI installs it unchanged in either.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { darkColors, lightColors, withAlpha } from "@/components/ui/theme-colors";
+
+export default function Banner({ dark }: { dark: boolean }) {
+  const colors = dark ? darkColors : lightColors;
+
+  return (
+    <View style={{ backgroundColor: withAlpha(colors.primary, 0.12) }}>
+      <Text style={{ color: colors.primary }}>Heads up</Text>
+    </View>
+  );
+}
+```
+
+## API
+
+| Export        | Type                                     | Description                                                      |
+| :------------ | :--------------------------------------- | :--------------------------------------------------------------- |
+| `lightColors` | `ThemeColors`                            | The light palette.                                               |
+| `darkColors`  | `ThemeColors`                            | The dark palette.                                                |
+| `withAlpha`   | `(hex: string, alpha: number) => string` | Adds transparency to a #rrggbb colour; `alpha` runs from 0 to 1. |
+
+The names are `background`, `foreground`, `card`, `muted`, `mutedForeground`, `primary`, `primaryForeground`, `border` and `destructive`.

@@ -16,7 +16,16 @@ import {
   type LucideIcon,
   Box,
   PanelsTopLeft,
-  Smartphone,
+  Webhook,
+  TextCursorInput,
+  MousePointerClick,
+  Compass,
+  PanelBottom,
+  Bell,
+  Loader,
+  Table2,
+  Layers,
+  Palette,
 } from "lucide-react";
 import { CATEGORIES, registry, type Category } from "@/registry";
 import { isNew, platformOf } from "@/lib/registry";
@@ -30,7 +39,16 @@ const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   Typography: Type,
   Sections: PanelsTopLeft,
   Components: LayoutTemplate,
-  "React Native": Smartphone,
+  "React Native · Inputs": TextCursorInput,
+  "React Native · Buttons": MousePointerClick,
+  "React Native · Navigation": Compass,
+  "React Native · Overlays": PanelBottom,
+  "React Native · Feedback": Bell,
+  "React Native · Progress": Loader,
+  "React Native · Data": Table2,
+  Hooks: Webhook,
+  Providers: Layers,
+  Theme: Palette,
 };
 
 const DOC_CATEGORIES: SidebarCategory[] = [

@@ -9,23 +9,29 @@ import { cn } from "@/lib/utils";
 import { ThemePicker } from "@/components/theme-picker";
 import { CopyPromptButton } from "@/components/copy-prompt-button";
 
-interface ComponentPreviewClientProps {
-  name: string;
+interface Variant {
+  label: string;
   preview: React.ReactNode;
   code: string;
   filePath: string;
   highlightedCode: React.ReactNode;
 }
 
+interface ComponentPreviewClientProps extends Omit<Variant, "label"> {
+  name: string;
+  /** Versions of the same item for different platforms, such as React and React Native. */
+  variants?: Variant[];
+}
+
 export const ComponentPreviewClient = ({
   name,
-  preview,
-  code,
-  filePath,
-  highlightedCode,
+  variants,
+  ...single
 }: ComponentPreviewClientProps) => {
   const [activeTab, setActiveTab] = useState("preview");
   const [key, setKey] = useState(0);
+  const [variant, setVariant] = useState(0);
+  const { preview, code, filePath, highlightedCode } = variants?.[variant] ?? single;
 
   const handleRestart = () => {
     setKey((prev) => prev + 1);
@@ -53,6 +59,34 @@ export const ComponentPreviewClient = ({
             ))}
           </Tabs.List>
           <div className="flex items-center gap-2">
+            {variants && (
+              <div
+                role="radiogroup"
+                aria-label="Platform"
+                className="flex rounded-md border border-border bg-card/80 p-0.5 text-xs font-medium"
+              >
+                {variants.map((item, i) => (
+                  <button
+                    key={item.label}
+                    type="button"
+                    role="radio"
+                    aria-checked={variant === i}
+                    onClick={() => {
+                      setVariant(i);
+                      setKey((prev) => prev + 1);
+                    }}
+                    className={cn(
+                      "rounded px-2.5 py-1 transition-colors",
+                      variant === i
+                        ? "bg-foreground text-background"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
             <CopyPromptButton name={name} />
             <ThemePicker variant="icon" />
           </div>

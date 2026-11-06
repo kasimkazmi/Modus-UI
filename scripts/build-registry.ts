@@ -14,8 +14,11 @@ const failures: string[] = [];
 
 for (const item of registry) {
   try {
-    const content = fs.readFileSync(path.join(process.cwd(), "src", item.files[0]), "utf8");
-    const payload = { ...item, files: [{ path: item.files[0], content }] };
+    const files = item.files.map((file) => ({
+      path: file,
+      content: fs.readFileSync(path.join(process.cwd(), "src", file), "utf8"),
+    }));
+    const payload = { ...item, files };
 
     fs.writeFileSync(
       path.join(REGISTRY_PATH, `${item.name}.json`),

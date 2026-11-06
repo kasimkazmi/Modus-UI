@@ -1,0 +1,15 @@
+{
+  "name": "theme-colors",
+  "title": "Colors",
+  "category": "Theme",
+  "type": "components:ui",
+  "platform": "both",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/theme-colors.ts",
+      "content": "/** Every colour a screen needs, by role rather than by shade, so light and dark can swap freely. */\nexport interface ThemeColors {\n  background: string;\n  foreground: string;\n  card: string;\n  muted: string;\n  mutedForeground: string;\n  primary: string;\n  primaryForeground: string;\n  border: string;\n  destructive: string;\n}\n\nexport const lightColors: ThemeColors = {\n  background: \"#ffffff\",\n  foreground: \"#111827\",\n  card: \"#f9fafb\",\n  muted: \"#f3f4f6\",\n  mutedForeground: \"#6b7280\",\n  primary: \"#4f46e5\",\n  primaryForeground: \"#ffffff\",\n  border: \"#e5e7eb\",\n  destructive: \"#dc2626\",\n};\n\nexport const darkColors: ThemeColors = {\n  background: \"#0b0b0f\",\n  foreground: \"#f9fafb\",\n  card: \"#16161d\",\n  muted: \"#1f1f29\",\n  mutedForeground: \"#9ca3af\",\n  primary: \"#818cf8\",\n  primaryForeground: \"#0b0b0f\",\n  border: \"#2a2a36\",\n  destructive: \"#f87171\",\n};\n\n/**\n * Adds transparency to a #rrggbb colour and returns an rgba() string. `alpha` runs from 0 to 1. Use it\n * for overlays and pressed states so they stay tied to the palette instead of being hard-coded.\n */\nexport function withAlpha(hex: string, alpha: number): string {\n  const value = hex.replace(\"#\", \"\");\n  const r = parseInt(value.slice(0, 2), 16);\n  const g = parseInt(value.slice(2, 4), 16);\n  const b = parseInt(value.slice(4, 6), 16);\n  return `rgba(${r}, ${g}, ${b}, ${Math.max(0, Math.min(1, alpha))})`;\n}\n"
+    }
+  ]
+}

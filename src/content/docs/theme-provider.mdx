@@ -1,0 +1,69 @@
+---
+title: ThemeProvider
+description: A React Native provider that supplies one colour palette to the tree through a useTheme hook, with per-colour overrides.
+---
+
+Supplies one palette to everything below it. Components call `useTheme()` and read colours by role, so switching between light and dark restyles the whole tree at once with no per-component logic. Override individual colours with `colors`; anything you leave out keeps its default. Works in React and in React Native with no extra packages.
+
+<ComponentPreview name="theme-provider" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add theme-provider
+```
+
+### Manual
+
+1. Copy the code from the code tab, using the React or React Native switch for your project.
+2. Create a file at `components/ui/theme-provider.tsx`.
+3. Paste the code.
+
+The CLI installs the React Native version in an Expo or React Native app and the React version everywhere else. In a project that targets both, keep the React file `theme-provider.tsx` and the React Native file `theme-provider.native.tsx` side by side and import `./theme-provider`; Metro picks the `.native` file on its own.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { ModeProvider, useMode } from "@/components/ui/mode-provider";
+import { ThemeProvider, useTheme } from "@/components/ui/theme-provider";
+
+function Card() {
+  const { colors } = useTheme();
+
+  return (
+    <View style={{ backgroundColor: colors.card }}>
+      <Text style={{ color: colors.foreground }}>Hello</Text>
+    </View>
+  );
+}
+
+function Themed() {
+  const { scheme } = useMode();
+
+  return (
+    <ThemeProvider scheme={scheme} colors={{ light: { primary: "#0d9488" } }}>
+      <Card />
+    </ThemeProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <ModeProvider>
+      <Themed />
+    </ModeProvider>
+  );
+}
+```
+
+## Props
+
+| Prop     | Type                   | Default | Description                                                                         |
+| :------- | :--------------------- | :------ | :---------------------------------------------------------------------------------- |
+| `scheme` | `"light" \| "dark"`    | -       | Which palette to use. Leave it out to follow the system.                            |
+| `colors` | `Partial<ThemeColors>` | -       | Overrides for single colours in either palette, as `{ light: {...}, dark: {...} }`. |
+
+`useTheme()` returns the active `scheme` and its `colors`, and throws outside a `ThemeProvider`.

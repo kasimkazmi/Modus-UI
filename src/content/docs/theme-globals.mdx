@@ -1,0 +1,49 @@
+---
+title: Globals
+description: Shared React Native design tokens for spacing, corner radius, type sizes, font weights and shadows.
+---
+
+The numbers every screen repeats, in one place. Pick spacing, radius, type size and shadow from a scale instead of typing a value, and the whole app stays consistent when you change one. One file that works unchanged in React and in React Native, with no extra packages.
+
+<ComponentPreview name="theme-globals" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add theme-globals
+```
+
+### Manual
+
+1. Copy the code from the code tab.
+2. Create a file at `components/ui/theme-globals.ts`.
+3. Paste the code.
+
+The same file serves React and React Native, so the CLI installs it unchanged in either.
+
+## Usage
+
+```tsx
+import { Text, View } from "react-native";
+import { fontSize, radius, shadow, spacing } from "@/components/ui/theme-globals";
+
+export default function Card() {
+  return (
+    <View style={{ padding: spacing.lg, borderRadius: radius.lg, boxShadow: shadow.md }}>
+      <Text style={fontSize.title}>Title</Text>
+    </View>
+  );
+}
+```
+
+## API
+
+| Export       | Description                                                                  |
+| :----------- | :--------------------------------------------------------------------------- |
+| `spacing`    | `xs` 4, `sm` 8, `md` 12, `lg` 16, `xl` 24, `xxl` 32.                         |
+| `radius`     | `sm` 8, `md` 12, `lg` 16, `xl` 24, `pill` 999.                               |
+| `fontSize`   | `caption`, `body`, `title`, `heading`, `display`, each with its line height. |
+| `fontWeight` | `regular`, `medium`, `semibold`, `bold` as string weights.                   |
+| `shadow`     | `sm`, `md`, `lg` elevation levels as box shadows.                            |

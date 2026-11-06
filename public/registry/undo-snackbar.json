@@ -1,7 +1,7 @@
 {
   "name": "undo-snackbar",
   "title": "Undo Snackbar",
-  "category": "React Native",
+  "category": "React Native · Feedback",
   "type": "components:ui",
   "platform": "native",
   "added": "2026-11-03",

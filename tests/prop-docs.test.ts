@@ -4,6 +4,9 @@ import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { registry } from "@/registry";
 
+// Hooks and theme tokens are plain functions and constants, documented under `## API`, not as components with props.
+const API_ONLY = new Set<string>(["Hooks", "Theme"]);
+
 /**
  * Keeps each doc's `## Props` table in step with the component's real props,
  * using the TypeScript compiler API (the approach of React Bits'
@@ -42,7 +45,9 @@ const config = ts.getParsedCommandLineOfConfigFile(
   {},
   { ...ts.sys, onUnRecoverableConfigFileDiagnostic: () => {} },
 )!;
-const files = registry.map((item) => path.join(SRC, item.files[0]));
+const files = registry
+  .filter((item) => !API_ONLY.has(item.category))
+  .map((item) => path.join(SRC, item.files[0]));
 const program = ts.createProgram(files, { ...config.options, incremental: false });
 const checker = program.getTypeChecker();
 
@@ -184,38 +189,41 @@ const normalize = (value: string) =>
     .replace(/^`(.*)`$/, "$1")
     .replace(/^(["'])(.*)\1$/, "$2");
 
-describe.each(registry)("$name props table", (item) => {
-  const props = readComponent(path.join(SRC, item.files[0]), pascal(item.name));
-  const mdx = fs.readFileSync(path.join(SRC, "content/docs", `${item.name}.mdx`), "utf8");
-  const rows = readTable(mdx);
+describe.each(registry.filter((item) => !API_ONLY.has(item.category)))(
+  "$name props table",
+  (item) => {
+    const props = readComponent(path.join(SRC, item.files[0]), pascal(item.name));
+    const mdx = fs.readFileSync(path.join(SRC, "content/docs", `${item.name}.mdx`), "utf8");
+    const rows = readTable(mdx);
 
-  // A component that takes no props needs no table.
-  const takesProps = [...props.declared].some((prop) => !UNDOCUMENTED.has(prop));
-  it("has a props table if it takes props", () => {
-    if (takesProps) expect(rows, "missing `## Props` table").toBeDefined();
-  });
-  if (!rows) return;
-  const documented = new Set(rows.map((row) => row.prop));
-
-  it("only documents real props", () => {
-    expect(rows.map((row) => row.prop).filter((prop) => !props.accepted.has(prop))).toEqual([]);
-  });
-
-  it("documents every prop the component declares", () => {
-    expect(
-      [...props.declared].filter((prop) => !documented.has(prop) && !UNDOCUMENTED.has(prop)),
-    ).toEqual([]);
-  });
-
-  it("documents the real scalar defaults", () => {
-    const mismatches = rows.flatMap((row) => {
-      if (!props.defaults.has(row.prop)) return [];
-      // Docs write a newline in a string default as the escape `\n`.
-      const actual = String(props.defaults.get(row.prop)).replace(/\n/g, "\\n");
-      return normalize(row.default) === actual
-        ? []
-        : [`${row.prop}: doc ${row.default}, code ${actual}`];
+    // A component that takes no props needs no table.
+    const takesProps = [...props.declared].some((prop) => !UNDOCUMENTED.has(prop));
+    it("has a props table if it takes props", () => {
+      if (takesProps) expect(rows, "missing `## Props` table").toBeDefined();
     });
-    expect(mismatches).toEqual([]);
-  });
-});
+    if (!rows) return;
+    const documented = new Set(rows.map((row) => row.prop));
+
+    it("only documents real props", () => {
+      expect(rows.map((row) => row.prop).filter((prop) => !props.accepted.has(prop))).toEqual([]);
+    });
+
+    it("documents every prop the component declares", () => {
+      expect(
+        [...props.declared].filter((prop) => !documented.has(prop) && !UNDOCUMENTED.has(prop)),
+      ).toEqual([]);
+    });
+
+    it("documents the real scalar defaults", () => {
+      const mismatches = rows.flatMap((row) => {
+        if (!props.defaults.has(row.prop)) return [];
+        // Docs write a newline in a string default as the escape `\n`.
+        const actual = String(props.defaults.get(row.prop)).replace(/\n/g, "\\n");
+        return normalize(row.default) === actual
+          ? []
+          : [`${row.prop}: doc ${row.default}, code ${actual}`];
+      });
+      expect(mismatches).toEqual([]);
+    });
+  },
+);

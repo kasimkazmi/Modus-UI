@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { registry, type RegistryItem } from "@/registry";
+import { isUtility } from "@/lib/registry";
 
 const PATTERN = {
   web: /useReducedMotion\(|motion-reduce:/,
@@ -12,11 +13,17 @@ const PATTERN = {
 const read = (file: string) => fs.readFileSync(path.join(process.cwd(), "src", file), "utf8");
 
 describe("reduced motion", () => {
-  it.each(registry)("$name consults prefers-reduced-motion", (item) => {
-    const source = read(item.files[0]);
-    // useReducedMotion for JS-driven motion; Tailwind's motion-reduce: for CSS-only motion.
-    expect(source).toMatch(PATTERN[(item as RegistryItem).platform ?? "web"]);
-  });
+  // Hooks, providers and theme tokens draw nothing, so there is no motion to reduce.
+  it.each(registry.filter((item) => !isUtility(item as RegistryItem)))(
+    "$name consults prefers-reduced-motion",
+    (item) => {
+      const source = read(item.files[0]);
+      // useReducedMotion for JS-driven motion; Tailwind's motion-reduce: for CSS-only motion.
+      expect(source).toMatch(
+        PATTERN[(item as RegistryItem).platform === "native" ? "native" : "web"],
+      );
+    },
+  );
 
   it.each(registry)("$name uses the value it reads", (item) => {
     const source = read(item.files[0]);

@@ -29,6 +29,12 @@ export function installedDependencies(pkg: Record<string, unknown>): Set<string>
   return names;
 }
 
+/** True for an Expo or React Native app, which wants the `.native` file of an item that has one. */
+export function isReactNativeProject(pkg: Record<string, unknown>): boolean {
+  const deps = installedDependencies(pkg);
+  return deps.has("react-native") || deps.has("expo");
+}
+
 export function hasSrcDir(cwd: string): boolean {
   return existsSync(join(cwd, "src"));
 }

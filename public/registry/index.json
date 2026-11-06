@@ -1,7 +1,7 @@
 {
   "name": "Modus UI",
   "homepage": "https://modusui.kasimkazmi.com",
-  "count": 298,
+  "count": 307,
   "categories": [
     "Navigation",
     "Actions",
@@ -11,7 +11,16 @@
     "Typography",
     "Sections",
     "Components",
-    "React Native"
+    "React Native · Inputs",
+    "React Native · Buttons",
+    "React Native · Navigation",
+    "React Native · Overlays",
+    "React Native · Feedback",
+    "React Native · Progress",
+    "React Native · Data",
+    "Hooks",
+    "Providers",
+    "Theme"
   ],
   "components": [
     {
@@ -2604,7 +2613,7 @@
     {
       "name": "swipe-actions",
       "title": "Swipe Actions",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native list row that slides left to reveal action buttons, with rubber-banding, flick detection and screen reader actions.",
       "dependencies": []
@@ -2612,7 +2621,7 @@
     {
       "name": "snap-sheet",
       "title": "Snap Sheet",
-      "category": "React Native",
+      "category": "React Native · Overlays",
       "platform": "native",
       "description": "A React Native bottom sheet with snap points, flick momentum, dismiss-by-drag and an adjustable handle for screen readers.",
       "dependencies": []
@@ -2620,7 +2629,7 @@
     {
       "name": "glide-segments",
       "title": "Glide Segments",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A React Native segmented control whose thumb glides between options on a spring and stretches as it travels.",
       "dependencies": []
@@ -2628,7 +2637,7 @@
     {
       "name": "swipe-deck",
       "title": "Swipe Deck",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native card stack swiped away one at a time, with tilt, a rising next card, like and pass stamps, and screen reader actions.",
       "dependencies": []
@@ -2636,7 +2645,7 @@
     {
       "name": "fan-menu",
       "title": "Fan Menu",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native floating button that fans its actions out along an arc, springing them out one after another.",
       "dependencies": []
@@ -2644,7 +2653,7 @@
     {
       "name": "pin-pad",
       "title": "Pin Pad",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native numeric keypad for PINs and passcodes, with popping dots, a shake on a wrong PIN and spoken progress.",
       "dependencies": []
@@ -2652,7 +2661,7 @@
     {
       "name": "flick-toast",
       "title": "Flick Toast",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native stack of toasts you flick away, with a countdown line that waits while you hold, older toasts scaled back, and screen reader dismiss.",
       "dependencies": []
@@ -2660,7 +2669,7 @@
     {
       "name": "fold-panel",
       "title": "Fold Panel",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native accordion whose panels grow to the measured height of their content, with a turning chevron and screen reader state.",
       "dependencies": []
@@ -2668,7 +2677,7 @@
     {
       "name": "snap-carousel",
       "title": "Snap Carousel",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native carousel that settles on one card at a time, with neighbors that shrink and fade and dots that stretch to follow.",
       "dependencies": []
@@ -2676,7 +2685,7 @@
     {
       "name": "slide-switch",
       "title": "Slide Switch",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native switch whose thumb can be dragged as well as tapped, stretching while held and settling on the nearer side.",
       "dependencies": []
@@ -2684,7 +2693,7 @@
     {
       "name": "shimmer-block",
       "title": "Shimmer Block",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native loading placeholder with a soft highlight that sweeps across it, stacked lines that shimmer together, and one spoken \"Loading\" for the whole block.",
       "dependencies": []
@@ -2692,7 +2701,7 @@
     {
       "name": "parallax-header",
       "title": "Parallax Header",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native scroll view whose hero stretches on overscroll, drifts at half speed, and collapses into a compact title bar.",
       "dependencies": []
@@ -2700,7 +2709,7 @@
     {
       "name": "bubble-tab-bar",
       "title": "Bubble Tab Bar",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A React Native bottom tab bar where a rounded pill slides behind the selected tab and the selected tab opens to show its label.",
       "dependencies": []
@@ -2708,7 +2717,7 @@
     {
       "name": "roll-number",
       "title": "Roll Number",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native odometer whose digits roll to their new value, last digit first, with separators, decimals and negative numbers.",
       "dependencies": []
@@ -2716,7 +2725,7 @@
     {
       "name": "star-rating",
       "title": "Star Rating",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native star rating you can tap or scrub, with half stars, popping fills and adjustable screen reader support.",
       "dependencies": []
@@ -2724,7 +2733,7 @@
     {
       "name": "value-slider",
       "title": "Value Slider",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native slider with a value bubble, step snapping, tap-to-jump and adjustable screen reader support.",
       "dependencies": []
@@ -2732,7 +2741,7 @@
     {
       "name": "expand-search",
       "title": "Expand Search",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native search field that starts as a round button and springs open to full width, with a clear button and a Cancel that folds it away.",
       "dependencies": []
@@ -2740,7 +2749,7 @@
     {
       "name": "intro-pager",
       "title": "Intro Pager",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A swipeable React Native onboarding pager where the art drifts against the text, the dots stretch, and Next turns into the final action.",
       "dependencies": []
@@ -2748,7 +2757,7 @@
     {
       "name": "drag-list",
       "title": "Drag List",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native reorderable list where you drag a grip and the other rows spring out of the way, with move actions for screen readers.",
       "dependencies": []
@@ -2756,7 +2765,7 @@
     {
       "name": "long-press-menu",
       "title": "Long Press Menu",
-      "category": "React Native",
+      "category": "React Native · Overlays",
       "platform": "native",
       "description": "A React Native menu that springs out from a trigger you press and hold, with every item also exposed as an accessibility action.",
       "dependencies": []
@@ -2764,7 +2773,7 @@
     {
       "name": "slide-confirm",
       "title": "Slide Confirm",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native slide-to-confirm control. Drag the thumb to the end to confirm, release early to spring back, and confirm with a screen reader or keyboard action.",
       "dependencies": []
@@ -2772,7 +2781,7 @@
     {
       "name": "calendar-strip",
       "title": "Calendar Strip",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native horizontal strip of days with a pill that glides to the selected day, event dots, and full dates read out to screen readers.",
       "dependencies": []
@@ -2780,7 +2789,7 @@
     {
       "name": "step-tracker",
       "title": "Step Tracker",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A React Native progress tracker built from plain Views, with popping checks, a pulsing current step and connectors that fill as you advance.",
       "dependencies": []
@@ -2788,7 +2797,7 @@
     {
       "name": "chip-input",
       "title": "Chip Input",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native tag input where Enter or a comma turns text into chips that pop in, wrap, and can each be removed.",
       "dependencies": []
@@ -2796,7 +2805,7 @@
     {
       "name": "typing-dots",
       "title": "Typing Dots",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native chat typing indicator whose dots bounce in a staggered wave, with a bubble behind them and a single spoken label.",
       "dependencies": []
@@ -2804,7 +2813,7 @@
     {
       "name": "marquee-ticker",
       "title": "Marquee Ticker",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native endless scrolling strip with a seamless loop, either direction, press and hold to pause, and a still fallback for reduced motion.",
       "dependencies": []
@@ -2812,7 +2821,7 @@
     {
       "name": "choice-chips",
       "title": "Choice Chips",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "React Native chips for one choice or several, blending to the selected color while a check mark opens in front of the label.",
       "dependencies": []
@@ -2820,7 +2829,7 @@
     {
       "name": "hold-stepper",
       "title": "Hold Stepper",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native plus and minus stepper that repeats while held, speeding up the longer you hold, with the value sliding in from the direction it moved.",
       "dependencies": []
@@ -2828,7 +2837,7 @@
     {
       "name": "action-tray",
       "title": "Action Tray",
-      "category": "React Native",
+      "category": "React Native · Overlays",
       "platform": "native",
       "description": "A React Native bottom action list that slides up over a dimmed backdrop, with grouped actions, a separate cancel button and drag to dismiss.",
       "dependencies": []
@@ -2836,7 +2845,7 @@
     {
       "name": "confirm-dialog",
       "title": "Confirm Dialog",
-      "category": "React Native",
+      "category": "React Native · Overlays",
       "platform": "native",
       "description": "A React Native alert dialog that pops in on a spring, starts focus on Cancel so Enter never confirms by accident, and locks while work is under way.",
       "dependencies": []
@@ -2844,7 +2853,7 @@
     {
       "name": "code-boxes",
       "title": "Code Boxes",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native one-time-code input drawn as separate boxes, with paste, SMS autofill, a blinking caret, a pop for each digit and a shake on error.",
       "dependencies": []
@@ -2852,7 +2861,7 @@
     {
       "name": "hue-picker",
       "title": "Hue Picker",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native colour picker built from plain Views, with a hue strip, a lightness strip for the chosen hue, one-tap swatches and a live preview.",
       "dependencies": []
@@ -2860,7 +2869,7 @@
     {
       "name": "tab-pager",
       "title": "Tab Pager",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A React Native tab header over swipeable pages, with an underline that follows your finger and labels that blend as their page arrives.",
       "dependencies": []
@@ -2868,7 +2877,7 @@
     {
       "name": "wheel-picker",
       "title": "Wheel Picker",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native scrolling wheel that snaps rows to the middle, fades them with distance, and settles reliably even when a mouse wheel stops.",
       "dependencies": []
@@ -2876,7 +2885,7 @@
     {
       "name": "avatar-stack",
       "title": "Avatar Stack",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native stack of overlapping avatars that spreads apart on a press, collapses extras into a plus count, and reads out who is in it.",
       "dependencies": []
@@ -2884,7 +2893,7 @@
     {
       "name": "stripe-progress",
       "title": "Stripe Progress",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native progress bar whose fill grows on a spring and whose diagonal stripes drift, with an indeterminate mode and no gradient packages.",
       "dependencies": []
@@ -2892,7 +2901,7 @@
     {
       "name": "range-slider",
       "title": "Range Slider",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native slider with two thumbs for choosing a range, where the thumbs never cross, values snap to a step, and each thumb is adjustable for screen readers.",
       "dependencies": []
@@ -2900,7 +2909,7 @@
     {
       "name": "tick-box",
       "title": "Tick Box",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native checkbox that pops its fill in on a spring, grows its tick, and has a mixed state for select-all boxes.",
       "dependencies": []
@@ -2908,7 +2917,7 @@
     {
       "name": "notice-banner",
       "title": "Notice Banner",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native inline alert in four tones that slides in, collapses its height on the way out, and can be swiped away or closed with a button.",
       "dependencies": []
@@ -2916,7 +2925,7 @@
     {
       "name": "side-drawer",
       "title": "Side Drawer",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "A React Native panel that slides in from the left or right edge, follows your finger as you drag it shut, and can be pulled open by a swipe from the screen edge.",
       "dependencies": []
@@ -2924,7 +2933,7 @@
     {
       "name": "reaction-bar",
       "title": "Reaction Bar",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native row of emoji reactions whose emoji pops and wobbles when chosen, with counts that roll to their new number.",
       "dependencies": []
@@ -2932,7 +2941,7 @@
     {
       "name": "suggest-input",
       "title": "Suggest Input",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native text field with a suggestion list that narrows as you type, bolds what matched, and works with arrow keys, Enter and Escape on the web.",
       "dependencies": []
@@ -2940,7 +2949,7 @@
     {
       "name": "expand-card",
       "title": "Expand Card",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native card that grows from a compact row into a full detail view, with its picture swelling from a thumbnail to a banner and its details fading in.",
       "dependencies": []
@@ -2948,7 +2957,7 @@
     {
       "name": "ring-meter",
       "title": "Ring Meter",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native circular progress ring drawn with plain views and no SVG package, that sweeps smoothly all the way round and holds any content in its middle.",
       "dependencies": []
@@ -2956,7 +2965,7 @@
     {
       "name": "count-badge",
       "title": "Count Badge",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native notification count that sits on an icon's corner, pops in when it appears, pulses as the number changes, and reads out with its label.",
       "dependencies": []
@@ -2964,7 +2973,7 @@
     {
       "name": "float-field",
       "title": "Float Field",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native text field whose label floats up from inside the box, with an animated focus border, an error shake, a clear button and a Show toggle for passwords.",
       "dependencies": []
@@ -2972,7 +2981,7 @@
     {
       "name": "month-grid",
       "title": "Month Grid",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native month calendar with a pill that glides to the selected day, swipe to change month, event dots, and local dates that never shift across time zones.",
       "dependencies": []
@@ -2980,7 +2989,7 @@
     {
       "name": "chat-bubble",
       "title": "Chat Bubble",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native chat message that springs in from its own corner, shows delivery ticks that turn blue when read, and becomes a retry button when it fails.",
       "dependencies": []
@@ -2988,7 +2997,7 @@
     {
       "name": "live-dot",
       "title": "Live Dot",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native presence and broadcast indicator whose live or online dot sends a soft ring outward on a loop, and whose status is always spoken as well as coloured.",
       "dependencies": []
@@ -2996,7 +3005,7 @@
     {
       "name": "composer-bar",
       "title": "Composer Bar",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native message composer whose field grows line by line, whose microphone turns into a send arrow as you type, and which sends on Enter on the web.",
       "dependencies": []
@@ -3004,7 +3013,7 @@
     {
       "name": "setting-list",
       "title": "Setting List",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native grouped settings list with icon tiles, chevrons, values and animated switches, in the style of a phone's own settings screen.",
       "dependencies": []
@@ -3012,7 +3021,7 @@
     {
       "name": "pull-refresh",
       "title": "Pull Refresh",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native scrolling list you refresh by pulling down from the top, with resistance, a turning arrow, a holding spinner, and a Refresh action for screen readers.",
       "dependencies": []
@@ -3020,7 +3029,7 @@
     {
       "name": "story-bars",
       "title": "Story Bars",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "The React Native row of segmented progress bars from a story viewer, which fills each story in turn, holds in place when paused, and announces its position.",
       "dependencies": []
@@ -3028,7 +3037,7 @@
     {
       "name": "action-button",
       "title": "Action Button",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native button that carries its own progress, turning its label into a spinner, then a tick or a cross with a shake, without ever changing size.",
       "dependencies": []
@@ -3036,7 +3045,7 @@
     {
       "name": "spin-loader",
       "title": "Spin Loader",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "Four React Native loading spinners in one component, a ring, bouncing dots, rising bars and a spreading pulse, that stand still when motion is reduced.",
       "dependencies": []
@@ -3044,7 +3053,7 @@
     {
       "name": "radio-group",
       "title": "Radio Group",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native radio group drawn as cards with a springing dot, a single tab stop and arrow-key navigation on the web.",
       "dependencies": []
@@ -3052,7 +3061,7 @@
     {
       "name": "mode-toggle",
       "title": "Mode Toggle",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native light and dark switch where the sun slides across, turns into a moon and the sky fills with stars.",
       "dependencies": []
@@ -3060,7 +3069,7 @@
     {
       "name": "tip-popover",
       "title": "Tip Popover",
-      "category": "React Native",
+      "category": "React Native · Overlays",
       "platform": "native",
       "description": "A React Native tip that points at its trigger, springs out from the arrow and closes on an outside tap or Escape.",
       "dependencies": []
@@ -3068,7 +3077,7 @@
     {
       "name": "data-table",
       "title": "Data Table",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native table with sortable columns, a header that stays put while rows scroll and sideways scrolling for wide columns.",
       "dependencies": []
@@ -3076,7 +3085,7 @@
     {
       "name": "wave-bars",
       "title": "Wave Bars",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native audio waveform made of bars that swell out of step while playing and tint as they are played.",
       "dependencies": []
@@ -3084,7 +3093,7 @@
     {
       "name": "page-dots",
       "title": "Page Dots",
-      "category": "React Native",
+      "category": "React Native · Navigation",
       "platform": "native",
       "description": "React Native pager dots where the current page stretches into a pill and every dot can be tapped to jump.",
       "dependencies": []
@@ -3092,7 +3101,7 @@
     {
       "name": "password-meter",
       "title": "Password Meter",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native strength meter whose four bars fill and change colour as a password gets stronger.",
       "dependencies": []
@@ -3100,7 +3109,7 @@
     {
       "name": "timeline-list",
       "title": "Timeline List",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native vertical timeline with completed, current and upcoming steps and a pulsing dot on the step in progress.",
       "dependencies": []
@@ -3108,7 +3117,7 @@
     {
       "name": "empty-state",
       "title": "Empty State",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native empty list placeholder with a floating badge, a message and an optional action button.",
       "dependencies": []
@@ -3116,7 +3125,7 @@
     {
       "name": "rating-histogram",
       "title": "Rating Histogram",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native review breakdown with one animated bar per star level and the average beside them.",
       "dependencies": []
@@ -3124,7 +3133,7 @@
     {
       "name": "countdown-timer",
       "title": "Countdown Timer",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native minutes and seconds countdown with a draining bar that pauses, resumes and fires once when time is up.",
       "dependencies": []
@@ -3132,7 +3141,7 @@
     {
       "name": "contact-index",
       "title": "Contact Index",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native alphabetical list with a draggable letter rail that jumps between sections like a phone's contacts.",
       "dependencies": []
@@ -3140,7 +3149,7 @@
     {
       "name": "select-grid",
       "title": "Select Grid",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native multi-select grid of cards where a tick springs in, with an optional limit that dims the rest.",
       "dependencies": []
@@ -3148,7 +3157,7 @@
     {
       "name": "poll-bars",
       "title": "Poll Bars",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native poll whose options turn into animated result bars with percentages once a vote is cast.",
       "dependencies": []
@@ -3156,7 +3165,7 @@
     {
       "name": "card-field",
       "title": "Card Field",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native payment card input that groups the number, names the brand, adds the expiry slash and shakes on a failed check.",
       "dependencies": []
@@ -3164,7 +3173,7 @@
     {
       "name": "step-slider",
       "title": "Step Slider",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native slider with fixed stops whose thumb follows the finger and springs onto the nearest label.",
       "dependencies": []
@@ -3172,7 +3181,7 @@
     {
       "name": "cart-quantity",
       "title": "Cart Quantity",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native quantity picker whose minus turns into a bin at one so the same tap removes the item.",
       "dependencies": []
@@ -3180,7 +3189,7 @@
     {
       "name": "password-field",
       "title": "Password Field",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native password input with a Show and Hide button and a border that eases to the accent colour on focus.",
       "dependencies": []
@@ -3188,7 +3197,7 @@
     {
       "name": "resend-button",
       "title": "Resend Button",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native resend code link that waits out a countdown, pulses when ready and starts over after each press.",
       "dependencies": []
@@ -3196,7 +3205,7 @@
     {
       "name": "gauge-meter",
       "title": "Gauge Meter",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native half-circle gauge whose arc springs round to the value, built from clipped Views with no SVG package.",
       "dependencies": []
@@ -3204,7 +3213,7 @@
     {
       "name": "undo-snackbar",
       "title": "Undo Snackbar",
-      "category": "React Native",
+      "category": "React Native · Feedback",
       "platform": "native",
       "description": "A React Native snackbar with an Undo button that slides up, shows a draining timer line and closes itself.",
       "dependencies": []
@@ -3212,7 +3221,7 @@
     {
       "name": "mood-picker",
       "title": "Mood Picker",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native row of faces for rating how something felt, where the chosen face swells with a bounce and shows its name.",
       "dependencies": []
@@ -3220,7 +3229,7 @@
     {
       "name": "expandable-text",
       "title": "Expandable Text",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native paragraph that clamps to a few lines with a Read more link that grows the box to the full text.",
       "dependencies": []
@@ -3228,7 +3237,7 @@
     {
       "name": "extended-fab",
       "title": "Extended FAB",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native floating action button with a label that slides away to leave a circle when collapsed.",
       "dependencies": []
@@ -3236,7 +3245,7 @@
     {
       "name": "swatch-picker",
       "title": "Swatch Picker",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native colour picker of circles where the chosen one gets a ring that springs out and a tick inside.",
       "dependencies": []
@@ -3244,7 +3253,7 @@
     {
       "name": "like-button",
       "title": "Like Button",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native heart button that pops on like with a ring of sparks flying outward, and shrinks quietly when unliked.",
       "dependencies": []
@@ -3252,7 +3261,7 @@
     {
       "name": "task-checklist",
       "title": "Task Checklist",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native to-do list with a progress bar, where ticking a task draws a strike-through line across its text.",
       "dependencies": []
@@ -3260,7 +3269,7 @@
     {
       "name": "spark-bars",
       "title": "Spark Bars",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A tiny React Native bar chart for trends inside a card, whose bars grow up one after another and resize on change.",
       "dependencies": []
@@ -3268,7 +3277,7 @@
     {
       "name": "battery-meter",
       "title": "Battery Meter",
-      "category": "React Native",
+      "category": "React Native · Progress",
       "platform": "native",
       "description": "A React Native battery gauge whose fill slides to the level, turns red when low and pulses a bolt while charging.",
       "dependencies": []
@@ -3276,7 +3285,7 @@
     {
       "name": "compare-slider",
       "title": "Compare Slider",
-      "category": "React Native",
+      "category": "React Native · Data",
       "platform": "native",
       "description": "A React Native before and after slider where dragging a handle reveals more of one side, steppable by screen readers.",
       "dependencies": []
@@ -3284,7 +3293,7 @@
     {
       "name": "hold-confirm",
       "title": "Hold Confirm",
-      "category": "React Native",
+      "category": "React Native · Buttons",
       "platform": "native",
       "description": "A React Native press and hold button for risky actions that fills while held and drains back if released early.",
       "dependencies": []
@@ -3292,9 +3301,81 @@
     {
       "name": "select-menu",
       "title": "Select Menu",
-      "category": "React Native",
+      "category": "React Native · Inputs",
       "platform": "native",
       "description": "A React Native dropdown that opens in place, pushing content down instead of floating, with a turning chevron.",
+      "dependencies": []
+    },
+    {
+      "name": "use-color-scheme",
+      "title": "useColorScheme",
+      "category": "Hooks",
+      "platform": "both",
+      "description": "A React Native hook that returns the system colour scheme as light or dark, never null.",
+      "dependencies": []
+    },
+    {
+      "name": "use-keyboard-height",
+      "title": "useKeyboardHeight",
+      "category": "Hooks",
+      "platform": "both",
+      "description": "A React Native hook that returns the on-screen keyboard height, or 0 while it is hidden.",
+      "dependencies": []
+    },
+    {
+      "name": "use-haptics",
+      "title": "useHaptics",
+      "category": "Hooks",
+      "platform": "both",
+      "description": "A React Native hook for touch feedback with tap, success, warning and error patterns that you can switch off.",
+      "dependencies": []
+    },
+    {
+      "name": "use-reduce-motion",
+      "title": "useReduceMotion",
+      "category": "Hooks",
+      "platform": "both",
+      "description": "A React Native hook that reports whether the system asks to reduce motion and follows later changes.",
+      "dependencies": []
+    },
+    {
+      "name": "use-debounced-value",
+      "title": "useDebouncedValue",
+      "category": "Hooks",
+      "platform": "both",
+      "description": "A React Native hook that returns a copy of a value which only updates after it stops changing.",
+      "dependencies": []
+    },
+    {
+      "name": "mode-provider",
+      "title": "ModeProvider",
+      "category": "Providers",
+      "platform": "both",
+      "description": "A React Native provider that holds the light, dark or system choice and exposes it through a useMode hook.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-provider",
+      "title": "ThemeProvider",
+      "category": "Providers",
+      "platform": "both",
+      "description": "A React Native provider that supplies one colour palette to the tree through a useTheme hook, with per-colour overrides.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-colors",
+      "title": "Colors",
+      "category": "Theme",
+      "platform": "both",
+      "description": "Light and dark colour palettes for React Native, named by role, with a helper that adds transparency to any colour.",
+      "dependencies": []
+    },
+    {
+      "name": "theme-globals",
+      "title": "Globals",
+      "category": "Theme",
+      "platform": "both",
+      "description": "Shared React Native design tokens for spacing, corner radius, type sizes, font weights and shadows.",
       "dependencies": []
     }
   ],

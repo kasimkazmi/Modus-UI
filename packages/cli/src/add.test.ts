@@ -13,6 +13,14 @@ const catalogue = {
   renamed: { "fuzzy-text": "blur-text" },
   components: [
     {
+      name: "use-flag",
+      title: "useFlag",
+      category: "Hooks",
+      platform: "both",
+      description: "d",
+      dependencies: [],
+    },
+    {
       name: "blur-text",
       title: "Blur Text",
       category: "Text",
@@ -30,6 +38,20 @@ const catalogue = {
 };
 
 function component(name: string) {
+  if (name === "use-flag") {
+    return {
+      name,
+      title: name,
+      category: "Hooks",
+      type: "registry:ui",
+      platform: "both",
+      dependencies: [],
+      files: [
+        { path: "registry/use-flag.ts", content: "// react\n" },
+        { path: "registry/use-flag.native.ts", content: "// react native\n" },
+      ],
+    };
+  }
   return {
     name,
     title: name,
@@ -68,6 +90,25 @@ beforeEach(async () => {
 afterEach(async () => {
   vi.unstubAllGlobals();
   await rm(dir, { recursive: true, force: true });
+});
+
+describe("add for both platforms", () => {
+  it("installs the React Native file in an Expo app, with no cn helper or class packages", async () => {
+    await project({ dependencies: { expo: "55.0.0", "react-native": "0.88.0" } });
+    await add(["use-flag"], { cwd: dir, run, log });
+    expect(await readFile(join(dir, "components/ui/use-flag.ts"), "utf8")).toBe(
+      "// react native\n",
+    );
+    expect(existsSync(join(dir, "lib/utils.ts"))).toBe(false);
+    expect(run).not.toHaveBeenCalled();
+  });
+
+  it("installs the React file in a web app, also without the cn helper", async () => {
+    await project({ dependencies: { next: "14.0.0" } });
+    await add(["use-flag"], { cwd: dir, run, log });
+    expect(await readFile(join(dir, "components/ui/use-flag.ts"), "utf8")).toBe("// react\n");
+    expect(existsSync(join(dir, "lib/utils.ts"))).toBe(false);
+  });
 });
 
 describe("add", () => {

@@ -1,0 +1,47 @@
+---
+title: useKeyboardHeight
+description: A React Native hook that returns the on-screen keyboard height, or 0 while it is hidden.
+---
+
+The height of the on-screen keyboard, or 0 while it is hidden. On iOS it updates as the keyboard starts to move, so a view can slide up alongside it; on Android it updates once the keyboard has finished appearing. It is always 0 on the web, where there is no on-screen keyboard to measure. Works in React and in React Native with no extra packages.
+
+<ComponentPreview name="use-keyboard-height" />
+
+## Installation
+
+### CLI
+
+```bash
+npx @modus-ui/cli add use-keyboard-height
+```
+
+### Manual
+
+1. Copy the code from the code tab, using the React or React Native switch for your project.
+2. Create a file at `components/ui/use-keyboard-height.ts`.
+3. Paste the code.
+
+The CLI installs the React Native version in an Expo or React Native app and the React version everywhere else. In a project that targets both, keep the React file `use-keyboard-height.ts` and the React Native file `use-keyboard-height.native.ts` side by side and import `./use-keyboard-height`; Metro picks the `.native` file on its own.
+
+## Usage
+
+```tsx
+import { TextInput, View } from "react-native";
+import { useKeyboardHeight } from "@/components/ui/use-keyboard-height";
+
+export default function Composer() {
+  const keyboard = useKeyboardHeight();
+
+  return (
+    <View style={{ marginBottom: keyboard }}>
+      <TextInput placeholder="Message" />
+    </View>
+  );
+}
+```
+
+## API
+
+| Part    | Type     | Description                                  |
+| :------ | :------- | :------------------------------------------- |
+| Returns | `number` | Keyboard height in points, or 0 when hidden. |

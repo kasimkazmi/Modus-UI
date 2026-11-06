@@ -1,7 +1,7 @@
 {
   "name": "tip-popover",
   "title": "Tip Popover",
-  "category": "React Native",
+  "category": "React Native · Overlays",
   "type": "components:ui",
   "platform": "native",
   "added": "2026-11-03",

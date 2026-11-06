@@ -1,0 +1,19 @@
+{
+  "name": "use-reduce-motion",
+  "title": "useReduceMotion",
+  "category": "Hooks",
+  "type": "components:ui",
+  "platform": "both",
+  "added": "2026-11-05",
+  "dependencies": [],
+  "files": [
+    {
+      "path": "registry/use-reduce-motion.ts",
+      "content": "\"use client\";\n\nimport { useSyncExternalStore } from \"react\";\n\nconst QUERY = \"(prefers-reduced-motion: reduce)\";\n\nfunction subscribe(onChange: () => void) {\n  const media = window.matchMedia(QUERY);\n  media.addEventListener(\"change\", onChange);\n  return () => media.removeEventListener(\"change\", onChange);\n}\n\n/**\n * Whether the person has asked the system to reduce motion. It reads the prefers-reduced-motion media\n * query and follows later changes, so animated components can skip or shorten their motion. On the\n * server, and for the first render while hydrating, it returns false so the markup matches.\n */\nexport function useReduceMotion(): boolean {\n  return useSyncExternalStore(\n    subscribe,\n    () => window.matchMedia(QUERY).matches,\n    () => false,\n  );\n}\n"
+    },
+    {
+      "path": "registry/use-reduce-motion.native.ts",
+      "content": "import { useEffect, useState } from \"react\";\nimport { AccessibilityInfo } from \"react-native\";\n\n/**\n * Whether the person has asked the system to reduce motion. It reads the setting once on mount and\n * follows later changes, so animated components can skip or shorten their motion. It starts as false\n * until the platform answers.\n */\nexport function useReduceMotion(): boolean {\n  const [reduce, setReduce] = useState(false);\n\n  useEffect(() => {\n    AccessibilityInfo.isReduceMotionEnabled().then(setReduce);\n    const subscription = AccessibilityInfo.addEventListener(\"reduceMotionChanged\", setReduce);\n    return () => subscription.remove();\n  }, []);\n\n  return reduce;\n}\n"
+    }
+  ]
+}
