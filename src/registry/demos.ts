@@ -318,6 +318,7 @@ export const demos: Record<ComponentName, ComponentType> = {
   "theme-provider": dynamic(() => import("./theme-provider-demo"), { ssr: false }),
   "theme-colors": dynamic(() => import("./theme-colors-demo"), { ssr: false }),
   "theme-globals": dynamic(() => import("./theme-globals-demo"), { ssr: false }),
+  "dot-veil": dynamic(() => import("./dot-veil-demo")),
 };
 
 /** Looks up a demo by a slug from the URL, which may not be a known component. */

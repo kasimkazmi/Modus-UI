@@ -44,3 +44,4 @@ packages/*/dist
 .env.*
 !.env.example
 secrets/
+.env*

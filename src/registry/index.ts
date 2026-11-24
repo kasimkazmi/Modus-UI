@@ -4146,6 +4146,15 @@ export const registry = [
     files: ["registry/ascii-flow.tsx"],
   },
   {
+    name: "dot-veil",
+    title: "Dot Veil",
+    category: "Backgrounds",
+    type: "components:ui",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    files: ["registry/dot-veil.tsx"],
+    added: "2026-11-10",
+  },
+  {
     name: "swipe-actions",
     title: "Swipe Actions",
     category: "React Native · Data",
